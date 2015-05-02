@@ -33,7 +33,7 @@
             [{assign var="blPicUplodaded" value=false}]
             <span class="notActive">-------</span>
         [{else}]
-            <input type="text" class="editinput" name="editval[oxarticles__oxpic[{$iIndex}]]" value="[{$edit->oxarticles__oxpic`$iIndex`->value}]">
+            <input type="text" class="editinput" name="editval[oxarticles__oxpic[{$iIndex}]]" value="[{$sPicFile}]">
         [{/if}]
       </td>
     </tr>
