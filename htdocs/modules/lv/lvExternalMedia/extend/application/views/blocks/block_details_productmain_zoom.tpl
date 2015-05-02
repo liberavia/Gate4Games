@@ -3,7 +3,7 @@
     <div class="picture">
         [{$oView->lvGetYouTubeMediaEmbed()}]
     </div>
-[{else if $oView->showZoomPics()}]
+[{elseif $oView->showZoomPics()}]
     [{oxscript include="js/widgets/oxmodalpopup.js" priority=10 }]
     [{oxscript add="$('#zoomTrigger').oxModalPopup({target:'#zoomModal'});"}]
     [{oxscript add="$('#zoom1').oxModalPopup({target:'#zoomModal'});"}]

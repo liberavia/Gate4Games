@@ -31,8 +31,8 @@ $aModule = array(
     'id'           => 'lvExternalMedia',
     'title'        => 'Externe Bilder und Medien',
     'description'  => array(
-        'de' => 'Modul für die Zahlung mit PayPal.',
-        'en' => 'Module for PayPal payment.',
+        'de' => 'Modul zur Verwaltung externer Medien',
+        'en' => 'Module for managing external media',
     ),
     'thumbnail'    => '',
     'version'      => '1.0.0',
