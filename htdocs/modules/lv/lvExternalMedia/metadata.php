@@ -44,6 +44,7 @@ $aModule = array(
         'oxwarticledetails'                 => 'lv/lvExternalMedia/extend/application/components/widgets/lvextmedia_oxwarticledetails',
         // models
         'oxmediaurl'                        => 'lv/lvExternalMedia/extend/application/models/lvextmedia_oxmediaurl',
+        'oxpicturehandler'                  => 'lv/lvExternalMedia/extend/application/models/lvextmedia_oxpicturehandler',
     ),
     'files' => array(
     ),
@@ -54,6 +55,7 @@ $aModule = array(
     'blocks' => array(
         array( 'template' => 'page/details/inc/productmain.tpl',    'block'=>'details_productmain_zoom',        'file'=>'extend/application/views/blocks/block_details_productmain_zoom.tpl' ),
         array( 'template' => 'article_pictures.tpl',                'block'=>'admin_article_pictures_main',     'file'=>'extend/application/views/blocks/block_admin_article_pictures_main.tpl' ),
+        array( 'template' => 'page/details/inc/productmain.tpl',    'block'=>'details_productmain_morepics',    'file'=>'extend/application/views/blocks/block_details_productmain_morepics.tpl' ),
     ),
     'settings' => array(
     )
