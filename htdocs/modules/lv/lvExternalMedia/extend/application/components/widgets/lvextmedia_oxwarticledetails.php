@@ -37,7 +37,7 @@ class lvextmedia_oxwarticledetails extends lvextmedia_oxwarticledetails_parent {
             $aMediaFiles = $this->getProduct()->getMediaUrls();
             // $this->_aMediaFiles = count($aMediaFiles) ? $aMediaFiles : false;
             foreach ( $aMediaFiles as $oMediaUrl ) {
-                $sUrl = $this->oxmediaurls__oxurl->value;
+                $sUrl = $oMediaUrl->oxmediaurls__oxurl->value;
                 //youtube link
                 if ( strpos( $sUrl, 'youtube.com' ) || strpos( $sUrl, 'youtu.be' ) ) {
                     $sYouTubeEmbed = $oMediaUrl->getHtml();

@@ -34,11 +34,10 @@ class lvextmedia_oxmediaurl extends lvextmedia_oxmediaurl_parent {
         parent::_getYoutubeHtml();
                
         $sUrl = $this->oxmediaurls__oxurl->value;
-        $oPictureHandler = oxNew( 'oxPictureHandler' );
         
         $oConfig = $this->getConfig();
-        $sSize = $oConfig->getConfigParam( 'aDetailImageSizes' );
-        $aSize = $oPictureHandler->getImageSize( $sSize, 1 );
+        $aSizes = $oConfig->getConfigParam( 'aDetailImageSizes' );
+        $aSize = explode('*', $aSizes['oxpic1']);
         
         if ( is_array( $aSize ) && is_numeric( $aSize[0] ) && is_numeric( $aSize[1] ) ) {
             $sIFrameWidth   = $aSize[0];
@@ -57,7 +56,7 @@ class lvextmedia_oxmediaurl extends lvextmedia_oxmediaurl_parent {
             $sYoutubeUrl = str_replace("youtu.be/", "www.youtube.com/embed/", $sUrl);
         }
 
-        $sYoutubeTemplate = '%s<br><iframe width="'.$sIFrameWidth.'" height="'.$sIFrameHeight.'" src="%s" frameborder="0" allowfullscreen></iframe>';
+        $sYoutubeTemplate = '%s<iframe width="'.$sIFrameWidth.'" height="'.$sIFrameHeight.'" src="%s" frameborder="0" allowfullscreen></iframe>';
         $sYoutubeHtml = sprintf($sYoutubeTemplate, $sDesc, $sYoutubeUrl, $sYoutubeUrl);
 
         return $sYoutubeHtml;
