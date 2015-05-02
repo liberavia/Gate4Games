@@ -38,7 +38,7 @@ class lvextmedia_oxmediaurl extends lvextmedia_oxmediaurl_parent {
         
         $oConfig = $this->getConfig();
         $sSize = $oConfig->getConfigParam( 'aDetailImageSizes' );
-        $aSize = $this->getImageSize( $sSize, 1 );
+        $aSize = $oPictureHandler->getImageSize( $sSize, 1 );
         
         if ( is_array( $aSize ) && is_numeric( $aSize[0] ) && is_numeric( $aSize[1] ) ) {
             $sIFrameWidth   = $aSize[0];
