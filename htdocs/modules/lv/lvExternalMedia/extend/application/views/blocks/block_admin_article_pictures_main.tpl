@@ -28,13 +28,7 @@
       </td>
       <td class="text">
         [{assign var="sPicFile" value=$edit->getPictureFieldValue("oxpic", $iIndex) }]
-
-        [{if $sPicFile == "nopic.jpg" || $sPicFile == ""}]
-            [{assign var="blPicUplodaded" value=false}]
-            <span class="notActive">-------</span>
-        [{else}]
-            <input type="text" class="editinput" name="editval[oxarticles__oxpic[{$iIndex}]]" value="[{$sPicFile}]">
-        [{/if}]
+        <input type="text" class="editinput" name="editval[oxarticles__oxpic[{$iIndex}]]" value="[{$sPicFile}]">
       </td>
     </tr>
 [{/section}]
