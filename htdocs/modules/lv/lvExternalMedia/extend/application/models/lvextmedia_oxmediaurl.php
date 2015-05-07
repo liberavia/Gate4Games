@@ -31,6 +31,12 @@ class lvextmedia_oxmediaurl extends lvextmedia_oxmediaurl_parent {
      */
     protected $_sLvIframeId = null;
     
+    /**
+     * Flag for signaling if next frame will be visible
+     * @var type 
+     */
+    protected $_blLvVisible = null;
+    
     
     /**
      * Public setter that sets the id of an iframe
@@ -42,6 +48,16 @@ class lvextmedia_oxmediaurl extends lvextmedia_oxmediaurl_parent {
         $this->_sLvIframeId = $sIFrameId;
     }
 
+
+    /**
+     * Public setter that sets if next iframe will be visible
+     * 
+     * @param type $sIFrameId
+     * @return void
+     */
+    public function lvSetIFrameVisible( $blVisible ) {
+        $this->_blLvVisible = (bool)$blVisible;
+    }
 
     /**
      * Returns the youtube thumbnail of an video. Returns empty string, if media is no youtube video
@@ -102,12 +118,28 @@ class lvextmedia_oxmediaurl extends lvextmedia_oxmediaurl_parent {
 
         $sFrameIdCode = '';
         if ( $this->_sLvIframeId !== null ) {
-            $sFrameIdCode = 'id="'.$this->_sLvIframeId.'" style="display:none;"';
+            $sFrameIdCode = 'id="'.$this->_sLvIframeId.'"';
         }
-        $sYoutubeTemplate = '%s<iframe '.$sFrameIdCode.' width="'.$sIFrameWidth.'" height="'.$sIFrameHeight.'" src="%s" frameborder="0" allowfullscreen></iframe>';
+        
+        $sStyleCodeVisible = '';
+        if ( $this->_blLvVisible !== null ) {
+            if ( $this->_blLvVisible ) {
+                $sStyleCodeVisible = 'style="display:block"';
+            }
+            else {
+                $sStyleCodeVisible = 'style="display:none;"';
+            }
+        }
+        
+        $sYoutubeTemplate = '%s<iframe '.$sFrameIdCode.' '.$sStyleCodeVisible.' width="'.$sIFrameWidth.'" height="'.$sIFrameHeight.'" src="%s" frameborder="0" allowfullscreen></iframe>';
         $sYoutubeHtml = sprintf($sYoutubeTemplate, $sDesc, $sYoutubeUrl, $sYoutubeUrl);
+        
+        // reset flags if they have been used
         if ( $this->_sLvIframeId !== null ) {
             $this->_sLvIframeId = null;
+        }
+        if ( $this->_blLvVisible !== null ) {
+            $this->_blLvVisible = null;
         }
 
         return $sYoutubeHtml;

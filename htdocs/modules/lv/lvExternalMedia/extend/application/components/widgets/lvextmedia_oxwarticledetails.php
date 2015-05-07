@@ -144,6 +144,10 @@ class lvextmedia_oxwarticledetails extends lvextmedia_oxwarticledetails_parent {
         $iVideoIndex = 1;
         foreach ( $this->_aLvMediaFiles as $oMediaUrl ) {
             $oMediaUrl->lvSetIFrameId( 'detailsvideoiframe_'.$iVideoIndex );
+            $oMediaUrl->lvSetIFrameVisible(false);
+            if ( $iVideoIndex == 1 ) {
+                $oMediaUrl->lvSetIFrameVisible(true);
+            }
             $sUrl = $oMediaUrl->getHtml();
             if ( strpos( $sUrl, 'youtube.com' ) || strpos( $sUrl, 'youtu.be' ) ) {
                 $aVideoMedia = array(
