@@ -1,13 +1,13 @@
-[{if $oView->morePics()}]
+[{if $oView->lvHasMoreMedia()}]
     <div class="otherPictures" id="morePicsContainer">
         <div class="shadowLine"></div>
         <ul class="clear">
         [{oxscript add="var aMorePic=new Array();"}]
-        [{foreach from=$oView->getIcons() key=iPicNr item=oArtIcon name=sMorePics}]
+        [{foreach from=$oView->lvGetAllMedia() key=iPicNr item=sLvExtUrl name=sMorePics}]
             <li>
-                <a id="morePics_[{$smarty.foreach.sMorePics.iteration}]" rel="useZoom: 'zoom1', smallImage: '[{$oPictureProduct->getPictureUrl($iPicNr)}]' " class="cloud-zoom-gallery" href="[{$oPictureProduct->getMasterZoomPictureUrl($iPicNr)}]">
+                <a id="morePics_[{$smarty.foreach.sMorePics.iteration}]" rel="useZoom: 'zoom1', smallImage: '[{$sLvExtUrl}]' " class="cloud-zoom-gallery" href="[{$sLvExtUrl}]">
                     <span class="marker"><img src="[{$oViewConf->getImageUrl('marker.png')}]" alt=""></span>
-                    <span class="artIcon"><img src="[{$oPictureProduct->getIconUrl($iPicNr)}]" alt=""></span>
+                    <span class="artIcon"><img src="[{$sLvExtUrl}]" alt=""></span>
                 </a>
             </li>
         [{/foreach}]

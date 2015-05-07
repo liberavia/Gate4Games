@@ -46,10 +46,6 @@
 [{/block}]
 
 [{block name="details_tabs_media"}]
-    [{if $oView->getMediaFiles() || $oDetailsProduct->oxarticles__oxfile->value}]
-        [{capture append="tabs"}]<a href="#media">[{oxmultilang ident="MEDIA"}]</a>[{/capture}]
-        [{capture append="tabsContent"}]<div id="media">[{include file="page/details/inc/media.tpl"}]</div>[{/capture}]
-    [{/if}]
 [{/block}]
 
 [{block name="details_tabs_fbcomments"}]

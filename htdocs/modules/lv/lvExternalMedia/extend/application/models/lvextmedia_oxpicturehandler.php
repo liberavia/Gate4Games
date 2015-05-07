@@ -38,7 +38,7 @@ class lvextmedia_oxpicturehandler extends lvextmedia_oxpicturehandler_parent {
      */
     public function getProductPicUrl($sPath, $sFile, $sSize, $sIndex = null, $bSsl = null)
     {
-        if ( strpos($sFile, "http") !== false ) {
+        if ( strpos( $sFile, "http" ) !== false ) {
             $sUrl = $sFile;
         }
         else {
