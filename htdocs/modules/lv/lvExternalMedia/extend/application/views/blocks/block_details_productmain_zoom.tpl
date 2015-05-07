@@ -1,6 +1,5 @@
 [{if $oView->lvGetYouTubeMediaEmbed()}]
     <div id="lvDetailsVideoStd" class="picture">
-        [{*$oView->lvGetYouTubeMediaEmbed()*}]
         [{foreach from=$oView->lvGetAllMedia(false) item="aLvVideoMedia" name="alvMoreVideos"}]
             [{$aLvVideoMedia.embedurl}]
         [{/foreach}]

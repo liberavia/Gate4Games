@@ -9,18 +9,18 @@
         }
         
         function lvChangeDetailsToVideo( iVideoNr ) {
-            $( '#lvDetailsVideoStd' ).hide();
+            $( '#lvDetailsPictureStd' ).hide();
             $( '#lvDetailsVideoStd' ).show();
-            iVideoNr = parseInt(iVideoNr);
             $( '#lvDetailsPictureStd' ).empty();
-            for ( var iCurrentVideoNr=1;iCurrentVideoNr<=6;iCurrrentVideoNr++ ) {
-                var sCurrentVideoNr =iCurrentVideoNr.toString();
-                if ( $( '#detailsvideoiframe_' + sCurrentVideoNr ).length > 0 ) ) {
+            iVideoNr = parseInt(iVideoNr);
+            for ( var iCurrentVideoNr=1;iCurrentVideoNr<=6;iCurrentVideoNr++ ) {
+                var sCurrentVideoNr = iCurrentVideoNr + "";
+                if ( $( '#detailsvideoiframe_' + sCurrentVideoNr ).length > 0 ) {
                     if ( iCurrentVideoNr == iVideoNr ) {
-                        $( '#detailsvideoiframe_' + sCurrentVideoNr ).show();
+                        $( '#detailsvideoiframe_' + sCurrentVideoNr ).css( "display", "block");
                     }
                     else {
-                        $( '#detailsvideoiframe_' + sCurrentVideoNr ).hide();
+                        $( '#detailsvideoiframe_' + sCurrentVideoNr ).css( "display", "none");
                     }
                 }
             }
