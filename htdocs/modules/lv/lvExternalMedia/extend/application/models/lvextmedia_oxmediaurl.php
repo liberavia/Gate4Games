@@ -24,6 +24,33 @@
  * @author André Gregor-Herrmann
  */
 class lvextmedia_oxmediaurl extends lvextmedia_oxmediaurl_parent {
+    
+    
+    /**
+     * Returns the youtube thumbnail of an video. Returns empty string, if media is no youtube video
+     * 
+     * @param void
+     * @return string
+     */
+    public function lvGetYouTubeThumbnailUrl() {
+        $sUrl = $this->oxmediaurls__oxurl->value;
+        
+        $sThumbnailUrl = "";
+        if ( strpos( $sUrl, 'youtube.com' ) || strpos( $sUrl, 'youtu.be' ) ) {
+            if ( strpos($sUrl, 'https') === false ) {
+                $sProtocol = "http://";
+            }
+            else {
+                $sProtocol = "https://";
+            }
+            $sVideoId = str_replace( $sProtocol."www.youtube.com/watch?v=", "", $sUrl );
+            
+            $sThumbnailUrl = $sProtocol."img.youtube.com/vi/".$sVideoId."/0.jpg";
+        }
+        
+        return $sThumbnailUrl;
+    }
+    
     /**
      * Transforms the link to YouTube object, and returns it.
      *

@@ -36,7 +36,54 @@ class lvextmedia_oxwarticledetails extends lvextmedia_oxwarticledetails_parent {
      * @var array
      */
     protected $_aLvMediaFiles = null;
+    
+    
+    /**
+     * Returns the details image max height
+     * 
+     * @param void
+     * @return string
+     */
+    public function lvGetDetailsImageMaxHeight() {
+        $oConfig = $this->getConfig();
+        $aSizes = $oConfig->getConfigParam( 'aDetailImageSizes' );
+        $aSize = explode( '*', $aSizes['oxpic1'] );
+        
+        if ( is_array( $aSize ) && is_numeric( $aSize[0] ) && is_numeric( $aSize[1] ) ) {
+            $sHeight  = $aSize[1];
+        }
+        else {
+            // dummy standard default
+            $sHeight  = '380';
+        }
+        
+        return $sHeight;
+    }
 
+
+    /**
+     * Returns the details image max width
+     * 
+     * @param void
+     * @return string
+     */
+    public function lvGetDetailsImageMaxWidth() {
+        $oConfig = $this->getConfig();
+        $aSizes = $oConfig->getConfigParam( 'aDetailImageSizes' );
+        $aSize = explode( '*', $aSizes['oxpic1'] );
+        
+        if ( is_array( $aSize ) && is_numeric( $aSize[0] ) && is_numeric( $aSize[1] ) ) {
+            $sWidth   = $aSize[0];
+        }
+        else {
+            // dummy standard default
+            $sWidth   = '340';
+        }
+        
+        return $sWidth;
+    }
+
+    
     /**
      * Template variable getter. Returns youtube media file of given index if there is one
      *
@@ -80,12 +127,30 @@ class lvextmedia_oxwarticledetails extends lvextmedia_oxwarticledetails_parent {
         if ($this->_aMediaFiles === null) {
             $this->_aLvMediaFiles = $this->getProduct()->getMediaUrls();
         }
+        
+        // get sizes of icon
+        $sIconSize = $this->getConfig()->getConfigParam( 'sIconsize' );
+        if ( strpos( $sIconSize, "*" ) !== false ) {
+            $aIconSize = explode( "*", $sIconSize );
+            $sIconWidth     = trim( $aIconSize[0] );
+            $sIconHeight    = trim( $aIconSize[0] );
+        }
+        else {
+            // use dummy standard
+            $sIconWidth     = '87';
+            $sIconHeight    = '87';
+        }
 
         foreach ( $this->_aLvMediaFiles as $oMediaUrl ) {
+            $sUrl = $oMediaUrl->getHtml();
             if ( strpos( $sUrl, 'youtube.com' ) || strpos( $sUrl, 'youtu.be' ) ) {
                 $aVideoMedia = array(
-                    'mediatype' => 'youtube',
-                    'embedurl'  => $oMediaUrl->getHtml(),
+                    'mediatype'     => 'youtube',
+                    'embedurl'      => $sUrl,
+                    'url'           => $oMediaUrl->getLink(),
+                    'iconurl'       => $oMediaUrl->lvGetYouTubeThumbnailUrl(),
+                    'iconwidth'     => $sIconWidth,
+                    'iconheight'    => $sIconHeight,
                 );
                 $this->_aLvAllMedia[] = $aVideoMedia;
             }
@@ -94,6 +159,17 @@ class lvextmedia_oxwarticledetails extends lvextmedia_oxwarticledetails_parent {
         // next geet all the picture links
         $aExtPictureLinks = $this->_lvGetExtPictureLinks();
         
+        foreach ( $aExtPictureLinks as $sExtPictureLink ) {
+            $aPicMedia = array(
+                'mediatype'     => 'extpic',
+                'detailsurl'    => $sExtPictureLink,
+                'iconurl'       => $sExtPictureLink,
+                'iconwidth'     => $sIconWidth,
+                'iconheight'    => $sIconHeight,
+            );
+            
+            $this->_aLvAllMedia[] = $aPicMedia;
+        }
         
         return $this->_aLvAllMedia;
     }
@@ -112,13 +188,34 @@ class lvextmedia_oxwarticledetails extends lvextmedia_oxwarticledetails_parent {
         else {
             $aAllMedia = $this->_aLvAllMedia;
         }
-        
         $blReturn = false;
         if ( count( $aAllMedia ) > 1 ) {
             $blReturn = true;
         }
-        
         return $blReturn;
+    }
+    
+    
+    /**
+     * Template getter returns first image entry of all media
+     */
+    public function lvGetFirstPictureUrl() {
+        if ( $this->_aLvAllMedia === null ) {
+            $aAllMedia = $this->lvGetAllMedia();
+        }
+        else {
+            $aAllMedia = $this->_aLvAllMedia;
+        }
+        
+        $sPicUrl = '';
+        foreach ( $aAllMedia as $aCurrentMediaEntry ) {
+            if ( $aCurrentMediaEntry['mediatype'] == 'extpic' ) {
+                $sPicUrl = $aCurrentMediaEntry['detailsurl'];
+                break;
+            }
+        }
+        
+        return $sPicUrl;
     }
     
     
@@ -131,10 +228,11 @@ class lvextmedia_oxwarticledetails extends lvextmedia_oxwarticledetails_parent {
      */
     protected function _lvGetExtPictureLinks() {
         $aExtPicLinks = array();
+        $oProduct = $this->getProduct();
         
         for ( $iIndex=1; $iIndex<=12; $iIndex++ ) {
             $sCurrentPicField = "oxarticles__oxpic".(string)$iIndex;
-            $sCurrentPictureUrl = $this->$sCurrentPicField->value;
+            $sCurrentPictureUrl = $oProduct->$sCurrentPicField->value;
             
             // check if this is an external link picture
             if ( strpos( $sCurrentPictureUrl, 'http' ) !== false ) {
