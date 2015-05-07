@@ -25,7 +25,24 @@
  */
 class lvextmedia_oxmediaurl extends lvextmedia_oxmediaurl_parent {
     
+    /**
+     * ID to set into youtube iframe html
+     * @var string
+     */
+    protected $_sLvIframeId = null;
     
+    
+    /**
+     * Public setter that sets the id of an iframe
+     * 
+     * @param type $sIFrameId
+     * @return void
+     */
+    public function lvSetIFrameId( $sIFrameId ) {
+        $this->_sLvIframeId = $sIFrameId;
+    }
+
+
     /**
      * Returns the youtube thumbnail of an video. Returns empty string, if media is no youtube video
      * 
@@ -83,8 +100,15 @@ class lvextmedia_oxmediaurl extends lvextmedia_oxmediaurl_parent {
             $sYoutubeUrl = str_replace("youtu.be/", "www.youtube.com/embed/", $sUrl);
         }
 
-        $sYoutubeTemplate = '%s<iframe width="'.$sIFrameWidth.'" height="'.$sIFrameHeight.'" src="%s" frameborder="0" allowfullscreen></iframe>';
+        $sFrameIdCode = '';
+        if ( $this->_sLvIframeId !== null ) {
+            $sFrameIdCode = 'id="'.$this->_sLvIframeId.'" style="display:none;"';
+        }
+        $sYoutubeTemplate = '%s<iframe '.$sFrameIdCode.' width="'.$sIFrameWidth.'" height="'.$sIFrameHeight.'" src="%s" frameborder="0" allowfullscreen></iframe>';
         $sYoutubeHtml = sprintf($sYoutubeTemplate, $sDesc, $sYoutubeUrl, $sYoutubeUrl);
+        if ( $this->_sLvIframeId !== null ) {
+            $this->_sLvIframeId = null;
+        }
 
         return $sYoutubeHtml;
     }

@@ -93,7 +93,7 @@ class lvextmedia_oxwarticledetails extends lvextmedia_oxwarticledetails_parent {
     public function lvGetYouTubeMediaEmbed( $iIndex=0 ) {
         $sYouTubeEmbed = false;
 
-        if ($this->_aMediaFiles === null) {
+        if ( $this->_aMediaFiles === null ) {
             $this->_aLvMediaFiles = $this->getProduct()->getMediaUrls();
         }
 
@@ -120,11 +120,11 @@ class lvextmedia_oxwarticledetails extends lvextmedia_oxwarticledetails_parent {
      * @param void
      * @return array
      */
-    public function lvGetAllMedia() {
+    public function lvGetAllMedia( $blIncludePictures=true ) {
         $this->_aLvAllMedia = array();
         
         // first get all the youtube videos
-        if ($this->_aMediaFiles === null) {
+        if ( $this->_aMediaFiles === null ) {
             $this->_aLvMediaFiles = $this->getProduct()->getMediaUrls();
         }
         
@@ -141,11 +141,14 @@ class lvextmedia_oxwarticledetails extends lvextmedia_oxwarticledetails_parent {
             $sIconHeight    = '87';
         }
 
+        $iVideoIndex = 1;
         foreach ( $this->_aLvMediaFiles as $oMediaUrl ) {
+            $oMediaUrl->lvSetIFrameId( 'detailsvideoiframe_'.$iVideoIndex );
             $sUrl = $oMediaUrl->getHtml();
             if ( strpos( $sUrl, 'youtube.com' ) || strpos( $sUrl, 'youtu.be' ) ) {
                 $aVideoMedia = array(
                     'mediatype'     => 'youtube',
+                    'index'         => $iVideoIndex,
                     'embedurl'      => $sUrl,
                     'url'           => $oMediaUrl->getLink(),
                     'iconurl'       => $oMediaUrl->lvGetYouTubeThumbnailUrl(),
@@ -153,22 +156,26 @@ class lvextmedia_oxwarticledetails extends lvextmedia_oxwarticledetails_parent {
                     'iconheight'    => $sIconHeight,
                 );
                 $this->_aLvAllMedia[] = $aVideoMedia;
+                $iVideoIndex++;
             }
         }
-        
-        // next geet all the picture links
-        $aExtPictureLinks = $this->_lvGetExtPictureLinks();
-        
-        foreach ( $aExtPictureLinks as $sExtPictureLink ) {
-            $aPicMedia = array(
-                'mediatype'     => 'extpic',
-                'detailsurl'    => $sExtPictureLink,
-                'iconurl'       => $sExtPictureLink,
-                'iconwidth'     => $sIconWidth,
-                'iconheight'    => $sIconHeight,
-            );
-            
-            $this->_aLvAllMedia[] = $aPicMedia;
+
+        if ( $blIncludePictures ) {
+            // next geet all the picture links
+            $aExtPictureLinks = $this->_lvGetExtPictureLinks();
+
+            foreach ( $aExtPictureLinks as $iIndex=>$sExtPictureLink ) {
+                $aPicMedia = array(
+                    'mediatype'     => 'extpic',
+                    'index'         => $iIndex+1,
+                    'detailsurl'    => $sExtPictureLink,
+                    'iconurl'       => $sExtPictureLink,
+                    'iconwidth'     => $sIconWidth,
+                    'iconheight'    => $sIconHeight,
+                );
+
+                $this->_aLvAllMedia[] = $aPicMedia;
+            }
         }
         
         return $this->_aLvAllMedia;

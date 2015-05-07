@@ -6,10 +6,19 @@
             $( '#lvDetailsPictureStd' ).append( sPictureCode );
         }
         
-        function lvChangeDetailsToVideo( sTargetVideoLink ) {
+        function lvChangeDetailsToVideo( iVideoNr ) {
             $( '#lvDetailsPictureStd' ).empty();
-            var sTargetVideoEmbedCode ='<iframe width="380" height="340" src="' + sTargetVideoLink + '" frameborder="0" allowfullscreen></iframe>';
-            $( '#lvDetailsPictureStd' ).append( sTargetVideoEmbedCode );
+            for ( var iCurrentVideoNr=1;iCurrentVideoNr<=6;iCurrrentVideoNr++ ) {
+                var sCurrentVideoNr =iCurrentVideoNr.toString();
+                if ( $( '#detailsvideoiframe_' + sCurrentVideoNr ).length > 0 ) ) {
+                    if ( iCurrentVideoNr == iVideoNr ) {
+                        $( '#detailsvideoiframe_' + sCurrentVideoNr ).show();
+                    }
+                    else {
+                        $( '#detailsvideoiframe_' + sCurrentVideoNr ).hide();
+                    }
+                }
+            }
         }
     </script>
 
@@ -20,7 +29,7 @@
         [{foreach from=$oView->lvGetAllMedia() key=iPicNr item=aLvExtUrl name=sMorePics}]
             [{if $aLvExtUrl.mediatype == 'youtube'}]
                 <li>
-                    <a id="morePics_[{$smarty.foreach.sMorePics.iteration}]" onclick="lvChangeDetailsToVideo( '[{$aLvExtUrl.url}]' )">
+                    <a id="morePics_[{$smarty.foreach.sMorePics.iteration}]" onclick="lvChangeDetailsToVideo([{$smarty.foreach.sMorePics.iteration}])">
                         <span class="marker"><img src="[{$oViewConf->getImageUrl('marker.png')}]" alt=""></span>
                         <span class="artIcon"><img src="[{$aLvExtUrl.iconurl}]" style="height:auto;width:auto;max-height:[{$aLvExtUrl.iconheight}]px;max-width:[{$aLvExtUrl.iconwidth}]px;" alt=""></span>
                     </a>
