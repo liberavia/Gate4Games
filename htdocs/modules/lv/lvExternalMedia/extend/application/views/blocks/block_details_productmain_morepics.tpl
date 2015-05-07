@@ -7,6 +7,7 @@
         }
         
         function lvChangeDetailsToVideo( iVideoNr ) {
+            iVideoNr = parseInt( iVideoNr );
             $( '#lvDetailsPictureStd' ).empty();
             for ( var iCurrentVideoNr=1;iCurrentVideoNr<=6;iCurrrentVideoNr++ ) {
                 var sCurrentVideoNr =iCurrentVideoNr.toString();
@@ -29,7 +30,7 @@
         [{foreach from=$oView->lvGetAllMedia() key=iPicNr item=aLvExtUrl name=sMorePics}]
             [{if $aLvExtUrl.mediatype == 'youtube'}]
                 <li>
-                    <a id="morePics_[{$smarty.foreach.sMorePics.iteration}]" onclick="lvChangeDetailsToVideo([{$smarty.foreach.sMorePics.iteration}])">
+                    <a id="morePics_[{$smarty.foreach.sMorePics.iteration}]" onclick="lvChangeDetailsToVideo( '[{$smarty.foreach.sMorePics.iteration}]' )">
                         <span class="marker"><img src="[{$oViewConf->getImageUrl('marker.png')}]" alt=""></span>
                         <span class="artIcon"><img src="[{$aLvExtUrl.iconurl}]" style="height:auto;width:auto;max-height:[{$aLvExtUrl.iconheight}]px;max-width:[{$aLvExtUrl.iconwidth}]px;" alt=""></span>
                     </a>
