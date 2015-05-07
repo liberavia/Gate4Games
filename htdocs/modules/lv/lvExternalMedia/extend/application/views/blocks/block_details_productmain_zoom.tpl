@@ -4,7 +4,11 @@
         [{foreach from=$oView->lvGetAllMedia(false) item="aLvVideoMedia" name="alvMoreVideos"}]
             [{$aLvVideoMedia.embedurl}]
         [{/foreach}]
-        <script type="text/javascript">$( 'detailsvideoiframe_1' ).show();</script>
+        <script type="text/javascript">
+            $( document ).ready(function() {
+                $( 'detailsvideoiframe_1' ).show();
+            });    
+        </script>
     </div>
     <div id="lvDetailsPictureStd" class="picture">
     </div>
