@@ -1,13 +1,17 @@
 [{if $oView->lvHasMoreMedia()}]
     <script type="text/javascript">
         function lvChangeDetailsToPicture( sTargetPictureUrl ) {
+            $( '#lvDetailsVideoStd' ).hide();
+            $( '#lvDetailsPictureStd' ).show();
             $( '#lvDetailsPictureStd' ).empty();
             var sPictureCode = '<img src="' + sTargetPictureUrl + '" style="height:auto;width:auto;max-height:[{$oView->lvGetDetailsImageMaxHeight()}]px;max-width:[{$oView->lvGetDetailsImageMaxHeight()}]px;" alt="[{$oPictureProduct->oxarticles__oxtitle->value|strip_tags}] [{$oPictureProduct->oxarticles__oxvarselect->value|strip_tags}]">';
             $( '#lvDetailsPictureStd' ).append( sPictureCode );
         }
         
         function lvChangeDetailsToVideo( iVideoNr ) {
-            iVideoNr = parseInt( iVideoNr );
+            $( '#lvDetailsVideoStd' ).hide();
+            $( '#lvDetailsVideoStd' ).show();
+            iVideoNr = parseInt(iVideoNr);
             $( '#lvDetailsPictureStd' ).empty();
             for ( var iCurrentVideoNr=1;iCurrentVideoNr<=6;iCurrrentVideoNr++ ) {
                 var sCurrentVideoNr =iCurrentVideoNr.toString();

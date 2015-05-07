@@ -5,7 +5,7 @@
             [{$aLvVideoMedia.embedurl}]
         [{/foreach}]
     </div>
-    <div id="lvDetailsPictureStd" class="picture">
+    <div id="lvDetailsPictureStd" class="picture" style="display: none;">
     </div>
 [{else}]
     <div id="lvDetailsPictureStd" class="picture">
