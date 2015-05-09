@@ -17,6 +17,8 @@
                 [{ $oViewConf->getHiddenSid() }]
                 <input type="hidden" name="fnc" value="lvValidateAge">
                 <input type="hidden" name="cl" value="lvagecheck">
+                <input type="hidden" name="sReturnUrl" value="[{if $sReturnUrl}][{$sReturnUrl}][{/if}]">
+                
                 <table id="lvAgeTable">
                     <tr>
                         <td>

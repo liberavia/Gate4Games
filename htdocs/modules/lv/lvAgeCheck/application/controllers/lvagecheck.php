@@ -44,11 +44,13 @@ class lvagecheck extends oxUBase {
         $oConfig = $this->getConfig();
         
         $sForbidden = $oConfig->getRequestParameter( 'forbidden' );
+        $sReturnUrl = $oConfig->getRequestParameter( 'formerpage' );
         
         $this->_aView['blLvForbiddenByAge'] = false;
         if ( $sForbidden !== false ) {
             $this->_aView['blLvForbiddenByAge'] = true;
         }
+        $this->_aView['sFormerPage'] = $sReturnUrl;
         
         return $this->_sThisTemplate;
     }
@@ -115,7 +117,8 @@ class lvagecheck extends oxUBase {
     public function lvValidateAge() {
         $oConfig = $this->getConfig();
         
-        $aParams = $oConfig->getRequestParameter( 'editval' );
+        $aParams    = $oConfig->getRequestParameter( 'editval' );
+        $sReturnUrl = urldecode( $oConfig->getRequestParameter( 'sReturnUrl' ) );
         
         if ( count( $aParams ) == 3 ) {
             $oSession       = $this->getSession();
@@ -133,7 +136,15 @@ class lvagecheck extends oxUBase {
             $oSession->setVariable( $this->_sLvAgeSessionName, $iTimeStamp );
             
             // send user back and see if he matches age
-            $oUtils->redirect( $oUtilsServer->getServerVar( 'HTTP_REFERER' ) );
+            if ( $sReturnUrl && $sReturnUrl != '' ) {
+                $sUrl = $sReturnUrl;
+                        
+            }
+            else {
+                $sUrl = $oUtilsServer->getServerVar( 'HTTP_REFERER' );
+            }
+            
+            $oUtils->redirect( $sUrl, false );
         }
         else {
             $oLang          = oxRegistry::getLang();
