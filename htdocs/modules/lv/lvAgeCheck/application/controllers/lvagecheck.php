@@ -25,6 +25,10 @@
  */
 class lvagecheck extends oxUBase {
     
+    /**
+     * Template to call for rendering
+     * @var string
+     */
     protected $_sThisTemplate = 'lvagecheck.tpl';
     
     
@@ -43,7 +47,65 @@ class lvagecheck extends oxUBase {
         return $this->_sThisTemplate;
     }
     
+    /**
+     * Template getter returns an array of years til 100 years backwards from now
+     * 
+     * @param void
+     * @return array
+     */
+    public function lvGetYears() {
+        $iCurrentYear = (int)date( 'Y' );
+        $iMaxYearDown = $iCurrentYear - 100;
+        $aYears = array();
+        
+        for ( $iIndex=$iCurrentYear; $iIndex>=$iMaxYearDown; $iIndex-- ) {
+            $aYears[] = $iIndex;
+        }
+        
+        return $aYears;
+    }
+
+
+    /**
+     * Template getter returns months from 1 to 12
+     * 
+     * @param void
+     * @return array
+     */
+    public function lvGetMonths() {
+        $aMonths = array();
+        
+        for ( $iIndex=1; $iIndex<=12; $iIndex++ ) {
+            $aMonths[] = $iIndex;
+        }
+        
+        return $aMonths;
+    }
     
+
+    /**
+     * Template getter returns days from 1 to 31
+     * 
+     * @param void
+     * @return array
+     */
+    public function lvGetDays() {
+        $aDays = array();
+        
+        for ( $iIndex=1; $iIndex<=31; $iIndex++ ) {
+            $aDays[] = $iIndex;
+        }
+        
+        return $aDays;
+    }
+    
+    
+    /**
+     * Validating age entry set timestamp into session and redirect user to referer
+     * 
+     * @param void
+     * @return void
+     */
     public function lvValidateAge() {
         $oConfig = $this->getConfig();
         
