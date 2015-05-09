@@ -12,6 +12,7 @@
       <link rel="stylesheet" href="[{$oViewConf->getResourceUrl()}]main.css">
       <link rel="stylesheet" href="[{$oViewConf->getResourceUrl()}]colors.css">
       <link rel="stylesheet" type="text/css" href="[{$oViewConf->getResourceUrl()}]yui/build/assets/skins/sam/container.css">
+      <link rel="stylesheet" href="[{$oViewConf->getResourceUrl()}]g4gadmin.css">
   [{/block}]
 
   [{block name="admin_headitem_incjs"}]

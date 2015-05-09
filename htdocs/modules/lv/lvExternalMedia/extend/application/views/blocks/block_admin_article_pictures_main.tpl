@@ -13,7 +13,7 @@
 
 [{if $oxparentid}]
     <tr>
-      <td class="index" colspan="2">
+      <td class="index" colspan="3">
             <b>[{ oxmultilang ident="GENERAL_VARIANTE" }]</b>
             <a href="Javascript:editThis('[{$parentarticle->oxarticles__oxid->value}]');" class="edittext"><b>"[{$parentarticle->oxarticles__oxartnum->value}] [{$parentarticle->oxarticles__oxtitle->value}]"</b></a>
       </td>
@@ -28,7 +28,10 @@
       </td>
       <td class="text">
         [{assign var="sPicFile" value=$edit->getPictureFieldValue("oxpic", $iIndex) }]
-        <input type="text" class="editinput" name="editval[oxarticles__oxpic[{$iIndex}]]" value="[{$sPicFile}]">
+        <input type="text" class="editinput lvLongEdit" name="editval[oxarticles__oxpic[{$iIndex}]]" value="[{$sPicFile}]">
+      </td>
+      <td>
+          <input type="radio" id="coverpic[{$iIndex}]" name="editval[oxarticles__lvcoverpic]" value="oxpic[{$iIndex}]"><label for="coverpic[{$iIndex}]">Cover</label>
       </td>
     </tr>
 [{/section}]
