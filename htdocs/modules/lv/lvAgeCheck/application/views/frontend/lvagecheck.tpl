@@ -1,17 +1,17 @@
 [{capture append="oxidBlock_content"}]
 <div id="lvAgeCheckContent">
-    <div id="lvAgeCheckInformation">
-        [{oxifcontent ident="lvagenotallowed" object="oCont"}]
-            [{$oCont->oxcontents__oxcontent->value}]
-        [{/oxifcontent}]
-    </div>    
     [{if $blLvForbiddenByAge}]
+        <div id="lvAgeCheckInformation">
+            [{oxifcontent ident="lvagenotallowed" object="oCont"}]
+                [{$oCont->oxcontents__oxcontent->value}]
+            [{/oxifcontent}]
+        </div>    
+    [{else}]
         <div id="lvEnterAge">
             [{oxifcontent ident="lventerage" object="oCont"}]
                 [{$oCont->oxcontents__oxcontent->value}]
             [{/oxifcontent}]
         </div>
-    [{else}]
         <div id="lvEnterAge">
             <form action="[{ $oViewConf->getSslSelfLink() }]" method="post">
                 [{ $oViewConf->getHiddenSid() }]
