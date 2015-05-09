@@ -23,7 +23,7 @@
  * @author Gate4Games
  * @author André Gregor-Herrmann
  */
-class lvextmedia_admin_pictures extends lvextmedia_admin_pictures_parent {
+class lvextmedia_article_pictures extends lvextmedia_article_pictures_parent {
     
     /**
      * Saves (uploads) pictures to server.
@@ -32,7 +32,7 @@ class lvextmedia_admin_pictures extends lvextmedia_admin_pictures_parent {
      */
     public function save()
     {
-        $myConfig = $this->getConfig();
+        $oConfig = $this->getConfig();
 
         $oArticle = oxNew("oxarticle");
         $oArticle->load( $this->getEditObjectId() );
