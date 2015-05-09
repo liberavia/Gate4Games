@@ -31,6 +31,12 @@ class lvagecheck extends oxUBase {
      */
     protected $_sThisTemplate = 'lvagecheck.tpl';
     
+    /**
+     * Session variable name for age check
+     * @var string
+     */
+    protected $_sLvAgeSessionName = 'sCustomerBirthdate'; 
+
     
     public function render() {
         parent::render();
@@ -110,8 +116,32 @@ class lvagecheck extends oxUBase {
         $oConfig = $this->getConfig();
         
         $aParams = $oConfig->getRequestParameter( 'editval' );
-        print_r( $aParams );
-        die();
+        
+        if ( count( $aParams ) == 3 ) {
+            $oSession       = $this->getSession();
+            $oUtils         = oxRegistry::getUtils();
+            $oUtilsServer   = oxRegistry::get( 'oxUtilsServer' );
+            
+            $sYear      = trim( $aParams['lvAgeYear'] );
+            $sMonth     = trim( $aParams['lvAgeMonth'] );
+            $sDay       = trim( $aParams['lvAgeDay'] );
+            
+            $sBirtdate = $sYear."-".$sMonth."-".$sDay;
+            
+            $iTimeStamp = strtotime( $sBirtdate );
+            
+            $oSession->setVariable( $this->_sLvAgeSessionName, $iTimeStamp );
+            
+            // send user back and see if he matches age
+            $oUtils->redirect( $oUtilsServer->getServerVar( 'HTTP_REFERER' ) );
+        }
+        else {
+            $oLang          = oxRegistry::getLang();
+            $oUtilsView     = oxRecommList::get( 'oxUtilsView' );
+            
+            $sErrorMessage = $oLang->translateString( 'LV_AGECHECK_VALIDATION_ERROR' );
+            $oUtilsView->addErrorToDisplay( $sErrorMessage );
+        }
     }
     
 }

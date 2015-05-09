@@ -28,5 +28,6 @@ $aLang = array(
     'LV_AGECHECK_ENTER_MONTH'                           => 'Month of birth',
     'LV_AGECHECK_ENTER_DAY'                             => 'Day of birth',
     'LV_AGECHECK_SUBMIT'                                => 'Confirm age',
+    'LV_AGECHECK_VALIDATION_ERROR'                      => 'An error occured, please enter your birthdate again.',
 );
 
