@@ -39,7 +39,6 @@ class lvagecheck_oxwarticledetails extends lvagecheck_oxwarticledetails_parent {
     public function render() {
         
         $aRecommendedAges = $this->_lvGetRecommendedAges();
-        
         $sCheckAgeType = false;
         if ( count( $aRecommendedAges ) > 0 ) {
             $sCheckAgeType = $this->_lvNeedToCheckAge( $aRecommendedAges );
@@ -129,7 +128,7 @@ class lvagecheck_oxwarticledetails extends lvagecheck_oxwarticledetails_parent {
             }
         }
         
-        $sCheckAgeType = "none";
+        $sCheckAgeType = "approved";
         // if check is required we first need to check if check has already been performed
         if ( $blNeedToCheck ) {
             $sUserBirthdateTimestamp = $oSession->getVariable( $this->_sLvAgeSessionName );
@@ -144,6 +143,9 @@ class lvagecheck_oxwarticledetails extends lvagecheck_oxwarticledetails_parent {
                 else {
                     $sCheckAgeType = 'denied';
                 }
+            }
+            else {
+                $sCheckAgeType = "none";
             }
         }
         
