@@ -31,7 +31,7 @@
         <input type="text" class="editinput lvLongEdit" name="editval[oxarticles__oxpic[{$iIndex}]]" value="[{$sPicFile}]">
       </td>
       <td>
-          <input type="radio" id="coverpic[{$iIndex}]" name="editval[oxarticles__lvcoverpic]" value="oxpic[{$iIndex}]"><label for="coverpic[{$iIndex}]">Cover</label>
+          <input type="radio" id="coverpic[{$iIndex}]" name="editval[oxarticles__lvcoverpic]" value="oxpic[{$iIndex}]" [{if $edit->oxarticles__lvcoverpic->value == "oxpic`$iIndex`"}]selected[{/if}]><label for="coverpic[{$iIndex}]">Cover</label>
       </td>
     </tr>
 [{/section}]
