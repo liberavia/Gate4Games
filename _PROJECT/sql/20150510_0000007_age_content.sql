@@ -1,0 +1,4 @@
+INSERT INTO `oxcontents` (`OXID`, `OXLOADID`, `OXSHOPID`, `OXSNIPPET`, `OXTYPE`, `OXACTIVE`, `OXACTIVE_1`, `OXPOSITION`, `OXTITLE`, `OXCONTENT`, `OXTITLE_1`, `OXCONTENT_1`, `OXACTIVE_2`, `OXTITLE_2`, `OXCONTENT_2`, `OXACTIVE_3`, `OXTITLE_3`, `OXCONTENT_3`, `OXCATID`, `OXFOLDER`, `OXTERMVERSION`, `OXTIMESTAMP`) VALUES
+('84c36b6371253172e23f2706b9023712', 'lvagenotallowed', 'oxbaseshop', 1, 0, 1, 0, '', 'Information Nichtanzeige wegen Alter', '<p>Leider biste zu Jung dafür, sorry</p>', '', '', 0, '', '', 0, '', '', '41625027aee7153cabcb4d7b9120c0d9', '', '', '2015-05-09 21:20:08'),
+('c53c855387b8275f943f591a92268abf', 'lventerage', 'oxbaseshop', 1, 0, 1, 0, '', 'Informationstext Alterseingabe', '<p>Bitte gebe dein Geburtstag über die Felder unten ein</p>', '', '', 0, '', '', 0, '', '', '41625027aee7153cabcb4d7b9120c0d9', '', '', '2015-05-09 21:19:06');
+ 
