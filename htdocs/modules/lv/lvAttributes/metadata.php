@@ -48,7 +48,7 @@ $aModule = array(
     'templates' => array(
     ),
     'blocks' => array(
-        array( 'template' => 'article_pictures.tpl',                'block'=>'admin_attribute_main_form',     'file'=>'extend/application/views/blocks/block_admin_attribute_main.tpl' ),
+        array( 'template' => 'attribute_main.tpl',                'block'=>'admin_attribute_main_form',     'file'=>'extend/application/views/blocks/block_admin_attribute_main.tpl' ),
     ),
     'settings' => array(
     )
