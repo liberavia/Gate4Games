@@ -38,7 +38,8 @@ class lvextmedia_article_pictures extends lvextmedia_article_pictures_parent {
         $oArticle->load( $this->getEditObjectId() );
         
         if ( $oArticle ) {
-            $oArticle->assign( $oConfig->getRequestParameter( "editval" ) );
+            $aParams = $oConfig->getRequestParameter( "editval" );
+            $oArticle->assign( $aParams );
             $oArticle->save();
         }
     }
