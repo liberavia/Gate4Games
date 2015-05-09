@@ -65,7 +65,7 @@ class lvagecheck_oxwarticledetails extends lvagecheck_oxwarticledetails_parent {
 
         // redirect to age check page
         $sShopUrl   = $oConfig->getShopUrl();
-        $sRedirectQueryString = urlencode( $oUtilsServer->getServerVar( 'QUERY_STRING' ) );
+        $sRedirectQueryString = urlencode( $oUtilsServer->getServerVar( 'REQUEST_URI' ) );
         
         $sAddToUrl  = "index.php?cl=lvagecheck&formerpage=".$sRedirectQueryString;
         

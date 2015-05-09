@@ -36,8 +36,12 @@ class lvagecheck extends oxUBase {
      * @var string
      */
     protected $_sLvAgeSessionName = 'sCustomerBirthdate'; 
-
     
+    
+    protected $_sLvCurrentReturnUrl = '';
+
+
+
     public function render() {
         parent::render();
         
@@ -50,11 +54,24 @@ class lvagecheck extends oxUBase {
         if ( $sForbidden !== false ) {
             $this->_aView['blLvForbiddenByAge'] = true;
         }
-        $this->_aView['sFormerPage'] = $sReturnUrl;
+        
+        $this->_sLvCurrentReturnUrl = $sReturnUrl;
         
         return $this->_sThisTemplate;
     }
     
+    
+    /**
+     * Template getter returns current return url
+     * 
+     * @param void
+     * @return string
+     */
+    public function lvGetReturnUrl() {
+        return $this->_sLvCurrentReturnUrl;
+    }
+
+
     /**
      * Template getter returns an array of years til 100 years backwards from now
      * 
@@ -137,8 +154,17 @@ class lvagecheck extends oxUBase {
             
             // send user back and see if he matches age
             if ( $sReturnUrl && $sReturnUrl != '' ) {
-                $sUrl = $sReturnUrl;
-                        
+                $sShopUrl = $oConfig->getShopUrl();
+                $sConcatenate = '';
+                
+                if ( substr( $sShopUrl, -1 ) != '/' && substr( $sReturnUrl, 0, 1 ) != '/' ) {
+                    $sConcatenate  = "/";
+                }
+                else if ( substr( $sShopUrl, -1 ) == '/' && substr( $sReturnUrl, 0, 1 ) == '/' ) {
+                    $sShopUrl = substr($sShopUrl, 0, strlen( $sShopUrl )-1 );
+                }
+                
+                $sUrl = $sShopUrl.$sConcatenate.$sReturnUrl;
             }
             else {
                 $sUrl = $oUtilsServer->getServerVar( 'HTTP_REFERER' );

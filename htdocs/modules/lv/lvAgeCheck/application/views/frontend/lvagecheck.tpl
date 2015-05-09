@@ -14,10 +14,10 @@
         </div>
         <div id="lvEnterAge">
             <form action="[{ $oViewConf->getSslSelfLink() }]" method="post">
-                [{ $oViewConf->getHiddenSid() }]
+                [{$oViewConf->getHiddenSid()}]
                 <input type="hidden" name="fnc" value="lvValidateAge">
                 <input type="hidden" name="cl" value="lvagecheck">
-                <input type="hidden" name="sReturnUrl" value="[{if $sReturnUrl}][{$sReturnUrl}][{/if}]">
+                <input type="hidden" name="sReturnUrl" value="[{$oView->lvGetReturnUrl()}]">
                 
                 <table id="lvAgeTable">
                     <tr>
