@@ -19,7 +19,17 @@
       </td>
     </tr>
 [{/if}]
-
+<tr>
+  <td class="index">
+      Nr.
+  </td>
+  <td class="text">
+      Url
+  </td>
+  <td>
+      Cover
+  </td>
+</tr>
 [{section name=picRow start=1 loop=$iPicCount+1 step=1}]
     [{assign var="iIndex" value=$smarty.section.picRow.index}]
     <tr>
@@ -31,7 +41,7 @@
         <input type="text" class="editinput lvLongEdit" name="editval[oxarticles__oxpic[{$iIndex}]]" value="[{$sPicFile}]">
       </td>
       <td>
-          <input type="radio" id="coverpic[{$iIndex}]" name="editval[oxarticles__lvcoverpic]" value="oxpic[{$iIndex}]" [{if $edit->oxarticles__lvcoverpic->value == "oxpic`$iIndex`"}]selected[{/if}]><label for="coverpic[{$iIndex}]">Cover</label>
+          <input type="radio" id="coverpic[{$iIndex}]" name="editval[oxarticles__lvcoverpic]" value="oxpic[{$iIndex}]" [{if $edit->oxarticles__lvcoverpic->value == "oxpic`$iIndex`"}]selected[{/if}]>
       </td>
     </tr>
 [{/section}]
