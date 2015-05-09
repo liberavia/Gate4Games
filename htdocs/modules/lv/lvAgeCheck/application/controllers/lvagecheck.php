@@ -31,7 +31,25 @@ class lvagecheck extends oxUBase {
     public function render() {
         parent::render();
         
+        $oConfig = $this->getConfig();
+        
+        $sForbidden = $oConfig->getRequestParameter( 'forbidden' );
+        
+        $this->_aView['blLvForbiddenByAge'] = false;
+        if ( $sForbidden !== false ) {
+            $this->_aView['blLvForbiddenByAge'] = true;
+        }
+        
         return $this->_sThisTemplate;
+    }
+    
+    
+    public function lvValidateAge() {
+        $oConfig = $this->getConfig();
+        
+        $aParams = $oConfig->getRequestParameter( 'editval' );
+        print_r( $aParams );
+        die();
     }
     
 }

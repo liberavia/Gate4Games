@@ -54,6 +54,59 @@ class lvagecheck_oxwarticledetails extends lvagecheck_oxwarticledetails_parent {
     
     
     /**
+     * Template getter returns an array of years til 100 years backwards from now
+     * 
+     * @param void
+     * @return array
+     */
+    public function lvGetYears() {
+        $iCurrentYear = (int)date( 'Y' );
+        $iMaxYearDown = $iCurrentYear - 100;
+        $aYears = array();
+        
+        for ( $iIndex=$iCurrentYear; $iIndex>=$iMaxYearDown; $iIndex-- ) {
+            $aYears[] = $iIndex;
+        }
+        
+        return $aYears;
+    }
+
+
+    /**
+     * Template getter returns months from 1 to 12
+     * 
+     * @param void
+     * @return array
+     */
+    public function lvGetMonths() {
+        $aMonths = array();
+        
+        for ( $iIndex=1; $iIndex<=12; $iIndex++ ) {
+            $aMonths[] = $iIndex;
+        }
+        
+        return $aMonths;
+    }
+    
+
+    /**
+     * Template getter returns days from 1 to 31
+     * 
+     * @param void
+     * @return array
+     */
+    public function lvGetDays() {
+        $aDays = array();
+        
+        for ( $iIndex=1; $iIndex<=31; $iIndex++ ) {
+            $aDays[] = $iIndex;
+        }
+        
+        return $aDays;
+    }
+
+    
+    /**
      * Redirects to age check page. If user is not allowed top see contend by age add relating
      * parameter to redirect url
      * 
