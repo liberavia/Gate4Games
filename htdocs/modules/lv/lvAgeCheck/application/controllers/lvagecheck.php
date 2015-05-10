@@ -37,24 +37,34 @@ class lvagecheck extends oxUBase {
      */
     protected $_sLvAgeSessionName = 'sCustomerBirthdate'; 
     
-    
+    /**
+     * Optional return url after requesting age
+     * @var string
+     */
     protected $_sLvCurrentReturnUrl = '';
 
+    /**
+     * Flag that signals if user has been denied by age
+     * @var bool
+     */
+    protected $_blLvForbiddenByAge = false;
 
 
+    /**
+     * Render method which is in each oxid controller
+     * 
+     * @param void
+     * @return string
+     */
     public function render() {
         parent::render();
         
         $oConfig = $this->getConfig();
         
-        $sForbidden = $oConfig->getRequestParameter( 'forbidden' );
+        $blForbidden = (bool)$oConfig->getRequestParameter( 'forbidden' );
         $sReturnUrl = $oConfig->getRequestParameter( 'formerpage' );
         
-        $this->_aView['blLvForbiddenByAge'] = false;
-        if ( $sForbidden !== false ) {
-            $this->_aView['blLvForbiddenByAge'] = true;
-        }
-        
+        $this->_blLvForbiddenByAge = $blForbidden;
         $this->_sLvCurrentReturnUrl = $sReturnUrl;
         
         return $this->_sThisTemplate;
@@ -69,6 +79,17 @@ class lvagecheck extends oxUBase {
      */
     public function lvGetReturnUrl() {
         return $this->_sLvCurrentReturnUrl;
+    }
+    
+    
+    /**
+     * Template getter returns if user access has been denied by requesting his age
+     * 
+     * @param void
+     * @return bool
+     */
+    public function lvGetForbiddenByAge() {
+        return $this->_blLvForbiddenByAge;
     }
 
 

@@ -1,6 +1,6 @@
 [{capture append="oxidBlock_content"}]
 <div id="lvAgeCheckContent">
-    [{if $blLvForbiddenByAge}]
+    [{if $oView->lvGetForbiddenByAge()}]
         <div id="lvAgeCheckInformation">
             [{oxifcontent ident="lvagenotallowed" object="oCont"}]
                 [{$oCont->oxcontents__oxcontent->value}]

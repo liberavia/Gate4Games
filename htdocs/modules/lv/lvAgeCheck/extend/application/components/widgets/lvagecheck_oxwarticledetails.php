@@ -45,7 +45,7 @@ class lvagecheck_oxwarticledetails extends lvagecheck_oxwarticledetails_parent {
         }
         
         if ( $sCheckAgeType == 'none' || $sCheckAgeType == 'denied' ) {
-            $this->_lvRedirectToCheckPage( $sCheckAge );
+            $this->_lvRedirectToCheckPage( $sCheckAgeType );
         }
         
         return parent::render();
