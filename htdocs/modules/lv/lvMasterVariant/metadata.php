@@ -41,7 +41,7 @@ $aModule = array(
     'email'        => 'info@gate4games.com',
     'extend'       => array(
         // controllers admin
-        'article_main'                          => 'lv/lvMasterVariant/extend/application/controllers/admin/lvmv_article_main',
+        // 'article_main'                          => 'lv/lvMasterVariant/extend/application/controllers/admin/lvmv_article_main',
     ),
     'files' => array(
     ),
