@@ -57,7 +57,7 @@ class lvmv_article_main extends lvmv_article_main_parent {
         
         if ( $sOxid != "-1" ) {
             $oArticle->loadInLang( $this->_iEditLang, $sOxid );
-            $oParent = $oArticle->getParent();
+            $oParent = $oArticle->getParentArticle();
             
             if ( $oParent ) {
                 $sParentId  = $oParent->getId();
