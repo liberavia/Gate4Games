@@ -123,63 +123,8 @@ class lvextmedia_oxwarticledetails extends lvextmedia_oxwarticledetails_parent {
     public function lvGetAllMedia( $blIncludePictures=true ) {
         $this->_aLvAllMedia = array();
         
-        // first get all the youtube videos
-        if ( $this->_aMediaFiles === null ) {
-            $this->_aLvMediaFiles = $this->getProduct()->getMediaUrls();
-        }
-        
-        // get sizes of icon
-        $sIconSize = $this->getConfig()->getConfigParam( 'sIconsize' );
-        if ( strpos( $sIconSize, "*" ) !== false ) {
-            $aIconSize = explode( "*", $sIconSize );
-            $sIconWidth     = trim( $aIconSize[0] );
-            $sIconHeight    = trim( $aIconSize[0] );
-        }
-        else {
-            // use dummy standard
-            $sIconWidth     = '87';
-            $sIconHeight    = '87';
-        }
-
-        $iVideoIndex = 1;
-        foreach ( $this->_aLvMediaFiles as $oMediaUrl ) {
-            $oMediaUrl->lvSetIFrameId( 'detailsvideoiframe_'.$iVideoIndex );
-            $oMediaUrl->lvSetIFrameVisible(false);
-            if ( $iVideoIndex == 1 ) {
-                $oMediaUrl->lvSetIFrameVisible(true);
-            }
-            $sUrl = $oMediaUrl->getHtml();
-            if ( strpos( $sUrl, 'youtube.com' ) || strpos( $sUrl, 'youtu.be' ) ) {
-                $aVideoMedia = array(
-                    'mediatype'     => 'youtube',
-                    'index'         => $iVideoIndex,
-                    'embedurl'      => $sUrl,
-                    'url'           => $oMediaUrl->getLink(),
-                    'iconurl'       => $oMediaUrl->lvGetYouTubeThumbnailUrl(),
-                    'iconwidth'     => $sIconWidth,
-                    'iconheight'    => $sIconHeight,
-                );
-                $this->_aLvAllMedia[] = $aVideoMedia;
-                $iVideoIndex++;
-            }
-        }
-
-        if ( $blIncludePictures ) {
-            // next geet all the picture links
-            $aExtPictureLinks = $this->_lvGetExtPictureLinks();
-
-            foreach ( $aExtPictureLinks as $iIndex=>$sExtPictureLink ) {
-                $aPicMedia = array(
-                    'mediatype'     => 'extpic',
-                    'index'         => $iIndex+1,
-                    'detailsurl'    => $sExtPictureLink,
-                    'iconurl'       => $sExtPictureLink,
-                    'iconwidth'     => $sIconWidth,
-                    'iconheight'    => $sIconHeight,
-                );
-
-                $this->_aLvAllMedia[] = $aPicMedia;
-            }
+        if ( $this->_aLvAllMedia === null ) {
+            $this->_aLvAllMedia = $this->getProduct()->lvGetAllMedia();
         }
         
         return $this->_aLvAllMedia;
@@ -211,46 +156,6 @@ class lvextmedia_oxwarticledetails extends lvextmedia_oxwarticledetails_parent {
      * Template getter returns first image entry of all media
      */
     public function lvGetFirstPictureUrl() {
-        if ( $this->_aLvAllMedia === null ) {
-            $aAllMedia = $this->lvGetAllMedia();
-        }
-        else {
-            $aAllMedia = $this->_aLvAllMedia;
-        }
-        
-        $sPicUrl = '';
-        foreach ( $aAllMedia as $aCurrentMediaEntry ) {
-            if ( $aCurrentMediaEntry['mediatype'] == 'extpic' ) {
-                $sPicUrl = $aCurrentMediaEntry['detailsurl'];
-                break;
-            }
-        }
-        
-        return $sPicUrl;
-    }
-    
-    
-    
-    /**
-     * Returns an array of all external picture links
-     * 
-     * @param void
-     * @return array
-     */
-    protected function _lvGetExtPictureLinks() {
-        $aExtPicLinks = array();
-        $oProduct = $this->getProduct();
-        
-        for ( $iIndex=1; $iIndex<=12; $iIndex++ ) {
-            $sCurrentPicField = "oxarticles__oxpic".(string)$iIndex;
-            $sCurrentPictureUrl = $oProduct->$sCurrentPicField->value;
-            
-            // check if this is an external link picture
-            if ( strpos( $sCurrentPictureUrl, 'http' ) !== false ) {
-                $aExtPicLinks[] = $sCurrentPictureUrl;
-            }
-        }
-        
-        return $aExtPicLinks;
+        return $this->getProduct()->lvGetFirstPictureUrl();
     }
 }
