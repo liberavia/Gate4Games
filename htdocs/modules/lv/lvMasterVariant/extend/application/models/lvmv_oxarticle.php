@@ -40,7 +40,16 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
      * @return object
      */
     protected function _lvGetProduct() {
-        return $this->_lvGetMasterVariant();
+        $oMasterVariant = $this->_lvGetMasterVariant();
+        
+        if ( $oMasterVariant ) {
+            $oReturn = $oMasterVariant;
+        }
+        else {
+            $oReturn = parent::_lvGetProduct();
+        }
+        
+        return $oReturn;
     }
 
     
@@ -66,10 +75,6 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
                 }
                 
                 $this->_oLvMasterVariant = $oTargetVariant;
-            }
-            else {
-                // is already variant so deliver parent call
-                return parent::_lvGetMasterVariant();
             }
         }
         
