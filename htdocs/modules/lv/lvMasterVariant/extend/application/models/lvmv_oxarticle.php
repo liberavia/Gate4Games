@@ -46,7 +46,7 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
             $oReturn = $oMasterVariant;
         }
         else {
-            $oReturn = parent::_lvGetProduct();
+            $oReturn = parent::lvGetProduct();
         }
         
         return $oReturn;
