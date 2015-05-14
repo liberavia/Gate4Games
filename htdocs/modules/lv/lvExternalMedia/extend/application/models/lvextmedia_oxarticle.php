@@ -152,7 +152,7 @@ class lvextmedia_oxarticle extends lvextmedia_oxarticle_parent {
         
         if ( $sCoverPicFieldName != '' ) {
             $sCoverPicFieldName = "oxarticles__".$sCoverPicFieldName;
-            $sPicUrl =  $this->$sCoverPicFieldName->value;
+            $sPicUrl =  $oProduct->$sCoverPicFieldName->value;
         }
         else {
             // falbackurl
@@ -174,7 +174,7 @@ class lvextmedia_oxarticle extends lvextmedia_oxarticle_parent {
     protected function _lvGetExtPictureLinks() {
         $aExtPicLinks = array();
         $oProduct = $this->_lvGetProduct();
-        
+
         for ( $iIndex=1; $iIndex<=12; $iIndex++ ) {
             $sCurrentPicField = "oxarticles__oxpic".(string)$iIndex;
             $sCurrentPictureUrl = $oProduct->$sCurrentPicField->value;

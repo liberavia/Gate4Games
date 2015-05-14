@@ -69,7 +69,7 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
                     $iCurrentLangId = oxRegistry::getLang()->getBaseLanguage();
                     $oArticle = oxNew( 'oxarticle' );
                     $oArticle->loadInLang( $iCurrentLangId, $sMasterVariantOxid );
-                    
+
                     if ( $oArticle ) {
                         $this->_oLvMasterVariant = $oArticle;
                     }
