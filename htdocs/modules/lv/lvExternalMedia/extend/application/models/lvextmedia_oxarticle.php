@@ -136,6 +136,30 @@ class lvextmedia_oxarticle extends lvextmedia_oxarticle_parent {
     }
     
     
+    /**
+     * Public getter returns defined cover pic if exists and first image if not
+     * 
+     * @param void
+     * @return string
+     */
+    public function lvGetCoverPictureUrl() {
+        // target field
+        $sCoverPicFieldName = $this->oxarticles__lvcoverpic->value();
+        
+        if ( $sCoverPicFieldName != '' ) {
+            $sCoverPicFieldName = "oxarticles__".$sCoverPicFieldName;
+            $sPicUrl =  $this->$sCoverPicFieldName->value;
+        }
+        else {
+            // falbackurl
+            $sPicUrl = $this->lvGetFirstPictureUrl();
+        }
+        
+        return $sPicUrl;
+    }
+    
+    
+    
     
     /**
      * Returns an array of all external picture links

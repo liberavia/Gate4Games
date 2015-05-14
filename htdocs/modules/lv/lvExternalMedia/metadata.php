@@ -56,9 +56,12 @@ $aModule = array(
     'templates' => array(
     ),
     'blocks' => array(
-        array( 'template' => 'page/details/inc/productmain.tpl',    'block'=>'details_productmain_zoom',        'file'=>'extend/application/views/blocks/block_details_productmain_zoom.tpl' ),
-        array( 'template' => 'article_pictures.tpl',                'block'=>'admin_article_pictures_main',     'file'=>'extend/application/views/blocks/block_admin_article_pictures_main.tpl' ),
-        array( 'template' => 'page/details/inc/productmain.tpl',    'block'=>'details_productmain_morepics',    'file'=>'extend/application/views/blocks/block_details_productmain_morepics.tpl' ),
+        array( 'template' => 'page/details/inc/productmain.tpl',        'block'=>'details_productmain_zoom',                        'file'=>'extend/application/views/blocks/block_details_productmain_zoom.tpl' ),
+        array( 'template' => 'article_pictures.tpl',                    'block'=>'admin_article_pictures_main',                     'file'=>'extend/application/views/blocks/block_admin_article_pictures_main.tpl' ),
+        array( 'template' => 'page/details/inc/productmain.tpl',        'block'=>'details_productmain_morepics',                    'file'=>'extend/application/views/blocks/block_details_productmain_morepics.tpl' ),
+        array( 'template' => 'widget/product/listitem_grid.tpl',        'block'=>'lv_widget_product_listitem_grid_picture',         'file'=>'extend/application/views/blocks/block_lv_widget_product_listitem_grid_picture.tpl' ),
+        array( 'template' => 'widget/product/listitem_infogrid.tpl',    'block'=>'widget_product_listitem_infogrid_gridpicture',    'file'=>'extend/application/views/blocks/block_widget_product_listitem_infogrid_gridpicture.tpl' ),
+        array( 'template' => 'widget/product/listitem_line.tpl',        'block'=>'widget_product_listitem_line_picturebox',         'file'=>'extend/application/views/blocks/block_widget_product_listitem_line_picturebox.tpl' ),
     ),
     'settings' => array(
     )

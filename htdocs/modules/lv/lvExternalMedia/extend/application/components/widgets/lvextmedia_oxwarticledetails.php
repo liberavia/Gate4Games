@@ -121,12 +121,7 @@ class lvextmedia_oxwarticledetails extends lvextmedia_oxwarticledetails_parent {
      * @return array
      */
     public function lvGetAllMedia( $blIncludePictures=true ) {
-        $this->_aLvAllMedia = array();
-        
-        if ( $this->_aLvAllMedia === null ) {
-            $this->_aLvAllMedia = $this->getProduct()->lvGetAllMedia();
-        }
-        
+        $this->_aLvAllMedia = $this->getProduct()->lvGetAllMedia();
         return $this->_aLvAllMedia;
     }
     
@@ -154,8 +149,22 @@ class lvextmedia_oxwarticledetails extends lvextmedia_oxwarticledetails_parent {
     
     /**
      * Template getter returns first image entry of all media
+     * 
+     * @param void
+     * @return string
      */
     public function lvGetFirstPictureUrl() {
         return $this->getProduct()->lvGetFirstPictureUrl();
+    }
+    
+    
+    /**
+     * Template getter returns coverpic of details article
+     * 
+     * @param void
+     * @return string
+     */
+    public function lvGetCoverPictureUrl() {
+        return $this->getProduct()->lvGetCoverPictureUrl();
     }
 }
