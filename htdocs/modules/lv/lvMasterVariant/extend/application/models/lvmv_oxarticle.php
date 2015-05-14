@@ -57,27 +57,70 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
      * Returns the master variant of article
      * 
      * @param void
-     * 
+     * @return mixed
      */
     protected function _lvGetMasterVariant() {
         if ( $this->_oLvMasterVariant === null ) {
             if ( $this->getVariantsCount() > 0 ) {
-                $iIndex = 0;
-                foreach ( $this->getVariants() as $oVariant ) {
-                    if ( $iIndex == 0 ) {
-                        // we better save first variant as fallback
-                        $oTargetVariant = $oVariant;
-                    }
-                    if ( $oVariant->oxarticles__lvmastervariant->value == '1' ) {
-                        $oTargetVariant = $oVariant;
-                    }
-                    $iIndex++;
-                }
                 
-                $this->_oLvMasterVariant = $oTargetVariant;
+                $sMasterVariantOxid = $this->_lvGetMasterVariantId();
+                
+                if ( $sMasterVariantOxid ) {
+                    $iCurrentLangId = oxRegistry::getLang()->getBaseLanguage();
+                    $oArticle = oxNew( 'oxarticle' );
+                    $oArticle->loadInLang( $iCurrentLangId, $sMasterVariantOxid );
+                    
+                    if ( $oArticle ) {
+                        $this->_oLvMasterVariant = $oArticle;
+                    }
+                }
             }
         }
         
         return $this->_oLvMasterVariant;
+    }
+    
+    
+    /**
+     * Returns oxid of master variant
+     * 
+     * @param void
+     * @return mixed
+     */
+    protected function _lvGetMasterVariantId() {
+        // Maybe we are still in a variant. Return false in case
+        $mReturn = false;
+        
+        if ( $this->oxarticles__oxparentid == '' ) {
+            $sOxid = $this->getId();
+            
+            $oDb = oxDb::getDb( FETCH_MODE_ASSOC );
+            $sArticleTable = getViewName( 'oxarticles' );
+            
+            $sQuery = "SELECT OXID, LVMASTERVARIANT FROM ".$sArticleTable." WHERE OXPARENTID='".$sOxid."'";
+            
+            $oResult = $oDb->Execute( $sQuery );
+            
+            if ( $oResult != false && $oResult->recordCount() > 0 ) {
+                $iIndex = 0;
+                while ( !$oResult->EOF ) {
+                    // saving first variant oxid as fallback if there is no master
+                    if ( $iIndex == 0 ) {
+                        $mReturn = $oResult->fields['OXID'];
+                    }
+                    
+                    $blIsMasterVariant = (bool)$oResult->fields['LVMASTERVARIANT'];
+                    
+                    if ( $blIsMasterVariant ) {
+                        $mReturn = $oResult->fields['OXID'];
+                    }
+                    
+                    $iIndex++;
+                    $oResult->moveNext();
+                }
+            }
+        }
+        
+        return $mReturn;
     }
 }
