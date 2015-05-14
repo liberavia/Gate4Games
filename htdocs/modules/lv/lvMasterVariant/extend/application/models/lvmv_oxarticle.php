@@ -51,6 +51,71 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
         
         return $oReturn;
     }
+    
+    
+    /**
+     * Get article long description
+     *
+     * @return object $oField field object
+     */
+    public function getLongDescription()
+    {
+        $sMasterVariantOxid = $this->_lvGetMasterVariantId();
+        if ( $sMasterVariantOxid ) {
+            if ( $this->_oLongDesc === null ) {
+                // initializing
+                $this->_oLongDesc = new oxField();
+
+
+                // choosing which to get..
+                $sOxid = $sMasterVariantOxid;
+                $sViewName = getViewName( 'oxartextends', $this->getLanguage() );
+
+                $oDb = oxDb::getDb();
+                $sDbValue = $oDb->getOne("select oxlongdesc from {$sViewName} where oxid = " . $oDb->quote($sOxid));
+
+                if ($sDbValue != false) {
+                    $this->_oLongDesc->setValue($sDbValue, oxField::T_RAW);
+                } elseif ($this->oxarticles__oxparentid->value) {
+                    if (!$this->isAdmin() || $this->_blLoadParentData) {
+                        $oParent = $this->getParentArticle();
+                        if ($oParent) {
+                            $this->_oLongDesc->setValue($oParent->getLongDescription()->getRawValue(), oxField::T_RAW);
+                        }
+                    }
+                }
+            }
+
+            return $this->_oLongDesc;
+        }
+        else {
+            return parent::getLongDescription();
+        }
+    }
+    
+    
+    /**
+     * Loads and returns attribute list associated with this article
+     *
+     * @return object
+     */
+    public function getAttributes()
+    {
+        $sMasterVariantOxid = $this->_lvGetMasterVariantId();
+        if ( $sMasterVariantOxid ) {
+            if ($this->_oAttributeList === null) {
+                $this->_oAttributeList = oxNew('oxattributelist');
+                $this->_oAttributeList->loadAttributes($sMasterVariantOxid, $this->getParentId());
+            }
+
+            return $this->_oAttributeList;
+        }
+        else {
+            return parent::getAttributes();
+        }
+    }
+    
+    
 
     
     /**
