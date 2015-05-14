@@ -144,7 +144,7 @@ class lvextmedia_oxarticle extends lvextmedia_oxarticle_parent {
      */
     public function lvGetCoverPictureUrl() {
         // target field
-        $sCoverPicFieldName = $this->oxarticles__lvcoverpic->value();
+        $sCoverPicFieldName = $this->oxarticles__lvcoverpic->value;
         
         if ( $sCoverPicFieldName != '' ) {
             $sCoverPicFieldName = "oxarticles__".$sCoverPicFieldName;
