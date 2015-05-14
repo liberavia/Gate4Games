@@ -18,13 +18,12 @@
  */
 
 /**
- * Description of lvextmedia_alist
+ * Description of lvextmedia_oxwarticlebox
  *
  * @author Gate4Games
  * @author André Gregor-Herrmann
  */
-class lvextmedia_alist extends lvextmedia_alist_parent {
-    
+class lvextmedia_oxwarticlebox extends lvextmedia_oxwarticlebox_parent {
     /**
      * Returns the list image max height
      * 

@@ -42,6 +42,7 @@ $aModule = array(
     'extend'       => array(
         // components->widgets
         'oxwarticledetails'                 => 'lv/lvExternalMedia/extend/application/components/widgets/lvextmedia_oxwarticledetails',
+        'oxwarticlebox'                     => 'lv/lvExternalMedia/extend/application/components/widgets/lvextmedia_oxwarticlebox',
         // models
         'oxmediaurl'                        => 'lv/lvExternalMedia/extend/application/models/lvextmedia_oxmediaurl',
         'oxpicturehandler'                  => 'lv/lvExternalMedia/extend/application/models/lvextmedia_oxpicturehandler',
