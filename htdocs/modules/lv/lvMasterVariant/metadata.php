@@ -31,8 +31,8 @@ $aModule = array(
     'id'           => 'lvMasterVariant',
     'title'        => 'Variantenvererbung',
     'description'  => array(
-        'de' => 'Modul für die Rückwärtsvererung von Varianten zu Elternartikeln',
-        'en' => 'Module for reverse inheritance from variants to parent articles',
+        'de' => 'Modul für die Rückwärtsvererung von Varianten zu Elternartikeln. Achtung: Modul hängt ab von Externe Medien und Bilder',
+        'en' => 'Module for reverse inheritance from variants to parent articles. Caution: Modul depends on activated module Externe Medien und Bilder',
     ),
     'thumbnail'    => '',
     'version'      => '1.0.0',
@@ -42,6 +42,8 @@ $aModule = array(
     'extend'       => array(
         // controllers admin
         'article_main'                          => 'lv/lvMasterVariant/extend/application/controllers/admin/lvmv_article_main',
+        // models
+        'oxarticle'                             => 'lv/lvMasterVariant/extend/application/models/lvmv_oxarticle',
     ),
     'files' => array(
     ),

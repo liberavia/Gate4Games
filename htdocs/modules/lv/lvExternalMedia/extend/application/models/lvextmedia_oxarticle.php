@@ -46,10 +46,12 @@ class lvextmedia_oxarticle extends lvextmedia_oxarticle_parent {
      */
     public function lvGetAllMedia( $blIncludePictures=true ) {
         $this->_aLvAllMedia = array();
+        $oProduct = $this->_lvGetProduct();
+        
         
         // first get all the youtube videos
         if ( $this->_aLvMediaFiles === null ) {
-            $this->_aLvMediaFiles = $this->getMediaUrls();
+            $this->_aLvMediaFiles = $oProduct->getMediaUrls();
         }
         
         // get sizes of icon
@@ -144,7 +146,9 @@ class lvextmedia_oxarticle extends lvextmedia_oxarticle_parent {
      */
     public function lvGetCoverPictureUrl() {
         // target field
-        $sCoverPicFieldName = $this->oxarticles__lvcoverpic->value;
+        $oProduct = $this->_lvGetProduct();
+
+        $sCoverPicFieldName = $oProduct->oxarticles__lvcoverpic->value;
         
         if ( $sCoverPicFieldName != '' ) {
             $sCoverPicFieldName = "oxarticles__".$sCoverPicFieldName;
@@ -169,10 +173,11 @@ class lvextmedia_oxarticle extends lvextmedia_oxarticle_parent {
      */
     protected function _lvGetExtPictureLinks() {
         $aExtPicLinks = array();
+        $oProduct = $this->_lvGetProduct();
         
         for ( $iIndex=1; $iIndex<=12; $iIndex++ ) {
             $sCurrentPicField = "oxarticles__oxpic".(string)$iIndex;
-            $sCurrentPictureUrl = $this->$sCurrentPicField->value;
+            $sCurrentPictureUrl = $oProduct->$sCurrentPicField->value;
             
             // check if this is an external link picture
             if ( strpos( $sCurrentPictureUrl, 'http' ) !== false ) {
@@ -181,6 +186,17 @@ class lvextmedia_oxarticle extends lvextmedia_oxarticle_parent {
         }
         
         return $aExtPicLinks;
+    }
+    
+    
+    /**
+     * Wrapper method for getting the product object
+     * 
+     * @param void
+     * @return object
+     */
+    protected function _lvGetProduct() {
+        return $this;
     }
     
     

@@ -57,13 +57,14 @@
             [{/oxhasrights}]
         [{/block}]
     [{/capture}]
-    <a id="[{$iIndex}]" href="[{$_productLink}]" class="titleBlock title fn" title="[{ $product->oxarticles__oxtitle->value}] [{$product->oxarticles__oxvarselect->value}]">
-        <span>[{ $product->oxarticles__oxtitle->value }] [{$product->oxarticles__oxvarselect->value}]</span>
-        <div class="gridPicture">
-            <img src="[{$product->getThumbnailUrl()}]" alt="[{ $product->oxarticles__oxtitle->value }] [{$product->oxarticles__oxvarselect->value}]">
-        </div>
-    </a>
-
+    [{block name="lv_widget_product_listitem_grid_picture"}]
+        <a id="[{$iIndex}]" href="[{$_productLink}]" class="titleBlock title fn" title="[{ $product->oxarticles__oxtitle->value}] [{$product->oxarticles__oxvarselect->value}]">
+            <span>[{ $product->oxarticles__oxtitle->value }] [{$product->oxarticles__oxvarselect->value}]</span>
+            <div class="gridPicture">
+                <img src="[{$product->getThumbnailUrl()}]" alt="[{ $product->oxarticles__oxtitle->value }] [{$product->oxarticles__oxvarselect->value}]">
+            </div>
+        </a>
+    [{/block}]
     [{block name="widget_product_listitem_grid_tobasket"}]
         <div class="priceBlock">
             [{oxhasrights ident="TOBASKET"}]
