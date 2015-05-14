@@ -36,6 +36,18 @@ class lvextmedia_oxarticle extends lvextmedia_oxarticle_parent {
      * @var array
      */
     protected $_aLvMediaFiles = null;
+    
+    
+    /**
+     * Wrapper method for getting the product object
+     * 
+     * @param void
+     * @return object
+     */
+    public function lvGetProduct() {
+        return $this;
+    }
+    
 
     
     /**
@@ -46,7 +58,7 @@ class lvextmedia_oxarticle extends lvextmedia_oxarticle_parent {
      */
     public function lvGetAllMedia( $blIncludePictures=true ) {
         $this->_aLvAllMedia = array();
-        $oProduct = $this->_lvGetProduct();
+        $oProduct = $this->lvGetProduct();
         
         
         // first get all the youtube videos
@@ -146,7 +158,7 @@ class lvextmedia_oxarticle extends lvextmedia_oxarticle_parent {
      */
     public function lvGetCoverPictureUrl() {
         // target field
-        $oProduct = $this->_lvGetProduct();
+        $oProduct = $this->lvGetProduct();
 
         $sCoverPicFieldName = $oProduct->oxarticles__lvcoverpic->value;
         
@@ -173,7 +185,7 @@ class lvextmedia_oxarticle extends lvextmedia_oxarticle_parent {
      */
     protected function _lvGetExtPictureLinks() {
         $aExtPicLinks = array();
-        $oProduct = $this->_lvGetProduct();
+        $oProduct = $this->lvGetProduct();
 
         for ( $iIndex=1; $iIndex<=12; $iIndex++ ) {
             $sCurrentPicField = "oxarticles__oxpic".(string)$iIndex;
@@ -186,18 +198,6 @@ class lvextmedia_oxarticle extends lvextmedia_oxarticle_parent {
         }
         
         return $aExtPicLinks;
-    }
-    
-    
-    /**
-     * Wrapper method for getting the product object
-     * 
-     * @param void
-     * @return object
-     */
-    protected function _lvGetProduct() {
-        return $this;
-    }
-    
+    }    
     
 }

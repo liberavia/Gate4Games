@@ -48,6 +48,8 @@ class lvmv_article_main extends lvmv_article_main_parent {
     /**
      * Unflags all variants related to parent article
      * 
+     * @param void
+     * @return void
      */
     protected function _lvUnflagVariants() {
         $sOxid  = $this->getEditObjectId();

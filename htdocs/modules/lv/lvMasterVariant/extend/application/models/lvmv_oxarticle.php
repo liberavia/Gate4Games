@@ -39,7 +39,7 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
      * @param void
      * @return object
      */
-    protected function _lvGetProduct() {
+    public function lvGetProduct() {
         $oMasterVariant = $this->_lvGetMasterVariant();
         
         if ( $oMasterVariant ) {

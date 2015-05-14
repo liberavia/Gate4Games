@@ -94,7 +94,8 @@ class lvextmedia_oxwarticledetails extends lvextmedia_oxwarticledetails_parent {
         $sYouTubeEmbed = false;
 
         if ( $this->_aMediaFiles === null ) {
-            $this->_aLvMediaFiles = $this->getProduct()->getMediaUrls();
+            $oProduct = $this->getProduct()->lvGetProduct();
+            $this->_aLvMediaFiles = $oProduct->getMediaUrls();
         }
 
         $iIteration = 0;
