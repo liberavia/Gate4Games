@@ -85,6 +85,54 @@ class lvextmedia_oxwarticledetails extends lvextmedia_oxwarticledetails_parent {
 
     
     /**
+     * Returns the list image max height
+     * 
+     * @param void
+     * @return string
+     */
+    public function lvGetListImageMaxHeight() {
+        $oConfig = $this->getConfig();
+        
+        $sSize = $oConfig->getConfigParam( 'sThumbnailsize' );
+        $aSize = explode( '*', $sSize );
+        
+        if ( is_array( $aSize ) && is_numeric( $aSize[0] ) && is_numeric( $aSize[1] ) ) {
+            $sHeight  = $aSize[1];
+        }
+        else {
+            // dummy standard default
+            $sHeight  = '150';
+        }
+        
+        return $sHeight;
+    }
+
+
+    /**
+     * Returns the list image max width
+     * 
+     * @param void
+     * @return string
+     */
+    public function lvGetListImageMaxWidth() {
+        $oConfig = $this->getConfig();
+        
+        $sSize = $oConfig->getConfigParam( 'sThumbnailsize' );
+        $aSize = explode( '*', $sSize );
+        
+        if ( is_array( $aSize ) && is_numeric( $aSize[0] ) && is_numeric( $aSize[1] ) ) {
+            $sWidth   = $aSize[0];
+        }
+        else {
+            // dummy standard default
+            $sWidth   = '185';
+        }
+        
+        return $sWidth;
+    }
+    
+    
+    /**
      * Template variable getter. Returns youtube media file of given index if there is one
      *
      * @param void

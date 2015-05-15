@@ -65,6 +65,7 @@ $aModule = array(
         array( 'template' => 'widget/product/listitem_grid.tpl',        'block'=>'lv_widget_product_listitem_grid_picture',         'file'=>'extend/application/views/blocks/block_lv_widget_product_listitem_grid_picture.tpl' ),
         array( 'template' => 'widget/product/listitem_infogrid.tpl',    'block'=>'widget_product_listitem_infogrid_gridpicture',    'file'=>'extend/application/views/blocks/block_widget_product_listitem_infogrid_gridpicture.tpl' ),
         array( 'template' => 'widget/product/listitem_line.tpl',        'block'=>'widget_product_listitem_line_picturebox',         'file'=>'extend/application/views/blocks/block_widget_product_listitem_line_picturebox.tpl' ),
+        array( 'template' => 'page/details/inc/productmain.tpl',        'block'=>'details_productmain_shortdesc',                   'file'=>'extend/application/views/blocks/block_details_productmain_shortdesc.tpl' ),
     ),
     'settings' => array(
     )
