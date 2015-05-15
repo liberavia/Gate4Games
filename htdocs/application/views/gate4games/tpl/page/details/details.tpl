@@ -6,4 +6,4 @@
         [{oxid_include_widget cl="oxwArticleDetails" _parent=$oView->getClassName() nocookie=1 force_sid=$force_sid _navurlparams=$oViewConf->getNavUrlParams() _object=$oView->getProduct() anid=$oViewConf->getActArticleId() iPriceAlarmStatus=$oView->getPriceAlarmStatus() sorting=$oView->getSortingParameters() skipESIforUser=1}]
     </div>
 [{/capture}]
-[{include file="layout/page.tpl" sidebar="Left"}]
+[{include file="layout/page.tpl"}]
