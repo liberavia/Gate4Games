@@ -302,6 +302,7 @@
                 [{/block}]
 
                 [{block name="details_productmain_stockstatus"}]
+[{*                
                     [{if $oDetailsProduct->getStockStatus() == -1}]
                         <span class="stockFlag notOnStock">
                             [{if $oDetailsProduct->oxarticles__oxnostocktext->value}]
@@ -326,6 +327,7 @@
                             [{/if}]
                         </span>
                     [{/if}]
+*}]                    
                 [{/block}]
 
                 [{block name="details_productmain_deliverytime"}]

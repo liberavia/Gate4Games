@@ -28,7 +28,7 @@ $sMetadataVersion = '1.2';
  * Module information
  */
 $aModule = array(
-    'id'           => 'lvAfffiliage',
+    'id'           => 'lvAfffiliate',
     'title'        => 'Affiliate Module',
     'description'  => array(
         'de' => 'Modul welches den Shop in einen Affiliate Shop verwandelt. Es deaktiviert auch verschiedene Funktionen des Shops.',
@@ -52,6 +52,7 @@ $aModule = array(
     ),
     'blocks' => array(
         array( 'template' => 'page/details/inc/fullproductinfo.tpl',        'block'=>'lv_fullproductinfo_details_related',          'file'=>'extend/application/views/blocks/block_lv_fullproductinfo_details_related.tpl' ),
+        array( 'template' => 'layout/base.tpl',                             'block'=>'base_style',                                  'file'=>'extend/application/views/blocks/block_base_style.tpl' ),
     ),
     'settings' => array(
     )
