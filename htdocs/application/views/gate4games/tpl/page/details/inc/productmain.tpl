@@ -72,15 +72,14 @@
 
     [{* article main info block *}]
     <div class="information">
-
-        [{ assign var="oManufacturer" value=$oView->getManufacturer()}]
+        [{assign var="oManufacturer" value=$oView->getManufacturer()}]
         <div class="productMainInfo[{if $oManufacturer->oxmanufacturers__oxicon->value}] hasBrand[{/if}]">
 
             [{* Product title *}]
             [{block name="details_productmain_title"}]
                 [{*oxscript include="js/widgets/oxarticleactionlinksselect.js" priority=10 *}]
                 [{*oxscript add="$( '#productTitle' ).oxArticleActionLinksSelect();"*}]
-                <h1 id="productTitle"><span>[{$oDetailsProduct->oxarticles__oxtitle->value}] [{$oDetailsProduct->oxarticles__oxvarselect->value}]</span></h1>
+                [{*<h1 id="productTitle"><span>[{$oDetailsProduct->oxarticles__oxtitle->value}] [{$oDetailsProduct->oxarticles__oxvarselect->value}]</span></h1>*}]
             [{/block}]
 
             [{* Actions select list: to listmania and etc. *}]
@@ -236,7 +235,7 @@
             [{block name="details_productmain_persparams"}]
                 [{if $oView->isPersParam()}]
                     <div class="persparamBox clear">
-                        <label for="persistentParam">[{ oxmultilang ident="LABEL" suffix="COLON" }]</label><input type="text" id="persistentParam" name="persparam[details]" value="[{ $oDetailsProduct->aPersistParam.text }]" size="35">
+                        <label for="persistentParam">[{oxmultilang ident="LABEL" suffix="COLON"}]</label><input type="text" id="persistentParam" name="persparam[details]" value="[{ $oDetailsProduct->aPersistParam.text }]" size="35">
                     </div>
                 [{/if}]
             [{/block}]

@@ -41,7 +41,7 @@
     <div id="overviewLink">
         <a href="[{ $actCategory->toListLink }]" class="overviewLink">[{ oxmultilang ident="BACK_TO_OVERVIEW" }]</a>
     </div>
-    <h2 class="pageHead">[{$sPageHeadTitle|truncate:80}]</h2>
+    <h1 class="pageHead">[{$sPageHeadTitle|truncate:80}]</h1>
     <div class="detailsParams listRefine bottomRound">
         <div class="pager refineParams clear" id="detailsItemsPager">
             [{if $actCategory->prevProductLink}]<a id="linkPrevArticle" class="prev" href="[{$actCategory->prevProductLink}]">[{oxmultilang ident="PREVIOUS_PRODUCT"}]</a>[{/if}]
