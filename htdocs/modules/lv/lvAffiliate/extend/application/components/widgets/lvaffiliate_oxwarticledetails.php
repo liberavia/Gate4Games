@@ -36,11 +36,12 @@ class lvaffiliate_oxwarticledetails extends lvaffiliate_oxwarticledetails_parent
         
         $oProduct = $this->getProduct();
         
-        $aVariants = $oProduct->getVariants();
+        $aVariants = $oProduct->getFullVariants();
         
         if ( is_array( $aVariants ) && count( $aVariants ) > 0 ) {
             foreach ( $aVariants as $oVariant ) {
-                $aAffiliatesForProduct[] = $oVariant;
+                $aAffiliatesForProduct['vendor']    = $oVariant->getVendor();
+                $aAffiliatesForProduct['product']   = $oVariant;
             }
         }
         

@@ -1,3 +1,4 @@
+[{*
 [{assign var="aVariantSelections" value=$oView->getVariantSelections()}]
 
 [{if $aVariantSelections && $aVariantSelections.rawselections}]
@@ -28,6 +29,7 @@
         </div>
     </form>
 [{/if}]
+
 [{oxhasrights ident="TOBASKET"}]
     <form class="js-oxProductForm" action="[{$oViewConf->getSelfActionLink()}]" method="post">
         <div>
@@ -43,6 +45,7 @@
             [{/if}]
         </div>
 [{/oxhasrights}]
+*}]
 
 <div class="detailsInfo clear">
     [{* article picture with zoom *}]
