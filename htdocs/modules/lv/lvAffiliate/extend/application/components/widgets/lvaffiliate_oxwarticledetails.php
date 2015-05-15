@@ -37,10 +37,10 @@ class lvaffiliate_oxwarticledetails extends lvaffiliate_oxwarticledetails_parent
         
         if ( count( $aSortedVariantIds ) > 0 ) {
             $iIndex = 0;
+            $iCurrentLangId = oxRegistry::getLang()->getBaseLanguage();
             foreach ( $aSortedVariantIds as $sVariantId ) {
-                $iCurrentLangId = oxRegistry::getLang()->getBaseLanguage();
                 $oArticle = oxNew( 'oxarticle' );
-                $oArticle->loadInLang( $iCurrentLangId, $sMasterVariantOxid );
+                $oArticle->loadInLang( $iCurrentLangId, $sVariantId );
 
                 if ( $oArticle ) {
                     $aAffiliatesForProduct[$iIndex]['vendor']    = $oArticle->getVendor();
