@@ -5,7 +5,7 @@
         <div class="lvAffiliateDetailsBox widgetBox">
             <table class="lvAffiliateDetailsTable">
                 <tr>
-                    <td valign="middle" align="center" class="lvAffiliateDetailsPrice">
+                    <td class="lvAffiliateDetailsPrice">
                         <label id="productPrice" class="price">
                             <strong>
                                 <span>[{oxprice price=$oAffiliateProduct->getPrice() currency=$currency}]</span>
@@ -15,13 +15,13 @@
                             </strong>
                         </label>
                     </td>
-                    <td valign="middle" align="center" class="lvAffiliateDetailsIcon">
+                    <td class="lvAffiliateDetailsIcon">
                         <img src="[{$oAffiliateVendor->getIconUrl()}]">
                     </td>
-                    <td valign="middle" align="center" class="lvAffiliateDetailsTitle">
+                    <td class="lvAffiliateDetailsTitle">
                         [{$oAffiliateProduct->oxarticles__oxtitle->value}] [{oxmultilang ident="LVAFFILIATE_AT_VENDOR"}] [{$oAffiliateVendor->getTitle()}]
                     </td>
-                    <td valign="middle" align="center" class="lvAffiliateDetailsToOffer">
+                    <td class="lvAffiliateDetailsToOffer">
                         <a href="http://[{$oAffiliateProduct->oxarticles__oxexturl->value}]"><button class="submitButton largeButton">[{oxmultilang ident="LVAFFILIATE_TO_OFFER"}]</button></a>
                     </td>
                 </tr>
