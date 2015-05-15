@@ -24,5 +24,26 @@
  * @author André Gregor-Herrmann
  */
 class lvaffiliate_oxwarticledetails extends lvaffiliate_oxwarticledetails_parent {
-    //put your code here
+    
+    /**
+     * Template getter delivers all information needed for affiliate products
+     * 
+     * @param void
+     * @return array
+     */
+    public function lvGetAffiliateDetails() {
+        $aAffiliatesForProduct = array();
+        
+        $oProduct = $this->getProduct();
+        
+        $aVariants = $oProduct->getVariants();
+        
+        if ( is_array( $aVariants ) && count( $aVariants ) > 0 ) {
+            foreach ( $aVariants as $oVariant ) {
+                $aAffiliatesForProduct[] = $oVariant;
+            }
+        }
+        
+        return $aAffiliatesForProduct;
+    }
 }
