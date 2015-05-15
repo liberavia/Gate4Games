@@ -69,7 +69,7 @@ class lvaffiliate_oxwarticledetails extends lvaffiliate_oxwarticledetails_parent
             $sArticlesTable     = getViewName( 'oxarticles' );
             $sQuery = "SELECT OXID FROM ".$sArticlesTable." WHERE OXPARENTID='".$sOxid."' ORDER BY OXPRICE ASC";
             
-            $oResult = $oDb->Exectute( $sQuery );
+            $oResult = $oDb->Execute( $sQuery );
             
             if ( $oResult != false && $oResult->recordCount() > 0 ) {
                 while( !$oResult->EOF ) {
