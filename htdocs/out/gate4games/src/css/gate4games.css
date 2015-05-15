@@ -23,16 +23,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     width: 560px;
     float: left;
     text-align: center;
-    line-height: 500px;
-    height: 500px;
+    line-height: 510px;
+    height: 510px;
 }
 
 .detailsInfo .picture a {
     width: 560px;
     float: left;
     text-align: center;
-    line-height: 500px;
-    height: 500px;
+    line-height: 510px;
+    height: 510px;
     overflow: hidden;
 }
 
