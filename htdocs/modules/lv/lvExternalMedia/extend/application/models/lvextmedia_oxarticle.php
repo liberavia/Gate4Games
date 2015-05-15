@@ -184,11 +184,19 @@ class lvextmedia_oxarticle extends lvextmedia_oxarticle_parent {
      * @return array
      */
     protected function _lvGetExtPictureLinks() {
-        $aExtPicLinks = array();
-        $oProduct = $this->lvGetProduct();
-
+        $aExtPicLinks   = array();
+        $oProduct       = $this->lvGetProduct();
+        $sLvCoverPic    = $oProduct->oxarticles__lvcoverpic->value;
+                
         for ( $iIndex=1; $iIndex<=12; $iIndex++ ) {
             $sCurrentPicField = "oxarticles__oxpic".(string)$iIndex;
+            $sCoverPicCompare = "oxpic".(string)$iIndex;
+            
+            if ( $sLvCoverPic == $sCoverPicCompare ) {
+                // skip coverpicture due it will be shown right next to other pics
+                continue;
+            }
+            
             $sCurrentPictureUrl = $oProduct->$sCurrentPicField->value;
             
             // check if this is an external link picture
