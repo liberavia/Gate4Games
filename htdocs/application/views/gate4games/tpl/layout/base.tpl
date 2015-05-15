@@ -58,6 +58,7 @@
         [{oxstyle include="css/ie7.css" if="IE 7"}]
         [{oxstyle include="css/ie8.css" if="IE 8"}]
         [{oxstyle include="css/libs/jscrollpane.css"}]
+        [{oxstyle include="css/gate4games.css"}]
     [{/block}]
 
     [{assign var='rsslinks' value=$oView->getRssLinks()}]

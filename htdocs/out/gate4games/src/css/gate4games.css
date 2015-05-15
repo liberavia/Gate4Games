@@ -19,6 +19,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     Author     : André Gregor-Herrmann
 */
 
+.detailsInfo .picture {
+    width: 560px;
+    float: left;
+    text-align: center;
+    line-height: 500px;
+    height: 500px;
+}
+
+.detailsInfo .picture a {
+    width: 560px;
+    float: left;
+    text-align: center;
+    line-height: 500px;
+    height: 500px;
+    overflow: hidden;
+}
 
 
 
