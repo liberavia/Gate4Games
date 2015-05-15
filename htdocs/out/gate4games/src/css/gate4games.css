@@ -38,3 +38,140 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
+/******/
+/*** GRADIENTS -> ***/
+/* Blue */
+.gridView .titleBox,
+.itemSlider .titleBlock,
+.itemSlider .titleBlock:hover,
+.gridView .priceBox,
+.box h3,
+.box h2,
+.sectionHead,
+.pageHead,
+#currencies a.selected,
+#languages a.selected,
+.flyoutMenu a.selected,
+.dropDown a.selected,
+.thumbNav a.cur,
+.thumbNav a.cur:hover,
+.promoBox strong.promoPrice,
+.itemSlider .prevItem span.slideBg,
+.itemSlider .nextItem span.slideBg,
+.specBox h3{
+    background: -moz-linear-gradient(#000, #000, #ddd);
+    background: -ms-linear-gradient(#000, #000, #ddd);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #adefff), color-stop(50%, #389cb4), color-stop(100%, #18778e));
+    background: -webkit-linear-gradient(#000, #000, #ddd);
+    background: -o-linear-gradient(#000, #000, #ddd);
+    background: linear-gradient(#000, #000, #ddd);
+}
+
+
+.lightHead,
+h2.lightHead,
+h3.lightHead {
+    background: #b8dde6 url(../bg/svg/grad_blue-light.svg);
+    background: -moz-linear-gradient(#e0f1f5, #b8dde6);
+    background: -ms-linear-gradient(#e0f1f5, #b8dde6);
+    background: -webkit-gradient(linear, left top, left bottom, from(#e0f1f5), to(#b8dde6));
+    background: -webkit-linear-gradient(#e0f1f5, #b8dde6);
+    background: -o-linear-gradient(#e0f1f5, #b8dde6);
+    background: linear-gradient(#e0f1f5, #b8dde6);
+}
+
+.FXgradBlueDark,
+.submitButton {
+    background: #5fb7cc url(../bg/svg/grad_blue-dark.svg);
+    background: -moz-linear-gradient(#5fb7cc, #1a7990);
+    background: -ms-linear-gradient(#5fb7cc, #1a7990);
+    background: -webkit-gradient(linear, left top, left bottom, from(#5fb7cc), to(#1a7990));
+    background: -webkit-linear-gradient(#5fb7cc, #1a7990);
+    background: -o-linear-gradient(#5fb7cc, #1a7990);
+    background: linear-gradient(#5fb7cc, #1a7990);
+}
+
+
+
+/* Grey */
+.promoBox strong.promoTitle,
+.specBoxTitles a.title{
+    background: #a9b1b4 url(../bg/svg/grad_grey.svg);
+    background: -moz-linear-gradient(#f9fafa, #a9b1b4);
+    background: -ms-linear-gradient(#f9fafa, #a9b1b4);
+    background: -webkit-gradient(linear, left top, left bottom, from(#f9fafa), to(#a9b1b4));
+    background: -webkit-linear-gradient(#f9fafa, #a9b1b4);
+    background: -o-linear-gradient(#f9fafa, #a9b1b4);
+    background: linear-gradient(#f9fafa, #a9b1b4);
+}
+
+
+.FXgradGreyLight,
+.sf-menu li ul,
+#footer #panel,
+.box ul,
+.box ol,
+.box .content,
+.loginForm,
+#currencies,
+#languages,
+.flyoutMenu,
+.basketFlyout,
+div.anythingSlider .arrow,
+.thumbNav{
+    background: #d1d8db url(../bg/svg/grad_grey-light.svg);
+    background: -moz-linear-gradient(#fff, #d1d8db);
+    background: -ms-linear-gradient(#fff, #d1d8db);
+    background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#d1d8db));
+    background: -webkit-linear-gradient(#fff, #d1d8db);
+    background: -o-linear-gradient(#fff, #d1d8db);
+    background: linear-gradient(#fff, #d1d8db);
+}
+
+/* Orange */
+.FXgradOrange,
+.removeButton,
+.sf-menu li.current,
+.sf-menu li.sfHover, .sf-menu li:hover,
+.gridView div.priceBox:hover,
+.gridView div.titleBox:hover,
+.featuredList a:hover,
+.featuredList li.articleImage:hover + li.articleTitle > a,
+#footer .list a:hover,
+#currencies a:hover,
+#languages a:hover,
+.flyoutMenu a:hover,
+.submitButton:hover,
+.basketFlyout li a:hover,
+.dropDown ul a:hover,
+div.anythingSlider span.arrow:hover,
+.thumbNav a:hover,
+.itemSlider .prevItem:hover span.slideBg,
+.itemSlider .nextItem:hover span.slideBg,
+a.viewAllHover,
+.itemSlider li a.viewAllHover,
+.specBoxTitles a.title:hover,
+.actionLinks li:hover {
+    background: #ec6105 url("../bg/svg/grad_orange.svg");
+    background: -moz-linear-gradient(#ff8604, #ec6105);
+    background: -ms-linear-gradient(#ff8604, #ec6105);
+    background: -webkit-gradient(linear, left top, left bottom, from(#ff8604), to(#ec6105));
+    background: -webkit-linear-gradient(#ff8604, #ec6105);
+    background: -o-linear-gradient(#ff8604, #ec6105);
+    background: linear-gradient(#ff8604, #ec6105);
+}
+
+/* Light blue */
+.FXgradBlueLight, .fbEnableButton {
+    background: #ffffff url("../bg/svg/grad_light_blue.svg");
+    background: -moz-linear-gradient(#fff, #d7e3f1);
+    background: -ms-linear-gradient(#fff, #d7e3f1);
+    background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#d7e3f1));
+    background: -webkit-linear-gradient(#fff, #d7e3f1);
+    background: -o-linear-gradient(#fff, #d7e3f1);
+    background: linear-gradient(#fff, #d7e3f1);
+}
+/******/
+
+
+
