@@ -78,15 +78,17 @@
 
             [{* Product title *}]
             [{block name="details_productmain_title"}]
-                [{oxscript include="js/widgets/oxarticleactionlinksselect.js" priority=10 }]
-                [{oxscript add="$( '#productTitle' ).oxArticleActionLinksSelect();"}]
+                [{*oxscript include="js/widgets/oxarticleactionlinksselect.js" priority=10 *}]
+                [{*oxscript add="$( '#productTitle' ).oxArticleActionLinksSelect();"*}]
                 <h1 id="productTitle"><span>[{$oDetailsProduct->oxarticles__oxtitle->value}] [{$oDetailsProduct->oxarticles__oxvarselect->value}]</span></h1>
             [{/block}]
 
             [{* Actions select list: to listmania and etc. *}]
+[{*
             <div id="showLinksOnce"></div>
-
+*}]
             [{block name="details_productmain_productlinksselector"}]
+[{*
                 <a class="selector corners FXgradBlueDark" href="#" id="productLinks"><img src="[{$oViewConf->getImageUrl('selectbutton.png')}]" alt="Select"></a>
                 <ul class="actionLinks corners shadow">
                     [{block name="details_productmain_productlinks"}]
@@ -130,8 +132,8 @@
                         </li>
                     [{/block}]
                 </ul>
+*}]
             [{/block}]
-
             [{* article number *}]
             [{block name="details_productmain_artnumber"}]
                 <span id="productArtnum" class="itemCode">[{oxmultilang ident="PRODUCT_NO" suffix="COLON" }] [{$oDetailsProduct->oxarticles__oxartnum->value}]</span>
@@ -168,6 +170,7 @@
         [{assign var="blCanBuy" value=true}]
         [{* variants | md variants *}]
         [{block name="details_productmain_variantselections"}]
+[{*        
             [{if $aVariantSelections && $aVariantSelections.selections }]
                 [{oxscript include="js/widgets/oxajax.js" priority=10 }]
                 [{oxscript include="js/widgets/oxarticlevariant.js" priority=10 }]
@@ -185,10 +188,7 @@
 
                 [{if $blHasActiveSelections}]
                     <div class="variantReset">
-                        [{* Reset link *}]
                         <a href="" class="reset">[{ oxmultilang ident="RESET_SELECTION" }]</a>
-
-                        [{* Active selections *}]
                         <label>[{ oxmultilang ident="SELECTED_COMBINATION" suffix="COLON" }]</label>
                         [{assign var="sSelectionSep" value=""}]
                         [{strip}]
@@ -211,10 +211,12 @@
                     [{/if}]
 
             [{/if}]
+*}]            
         [{/block}]
 
         [{* selection lists *}]
         [{block name="details_productmain_selectlists"}]
+[{*        
             [{if $oViewConf->showSelectLists()}]
                 [{assign var="oSelections" value=$oDetailsProduct->getSelections()}]
                 [{if $oSelections}]
@@ -225,6 +227,7 @@
                     </div>
                 [{/if}]
             [{/if}]
+*}]            
         [{/block}]
 
         <div class="tobasket">
@@ -263,7 +266,7 @@
                                         [{assign var="sFrom" value="PRICE_FROM"|oxmultilangassign}]
                                     [{/if}]
                                 [{/if}]
-                                <strong >
+                                <strong>
                                     <span>[{$sFrom}] [{oxprice price=$oPrice currency=$currency}]</span>
                                     [{if $oView->isVatIncluded() }]
                                     <span>*</span>
@@ -279,12 +282,14 @@
                 [{/block}]
 
                 [{block name="details_productmain_tobasket"}]
+[{*                
                     [{oxhasrights ident="TOBASKET"}]
                         [{if !$oDetailsProduct->isNotBuyable()}]
                             <input id="amountToBasket" type="text" name="am" value="1" size="3" autocomplete="off" class="textbox">
                             <button id="toBasket" type="submit" [{if !$blCanBuy}]disabled="disabled"[{/if}] class="submitButton largeButton">[{oxmultilang ident="TO_CART"}]</button>
                         [{/if}]
                     [{/oxhasrights}]
+*}]
                 [{/block}]
             </div>
 

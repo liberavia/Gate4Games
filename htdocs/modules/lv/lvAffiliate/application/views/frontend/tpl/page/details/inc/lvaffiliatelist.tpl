@@ -3,11 +3,25 @@
         [{assign var="oAffiliateProduct"    value=$aLvAffiliateInfo.product}]
         [{assign var="oAffiliateVendor"     value=$aLvAffiliateInfo.vendor}]
         <div class="lvAffiliateDetailsBox widgetBox">
-            Title: [{$oAffiliateProduct->oxarticles__oxtitle->value}]<br>
-            Vendor: [{$oAffiliateVendor->getTitle()}]<br>
-            Price: [{$oAffiliateProduct->getFPrice()}] <br>
-            VendorLogo: <img src="[{$oAffiliateVendor->getIconUrl()}]"><br>
-            VendorLink <a href="http://[{$oAffiliateProduct->oxarticles__oxexturl->value}]">[{$oAffiliateProduct->oxarticles__oxexturl->value}]</a><br>
+            <div class="lvAffiliateDetailsPrice">
+                <label id="productPrice" class="price">
+                    <strong>
+                        <span>[{oxprice price=$oAffiliateProduct->getPrice() currency=$currency}]</span>
+                        [{if $oView->isVatIncluded() }]
+                            <span>*</span>
+                        [{/if}]
+                    </strong>
+                </label>
+            </div>
+            <div class="lvAffiliateDetailsTitle">
+                [{$oAffiliateProduct->oxarticles__oxtitle->value}] [{oxmultilang ident="LVAFFILIATE_AT_VENDOR"}] [{$oAffiliateVendor->getTitle()}]
+            </div>
+            <div class="lvAffiliateDetailsVendorLogo">
+                <img src="[{$oAffiliateVendor->getIconUrl()}]">
+            </div>
+            <div class="lvAffiliateDetailsVendorToOffer">
+                <a href="http://[{$oAffiliateProduct->oxarticles__oxexturl->value}]"></a>
+            </div>
         </div>
     [{/foreach}]
 </div>
