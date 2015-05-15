@@ -82,13 +82,12 @@ h3.lightHead {
 
 .FXgradBlueDark,
 .submitButton {
-    background: #5fb7cc url(../bg/svg/grad_blue-dark.svg);
-    background: -moz-linear-gradient(#5fb7cc, #1a7990);
-    background: -ms-linear-gradient(#5fb7cc, #1a7990);
-    background: -webkit-gradient(linear, left top, left bottom, from(#5fb7cc), to(#1a7990));
-    background: -webkit-linear-gradient(#5fb7cc, #1a7990);
-    background: -o-linear-gradient(#5fb7cc, #1a7990);
-    background: linear-gradient(#5fb7cc, #1a7990);
+    background: -moz-linear-gradient(#ddd, #000);
+    background: -ms-linear-gradient(#ddd, #000);
+    background: -webkit-gradient(linear, left top, left bottom, from(#ddd), to(#000));
+    background: -webkit-linear-gradient(#ddd, #000);
+    background: -o-linear-gradient(#ddd, #000);
+    background: linear-gradient(#ddd, #000);
 }
 
 

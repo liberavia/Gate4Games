@@ -16,7 +16,7 @@
             [{assign var="blAnon" value=1}]
         [{/if}]
 
-        [{oxid_include_widget cl="oxwServiceMenu" _parent=$oView->getClassName() force_sid=$force_sid nocookie=$blAnon _navurlparams=$oViewConf->getNavUrlParams() anid=$oViewConf->getActArticleId()}]
+        [{*oxid_include_widget cl="oxwServiceMenu" _parent=$oView->getClassName() force_sid=$force_sid nocookie=$blAnon _navurlparams=$oViewConf->getNavUrlParams() anid=$oViewConf->getActArticleId()*}]
     [{/block}]
 
     [{block name="layout_header_logo"}]
@@ -34,9 +34,11 @@
         [{else}]
             [{assign var="blAnon" value=1}]
         [{/if}]
+[{*
         <div id="minibasket_container">
             [{oxid_include_widget cl="oxwMiniBasket" nocookie=$blAnon force_sid=$force_sid}]
         </div>
+*}]
         [{include file="widget/header/search.tpl"}]
     [{/block}]
 </div>
