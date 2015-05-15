@@ -33,20 +33,52 @@ class lvaffiliate_oxwarticledetails extends lvaffiliate_oxwarticledetails_parent
      */
     public function lvGetAffiliateDetails() {
         $aAffiliatesForProduct = array();
+        $aSortedVariantIds = $this->_lvGetSortedVariantIds();
         
-        $oProduct = $this->getProduct();
-        
-        $aVariants = $oProduct->getFullVariants();
-        
-        if ( count( $aVariants ) > 0 ) {
+        if ( count( $aSortedVariantIds ) > 0 ) {
             $iIndex = 0;
-            foreach ( $aVariants as $oVariant ) {
-                $aAffiliatesForProduct[$iIndex]['vendor']    = $oVariant->getVendor();
-                $aAffiliatesForProduct[$iIndex]['product']   = $oVariant;
+            foreach ( $aSortedVariantIds as $sVariantId ) {
+                $iCurrentLangId = oxRegistry::getLang()->getBaseLanguage();
+                $oArticle = oxNew( 'oxarticle' );
+                $oArticle->loadInLang( $iCurrentLangId, $sMasterVariantOxid );
+
+                if ( $oArticle ) {
+                    $aAffiliatesForProduct[$iIndex]['vendor']    = $oArticle->getVendor();
+                    $aAffiliatesForProduct[$iIndex]['product']   = $oArticle;
+                }
                 $iIndex++;
             }
         }
         
         return $aAffiliatesForProduct;
+    }
+    
+    
+    /**
+     * Returns variant ids sorted by best price
+     * 
+     * @param void
+     * @return array
+     */
+    protected function _lvGetSortedVariantIds() {
+        $aVariantIds = array();
+        $sOxid = $this->getProduct()->getId();
+        
+        if ( $sOxid ) {
+            $oDb                = oxDb::getDb( FETCH_MODE_ASSOC );
+            $sArticlesTable     = getViewName( 'oxarticles' );
+            $sQuery = "SELECT OXID FROM ".$sArticlesTable." WHERE OXPARENTID='".$sOxid."' ORDER BY OXPRICE ASC";
+            
+            $oResult = $oDb->Exectute( $sQuery );
+            
+            if ( $oResult != false && $oResult->recordCount() > 0 ) {
+                while( !$oResult->EOF ) {
+                    $aVariantIds[] = $oResult->fields['OXID'];
+                    $oResult->moveNext();
+                }
+            }
+        }
+        
+        return $aVariantIds;
     }
 }
