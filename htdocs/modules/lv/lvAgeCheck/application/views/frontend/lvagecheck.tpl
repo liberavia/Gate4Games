@@ -8,6 +8,9 @@
         </div>    
     [{else}]
         <div id="lvEnterAge">
+            <div id="lvEnterAgeForGame">
+                <img src ="[{$oView->lvGetCoverImage()}]" style="height:auto;width:auto;max-height:[{$oView->lvGetDetailsImageMaxHeight()}]px;max-width:[{$oView->lvGetDetailsImageMaxHeight()}]px;">
+            </div>
             [{oxifcontent ident="lventerage" object="oCont"}]
                 [{$oCont->oxcontents__oxcontent->value}]
             [{/oxifcontent}]

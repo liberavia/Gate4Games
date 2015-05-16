@@ -31,6 +31,13 @@ class lvagecheck_oxwarticledetails extends lvagecheck_oxwarticledetails_parent {
      */
     protected $_sLvAgeSessionName = 'sCustomerBirthdate'; 
     
+    /**
+     * Cookie variable name for age check
+     * @var string
+     */
+    protected $_sLvAgeCookieName = 'lvG4GCustomerBirthdate'; 
+    
+    
     
     /**
      * Overloading render to first check age
@@ -62,12 +69,14 @@ class lvagecheck_oxwarticledetails extends lvagecheck_oxwarticledetails_parent {
         $oUtils         = oxRegistry::getUtils();
         $oConfig        = $this->getConfig();
         $oUtilsServer   = oxRegistry::get( 'oxUtilsServer' );
+        $oProduct       = $this->getProduct();
 
         // redirect to age check page
-        $sShopUrl   = $oConfig->getShopUrl();
-        $sRedirectQueryString = urlencode( $oUtilsServer->getServerVar( 'REQUEST_URI' ) );
+        $sShopUrl               = $oConfig->getShopUrl();
+        $sRedirectQueryString   = urlencode( $oUtilsServer->getServerVar( 'REQUEST_URI' ) );
+        $sCoverImage            = urlencode( $oProduct->lvGetCoverPictureUrl() );
         
-        $sAddToUrl  = "index.php?cl=lvagecheck&formerpage=".$sRedirectQueryString;
+        $sAddToUrl  = "index.php?cl=lvagecheck&formerpage=".$sRedirectQueryString."&coverimage=".$sCoverImage;
         
         if ( $sCheckAgeType == 'denied' ) {
             $sAddToUrl .= "&forbidden=1";
@@ -116,8 +125,9 @@ class lvagecheck_oxwarticledetails extends lvagecheck_oxwarticledetails_parent {
      * @return string
      */
     protected function _lvNeedToCheckAge( $aRecommendedAges ) {
-        $oConfig    = $this->getConfig();
-        $oSession   = $this->getSession();
+        $oConfig        = $this->getConfig();
+        $oSession       = $this->getSession();
+        $oUtilsServer   = oxRegistry::get( 'oxUtilsServer' );
         
         $sConfiguredCheckAge = trim( $oConfig->getConfigParam( 'sLvCheckFromAge' ) );
         $iConfiguredCheckAge = (int)$sConfiguredCheckAge;
@@ -135,10 +145,17 @@ class lvagecheck_oxwarticledetails extends lvagecheck_oxwarticledetails_parent {
         // if check is required we first need to check if check has already been performed
         if ( $blNeedToCheck ) {
             $sUserBirthdateTimestamp = $oSession->getVariable( $this->_sLvAgeSessionName );
-
-            if ( $sUserBirthdateTimestamp ) {
-                $iUserBirthdateTimestamp        = (int)$sUserBirthdateTimestamp;
-                $iTimeStampOfRecommendedBirth   = strtotime( "-".(string)$iRecommendedAge." years" );
+            $sCookieBirthdayTimeStamp = $oUtilsServer->getOxCookie( $this->_sLvAgeCookieName );
+            $iTimeStampOfRecommendedBirth   = strtotime( "-".(string)$iRecommendedAge." years" );
+            
+            if ( $sUserBirthdateTimestamp || $sCookieBirthdayTimeStamp ) {
+                if ( $sUserBirthdateTimestamp ) {
+                    $iUserBirthdateTimestamp        = (int)$sUserBirthdateTimestamp;
+                }
+                else {
+                    // use cookie if age nto in current session
+                    $iUserBirthdateTimestamp        = (int)$sCookieBirthdayTimeStamp;
+                }
                 
                 if ( $iUserBirthdateTimestamp <= $iTimeStampOfRecommendedBirth ) {
                     $sCheckAgeType = 'approved';

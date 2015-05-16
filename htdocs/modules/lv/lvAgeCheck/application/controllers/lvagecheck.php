@@ -38,6 +38,18 @@ class lvagecheck extends oxUBase {
     protected $_sLvAgeSessionName = 'sCustomerBirthdate'; 
     
     /**
+     * Cookie variable name for age check
+     * @var string
+     */
+    protected $_sLvAgeCookieName = 'lvG4GCustomerBirthdate'; 
+    
+    /**
+     * Time the cookie for age lasts
+     * @var string
+     */
+    protected $_sCookieLasting = '+ 1 month';
+
+    /**
      * Optional return url after requesting age
      * @var string
      */
@@ -48,6 +60,13 @@ class lvagecheck extends oxUBase {
      * @var bool
      */
     protected $_blLvForbiddenByAge = false;
+    
+    
+    /**
+     * Image of the game for which age is requested
+     * @var string
+     */
+    protected $_sCoverImage = '';
 
 
     /**
@@ -61,11 +80,13 @@ class lvagecheck extends oxUBase {
         
         $oConfig = $this->getConfig();
         
-        $blForbidden = (bool)$oConfig->getRequestParameter( 'forbidden' );
-        $sReturnUrl = $oConfig->getRequestParameter( 'formerpage' );
+        $blForbidden    = (bool)$oConfig->getRequestParameter( 'forbidden' );
+        $sReturnUrl     = $oConfig->getRequestParameter( 'formerpage' );
+        $sCoverImage    = $oConfig->getRequestParameter( 'coverimage' );
         
-        $this->_blLvForbiddenByAge = $blForbidden;
+        $this->_blLvForbiddenByAge  = $blForbidden;
         $this->_sLvCurrentReturnUrl = $sReturnUrl;
+        $this->_sCoverImage         = $sCoverImage;
         
         return $this->_sThisTemplate;
     }
@@ -90,6 +111,63 @@ class lvagecheck extends oxUBase {
      */
     public function lvGetForbiddenByAge() {
         return $this->_blLvForbiddenByAge;
+    }
+    
+    
+    /**
+     * Template getter returns url of coverimage
+     * 
+     * @param void
+     * @return string
+     */
+    public function lvGetCoverImage() {
+        return urldecode( $this->_sCoverImage );
+    }
+    
+    
+        /**
+     * Returns the details image max height
+     * 
+     * @param void
+     * @return string
+     */
+    public function lvGetDetailsImageMaxHeight() {
+        $oConfig = $this->getConfig();
+        $aSizes = $oConfig->getConfigParam( 'aDetailImageSizes' );
+        $aSize = explode( '*', $aSizes['oxpic1'] );
+        
+        if ( is_array( $aSize ) && is_numeric( $aSize[0] ) && is_numeric( $aSize[1] ) ) {
+            $sHeight  = $aSize[1];
+        }
+        else {
+            // dummy standard default
+            $sHeight  = '380';
+        }
+        
+        return $sHeight;
+    }
+
+
+    /**
+     * Returns the details image max width
+     * 
+     * @param void
+     * @return string
+     */
+    public function lvGetDetailsImageMaxWidth() {
+        $oConfig = $this->getConfig();
+        $aSizes = $oConfig->getConfigParam( 'aDetailImageSizes' );
+        $aSize = explode( '*', $aSizes['oxpic1'] );
+        
+        if ( is_array( $aSize ) && is_numeric( $aSize[0] ) && is_numeric( $aSize[1] ) ) {
+            $sWidth   = $aSize[0];
+        }
+        else {
+            // dummy standard default
+            $sWidth   = '340';
+        }
+        
+        return $sWidth;
     }
 
 
@@ -172,6 +250,7 @@ class lvagecheck extends oxUBase {
             $iTimeStamp = strtotime( $sBirtdate );
             
             $oSession->setVariable( $this->_sLvAgeSessionName, $iTimeStamp );
+            $oUtilsServer->setOxCookie( $this->_sLvAgeCookieName, $iTimeStamp, strtotime( $this->_sCookieLasting ) );
             
             // send user back and see if he matches age
             if ( $sReturnUrl && $sReturnUrl != '' ) {
