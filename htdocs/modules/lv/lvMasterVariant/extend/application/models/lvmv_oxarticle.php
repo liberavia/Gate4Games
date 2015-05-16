@@ -95,6 +95,25 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
     
     
     /**
+     * Template getter to receive short desc of article
+     * 
+     * @param void
+     * @return string
+     */
+    public function lvGetShortDescription() {
+        $sShortDesc = '';
+        
+        $oProduct = $this->lvGetProduct();
+        
+        if ( $oProduct ) {
+            $sShortDesc = $oProduct->oxarticles__oxshortdesc->value;
+        }
+        
+        return $sShortDesc;
+    }
+    
+    
+    /**
      * Loads and returns attribute list associated with this article
      *
      * @return object
