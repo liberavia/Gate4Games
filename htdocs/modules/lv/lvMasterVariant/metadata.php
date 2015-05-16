@@ -52,8 +52,10 @@ $aModule = array(
     'templates' => array(
     ),
     'blocks' => array(
-        array( 'template' => 'article_main.tpl',                    'block'=>'admin_article_main_form',         'file'=>'extend/application/views/blocks/block_admin_article_main_form.tpl' ),
-        array( 'template' => 'page/details/inc/productmain.tpl',    'block'=>'details_productmain_shortdesc',   'file'=>'extend/application/views/blocks/block_details_productmain_shortdesc.tpl' ),
+        array( 'template' => 'article_main.tpl',                            'block'=>'admin_article_main_form',                 'file'=>'extend/application/views/blocks/block_admin_article_main_form.tpl' ),
+        array( 'template' => 'page/details/inc/productmain.tpl',            'block'=>'details_productmain_shortdesc',           'file'=>'extend/application/views/blocks/block_details_productmain_shortdesc.tpl' ),
+        array( 'template' => 'widget/product/listitem/infogrid_price.tpl',  'block'=>'widget_product_listitem_infogrid_price',  'file'=>'extend/application/views/blocks/block_widget_product_listitem_infogrid_price.tpl' ),
+        
     ),
     'settings' => array(
     )

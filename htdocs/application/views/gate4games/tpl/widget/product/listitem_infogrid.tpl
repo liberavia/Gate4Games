@@ -68,6 +68,7 @@
         [{/block}]
 
         [{block name="widget_product_listitem_infogrid_selections"}]
+[{*        
                 <div class="selectorsBox">
                     [{if $aVariantSelections && $aVariantSelections.selections }]
                         <div id="variantselector_[{$iIndex}]" class="selectorsBox js-fnSubmit clear">
@@ -86,12 +87,13 @@
                         [{/if}]
                     [{/if}]
                 </div>
+*}]                
         [{/block}]
 
            <div class="priceBox">
                 <div class="content">
                     [{if $oViewConf->getShowCompareList()}]
-                        [{oxid_include_dynamic file="widget/product/compare_links.tpl" testid="_`$iIndex`" type="compare" aid=$product->oxarticles__oxid->value anid=$altproduct in_list=$product->isOnComparisonList() page=$oView->getActPage()}]
+                        [{*oxid_include_dynamic file="widget/product/compare_links.tpl" testid="_`$iIndex`" type="compare" aid=$product->oxarticles__oxid->value anid=$altproduct in_list=$product->isOnComparisonList() page=$oView->getActPage()*}]
                     [{/if}]
                     [{block name="widget_product_listitem_infogrid_price"}]
                         [{oxhasrights ident="SHOWARTICLEPRICE"}]
