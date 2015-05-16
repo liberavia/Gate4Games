@@ -1,7 +1,7 @@
+[{*
 [{if $oView->getTagCloudManager() }]
 
     [{if $oView->displayInBox() }]
-        [{* Display tags in separate box *}]
         <div id="tagBox" class="box tagCloud">
             <h3>[{ oxmultilang ident="TAGS" }]</h3>
             <div class="content">
@@ -22,3 +22,4 @@
         </div>
     </div>
 [{/if}]
+*}]
