@@ -173,4 +173,10 @@ a.viewAllHover,
 /******/
 
 
+body {
+    font: 12px / 140% arial, helvetica, clean, sans-serif;
+    background-image: linear-gradient (90deg, #000,#5D005D,#000);
+}
+
+
 
