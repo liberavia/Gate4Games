@@ -14,8 +14,7 @@
                 <label for="searchParam" class="innerLabel">[{oxmultilang ident="SEARCH" }]</label>
                 <input class="textbox" type="text" id="searchParam" name="searchparam" value="[{$oView->getSearchParamForHtml()}]">
             [{/block}]
-            <button class="submitButton largeButton" type="submit" value="[{oxmultilang ident="SEARCH" }]">
-        </div>
+            <button class="submitButton largeButton" type="submit">[{oxmultilang ident="SEARCH" }]</button>
     </form>
 [{/if}]
 [{/block}]
