@@ -64,6 +64,7 @@
 
     <div class="infoBox">
         [{block name="widget_product_listitem_line_selections"}]
+[{*        
             <div class="info">
                 <a id="[{$iIndex}]" href="[{$_productLink}]" class="title" title="[{ $product->oxarticles__oxtitle->value}] [{$product->oxarticles__oxvarselect->value}]">
                     <span>[{ $product->oxarticles__oxtitle->value }] [{$product->oxarticles__oxvarselect->value}]</span>
@@ -87,6 +88,7 @@
                     [{/if}]
                 </div>
             </div>
+*}]
         [{/block}]
         [{block name="widget_product_listitem_line_description"}]
             <div class="description">
@@ -102,7 +104,7 @@
     </div>
     <div class="functions">
             [{if $oViewConf->getShowCompareList()}]
-                [{oxid_include_dynamic file="widget/product/compare_links.tpl" testid="_`$iIndex`" type="compare" aid=$product->oxarticles__oxid->value anid=$altproduct in_list=$product->isOnComparisonList() page=$oView->getActPage()}]
+                [{*oxid_include_dynamic file="widget/product/compare_links.tpl" testid="_`$iIndex`" type="compare" aid=$product->oxarticles__oxid->value anid=$altproduct in_list=$product->isOnComparisonList() page=$oView->getActPage()*}]
             [{/if}]
             [{block name="widget_product_listitem_line_price"}]
                 [{oxhasrights ident="SHOWARTICLEPRICE"}]
