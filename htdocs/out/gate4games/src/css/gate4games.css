@@ -225,3 +225,16 @@ body {
     height: 100px;
     padding-left: 10px;
 }
+
+.itemSlider a.sliderHover,
+a.sliderHover {
+    background: #000;
+    opacity: 0.5;
+    filter: alpha(opacity =60);
+    width: 124px;
+    height: 148px;
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
