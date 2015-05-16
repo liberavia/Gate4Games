@@ -4,7 +4,7 @@
             $( '#lvDetailsVideoStd' ).hide();
             $( '#lvDetailsPictureStd' ).show();
             $( '#lvDetailsPictureStd' ).empty();
-            var sPictureCode = '<img src="' + sTargetPictureUrl + '" style="height:auto;width:auto;max-height:[{$oView->lvGetDetailsImageMaxHeight()}]px;max-width:[{$oView->lvGetDetailsImageMaxHeight()}]px;" alt="[{$oPictureProduct->oxarticles__oxtitle->value|strip_tags}] [{$oPictureProduct->oxarticles__oxvarselect->value|strip_tags}]">';
+            var sPictureCode = '<img src="' + sTargetPictureUrl + '" style="height:auto;width:auto;max-height:[{$oView->lvGetDetailsImageMaxHeight()}]px;max-width:[{$oView->lvGetDetailsImageMaxWidth()}]px;" alt="[{$oPictureProduct->oxarticles__oxtitle->value|strip_tags}] [{$oPictureProduct->oxarticles__oxvarselect->value|strip_tags}]">';
             $( '#lvDetailsPictureStd' ).append( sPictureCode );
         }
         
