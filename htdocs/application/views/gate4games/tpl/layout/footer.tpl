@@ -3,6 +3,7 @@
     [{oxscript add="$(function(){oxEqualizer.equalHeight($( '#panel dl' ));});"}]
     <div id="footer">
         <div id="panel" class="corners">
+[{*            
                 <div class="bar">
                     [{block name="footer_fblike"}]
                         [{if $oView->isActive('FbLike') && $oViewConf->getFbAppId()}]
@@ -26,8 +27,8 @@
                         </div>
                     [{/block}]
                 </div>
-
-            [{oxid_include_widget cl="oxwServiceList" noscript=1 nocookie=1}]
+*}]
+            [{*oxid_include_widget cl="oxwServiceList" noscript=1 nocookie=1*}]
 
             [{oxid_include_widget cl="oxwInformation" noscript=1 nocookie=1}]
 
@@ -36,6 +37,7 @@
             [{oxid_include_widget cl="oxwCategoryTree" _parent=$oView->getClassName() sWidgetType="footer" noscript=1 nocookie=1}]
 
         </div>
+[{*            
         <div class="copyright">
             <img src="[{$oViewConf->getImageUrl('logo_small.png')}]" alt="[{oxmultilang ident="OXID_ESALES_URL_TITLE"}]">
         </div>
@@ -44,6 +46,7 @@
                 [{$oCont->oxcontents__oxcontent->value}]
             [{/oxifcontent}]
         </div>
+*}]        
     </div>
 [{/block}]
 [{if $oView->isRootCatChanged()}]
