@@ -184,4 +184,14 @@ body {
 }
 
 
-
+#page:after, #header:after, #footer:after, #footer #panel:after, #details #attributes table:after, #navigation:after {
+    clear: both;
+    content: ' ';
+    display: block;
+    font-size: 0;
+    line-height: 0;
+    visibility: hidden;
+    width: 0;
+    height: 0;
+    background: #FFF;
+}
