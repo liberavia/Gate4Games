@@ -284,3 +284,23 @@ a.sliderHover {
     margin: 10px 0;
     width: 233px;
 }
+
+div.searchBox {
+    position: absolute;
+    right: 10px;
+    top: 73px;
+}
+
+div.searchBox input.textbox {
+    color: #b4b8b8;
+    float: left;
+    margin: 2px 3px 0 0;
+    padding-left: 4px;
+    width: 380px;
+}
+
+#navigation {
+    clear: both;
+    padding-top: 8px;
+    width: 520px;
+}
