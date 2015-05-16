@@ -256,5 +256,9 @@ a.sliderHover {
     color:#fff;
     text-shadow: 0 -1px 1px #000;
 
-    background:transparent url(../bg/fx-grad-black-spiked.png) top center no-repeat;
+    background:transparent url(../bg/fx-grad-darkviolet-spiked.png) top center no-repeat;
+}
+
+.gridView li:hover .priceBlock:hover .button{
+    background:#5D005D;
 }
