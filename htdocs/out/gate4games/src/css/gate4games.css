@@ -238,3 +238,23 @@ a.sliderHover {
     left: 0;
     top: 0;
 }
+
+.gridView li:hover .titleBlock{
+    color:#fff;
+    text-shadow: 0 -1px 0 #bf5001;
+    background:transparent url(../bg/fx-grad-black.png) bottom center no-repeat;
+}
+
+.gridView li:hover .titleBlock:hover{
+    background:transparent url(../bg/fx-grad-darkviolet.png) top center no-repeat;
+}
+
+
+.gridView li:hover .priceBlock{
+    height: 60px;
+    padding-top:30px;
+    color:#fff;
+    text-shadow: 0 -1px 1px #000;
+
+    background:transparent url(../bg/fx-grad-black-spiked.png) top center no-repeat;
+}
