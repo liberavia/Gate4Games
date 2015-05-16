@@ -269,3 +269,18 @@ a.sliderHover {
     padding: 7px 0 0 20px;
     width: 430px;
 }
+
+#footer #panel {
+    border: 1px solid #ddd;
+    margin: 0 10px;
+}
+
+#footer dl {
+    border-left: 1px solid #ffffff;
+    border-right: 1px solid #ddd;
+    color: #465256;
+    float: left;
+    height: auto;
+    margin: 10px 0;
+    width: 233px;
+}
