@@ -191,3 +191,32 @@ body {
     
 }
 
+#sidebar .tree a:hover {
+    background: -moz-linear-gradient(#000, #5D005D);
+    background: -ms-linear-gradient(#000, #5D005D);
+    background: -webkit-gradient(linear, left top, left bottom, from(#000), to(#5D005D));
+    background: -webkit-linear-gradient(#000, #5D005D);
+    background: -o-linear-gradient(#000, #5D005D);
+    background: linear-gradient(#000, #5D005D);
+    color:#fff;
+}
+
+#sidebar .tree li.active>a {
+    background: -moz-linear-gradient(#000, #5D005D);
+    background: -ms-linear-gradient(#000, #5D005D);
+    background: -webkit-gradient(linear, left top, left bottom, from(#000), to(#5D005D));
+    background: -webkit-linear-gradient(#000, #5D005D);
+    background: -o-linear-gradient(#000, #5D005D);
+    background: linear-gradient(#000, #5D005D);
+    color:#fff;
+}
+
+#sidebar .tree li.exp>a {
+    background: -moz-linear-gradient(#000, #000, #ddd);
+    background: -ms-linear-gradient(#000, #000, #ddd);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #000), color-stop(50%, #000), color-stop(100%, #ddd));
+    background: -webkit-linear-gradient(#000, #000, #ddd);
+    background: -o-linear-gradient(#000, #000, #ddd);
+    background: linear-gradient(#000, #000, #ddd);
+    color:#fff;
+}
