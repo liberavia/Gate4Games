@@ -188,6 +188,7 @@ body {
     width: 960px;
     margin: 0 auto;
     position:relative;
-    background: #FFF;
+    background: url("../bg/page_packground.png");
+    
 }
 
