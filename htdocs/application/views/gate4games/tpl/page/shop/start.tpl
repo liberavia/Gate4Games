@@ -36,4 +36,4 @@
         [{include file="widget/product/list.tpl" type=$oViewConf->getViewThemeParam('sStartPageListDisplayType') head="JUST_ARRIVED"|oxmultilangassign listId="newItems" products=$oView->getNewestArticles() rsslink=$rsslinks.newestArticles rssId="rssNewestProducts" showMainLink=true}]
     [{/if}]
 [{/capture}]
-[{include file="layout/page.tpl" sidebar="Right"}]
+[{include file="layout/page.tpl"}]
