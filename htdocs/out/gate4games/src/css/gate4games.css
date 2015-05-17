@@ -340,3 +340,8 @@ div.searchBox input.textbox {
     margin: -2px 0 0;
     text-shadow: 0 1px 1px #fff;
 }
+
+
+#sidebar .tree li.active>a>i span {
+    background: url('../bg/arrows-cat-exp-white.png') no-repeat;
+}
