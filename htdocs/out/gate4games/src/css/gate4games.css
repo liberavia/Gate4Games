@@ -346,6 +346,10 @@ div.searchBox input.textbox {
     background: url('../bg/arrows-cat-exp-white.png') no-repeat;
 }
 
+#sidebar .tree li.exp > a > i span {
+    background: rgba(0, 0, 0, 0) url("../bg/arrows-cat-exp-white.png") no-repeat scroll 0 0;
+}
+
 .selectedValue {
     background: none;
     padding-left: 10px;
