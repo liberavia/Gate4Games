@@ -315,3 +315,28 @@ div.searchBox input.textbox {
     width: 96px;
     z-index: 33;
 }
+
+
+
+.FXgradGreyLight, .sf-menu li ul, #footer #panel, .box ul, .box ol, .box .content, .loginForm, #currencies, #languages, .flyoutMenu, .basketFlyout, div.anythingSlider .arrow, .thumbNav {
+    background: rgba(0, 0, 0, 0) linear-gradient(#000, #5D005D) repeat scroll 0 0;
+}
+.box .catPicOnly {
+    padding: 0;
+}
+.box .content {
+    padding: 10px;
+}
+
+.box ul, .box ol, .box .content {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: -moz-use-text-color #5D005D #5D005D;
+    border-image: none;
+    border-style: none solid solid;
+    border-width: medium 2px 2px;
+    margin: -2px 0 0;
+    text-shadow: 0 1px 1px #fff;
+}
