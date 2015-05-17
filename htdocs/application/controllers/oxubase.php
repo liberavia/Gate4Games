@@ -1563,7 +1563,7 @@ class oxUBase extends oxView
         $aTitleParts = array_filter($aTitleParts);
 
         if (count($aTitleParts)) {
-            $sTitle = implode(' | ', $aTitleParts);
+            $sTitle = implode(' ', $aTitleParts);
         }
 
 

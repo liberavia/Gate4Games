@@ -345,3 +345,10 @@ div.searchBox input.textbox {
 #sidebar .tree li.active>a>i span {
     background: url('../bg/arrows-cat-exp-white.png') no-repeat;
 }
+
+.selectedValue {
+    background: none;
+    padding-left: 10px;
+    margin-top: 7px;
+}
+
