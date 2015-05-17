@@ -319,7 +319,7 @@ div.searchBox input.textbox {
 
 
 .FXgradGreyLight, .sf-menu li ul, #footer #panel, .box ul, .box ol, .box .content, .loginForm, #currencies, #languages, .flyoutMenu, .basketFlyout, div.anythingSlider .arrow, .thumbNav {
-    background: rgba(0, 0, 0, 0) linear-gradient(#000, #5D005D) repeat scroll 0 0;
+    background: rgba(0, 0, 0, 0) linear-gradient(#fff, #d1d8db) repeat scroll 0 0;
 }
 .box .catPicOnly {
     padding: 0;
