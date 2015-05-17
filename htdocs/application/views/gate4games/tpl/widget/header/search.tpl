@@ -15,6 +15,7 @@
                 <input class="textbox" type="text" id="searchParam" name="searchparam" value="[{$oView->getSearchParamForHtml()}]">
             [{/block}]
             <button class="submitButton largeButton" type="submit">[{oxmultilang ident="SEARCH" }]</button>
+        </div>
     </form>
 [{/if}]
 [{/block}]
