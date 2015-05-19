@@ -59,12 +59,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 .itemSlider .prevItem span.slideBg,
 .itemSlider .nextItem span.slideBg,
 .specBox h3{
-    background: -moz-linear-gradient(#000, #000, #ddd);
-    background: -ms-linear-gradient(#000, #000, #ddd);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #adefff), color-stop(50%, #389cb4), color-stop(100%, #18778e));
-    background: -webkit-linear-gradient(#000, #000, #ddd);
-    background: -o-linear-gradient(#000, #000, #ddd);
-    background: linear-gradient(#000, #000, #ddd);
+    background: -moz-linear-gradient(#000, #5d005d);
+    background: -ms-linear-gradient(#000, #5d005d);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #adefff), color-stop(50%, #5d005d));
+    background: -webkit-linear-gradient(#000, #5d005d);
+    background: -o-linear-gradient(#000, #5d005d);
+    background: linear-gradient(#000, #5d005d);
 }
 
 
@@ -82,12 +82,12 @@ h3.lightHead {
 
 .FXgradBlueDark,
 .submitButton {
-    background: -moz-linear-gradient(#ddd, #000);
-    background: -ms-linear-gradient(#ddd, #000);
-    background: -webkit-gradient(linear, left top, left bottom, from(#ddd), to(#000));
-    background: -webkit-linear-gradient(#ddd, #000);
-    background: -o-linear-gradient(#ddd, #000);
-    background: linear-gradient(#ddd, #000);
+    background: -moz-linear-gradient(#000, #5d005d);
+    background: -ms-linear-gradient(#000, #5d005d);
+    background: -webkit-gradient(linear, left top, left bottom, from(#000), to(#5d005d));
+    background: -webkit-linear-gradient(#000, #5d005d);
+    background: -o-linear-gradient(#000, #5d005d);
+    background: linear-gradient(#000, #5d005d);
 }
 
 
@@ -127,7 +127,17 @@ div.anythingSlider .arrow,
     background: linear-gradient(#fff, #d1d8db);
 }
 
-/* Orange */
+.submitButton:hover {
+    background: -moz-linear-gradient(#000, #C800C8);
+    background: -ms-linear-gradient(#000, #C800C8);
+    background: -webkit-gradient(linear, left top, left bottom, from(#000), to(#C800C8));
+    background: -webkit-linear-gradient(#000, #C800C8);
+    background: -o-linear-gradient(#000, #C800C8);
+    background: linear-gradient(#000, #C800C8);
+}
+
+
+/* Violet */
 .FXgradOrange,
 .removeButton,
 .sf-menu li.current,
@@ -140,7 +150,6 @@ div.anythingSlider .arrow,
 #currencies a:hover,
 #languages a:hover,
 .flyoutMenu a:hover,
-.submitButton:hover,
 .basketFlyout li a:hover,
 .dropDown ul a:hover,
 div.anythingSlider span.arrow:hover,
@@ -212,12 +221,12 @@ body {
 }
 
 #sidebar .tree li.exp>a {
-    background: -moz-linear-gradient(#000, #000, #ddd);
-    background: -ms-linear-gradient(#000, #000, #ddd);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #000), color-stop(50%, #000), color-stop(100%, #ddd));
-    background: -webkit-linear-gradient(#000, #000, #ddd);
-    background: -o-linear-gradient(#000, #000, #ddd);
-    background: linear-gradient(#000, #000, #ddd);
+    background: -moz-linear-gradient(#000, #5d005d);
+    background: -ms-linear-gradient(#000, #5d005d);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #000), color-stop(50%, #5d005d));
+    background: -webkit-linear-gradient(#000, #5d005d);
+    background: -o-linear-gradient(#000, #5d005d);
+    background: linear-gradient(#000, #5d005d);
     color:#fff;
 }
 
@@ -242,7 +251,7 @@ a.sliderHover {
 .gridView li:hover .titleBlock{
     color:#fff;
     text-shadow: 0 -1px 0 #bf5001;
-    background:transparent url(../bg/fx-grad-black.png) bottom center no-repeat;
+    background:transparent url(../bg/fx-grad-darkviolet.png) bottom center no-repeat;
 }
 
 .gridView li:hover .titleBlock:hover{
@@ -354,5 +363,22 @@ div.searchBox input.textbox {
     background: none;
     padding-left: 10px;
     margin-top: 7px;
+}
+
+
+.box .featured.icon {
+    border-bottom: 2px solid #5d005d;
+    height: auto;
+    min-height: 100px;
+    overflow: hidden;
+}
+.box .featured {
+    border-left: 2px solid #5d005d;
+    border-right: 2px solid #5d005d;
+    display: block;
+    height: 100px;
+    line-height: 100px;
+    text-align: center;
+    width: 168px;
 }
 
