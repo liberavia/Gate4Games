@@ -244,14 +244,8 @@ class lvagecheck extends oxUBase {
     public function lvValidateAge() {
         $oConfig = $this->getConfig();
         
-        $sArticleId     = $oConfig->getRequestParameter( 'anid' );
-        if ( $sArticleId ) {
-            $this->_oLvArticle = oxNew( 'oxarticle' );
-            $this->_oLvArticle->load( $sArticleId );
-        }
-        
         $aParams    = $oConfig->getRequestParameter( 'editval' );
-        $sReturnUrl = $this->lvGetReturnUrl();
+        $sReturnUrl = urldecode( $oConfig->getRequestParameter( 'sReturnUrl' ) );
         
         if ( count( $aParams ) == 3 ) {
             $oSession       = $this->getSession();
