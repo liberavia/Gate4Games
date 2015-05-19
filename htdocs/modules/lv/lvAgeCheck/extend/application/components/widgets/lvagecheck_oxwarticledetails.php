@@ -68,15 +68,13 @@ class lvagecheck_oxwarticledetails extends lvagecheck_oxwarticledetails_parent {
     protected function _lvRedirectToCheckPage( $sCheckAgeType ) {
         $oUtils         = oxRegistry::getUtils();
         $oConfig        = $this->getConfig();
-        $oUtilsServer   = oxRegistry::get( 'oxUtilsServer' );
         $oProduct       = $this->getProduct();
 
         // redirect to age check page
         $sShopUrl               = $oConfig->getShopUrl();
-        $sRedirectQueryString   = urlencode( $oUtilsServer->getServerVar( 'REQUEST_URI' ) );
-        $sCoverImage            = urlencode( $oProduct->lvGetCoverPictureUrl() );
+        $sArticleId             = $oProduct->getId();
         
-        $sAddToUrl  = "index.php?cl=lvagecheck&formerpage=".$sRedirectQueryString."&coverimage=".$sCoverImage;
+        $sAddToUrl  = "index.php?cl=lvagecheck&anid=".$sArticleId;
         
         if ( $sCheckAgeType == 'denied' ) {
             $sAddToUrl .= "&forbidden=1";

@@ -50,10 +50,10 @@ class lvagecheck extends oxUBase {
     protected $_sCookieLasting = '+ 1 month';
 
     /**
-     * Optional return url after requesting age
-     * @var string
+     * Article Object of age redirecting product
+     * @var object
      */
-    protected $_sLvCurrentReturnUrl = '';
+    protected $_oLvArticle = null;
 
     /**
      * Flag that signals if user has been denied by age
@@ -62,13 +62,6 @@ class lvagecheck extends oxUBase {
     protected $_blLvForbiddenByAge = false;
     
     
-    /**
-     * Image of the game for which age is requested
-     * @var string
-     */
-    protected $_sCoverImage = '';
-
-
     /**
      * Render method which is in each oxid controller
      * 
@@ -81,12 +74,20 @@ class lvagecheck extends oxUBase {
         $oConfig = $this->getConfig();
         
         $blForbidden    = (bool)$oConfig->getRequestParameter( 'forbidden' );
-        $sReturnUrl     = $oConfig->getRequestParameter( 'formerpage' );
-        $sCoverImage    = $oConfig->getRequestParameter( 'coverimage' );
+        $sArticleId     = $oConfig->getRequestParameter( 'anid' );
         
         $this->_blLvForbiddenByAge  = $blForbidden;
-        $this->_sLvCurrentReturnUrl = $sReturnUrl;
-        $this->_sCoverImage         = $sCoverImage;
+        if ( $sArticleId ) {
+            $this->_oLvArticle = oxNew( 'oxarticle' );
+            $this->_oLvArticle->load( $sArticleId );
+        }
+        else {
+            $oLang          = oxRegistry::getLang();
+            $oUtilsView     = oxRecommList::get( 'oxUtilsView' );
+            
+            $sErrorMessage = $oLang->translateString( 'LV_AGECHECK_VALIDATION_ERROR' );
+            $oUtilsView->addErrorToDisplay( $sErrorMessage );
+        }
         
         return $this->_sThisTemplate;
     }
@@ -99,7 +100,12 @@ class lvagecheck extends oxUBase {
      * @return string
      */
     public function lvGetReturnUrl() {
-        return $this->_sLvCurrentReturnUrl;
+        $sReturnLink = '';
+        if ( $this->_oLvArticle ) {
+            $sReturnUrl = $this->_oLvArticle->getLink();
+        }
+        
+        return $sReturnLink;
     }
     
     
@@ -121,7 +127,12 @@ class lvagecheck extends oxUBase {
      * @return string
      */
     public function lvGetCoverImage() {
-        return urldecode( $this->_sCoverImage );
+        $sReturnUrl = '';
+        if ( $this->_oLvArticle ) {
+            $sReturnUrl = $this->_oLvArticle->lvGetCoverPictureUrl();
+        }
+        
+        return $sReturnUrl;
     }
     
     
@@ -234,7 +245,7 @@ class lvagecheck extends oxUBase {
         $oConfig = $this->getConfig();
         
         $aParams    = $oConfig->getRequestParameter( 'editval' );
-        $sReturnUrl = urldecode( $oConfig->getRequestParameter( 'sReturnUrl' ) );
+        $sReturnUrl = $this->lvGetReturnUrl();
         
         if ( count( $aParams ) == 3 ) {
             $oSession       = $this->getSession();
