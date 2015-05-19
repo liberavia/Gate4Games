@@ -297,15 +297,16 @@ a.sliderHover {
 div.searchBox {
     position: absolute;
     right: 10px;
-    top: 73px;
+    top: 85px;
 }
 
 div.searchBox input.textbox {
-    color: #b4b8b8;
+    color: #5d005d;
     float: left;
-    margin: 2px 3px 0 0;
+    margin: 0px 10px 0 0;
     padding-left: 4px;
     width: 380px;
+    box-shadow: 0 0 15px 2px #5d005d;
 }
 
 #navigation {
@@ -382,3 +383,84 @@ div.searchBox input.textbox {
     width: 168px;
 }
 
+/* --- Article details tabs  ----------- */
+ul.tabs {
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+ul.tabs li {
+    float: left;
+    list-style: none;
+    border: 1px solid #999;
+    border-bottom: 1px solid #c9d3d7;
+    background: #d9dfe1;
+    padding: 7px 10px;
+    margin-left: -1px;
+    font-weight: 700;
+    position: relative;
+    color: #515353;
+    height: 15px;
+    text-transform: uppercase;
+    text-shadow: 0 1px 1px #fff;
+}
+
+ul.tabs li.ui-state-active {
+    background: -moz-linear-gradient(#000, #5D005D);
+    background: -ms-linear-gradient(#000, #5D005D);
+    background: -webkit-gradient(linear, left top, left bottom, from(#000), to(#5D005D));
+    background: -webkit-linear-gradient(#000, #5D005D);
+    background: -o-linear-gradient(#000, #5D005D);
+    background: linear-gradient(#000, #5D005D);
+    color:#fff;
+    border-bottom-color: #fff;
+    border-top-color: #c9d3d7;
+    border-right-color: #c9d3d7;
+    z-index: 2;
+}
+
+ul.tabs css3-container:first-child + li, .tabs li:first-child {
+    margin-left: 0;
+}
+
+ul.tabs li.ui-state-active:first-child, .tabs css3-container:first-child + li.ui-state-active {
+    border-left-color: #c9d3d7;
+}
+
+ul.tabs li.ui-state-active>a {
+    color: #fff;
+}
+
+ul.tabs a {
+    color: #515353;
+}
+
+div.ui-tabs-hide {
+    display: none;
+}
+
+ul.tabs li.fbTab a {
+    background: url(../../img/facebook_icon.png) no-repeat 0 1px;
+    padding: 0 0 0 18px;
+}
+
+
+#cookieNote {
+    background-color: #5d005d;
+    border-bottom: 1px solid #fff;
+    color: #fff;
+    display: none;
+    font-size: 16px;
+    font-weight: normal;
+    left: 0;
+    opacity: 0.9;
+    padding: 8px 0;
+    position: fixed;
+    text-align: center;
+    top: 0;
+    width: 100%;
+    z-index: 105;
+}
