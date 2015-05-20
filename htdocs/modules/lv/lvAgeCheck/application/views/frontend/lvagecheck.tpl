@@ -3,9 +3,20 @@
 <div id="lvAgeCheckContent">
     [{if $oView->lvGetForbiddenByAge()}]
         <div id="lvAgeCheckInformation" class="widgetBox">
-            [{oxifcontent ident="lvagenotallowed" object="oCont"}]
-                [{$oCont->oxcontents__oxcontent->value}]
-            [{/oxifcontent}]
+            <table width="100%" height="100%">
+                <tr>
+                    <td style="text-align:center;vertical-align: middle;">
+                        <div id="lvEnterAgeForGame">
+                            <img src ="[{$oView->lvGetCoverImage()}]" style="height:auto;width:auto;max-height:[{$oView->lvGetDetailsImageMaxHeight()}]px;max-width:[{$oView->lvGetDetailsImageMaxHeight()}]px;">
+                        </div>
+                    </td>
+                    <td style="text-align:center;vertical-align: middle;">
+                        [{oxifcontent ident="lvagenotallowed" object="oCont"}]
+                            [{$oCont->oxcontents__oxcontent->value}]
+                        [{/oxifcontent}]
+                    </td>
+                </tr>
+            </table>
         </div>    
     [{else}]
         <div id="lvEnterAge" class="widgetBox">
