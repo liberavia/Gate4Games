@@ -88,6 +88,7 @@ h3.lightHead {
     background: -webkit-linear-gradient(#000, #5d005d);
     background: -o-linear-gradient(#000, #5d005d);
     background: linear-gradient(#000, #5d005d);
+    text-shadow: 0 0 15px 2px #5d005d;
 }
 
 
