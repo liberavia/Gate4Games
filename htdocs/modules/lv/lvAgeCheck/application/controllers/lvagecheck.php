@@ -75,7 +75,6 @@ class lvagecheck extends oxUBase {
         
         $blForbidden    = (bool)$oConfig->getRequestParameter( 'forbidden' );
         $sArticleId     = $oConfig->getRequestParameter( 'anid' );
-        
         $this->_blLvForbiddenByAge  = $blForbidden;
         if ( $sArticleId ) {
             $this->_oLvArticle = oxNew( 'oxarticle' );
@@ -102,7 +101,7 @@ class lvagecheck extends oxUBase {
     public function lvGetReturnUrl() {
         $sReturnLink = '';
         if ( $this->_oLvArticle ) {
-            $sReturnUrl = $this->_oLvArticle->getLink();
+            $sReturnLink = $this->_oLvArticle->getLink();
         }
         
         return $sReturnLink;
