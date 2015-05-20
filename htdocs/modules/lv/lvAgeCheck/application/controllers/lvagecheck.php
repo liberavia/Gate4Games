@@ -77,8 +77,9 @@ class lvagecheck extends oxUBase {
         $sArticleId     = $oConfig->getRequestParameter( 'anid' );
         $this->_blLvForbiddenByAge  = $blForbidden;
         if ( $sArticleId ) {
+            $iCurrentLangId = oxRegistry::getLang()->getBaseLanguage();
             $this->_oLvArticle = oxNew( 'oxarticle' );
-            $this->_oLvArticle->load( $sArticleId );
+            $this->_oLvArticle->loadInLang( $iCurrentLangId, $sArticleId );
         }
         else {
             $oLang          = oxRegistry::getLang();
@@ -92,6 +93,18 @@ class lvagecheck extends oxUBase {
     }
     
     
+    /**
+     * Template getter for article object
+     * 
+     * @param void
+     * @return mixed
+     */
+    public function lvGetArticle() {
+        return $this->_oLvArticle;
+    }
+
+    
+
     /**
      * Template getter returns current return url
      * 

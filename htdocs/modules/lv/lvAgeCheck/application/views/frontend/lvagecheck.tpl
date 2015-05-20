@@ -1,4 +1,5 @@
 [{capture append="oxidBlock_content"}]
+[{assign var="product" value=$oView->lvGetArticle()}]
 <div id="lvAgeCheckContent">
     [{if $oView->lvGetForbiddenByAge()}]
         <div id="lvAgeCheckInformation" class="widgetBox">
@@ -64,7 +65,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="3" style="padding-top:5px;">
+                                        <td colspan="3" style="padding-top:15px;">
                                             <button class="submitButton largeButton" type="submit">[{oxmultilang ident="LV_AGECHECK_SUBMIT"}]</button>
                                         </td>
                                     </tr>
