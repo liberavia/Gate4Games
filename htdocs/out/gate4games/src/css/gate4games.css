@@ -464,3 +464,10 @@ ul.tabs li.fbTab a {
     width: 100%;
     z-index: 105;
 }
+
+
+.widgetBox, .widgetBoxBottomRound {
+    border: 1px solid #5d005d;
+    clear: both;
+    padding: 10px;
+}
