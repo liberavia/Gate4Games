@@ -93,6 +93,15 @@ class lvagecheck extends oxUBase {
     }
     
     
+    public function getPageTitle() {
+        $oLang = oxRegistry::getLang();
+        $sLangTitlePrefix = $oLang->translateString( 'LV_AGECHECK_FOR' );
+        $sGameTitle = $this->_oLvArticle->oxarticles__oxtitle->value;
+        
+        return $sLangTitlePrefix." ".$sGameTitle;
+    }
+
+
     /**
      * Template getter for article object
      * 
