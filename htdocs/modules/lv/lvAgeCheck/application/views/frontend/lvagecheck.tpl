@@ -10,12 +10,12 @@
         <div id="lvEnterAge" class="widgetBox">
             <table width="100%" height="100%">
                 <tr>
-                    <td>
+                    <td style="text-align:center;vertical-align: middle;">
                         <div id="lvEnterAgeForGame">
                             <img src ="[{$oView->lvGetCoverImage()}]" style="height:auto;width:auto;max-height:[{$oView->lvGetDetailsImageMaxHeight()}]px;max-width:[{$oView->lvGetDetailsImageMaxHeight()}]px;">
                         </div>
                     </td>
-                    <td>
+                    <td style="text-align:center;vertical-align: middle;">
                         <div>
                             [{oxifcontent ident="lventerage" object="oCont"}]
                                 [{$oCont->oxcontents__oxcontent->value}]
@@ -28,7 +28,7 @@
                                 <input type="hidden" name="cl" value="lvagecheck">
                                 <input type="hidden" name="sReturnUrl" value="[{$oView->lvGetReturnUrl()}]">
 
-                                <table id="lvAgeTable">
+                                <table id="lvAgeTable" width="100%">
                                     <tr>
                                         <td>
                                             [{oxmultilang ident="LV_AGECHECK_ENTER_YEAR"}]
@@ -64,7 +64,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="3">
+                                        <td colspan="3" style="padding-top:5px;">
                                             <button class="submitButton largeButton" type="submit">[{oxmultilang ident="LV_AGECHECK_SUBMIT"}]</button>
                                         </td>
                                     </tr>
