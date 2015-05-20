@@ -395,7 +395,7 @@ ul.tabs {
 ul.tabs li {
     float: left;
     list-style: none;
-    border: 1px solid #999;
+    border: 1px solid #5d005d;
     border-bottom: 1px solid #c9d3d7;
     background: #d9dfe1;
     padding: 7px 10px;
@@ -417,8 +417,8 @@ ul.tabs li.ui-state-active {
     background: linear-gradient(#000, #5D005D);
     color:#fff;
     border-bottom-color: #fff;
-    border-top-color: #c9d3d7;
-    border-right-color: #c9d3d7;
+    border-top-color: #5d005d;
+    border-right-color: #5d005d;
     z-index: 2;
 }
 
@@ -427,7 +427,7 @@ ul.tabs css3-container:first-child + li, .tabs li:first-child {
 }
 
 ul.tabs li.ui-state-active:first-child, .tabs css3-container:first-child + li.ui-state-active {
-    border-left-color: #c9d3d7;
+    border-left-color: #5d005d;
 }
 
 ul.tabs li.ui-state-active>a {
