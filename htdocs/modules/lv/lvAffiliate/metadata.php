@@ -51,7 +51,7 @@ $aModule = array(
         'page/details/inc/lvaffiliatelist.tpl'      => 'lv/lvAffiliate/application/views/frontend/tpl/page/details/inc/lvaffiliatelist.tpl',
     ),
     'blocks' => array(
-        array( 'template' => 'page/details/inc/fullproductinfo.tpl',        'block'=>'lv_fullproductinfo_details_related',          'file'=>'extend/application/views/blocks/block_lv_fullproductinfo_details_related.tpl' ),
+        array( 'template' => 'page/details/inc/fullproductinfo.tpl',        'block'=>'lv_fullproductinfo_details_tabs',             'file'=>'extend/application/views/blocks/block_lv_fullproductinfo_details_tabs.tpl' ),
         array( 'template' => 'layout/base.tpl',                             'block'=>'base_style',                                  'file'=>'extend/application/views/blocks/block_base_style.tpl' ),
     ),
     'settings' => array(
