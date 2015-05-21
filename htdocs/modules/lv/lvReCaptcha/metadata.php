@@ -52,6 +52,7 @@ $aModule = array(
     ),
     'blocks' => array(
         array( 'template' => 'page/details/inc/productmain.tpl',        'block'=>'lv_fullproductinfo_details_reviews',          'file'=>'extend/application/views/blocks/block_lv_fullproductinfo_details_reviews.tpl' ),
+        array( 'template' => 'page/review/review.tpl',                  'block'=>'lv_page_review_widget',                       'file'=>'extend/application/views/blocks/block_lv_page_review_widget.tpl' ),
         array( 'template' => 'widget/reviews/reviews.tpl',              'block'=>'widget_reviews_form',                         'file'=>'extend/application/views/blocks/block_widget_reviews_form.tpl' ),
         array( 'template' => 'layout/base.tpl',                         'block'=>'base_js',                                     'file'=>'extend/application/views/blocks/block_base_js.tpl' ),
         
