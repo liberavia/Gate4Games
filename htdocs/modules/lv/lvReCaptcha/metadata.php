@@ -43,6 +43,8 @@ $aModule = array(
         // components->widgets
         'oxwrating'                 => 'lv/lvReCaptcha/extend/application/components/widgets/lvrecaptcha_oxwrating',
         'oxwreview'                 => 'lv/lvReCaptcha/extend/application/components/widgets/lvrecaptcha_oxwreview',
+        // controllers
+        'details'                   => 'lv/lvReCaptcha/extend/application/controllers/lvrecaptcha_details',
     ),
     'files' => array(
     ),

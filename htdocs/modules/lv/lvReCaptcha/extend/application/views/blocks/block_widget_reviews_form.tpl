@@ -30,8 +30,9 @@
         [{/if}]
 
         <textarea  rows="15" name="rvw_txt" class="areabox"></textarea><br>
-        <button id="reviewSave" type="submit" class="submitButton">[{oxmultilang ident="SAVE_RATING_AND_REVIEW"}]</button>
         <div class="g-recaptcha" data-sitekey="[{$oView->lvGetReCaptchaWebsiteKey()}]"></div>
+        <br>
+        <button id="reviewSave" type="submit" class="submitButton">[{oxmultilang ident="SAVE_RATING_AND_REVIEW"}]</button>
     </div>
 </form>
 <a id="writeNewReview" rel="nofollow"><b>[{oxmultilang ident="WRITE_REVIEW"}]</b></a>
