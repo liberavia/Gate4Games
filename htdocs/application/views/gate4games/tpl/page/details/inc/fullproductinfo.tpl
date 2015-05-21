@@ -4,7 +4,9 @@
 <div id="detailsRelated" class="detailsRelated clear">
     [{block name="lv_fullproductinfo_details_related"}]
         <div class="relatedInfo[{if !$oView->getSimilarProducts() && !$oView->getCrossSelling() && !$oView->getAccessoires()}] relatedInfoFull[{/if}]">
-            [{include file="page/details/inc/tabs.tpl"}]
+            [{block name="lv_fullproductinfo_details_tabs"}]
+                [{include file="page/details/inc/tabs.tpl"}]
+            [{/block}]
             [{if $oView->getAlsoBoughtTheseProducts()}]
                 [{include file="widget/product/list.tpl" type="grid" listId="alsoBought" header="light" head="CUSTOMERS_ALSO_BOUGHT"|oxmultilangassign|colon products=$oView->getAlsoBoughtTheseProducts()}]
             [{/if}]
