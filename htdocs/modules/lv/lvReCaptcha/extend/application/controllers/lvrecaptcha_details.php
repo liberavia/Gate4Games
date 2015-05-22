@@ -88,8 +88,8 @@ class lvrecaptcha_details extends lvrecaptcha_details_parent {
         $blReturn                   = false;
         $oConfig                    = $this->getConfig();
         $sReCaptchaResponse         = $oConfig->getRequestParameter( 'g-recaptcha-response' );
-        $sReCaptchaSecretKey        = $oConfig->getConfigParameter( 'sLvRecaptchaSecretKey' );
-        $sReCaptchaApiRequestUrl    = $oConfig->getConfigParameter( 'sLvRecaptchaRequestUrl' );
+        $sReCaptchaSecretKey        = $oConfig->getConfigParam( 'sLvRecaptchaSecretKey' );
+        $sReCaptchaApiRequestUrl    = $oConfig->getConfigParam( 'sLvRecaptchaRequestUrl' );
         
         if ( $sReCaptchaResponse && $sReCaptchaSecretKey && $sReCaptchaApiRequestUrl ) {
             // preparing data to post
