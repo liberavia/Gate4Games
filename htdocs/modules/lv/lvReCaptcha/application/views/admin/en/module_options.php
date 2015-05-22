@@ -28,5 +28,6 @@ $aLang = array(
     'SHOP_MODULE_GROUP_lvrecaptchamain'                 => 'Access settings',
     'SHOP_MODULE_sLvRecaptchaWebsiteKey'                => 'Website Key',           
     'SHOP_MODULE_sLvRecaptchaSecretKey'                 => 'Secret Key',           
+    'SHOP_MODULE_sLvRecaptchaRequestUrl'                => 'API Request URL',
 );
 
