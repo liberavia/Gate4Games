@@ -1,6 +1,7 @@
 [{oxscript include="js/widgets/oxrating.js" priority=10 }]
 [{oxscript add="$( '#itemRating' ).oxRating();"}]
 
+[{block name="lv_details_rating"}]
 <ul id="itemRating" class="rating">
     [{math equation="x*y" x=20 y=$oView->getRatingValue() assign="iRatingAverage"}]
 
@@ -40,6 +41,7 @@
         </a>
     </li>
 </ul>
+[{/block}]
 [{oxscript widget=$oView->getClassName()}]
 
 

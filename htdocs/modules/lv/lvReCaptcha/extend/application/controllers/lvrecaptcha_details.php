@@ -45,6 +45,14 @@ class lvrecaptcha_details extends lvrecaptcha_details_parent {
         $oProduct = $this->getProduct();
         
         if ( $this->canAcceptFormData() && $oProduct ) {
+            $sLvUserName = $this->getConfig()->getRequestParameter( 'lvusername' );
+            if ( !$sLvUserName ) {
+                $sLvUserName = "Anonymous";
+            }
+            
+            if (strlen( $sLvUserName ) > 32 ) {
+                $sLvUserName = substr( $sLvUserName, 0, 32 );
+            }
 
             $dRating = $this->getConfig()->getRequestParameter( 'artrating' );
             if ( $dRating !== null ) {
@@ -54,23 +62,21 @@ class lvrecaptcha_details extends lvrecaptcha_details_parent {
             //save rating
             if ($dRating !== null && $dRating >= 1 && $dRating <= 5) {
                 $oRating = oxNew('oxrating');
-                if ($oRating->allowRating($oUser->getId(), 'oxarticle', $oProduct->getId())) {
-                    $oRating->oxratings__oxuserid = new oxField($oUser->getId());
-                    $oRating->oxratings__oxtype = new oxField('oxarticle');
-                    $oRating->oxratings__oxobjectid = new oxField($oProduct->getId());
-                    $oRating->oxratings__oxrating = new oxField($dRating);
-                    $oRating->save();
-                    $oProduct->addToRatingAverage($dRating);
-                }
+                $oRating->oxratings__oxuserid = new oxField($sLvUserName);
+                $oRating->oxratings__oxtype = new oxField('oxarticle');
+                $oRating->oxratings__oxobjectid = new oxField($oProduct->getId());
+                $oRating->oxratings__oxrating = new oxField($dRating);
+                $oRating->save();
+                $oProduct->addToRatingAverage($dRating);
             }
 
             if ( ( $sReviewText = trim(( string ) $this->getConfig()->getRequestParameter('rvw_txt', true) ) ) ) {
-                $oReview = oxNew('oxReview');
+                $oReview = oxNew( 'oxReview' );
                 $oReview->oxreviews__oxobjectid = new oxField($oProduct->getId());
                 $oReview->oxreviews__oxtype = new oxField('oxarticle');
                 $oReview->oxreviews__oxtext = new oxField($sReviewText, oxField::T_RAW);
                 $oReview->oxreviews__oxlang = new oxField(oxRegistry::getLang()->getBaseLanguage());
-                $oReview->oxreviews__oxuserid = new oxField($oUser->getId());
+                $oReview->oxreviews__oxuserid = new oxField($sLvUserName);
                 $oReview->oxreviews__oxrating = new oxField( ($dRating !== null) ? $dRating : 0 );
                 $oReview->save();
             }
@@ -102,20 +108,29 @@ class lvrecaptcha_details extends lvrecaptcha_details_parent {
                 $sFieldsString .= $sKey.'='.$sValue.'&'; 
             }
 
-            rtrim( $sFieldsString, '&' );
-            
+            $sFieldsString = rtrim( $sFieldsString, '&' );
+
             // initialize curl resource
             $resCurl = curl_init();
-            curl_setopt( $resCurl,CURLOPT_URL, $sReCaptchaApiRequestUrl );
-            curl_setopt( $resCurl,CURLOPT_POST, count( $aFields ) );
-            curl_setopt( $resCurl,CURLOPT_POSTFIELDS, $sFieldsString );            
+            curl_setopt( $resCurl, CURLOPT_URL, $sReCaptchaApiRequestUrl );
+            curl_setopt( $resCurl, CURLOPT_POST, count( $aFields ) );
+            curl_setopt( $resCurl, CURLOPT_POSTFIELDS, $sFieldsString ); 
+            curl_setopt( $resCurl, CURLOPT_RETURNTRANSFER, 1 );
             
             $sResult = curl_exec( $resCurl );
             curl_close( $resCurl );
             
-            $aResult = json_decode( $sResult, true );
+            // convert json answer
+            $mResult = json_decode( $sResult, true );
             
-            if ( (bool)$aResult['success'] === true ) {
+            // validate answer
+            if ( is_array( $mResult ) && (bool)$mResult['success'] === true ) {
+                /**
+                 * @todo validating possible error codes for displaying in frontend
+                 */
+                $blReturn = true;
+            }
+            else if ( is_integer( $mResult ) && (bool)$mResult === true ) {
                 $blReturn = true;
             }
         }

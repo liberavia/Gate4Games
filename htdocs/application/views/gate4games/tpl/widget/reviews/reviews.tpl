@@ -56,7 +56,7 @@
                 [{block name="widget_reviews_record"}]
                     <dt id="reviewName_[{$smarty.foreach.ReviewsCounter.iteration}]" class="clear item">
                         <span>
-                            <span>[{$review->oxuser__oxfname->value}]</span> [{oxmultilang ident="WRITES" suffix="COLON" }]
+                            <span>[{$review->oxreviews__oxuserid->value}]</span> [{oxmultilang ident="WRITES" suffix="COLON" }]
                             <span>[{$review->oxreviews__oxcreate->value|date_format:"%d.%m.%Y"}]</span>
                         </span>
                         [{if $review->oxreviews__oxrating->value}]

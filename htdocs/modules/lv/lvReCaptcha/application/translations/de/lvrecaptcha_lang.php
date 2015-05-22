@@ -25,5 +25,6 @@ $sLangName = 'Deutsch';
 
 $aLang = array(
     'charset'                                           => 'UTF-8',
+    'LV_RATING_USERNAME'                                => 'Dein Name (oder Pseudonym)',
 );
 
