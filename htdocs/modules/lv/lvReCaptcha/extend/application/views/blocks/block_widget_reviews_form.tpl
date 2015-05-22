@@ -28,7 +28,7 @@
         [{if $sReviewUserHash}]
             <input type="hidden" name="reviewuserhash" value="[{$sReviewUserHash}]">
         [{/if}]
-        [{oxmultilang ident="LV_RATING_USERNAME"}] <input type="text" value="" maxlength="32" name="lvusername"><br>
+        <br>[{oxmultilang ident="LV_RATING_USERNAME"}] <input type="text" value="" maxlength="32" name="lvusername"><br>
         <textarea  rows="15" name="rvw_txt" class="areabox"></textarea><br>
         <div class="g-recaptcha" data-sitekey="[{$oView->lvGetReCaptchaWebsiteKey()}]"></div>
         <br>
