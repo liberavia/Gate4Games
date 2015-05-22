@@ -60,6 +60,7 @@ $aModule = array(
         
     ),
     'settings' => array(
+        array( 'group' => 'lvrecaptchamain',      'name' => 'sLvRecaptchaRequestUrl',          'type' => 'str',        'value' => "https://www.google.com/recaptcha/api/siteverify" ),
         array( 'group' => 'lvrecaptchamain',      'name' => 'sLvRecaptchaWebsiteKey',         'type' => 'str',        'value' => '' ),
         array( 'group' => 'lvrecaptchamain',      'name' => 'sLvRecaptchaSecretKey',          'type' => 'str',        'value' => '' ),
     )

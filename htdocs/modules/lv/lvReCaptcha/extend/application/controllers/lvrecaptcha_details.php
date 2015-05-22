@@ -27,21 +27,27 @@ class lvrecaptcha_details extends lvrecaptcha_details_parent {
 
     /**
      * Saves user ratings and review text (oxReview object)
+     * LV: REMOVED need of beeing logged in to save a review. ADDED validation of Google Recaptcha innstead
      *
      * @return null
      */
-    public function saveReview()
-    {
+    public function saveReview() {
+        $blLvReCaptchaValidated = $this->_lvValidateReCaptchaResponse();
+        
+        if ( $blLvReCaptchaValidated === false ) {
+            return;
+        }
+        
         if (!oxRegistry::getSession()->checkSessionChallenge()) {
             return;
         }
 
-        if ($this->canAcceptFormData() &&
-            ($oUser = $this->getUser()) && ($oProduct = $this->getProduct())
-        ) {
+        $oProduct = $this->getProduct();
+        
+        if ( $this->canAcceptFormData() && $oProduct ) {
 
-            $dRating = $this->getConfig()->getRequestParameter('artrating');
-            if ($dRating !== null) {
+            $dRating = $this->getConfig()->getRequestParameter( 'artrating' );
+            if ( $dRating !== null ) {
                 $dRating = (int) $dRating;
             }
 
@@ -58,16 +64,62 @@ class lvrecaptcha_details extends lvrecaptcha_details_parent {
                 }
             }
 
-            if (($sReviewText = trim(( string ) $this->getConfig()->getRequestParameter('rvw_txt', true)))) {
+            if ( ( $sReviewText = trim(( string ) $this->getConfig()->getRequestParameter('rvw_txt', true) ) ) ) {
                 $oReview = oxNew('oxReview');
                 $oReview->oxreviews__oxobjectid = new oxField($oProduct->getId());
                 $oReview->oxreviews__oxtype = new oxField('oxarticle');
                 $oReview->oxreviews__oxtext = new oxField($sReviewText, oxField::T_RAW);
                 $oReview->oxreviews__oxlang = new oxField(oxRegistry::getLang()->getBaseLanguage());
                 $oReview->oxreviews__oxuserid = new oxField($oUser->getId());
-                $oReview->oxreviews__oxrating = new oxField(($dRating !== null) ? $dRating : 0);
+                $oReview->oxreviews__oxrating = new oxField( ($dRating !== null) ? $dRating : 0 );
                 $oReview->save();
             }
         }
+    }
+    
+    
+    /**
+     * Validates POST response of recaptcha form
+     * 
+     * @param void
+     * @rerurn bool
+     */
+    protected function _lvValidateReCaptchaResponse() {
+        $blReturn                   = false;
+        $oConfig                    = $this->getConfig();
+        $sReCaptchaResponse         = $oConfig->getRequestParameter( 'g-recaptcha-response' );
+        $sReCaptchaSecretKey        = $oConfig->getConfigParameter( 'sLvRecaptchaSecretKey' );
+        $sReCaptchaApiRequestUrl    = $oConfig->getConfigParameter( 'sLvRecaptchaRequestUrl' );
+        
+        if ( $sReCaptchaResponse && $sReCaptchaSecretKey && $sReCaptchaApiRequestUrl ) {
+            // preparing data to post
+            $aFields = array(
+                'secret'    => $sReCaptchaSecretKey,
+                'response'  => $sReCaptchaResponse,
+            );
+            
+            foreach( $aFields as $sKey=>$sValue ) { 
+                $sFieldsString .= $sKey.'='.$sValue.'&'; 
+            }
+
+            rtrim( $sFieldsString, '&' );
+            
+            // initialize curl resource
+            $resCurl = curl_init();
+            curl_setopt( $resCurl,CURLOPT_URL, $sReCaptchaApiRequestUrl );
+            curl_setopt( $resCurl,CURLOPT_POST, count( $aFields ) );
+            curl_setopt( $resCurl,CURLOPT_POSTFIELDS, $sFieldsString );            
+            
+            $sResult = curl_exec( $resCurl );
+            curl_close( $resCurl );
+            
+            $aResult = json_decode( $sResult, true );
+            
+            if ( (bool)$aResult['success'] === true ) {
+                $blReturn = true;
+            }
+        }
+        
+        return $blReturn;
     }
 }
