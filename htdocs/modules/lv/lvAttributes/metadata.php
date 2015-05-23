@@ -43,6 +43,8 @@ $aModule = array(
         // components->widgets
         'oxwarticledetails'                 => 'lv/lvAttributes/extend/application/components/widgets/lvattr_oxwarticledetails',
         'oxwarticlebox'                     => 'lv/lvAttributes/extend/application/components/widgets/lvattr_oxwarticlebox',
+        // models
+        'oxarticle'                         => 'lv/lvAttributes/extend/application/models/lvattr_oxarticle',
     ),
     'files' => array(
     ),

@@ -24,11 +24,6 @@
  * @author André Gregor-Herrmann
  */
 class lvattr_oxwarticlebox extends lvattr_oxwarticlebox_parent {
-    /**
-     * Configuration for compatibility icons
-     * @var array
-     */
-    protected $_aLvCompatibilityValue2Icon = null;
 
     /**
      * Template getter returns an array with compatibility icons
@@ -37,67 +32,8 @@ class lvattr_oxwarticlebox extends lvattr_oxwarticlebox_parent {
      * @return array
      */
     public function lvGetCompatibilityIcons() {
-        $aCompatibilityIcons    = array();
-        $oLang                  = oxRegistry::getLang();
-        $iCurrentLangId         = $oLang->getBaseLanguage();
-        $oViewConf              = oxRegistry::get( 'oxViewConfig' );
-        
-        if ( $this->_aLvCompatibilityValue2Icon === null ) {
-            $this->_lvSetCompatibilityConfiguration();
-        }
         $oArticle = $this->getProduct();
-        $aAttributes = $oArticle->getAttributes();
-        
-        foreach ( $this->_aLvCompatibilityValue2Icon as $sAttrOxid=>$sAttrConfig ) {
-            // attribute set?
-            if ( isset( $aAttributes[$sAttrOxid] ) ) {
-                // get value
-                $sAttributeValue = $aAttributes[$sAttrOxid]->oxattribute__oxvalue->value;
-                
-                // split current configuration
-                $aConfigSections = explode( '|', $sAttrConfig );
-                foreach ( $aConfigSections as $sConfigValues ) {
-                    $aConfigValues = explode( ':', $sConfigValues );
-                    if ( count( $aConfigValues ) == 3 ) {
-                        $sCheckValue    = trim( $aConfigValues[0] );
-                        $sIconName      = trim( $aConfigValues[1] );
-                        $sLangConst     = trim( $aConfigValues[2] );
-                        
-                        if ( $sAttributeValue == $sCheckValue ) {
-                            // we have a match!
-                            $sTitle         = $oLang->translateString( $sLangConst, $iCurrentLangId );
-                            $sModuleUrl     = $oViewConf->getModuleUrl( 'lvAttributes' );
-                            $sModuleImgPath = "out/img/";
-                            $sIconUrl       = $sModuleUrl.$sModuleImgPath.$sIconName;
-                            
-                            $aCompatibilityIcons[$sAttrOxid]['url'] = $sIconUrl;
-                            $aCompatibilityIcons[$sAttrOxid]['title'] = $sTitle;
-                        }
-                    }
-                }
-            }
-        }
-        
-        return $aCompatibilityIcons;
-    }
-        
-    /**
-     * Sets the configuration for compatibility icons
-     * 
-     * @param void
-     * @return void
-     */
-    protected function _lvSetCompatibilityConfiguration() {
-        $oConfig = $this->getConfig();
-        
-        $aCompatibilityConfig = $oConfig->getConfigParam( 'aLvCompatibilityValue2Icon' );
-        
-        if ( is_array( $aCompatibilityConfig ) && count( $aCompatibilityConfig ) > 0 ) {
-            $this->_aLvCompatibilityValue2Icon = $aCompatibilityConfig;
-        }
-        else {
-            $this->_aLvCompatibilityValue2Icon = array();
-        }
+        return $oArticle->lvGetCompatibilityIcons();
     }
         
 }
