@@ -1,0 +1,103 @@
+<?php
+
+/*
+ * Copyright (C) 2015 André Gregor-Herrmann
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * Description of lvattr_oxwarticlebox
+ *
+ * @author Gate4Games
+ * @author André Gregor-Herrmann
+ */
+class lvattr_oxwarticlebox extends lvattr_oxwarticlebox_parent {
+    /**
+     * Configuration for compatibility icons
+     * @var array
+     */
+    protected $_aLvCompatibilityValue2Icon = null;
+
+    /**
+     * Template getter returns an array with compatibility icons
+     * 
+     * @param void
+     * @return array
+     */
+    public function lvGetCompatibilityIcons() {
+        $aCompatibilityIcons    = array();
+        $oLang                  = oxRegistry::getLang();
+        $iCurrentLangId         = $oLang->getBaseLanguage();
+        $oViewConf              = oxRegistry::get( 'oxViewConfig' );
+        
+        if ( $this->_aLvCompatibilityValue2Icon === null ) {
+            $this->_lvSetCompatibilityConfiguration();
+        }
+        $oArticle = $this->getProduct();
+        $aAttributes = $oArticle->getAttributes();
+        
+        foreach ( $this->_aLvCompatibilityValue2Icon as $sAttrOxid=>$sAttrConfig ) {
+            // attribute set?
+            if ( isset( $aAttributes[$sAttrOxid] ) ) {
+                // get value
+                $sAttributeValue = $aAttributes[$sAttrOxid]->oxattribute__oxvalue->value;
+                
+                // split current configuration
+                $aConfigSections = explode( '|', $sAttrConfig );
+                foreach ( $aConfigSections as $sConfigValues ) {
+                    $aConfigValues = explode( ':', $sConfigValues );
+                    if ( count( $aConfigValues ) == 3 ) {
+                        $sCheckValue    = trim( $aConfigValues[0] );
+                        $sIconName      = trim( $aConfigValues[1] );
+                        $sLangConst     = trim( $aConfigValues[2] );
+                        
+                        if ( $sAttributeValue == $sCheckValue ) {
+                            // we have a match!
+                            $sTitle         = $oLang->translateString( $sLangConst, $iCurrentLangId );
+                            $sModuleUrl     = $oViewConf->getModuleUrl( 'lvAttributes' );
+                            $sModuleImgPath = "out/img/";
+                            $sIconUrl       = $sModuleUrl.$sModuleImgPath.$sIconName;
+                            
+                            $aCompatibilityIcons[$sAttrOxid]['url'] = $sIconUrl;
+                            $aCompatibilityIcons[$sAttrOxid]['title'] = $sTitle;
+                        }
+                    }
+                }
+            }
+        }
+        
+        return $aCompatibilityIcons;
+    }
+        
+    /**
+     * Sets the configuration for compatibility icons
+     * 
+     * @param void
+     * @return void
+     */
+    protected function _lvSetCompatibilityConfiguration() {
+        $oConfig = $this->getConfig();
+        
+        $aCompatibilityConfig = $oConfig->getConfigParam( 'aLvCompatibilityValue2Icon' );
+        
+        if ( is_array( $aCompatibilityConfig ) && count( $aCompatibilityConfig ) > 0 ) {
+            $this->_aLvCompatibilityValue2Icon = $aCompatibilityConfig;
+        }
+        else {
+            $this->_aLvCompatibilityValue2Icon = array();
+        }
+    }
+        
+}
