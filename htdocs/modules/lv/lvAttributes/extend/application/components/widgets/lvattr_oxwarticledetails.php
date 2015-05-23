@@ -53,7 +53,6 @@ class lvattr_oxwarticledetails extends lvattr_oxwarticledetails_parent {
         if ( $this->_aLvCompatibilityValue2Icon === null ) {
             $this->_lvSetCompatibilityConfiguration();
         }
-        
         $oArticle = $this->getProduct();
         $aAttributes = $oArticle->getAttributes();
         
@@ -61,7 +60,8 @@ class lvattr_oxwarticledetails extends lvattr_oxwarticledetails_parent {
             // attribute set?
             if ( isset( $aAttributes[$sAttrOxid] ) ) {
                 // get value
-                $sAttributeValue = $aAttributes[$sAttrOxid]->value;
+                $sAttributeValue = $aAttributes[$sAttrOxid]->oxattribute__oxvalue->value;
+                
                 // split current configuration
                 $aConfigSections = explode( '|', $sAttrConfig );
                 foreach ( $aConfigSections as $sConfigValues ) {
@@ -113,7 +113,7 @@ class lvattr_oxwarticledetails extends lvattr_oxwarticledetails_parent {
             // attribute set?
             if ( isset( $aAttributes[$sAttrOxid] ) ) {
                 // get value
-                $sAttributeValue = $aAttributes[$sAttrOxid]->value;
+                $sAttributeValue = $aAttributes[$sAttrOxid]->oxattribute__oxvalue->value;
                 // split current configuration
                 $aConfigSections = explode( '|', $sAttrConfig );
                 foreach ( $aConfigSections as $sConfigValues ) {
