@@ -40,6 +40,8 @@ $aModule = array(
     'url'          => 'http://www.gate4games.com',
     'email'        => 'info@gate4games.com',
     'extend'       => array(
+        // components->widgets
+        'oxwarticledetails'                 => 'lv/lvAttributes/extend/application/components/widgets/lvattr_oxwarticledetails',
     ),
     'files' => array(
     ),
@@ -48,9 +50,31 @@ $aModule = array(
     'templates' => array(
     ),
     'blocks' => array(
-        array( 'template' => 'attribute_main.tpl',                'block'=>'admin_attribute_main_form',     'file'=>'extend/application/views/blocks/block_admin_attribute_main.tpl' ),
+        array( 'template' => 'page/details/inc/productmain.tpl',        'block'=>'details_productmain_shortdesc',                   'file'=>'extend/application/views/blocks/block_details_productmain_shortdesc.tpl' ),
+
     ),
     'settings' => array(
+        array( 
+            'group' => 'lvattrmain',      
+            'name' => 'aLvCompatibilityValue2Icon',         
+            'type' => 'aarr',  
+            'value' => array( 
+                'CompatibilityTypeWine'     => 'Silber:wine_24.png:LV_ATTR_COMPATIBLE_WINE_SILVER|Gold:wine_24.png:LV_ATTR_COMPATIBLE_WINE_GOLD|Platin:wine_24.png:LV_ATTR_COMPATIBLE_WINE_PLATINUM', 
+                'CompatibilityTypeMac'      => 'Ja:mac_24.png:LV_ATTR_COMPATIBLE_MAC', 
+                'CompatibilityTypeLin'      => 'Ja:linux_24.png:LV_ATTR_COMPATIBLE_LIN',
+                'CompatibilityTypeWin'      => 'Ja:win_24.png:LV_ATTR_COMPATIBLE_WIN', 
+                'CompatibilityTypePOL'      => 'Ja:pol_24.png:LV_ATTR_COMPATIBLE_POL',
+            ) 
+        ),
+        array( 
+            'group' => 'lvattrmain',      
+            'name' => 'aLvAgeValue2Icon',         
+            'type' => 'aarr',  
+            'value' => array( 
+                'RecommendedAgePegi'        => '3:pegi_3.png:LV_ATTR_AGE_PEGI|7:pegi_7.png:LV_ATTR_AGE_PEGI|12:pegi_12.png:LV_ATTR_AGE_PEGI|16:pegi_16.png:LV_ATTR_AGE_PEGI|18:pegi_18.png:LV_ATTR_AGE_PEGI', 
+                'RecommendedAgeUsk'         => '0:usk_0.png:LV_ATTR_AGE_USK|6:usk_6.png:LV_ATTR_AGE_USK|12:usk_12.png:LV_ATTR_AGE_USK|16:usk_16.png:LV_ATTR_AGE_USK|18:pegi_18.png:LV_ATTR_AGE_USK', 
+            ) 
+        ),
     )
 );
  

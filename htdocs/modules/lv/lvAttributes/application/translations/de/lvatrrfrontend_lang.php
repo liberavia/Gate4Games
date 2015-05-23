@@ -25,8 +25,17 @@ $sLangName = 'Deutsch';
 
 $aLang = array(
     'charset'                                           => 'UTF-8',
-    'SHOP_MODULE_GROUP_lvattrmain'                      => 'Attributseinstellungen',
-    'SHOP_MODULE_aLvCompatibilityValue2Icon'            => 'Zuordnung von Kompatibilitätsicons zu Attributswerten (OXVALUE) eines Attributs (OXID)',           
-    'SHOP_MODULE_aLvAgeValue2Icon'                      => 'Zuordnung von Altersicons zu Attributswerten (OXVALUE) eines Attributs (OXID)',
+    // compatibility
+    'LV_ATTR_COMPATIBLE_WIN'                            => 'Kompatibel mit Windows',
+    'LV_ATTR_COMPATIBLE_MAC'                            => 'Kompatibel mit MacOSX',
+    'LV_ATTR_COMPATIBLE_LIN'                            => 'Kompatibel mit Linux',
+    'LV_ATTR_COMPATIBLE_WINE'                           => 'Kompatibel mit Wine',
+    'LV_ATTR_COMPATIBLE_WINE_GOLD'                      => 'Kompatibel mit Wine (Goldstatus)',
+    'LV_ATTR_COMPATIBLE_WINE_SILVER'                    => 'Kompatibel mit Wine (Silberstatus)',
+    'LV_ATTR_COMPATIBLE_WINE_PLATINUM'                  => 'Kompatibel mit Wine (Platinstatus)',
+    'LV_ATTR_COMPATIBLE_POL'                            => 'Kompatibel mit PlayOnLinux',
+    // age
+    'LV_ATTR_AGE_PEGI'                                  => 'Altersfreigabe PEGI',
+    'LV_ATTR_AGE_USK'                                   => 'Altersfreigabe USK',
 );
 

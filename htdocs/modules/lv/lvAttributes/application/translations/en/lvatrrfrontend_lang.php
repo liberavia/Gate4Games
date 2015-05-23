@@ -20,12 +20,22 @@
 // -------------------------------
 // RESOURCE IDENTIFIER = STRING
 // -------------------------------
+
 $sLangName = 'English';
 
 $aLang = array(
     'charset'                                           => 'UTF-8',
-    'SHOP_MODULE_GROUP_lvattrmain'                      => 'Attribute settings',
-    'SHOP_MODULE_aLvCompatibilityValue2Icon'            => 'Assign compatibility icons by attribute values (OXVALUE) to an attribute (OXID)',           
-    'SHOP_MODULE_aLvAgeValue2Icon'                      => 'Assign age icons by attribute values (OXVALUE) to an attribute (OXID)',
+    // compatibility
+    'LV_ATTR_COMPATIBLE_WIN'                            => 'Compatible to Windows',
+    'LV_ATTR_COMPATIBLE_MAC'                            => 'Compatible to MacOSX',
+    'LV_ATTR_COMPATIBLE_LIN'                            => 'Compatible to Linux',
+    'LV_ATTR_COMPATIBLE_WINE'                           => 'Compatible to Wine',
+    'LV_ATTR_COMPATIBLE_WINE_GOLD'                      => 'Compatible to Wine (Goldlevel)',
+    'LV_ATTR_COMPATIBLE_WINE_SILVER'                    => 'Compatible to Wine (Silver level)',
+    'LV_ATTR_COMPATIBLE_WINE_PLATINUM'                  => 'Compatible to Wine (Platinum level)',
+    'LV_ATTR_COMPATIBLE_POL'                            => 'Compatible to PlayOnLinux',
+    // age
+    'LV_ATTR_AGE_PEGI'                                  => 'Recommended Age PEGI',
+    'LV_ATTR_AGE_USK'                                   => 'Recommended Age USK',
 );
 
