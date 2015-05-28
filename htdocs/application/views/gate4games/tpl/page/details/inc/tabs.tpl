@@ -26,7 +26,7 @@
 
 [{block name="details_tabs_attributes"}]
     [{if $oView->getAttributes()}]
-        [{capture append="tabs"}]<a href="#attributes">[{oxmultilang ident="SPECIFICATION"}]</a>[{/capture}]
+        [{capture append="tabs"}]<a href="#attributes">[{oxmultilang ident="LV_GAME_GENERAL_DATA"}]</a>[{/capture}]
         [{capture append="tabsContent"}]<div id="attributes">[{include file="page/details/inc/attributes.tpl"}]</div>[{/capture}]
     [{/if}]
 [{/block}]

@@ -26,5 +26,6 @@ $sLangName = 'English';
 $aLang = array(
     'charset'                                           => 'UTF-8',
     'LV_COOKIE_NOTE'                                    => 'This site uses cookies for best presentation. For this some information like session information or language setting will be stored on your computer. Without cookies the site functionality is limited.',
+    'LV_GAME_GENERAL_DATA'                              => 'General Data',
 );
 

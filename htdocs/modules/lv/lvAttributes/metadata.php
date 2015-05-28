@@ -57,6 +57,7 @@ $aModule = array(
         array( 'template' => 'widget/product/listitem_grid.tpl',        'block'=>'widget_product_listitem_grid_tobasket',           'file'=>'extend/application/views/blocks/block_widget_product_listitem_grid_tobasket.tpl' ),
         array( 'template' => 'widget/product/listitem_infogrid.tpl',    'block'=>'widget_product_listitem_infogrid_tobasket',       'file'=>'extend/application/views/blocks/block_widget_product_listitem_infogrid_tobasket.tpl' ),
         array( 'template' => 'widget/product/listitem_line.tpl',        'block'=>'widget_product_listitem_line_tobasket',           'file'=>'extend/application/views/blocks/block_widget_product_listitem_line_tobasket.tpl' ),
+        array( 'template' => 'page/details/inc/tabs.tpl',               'block'=>'details_tabs_attributes',                         'file'=>'extend/application/views/blocks/block_widget_details_tabs_attributes.tpl' ),
     ),
     'settings' => array(
         array( 

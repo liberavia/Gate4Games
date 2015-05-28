@@ -184,13 +184,14 @@ a.viewAllHover,
 
 body {
     font: 12px / 140% arial, helvetica, clean, sans-serif;
-    background: linear-gradient (90deg, #000,#450045);
+/*    background: linear-gradient (90deg, #000,#450045);
     background: -moz-linear-gradient(#000,#450045);
     background: -ms-linear-gradient(#000,#450045);
     background: -webkit-gradient(linear, left, right, from(#000), to(#450045));
     background: -webkit-linear-gradient(#000,#450045);
     background: -o-linear-gradient(#000,#450045);
-    min-height: 1080px;
+    min-height: 1080px;*/
+    background: none;
 }
 
 
@@ -198,9 +199,9 @@ body {
     width: 960px;
     margin: 0 auto;
     position:relative;
-    background: url(../bg/page_background.png);
+/*    background: url(../bg/page_background.png);*/
+    background: none;
     box-shadow: 0 0 15px 2px #fff;
-    
 }
 
 #sidebar .tree a:hover {
