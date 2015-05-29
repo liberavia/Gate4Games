@@ -6,8 +6,8 @@
     </div>
     <br>
     <div style="text-align: right;">
-        [{foreach from=$oView->lvGetCompatibilityIcons() item="aCompatibilty"}]
-            <span><img src="[{$aCompatibilty.url}]" title="[{$aCompatibilty.title}]"></span>
+        [{foreach from=$oView->lvGetCompatibilityInformation() item="aCompatibilty"}]
+            <span><img src="[{$aCompatibilty.iconurl}]" title="[{$aCompatibilty.title}]"></span>
         [{/foreach}]
     </div>
 </div>

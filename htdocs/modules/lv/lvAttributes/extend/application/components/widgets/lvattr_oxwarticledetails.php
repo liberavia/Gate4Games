@@ -26,14 +26,14 @@
 class lvattr_oxwarticledetails extends lvattr_oxwarticledetails_parent {
     
     /**
-     * Template getter returns an array with compatibility icons
+     * Template getter returns an array with compatibility information
      * 
      * @param void
      * @return array
      */
-    public function lvGetCompatibilityIcons() {
+    public function lvGetCompatibilityInformation() {
         $oArticle = $this->getProduct();
-        return $oArticle->lvGetCompatibilityIcons();
+        return $oArticle->lvGetCompatibilityInformation();
     }
     
     
@@ -47,4 +47,5 @@ class lvattr_oxwarticledetails extends lvattr_oxwarticledetails_parent {
         $oArticle = $this->getProduct();
         return $oArticle->lvGetAgeIcons();
     }
+    
 }

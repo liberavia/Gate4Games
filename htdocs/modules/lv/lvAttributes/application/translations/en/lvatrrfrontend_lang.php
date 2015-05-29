@@ -34,6 +34,13 @@ $aLang = array(
     'LV_ATTR_COMPATIBLE_WINE_SILVER'                    => 'Compatible to Wine (Silver level)',
     'LV_ATTR_COMPATIBLE_WINE_PLATINUM'                  => 'Compatible to Wine (Platinum level)',
     'LV_ATTR_COMPATIBLE_POL'                            => 'Compatible to PlayOnLinux',
+    'LV_ATTR_GAME_SYSREQUIREMENTS'                      => 'System-Requirements and Compatibility',
+    'LV_ATTR_SYSREQUIREMENTS_FOR'                       => 'Systemanforderungen for',
+    'LV_ATTR_WIN'                                       => 'Windows',
+    'LV_ATTR_MAC'                                       => 'MacOSX',
+    'LV_ATTR_LIN'                                       => 'Linux',
+    'LV_ATTR_WINE'                                      => 'Wine',
+    'LV_ATTR_POL'                                       => 'Playonlinux',
     // age
     'LV_ATTR_AGE_PEGI'                                  => 'Recommended Age PEGI',
     'LV_ATTR_AGE_USK'                                   => 'Recommended Age USK',

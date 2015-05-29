@@ -37,12 +37,12 @@ class lvattr_oxarticle extends lvattr_oxarticle_parent {
     protected $_aLvAgeValue2Icon = null;
     
     /**
-     * Template getter returns an array with compatibility icons
+     * Returns all compatibility informaton array 
      * 
      * @param void
      * @return array
      */
-    public function lvGetCompatibilityIcons() {
+    public function lvGetCompatibilityInformation() {
         $aCompatibilityIcons    = array();
         $oLang                  = oxRegistry::getLang();
         $iCurrentLangId         = $oLang->getBaseLanguage();
@@ -75,9 +75,12 @@ class lvattr_oxarticle extends lvattr_oxarticle_parent {
                             $sModuleUrl     = $oViewConf->getModuleUrl( 'lvAttributes' );
                             $sModuleImgPath = "out/img/";
                             $sIconUrl       = $sModuleUrl.$sModuleImgPath.$sIconName;
+                            $sLvAttrDesc    = $aAttributes[$sAttrOxid]->oxattribute__lvattrdesc->value;
                             
-                            $aCompatibilityIcons[$sAttrOxid]['url'] = $sIconUrl;
-                            $aCompatibilityIcons[$sAttrOxid]['title'] = $sTitle;
+                            $aCompatibilityIcons[$sAttrOxid]['iconurl']         = $sIconUrl;
+                            $aCompatibilityIcons[$sAttrOxid]['title']           = $sTitle;
+                            $aCompatibilityIcons[$sAttrOxid]['description']     = $sLvAttrDesc;
+                            $aCompatibilityIcons[$sAttrOxid]['targetsys_trans'] = $this->_lvGetTargetSystemTranslationByAttrId( $sAttrOxid );
                         }
                     }
                 }
@@ -176,5 +179,45 @@ class lvattr_oxarticle extends lvattr_oxarticle_parent {
         else {
             $this->_aLvAgeValue2Icon = array();
         }
+    }
+    
+    
+    /**
+     * Returns translated target system text by attribute id
+     * 
+     * @param string $sAttrOxid
+     * @return string
+     */
+    protected function _lvGetTargetSystemTranslationByAttrId( $sAttrOxid ) {
+        $sReturn                = '';
+        
+        $sTranslateTargetSystem = '';
+        switch( $sAttrOxid ) {
+            case 'CompatibilityTypeWine':
+                $sTranslateTargetSystem = "LV_ATTR_WINE";
+                break;
+            case 'CompatibilityTypeWin':
+                $sTranslateTargetSystem = "LV_ATTR_WINE";
+                break;
+            case 'CompatibilityTypeMac':
+                $sTranslateTargetSystem = "LV_ATTR_MAC";
+                break;
+            case 'CompatibilityTypeLin':
+                $sTranslateTargetSystem = "LV_ATTR_LIN";
+                break;
+            case 'CompatibilityTypePOL':
+                $sTranslateTargetSystem = "LV_ATTR_POL";
+                break;
+        }
+        
+        if ( $sTranslateTargetSystem != '' ) {
+            $oLang                  = oxRegistry::getLang();
+            $sLangTargetSystem      = $oLang->translateString( $sTranslateTargetSystem );
+            $sLangSysReqPrefix      = $oLang->translateString( 'LV_ATTR_SYSREQUIREMENTS_FOR' );
+            
+            $sReturn = $sLangSysReqPrefix." ".$sLangTargetSystem;
+        }
+        
+        return $sReturn;
     }
 }
