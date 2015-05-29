@@ -1,5 +1,5 @@
 [{$smarty.block.parent}]
-[{if $oView->lvGetLongDescSysRequirements()}]
+[{if $oView->lvGetCompatibilityInformation()}]
     [{capture append="tabs"}]<a href="#lvattr_sysrequirements">[{oxmultilang ident="LV_GAME_SYSREQUIREMENTS"}]</a>[{/capture}]
     [{capture append="tabsContent"}]<div id="lvattr_sysrequirements">[{include file="page/details/inc/lvattr_sysrequirements.tpl"}]</div>[{/capture}]
 [{/if}]
