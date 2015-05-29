@@ -153,7 +153,9 @@
 
         [{block name="details_productmain_manufacturersicon"}]
             [{if $oManufacturer->oxmanufacturers__oxicon->value}]
-                <img src="[{$oManufacturer->getIconUrl()}]" alt="[{ $oManufacturer->oxmanufacturers__oxtitle->value}]">
+                <a href="[{$oManufacturer->getLink()}]" style="float:right;">
+                    <img src="[{$oManufacturer->getIconUrl()}]" alt="[{ $oManufacturer->oxmanufacturers__oxtitle->value}]">
+                </a>
             [{/if}]
         [{/block}]
 
