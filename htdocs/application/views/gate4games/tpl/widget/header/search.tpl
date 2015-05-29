@@ -11,10 +11,9 @@
                 <input type="hidden" name="cur" value="[{$currency->id}]">
             [{/if}]
             [{block name="header_search_field"}]
-                <label for="searchParam" class="innerLabel">[{oxmultilang ident="SEARCH" }]</label>
                 <input class="textbox" type="text" id="searchParam" name="searchparam" value="[{$oView->getSearchParamForHtml()}]">
             [{/block}]
-            <button class="submitButton largeButton" type="submit">[{oxmultilang ident="SEARCH" }]</button>
+            <button class="searchButton" type="submit">[{oxmultilang ident="SEARCH" }]</button>
         </div>
     </form>
 [{/if}]

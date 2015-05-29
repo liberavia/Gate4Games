@@ -300,23 +300,79 @@ a.sliderHover {
 
 div.searchBox {
     position: absolute;
-    right: 10px;
-    top: 105px;
+    right: 30px;
+    top: 30px;
 }
 
 div.searchBox input.textbox {
     color: #5d005d;
     float: left;
-    margin: 0px 10px 0 0;
+    margin: 0px 0px 0 0;
     padding-left: 4px;
-    width: 380px;
-    box-shadow: 0 0 15px 2px #5d005d;
+    width: 520px;
+/*    border-radius: 6px 0 0 6px;*/
+    border: 1px solid #5d005d;
+    font-weight: bold;
+    font-size: 16px;
+    height:30px;
+}
+
+.searchButton {
+    background: -moz-linear-gradient(#000, #5D005D);
+    background: -ms-linear-gradient(#000, #5D005D);
+    background: -webkit-gradient(linear, left top, left bottom, from(#000), to(#5D005D));
+    background: -webkit-linear-gradient(#000, #5D005D);
+    background: -o-linear-gradient(#000, #5D005D);
+    background: linear-gradient(#000, #5D005D);
+    border: 1px solid #000;
+    color: #fff;
+    cursor: pointer;
+    float: left;
+    font-size: 18px;
+    font-weight: bold;
+    height: 34px;
+    line-height: 20px;
+    margin-left: -1px;
+    padding-top: 0;
+    text-align: left;
+    width: 114px;
+/*    border-radius:0px 6px 6px 0px;*/
+    border: 1px solid #5d005d;
+}
+
+.searchButton:hover {
+    background: -moz-linear-gradient(#000, #C800C8);
+    background: -ms-linear-gradient(#000, #C800C8);
+    background: -webkit-gradient(linear, left top, left bottom, from(#000), to(#C800C8));
+    background: -webkit-linear-gradient(#000, #C800C8);
+    background: -o-linear-gradient(#000, #C800C8);
+    background: linear-gradient(#000, #C800C8);
+}
+
+
+div.searchBox input.textbox:focus {
+    color: #5d005d;
+    float: left;
+    margin: 0px 0px 0 0;
+    padding-left: 4px;
+    width: 520px;
+/*    box-shadow: 0 0 15px 2px #5d005d;*/
+}
+
+label.innerLabel {
+    color: #b4b8b8;
+    display: block;
+    font-weight: normal;
+    font-size: 16px;
+    margin: 10px 0 0 5px;
+    position: absolute;
+    text-transform: uppercase;
 }
 
 #navigation {
     clear: both;
     padding-top: 8px;
-    width: 520px;
+    width: 100%;
 }
 
 .marker {
@@ -510,5 +566,45 @@ ul.tabs li.fbTab a {
     position: absolute;
     right: 10px;
     text-transform: uppercase;
-    top: 145px;
+    top: 5px;
+}
+
+#header {
+    width: 100%;
+    padding: 0 10px;
+    height: 150px;
+    margin: 0;
+    position: relative;
+    background: linear-gradient (90deg, #999,#fff);
+    background: -moz-linear-gradient(#999,#fff);
+    background: -ms-linear-gradient(#999,#fff);
+    background: -webkit-gradient(linear, left, right, from(#999), to(#fff));
+    background: -webkit-linear-gradient(#999,#fff);
+    background: -o-linear-gradient(#999,#fff);
+}
+
+
+#headerContent {
+    height: 134px;
+    margin: 0 auto;
+    position: relative;
+    width: 980px;
+    z-index: 13;
+}
+
+.topPopList {
+    float: right;
+    margin-right: 50px;
+    position: relative;
+}
+
+.oxSlider {
+    margin-bottom: 20px;
+    margin-top: 10px;
+    position: relative;
+}
+
+#logo {
+    float: left;
+    margin: 19px 0 8px 15px;
 }

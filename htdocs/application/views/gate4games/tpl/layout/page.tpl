@@ -3,10 +3,10 @@
     [{if $oView->showRDFa()}]
         [{ include file="rdfa/rdfa.tpl" }]
     [{/if}]
+    [{block name="layout_header"}]
+        [{include file="layout/header.tpl"}]
+    [{/block}]
     <div id="page" class="[{if $sidebar}] sidebar[{$sidebar}][{/if}]">
-        [{block name="layout_header"}]
-            [{include file="layout/header.tpl"}]
-        [{/block}]
         [{if $oView->getClassName() ne "start" && !$blHideBreadcrumb}]
         [{block name="layout_breadcrumb"}]
            [{ include file="widget/breadcrumb.tpl"}]

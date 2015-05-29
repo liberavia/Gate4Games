@@ -28,7 +28,6 @@
     </script>
 
     <div class="otherPictures" id="morePicsContainer">
-        <div class="shadowLine"></div>
         <ul class="clear">
         [{oxscript add="var aMorePic=new Array();"}]
         [{foreach from=$oView->lvGetAllMedia() key=iPicNr item=aLvExtUrl name=sMorePics}]
