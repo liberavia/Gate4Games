@@ -6,7 +6,6 @@
 [{/if}]
 <div id="header" class="clear">
     [{block name="layout_header_top"}]
-        [{oxid_include_widget cl="oxwLanguageList" lang=$oViewConf->getActLanguageId() _parent=$oView->getClassName() nocookie=1 _navurlparams=$oViewConf->getNavUrlParams() anid=$oViewConf->getActArticleId()}]
         [{*oxid_include_widget cl="oxwCurrencyList" cur=$oViewConf->getActCurrency() _parent=$oView->getClassName() nocookie=1 _navurlparams=$oViewConf->getNavUrlParams() anid=$oViewConf->getActArticleId()*}]
 
         [{if $oxcmp_user || $oView->getCompareItemCount() || $Errors.loginBoxErrors}]
@@ -19,6 +18,7 @@
         [{*oxid_include_widget cl="oxwServiceMenu" _parent=$oView->getClassName() force_sid=$force_sid nocookie=$blAnon _navurlparams=$oViewConf->getNavUrlParams() anid=$oViewConf->getActArticleId()*}]
     [{/block}]
     <div id="headerContent">
+        [{oxid_include_widget cl="oxwLanguageList" lang=$oViewConf->getActLanguageId() _parent=$oView->getClassName() nocookie=1 _navurlparams=$oViewConf->getNavUrlParams() anid=$oViewConf->getActArticleId()}]
         [{block name="layout_header_logo"}]
             [{assign var="sLogoImg" value=$oViewConf->getShopLogo()}]
             <a id="logo" href="[{$oViewConf->getHomeLink()}]" title="[{$oxcmp_shop->oxshops__oxtitleprefix->value}]"><img

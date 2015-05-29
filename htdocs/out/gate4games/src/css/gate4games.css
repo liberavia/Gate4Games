@@ -594,7 +594,7 @@ ul.tabs li.fbTab a {
 
 .topPopList {
     float: right;
-    margin-right: 50px;
+    margin-right: 0px;
     position: relative;
 }
 
