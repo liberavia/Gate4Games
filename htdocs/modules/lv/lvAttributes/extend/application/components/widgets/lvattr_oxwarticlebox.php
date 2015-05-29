@@ -31,9 +31,9 @@ class lvattr_oxwarticlebox extends lvattr_oxwarticlebox_parent {
      * @param void
      * @return array
      */
-    public function lvGetCompatibilityIcons() {
+    public function lvGetCompatibilityInformation() {
         $oArticle = $this->getProduct();
-        return $oArticle->lvGetCompatibilityIcons();
+        return $oArticle->lvGetCompatibilityInformation();
     }
         
 }
