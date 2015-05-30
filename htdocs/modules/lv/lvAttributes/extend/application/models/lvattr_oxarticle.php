@@ -75,7 +75,7 @@ class lvattr_oxarticle extends lvattr_oxarticle_parent {
                             $sModuleUrl     = $oViewConf->getModuleUrl( 'lvAttributes' );
                             $sModuleImgPath = "out/img/";
                             $sIconUrl       = $sModuleUrl.$sModuleImgPath.$sIconName;
-                            $sLvAttrDesc    = $aAttributes[$sAttrOxid]->oxattribute__lvattrdesc->value;
+                            $sLvAttrDesc    = $aAttributes[$sAttrOxid]->oxattribute__lvattrdesc->rawValue;
                             
                             $aCompatibilityIcons[$sAttrOxid]['iconurl']         = $sIconUrl;
                             $aCompatibilityIcons[$sAttrOxid]['title']           = $sTitle;
