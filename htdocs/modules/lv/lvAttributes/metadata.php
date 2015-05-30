@@ -51,7 +51,7 @@ $aModule = array(
     'events'       => array(
     ),
     'templates' => array(
-        'lvattr_sysrequirements.tpl'        => 'application/views/frontend/page/details/inc/lvattr_sysrequirements.tpl'
+        'lvattr_sysrequirements.tpl'        => 'lv/lvAttributes/application/views/frontend/page/details/inc/lvattr_sysrequirements.tpl'
     ),
     'blocks' => array(
         array( 'template' => 'page/details/inc/productmain.tpl',        'block'=>'details_productmain_shortdesc',                   'file'=>'extend/application/views/blocks/block_details_productmain_shortdesc.tpl' ),
