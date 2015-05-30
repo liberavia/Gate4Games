@@ -197,7 +197,7 @@ class lvattr_oxarticle extends lvattr_oxarticle_parent {
                 $sTranslateTargetSystem = "LV_ATTR_WINE";
                 break;
             case 'CompatibilityTypeWin':
-                $sTranslateTargetSystem = "LV_ATTR_WINE";
+                $sTranslateTargetSystem = "LV_ATTR_WIN";
                 break;
             case 'CompatibilityTypeMac':
                 $sTranslateTargetSystem = "LV_ATTR_MAC";
