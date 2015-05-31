@@ -42,6 +42,7 @@ $aModule = array(
     'extend'       => array(
     ),
     'files' => array(
+        'lvamzpnapiconnector'       => 'lv/lvAmazonPartnerNetConnector/application/models/lvamzpnapiconnector.php'
     ),
     'events'       => array(
     ),
