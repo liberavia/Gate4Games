@@ -1,0 +1,46 @@
+<?php
+
+/* 
+ * Copyright (C) 2015 André Gregor-Herrmann
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+// -------------------------------
+// RESOURCE IDENTIFIER = STRING
+// -------------------------------
+
+$sLangName = 'Deutsch';
+
+$aLang = array(
+    'charset'                                           => 'UTF-8',
+    // groups
+    'SHOP_MODULE_GROUP_lvamzpn_connect'                 => 'Zugangseinstellungen',
+    'SHOP_MODULE_GROUP_lvamzpn_import'                  => 'Importoptionen',
+    'SHOP_MODULE_GROUP_lvamzpn_debug'                   => 'Logs und Loglevel',
+    // options connect
+    'SHOP_MODULE_sLvAmzPnAssociateTag'                  => 'Amazon Partner-Id',           
+    'SHOP_MODULE_sLvAmzPnAWSAccessKeyId'                => 'AWS Access Key',  
+    'SHOP_MODULE_sLvAmzPnAWSSecretKey'                  => 'AWS Secret Key',
+    // group import
+    'SHOP_MODULE_sLvAmzPnBrowseNode'                    => 'Amazon Browse-Node von der die Produkte importiert werden sollen',
+    'SHOP_MODULE_sLvAmzPnSearchIndex'                   => 'Amazon Search-Index von welchem die Produkte importiert werden sollen',
+    'SHOP_MODULE_sLvAmzPnCondition'                     => 'Zustand der Produkte',
+    'SHOP_MODULE_sLvAmzPnSearchResponseGroups'          => 'Antwortgruppen für Suchanfragen (Entwickleroption)',
+    'SHOP_MODULE_sLvAmzPnLookupResponseGroups'          => 'Antwortgruppen für Detailanfragen (Entwickleroption)',
+    // group debug
+    'SHOP_MODULE_blLvAmzPnLogActive'                    => 'Aktivitäten in Log protokollieren (lvamzpn.log)',
+    'SHOP_MODULE_sLvAmzPnLogLevel'                      => 'Log-Level (1=Fehler,2=Fehler+Warnungen,3=Alle Aktivitäten, 4=Alle Aktivitäten+Debug-Ausgaben)',
+);
+
