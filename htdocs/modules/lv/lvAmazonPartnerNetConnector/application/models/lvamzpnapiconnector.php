@@ -298,10 +298,9 @@ class lvamzpnapiconnector extends oxBase {
      */
     protected function _lvLoadCategoryMapping() {
         $sMappingFilePath = getShopBasePath()."/modules/lv/lvAmazonPartnerNetConnector/config/category_mapping.csv";
-        
         if ( file_exists( $sMappingFilePath ) ) {
             $resMappingFile = fopen( $sMappingFilePath, "r" );
-            while ( ( $aData = fgetcsv( $resMappingFile, 1000, "," ) ) !== false ) {
+            while ( ( $aData = fgetcsv( $resMappingFile, 1000, ";" ) ) !== false ) {
                 $sAmazonCategory = $aData[0];
                 $this->_aCategoryMapping[$sAmazonCategory]['category'] = $aData[1];
                 $this->_aCategoryMapping[$sAmazonCategory]['sale_category'] = $aData[2];

@@ -27,7 +27,6 @@ class lvaffiliate_import extends oxBase {
     
     public function lvAddArticle( $aArticleData ) {
         print_r( $aArticleData );
-        die();
     }
     
 }
