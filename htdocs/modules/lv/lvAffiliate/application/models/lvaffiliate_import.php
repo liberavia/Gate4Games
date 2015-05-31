@@ -36,6 +36,18 @@ class lvaffiliate_import extends oxBase {
      * @var string
      */
     protected $_sLvCurrentManufacturerId = null;
+    
+    /**
+     * Current article id
+     * @var string
+     */
+    protected $_sLvCurrentArticleId = null;
+
+    /**
+     * Current parent id
+     * @var string
+     */
+    protected $_sLvCurrentParentId = null;
 
     /**
      * Current set of article data needs to be importet
@@ -130,15 +142,76 @@ class lvaffiliate_import extends oxBase {
      * @param array $aArticleData
      * @return void
      */
-    public function lvAddArticle( $aArticleData, $s ) {
+    public function lvAddArticle( $aArticleData ) {
         $this->_aLvCurrentArticleData = $aArticleData;
         $this->_lvSetManufacturerId();
-//        $this->_lvSetArticleIds();
+        $this->_lvSetArticleIds();
+die();        
 //        $this->_lvSetArticleData();
 //        $this->_lvAssignCategories();
 //        $this->_lvAssignAttributes();
         
         print_r( $aArticleData );
+    }
+    
+    
+    /**
+     * Method tries to match an existing article Id
+     * 
+     * @param void
+     * @return void
+     */
+    protected function _lvSetArticleIds() {
+        $oDb = oxDb::getDb( MODE_FETCH_ASSOC );
+        $sArticleId = "";
+        $sParentId  = "";
+        
+        // go through configuration
+        foreach ( $this->_aLvField2MatchArticle as $sDataFieldName=>$sConfigFieldValue ) {
+            $aConfigFieldValue  = explode( "|", $sConfigFieldValue );
+            $sConfigDbField     = $aConfigFieldValue[0];
+            $sConfigFamily      = $aConfigFieldValue[1];
+            $sValueToMatch      = $this->_aLvCurrentArticleData[$sDataFieldName];
+            
+            $sQuery     = "SELECT OXID, OXPARENTID FROM oxarticles WHERE ".$sConfigDbField."='".$sValueToMatch."' LIMIT 1";
+            $aResult    = $oDb->GetRow( $sQuery );
+            
+            $blCreateComplete = true;
+            if ( $aResult && is_array( $aResult ) ) {
+                if ( $sConfigFamily == 'child' ) {
+                    $sArticleId     = $aResult['OXID'];
+                    $sParentId      = $aResult['OXPARENTID'];
+                }
+                else {
+                    $sParentId  = $aResult['OXID'];
+                    $sQuery     = "SELECT OXID FROM oxarticles WHERE OXPARENTID='".$sParentId."' AND ".$this->_sLvVendorId." LIMIT 1";
+                    $sArticleId = $oDb->GetOne( $sQuery );
+                    if ( !$sArticleId ) {
+                        $blCreateComplete = false;
+                    }
+                }
+            }
+        }
+        
+        if ( !$sArticleId || $sArticleId != "" ) {
+            $this->_lvCreateArticle( $blComplete );
+        }
+        else {
+            $this->_lvUpdateArticle();
+        }
+    }
+    
+    
+    /**
+     * Creates a new article. If complete article including parent should be generated the param is set to true
+     * 
+     * @param bool $blComplete
+     * @return void
+     */
+    protected function _lvCreateArticle( $blComplete ) {
+        /**
+         * @todo: Go further here next time
+         */
     }
     
     
@@ -155,10 +228,11 @@ class lvaffiliate_import extends oxBase {
         // go through configuration
         foreach ( $this->_aLvField2MatchManufacturer as $sDataFieldName=>$sConfigFieldValue ) {
             $aConfigFieldValue  = explode( "|", $sConfigFieldValue );
-            $sConfigDbTable     = $aDataFieldValue[0];
-            $sConfigDbField     = $aDataFieldValue[1];
+            $sConfigDbTable     = $aConfigFieldValue[0];
+            $sConfigDbField     = $aConfigFieldValue[1];
             
             $sQuery = "SELECT OXID FROM ".$sConfigDbTable." WHERE ".$sConfigDbField."='".$this->_aLvCurrentArticleData[$sDataFieldName]."' LIMIT 1";
+            
             $sManufacturerId = $oDb->GetOne( $sQuery );
             
             if ( !$sManufacturerId ) {
@@ -182,10 +256,39 @@ class lvaffiliate_import extends oxBase {
         $sNewId         = $oUtilsObject->generateUId();
         $oManufacturer  = oxNew( 'oxmanufacturer' );
         
+        $sShortCut = $this->_lvCreateShortCut( $sManufacturerName );
+        
         $oManufacturer->setId( $sNewId );
-        $oManufacturer->oxmanufacturers__oxtitle = new oxField( $sManufacturerName );
+        $oManufacturer->oxmanufacturers__oxtitle    = new oxField( $sManufacturerName );
+        $oManufacturer->oxmanufacturers__lvshortcut = new oxField( $sShortCut );
         $oManufacturer->save();
         $this->_sLvCurrentManufacturerId = $sNewId;
+    }
+    
+    
+    /**
+     * Creating shortcut from name
+     * 
+     * @param string $sLongName
+     * @return string
+     */
+    protected function _lvCreateShortCut( $sLongName ) {
+        $aWords = explode( " ", $sLongName );
+        $iAmountWords = count( $aWords );
+        if ( $iAmountWords >= 3 ) {
+            $sShortCut = "";
+            foreach ( $aWords as $sWord ) {
+                $sShortCut .= strtolower( substr( $sWord, 0, 1 ) );
+            }
+        }
+        else {
+            $sShortCut = "";
+            foreach ( $aWords as $sWord ) {
+                $sShortCut .= strtolower( substr( $sWord, 0, 2 ) );
+            }
+        }
+        
+        return $sShortCut;
     }
     
 }
