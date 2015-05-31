@@ -34,6 +34,7 @@ class lvamzpnapiconnector extends oxBase {
         'AssociateTag'      =>'',
         'BrowseNode'        =>'',
         'Condition'         =>'',
+        'ItemPage'          =>'',
         'Operation'         =>'ItemSearch',
         'ResponseGroup'     =>'',
         'SearchIndex'       =>'',
@@ -82,13 +83,24 @@ class lvamzpnapiconnector extends oxBase {
      */
     protected $_blLvAmzPnLogActive = false;
     
-    
     /**
      * Set log level default is 1 = Errors
      * @var int
      */
     protected $_iLvAmzPnLogLevel = 1;
     
+    /**
+     * Stores current used page number
+     * @var int
+     */
+    protected $_iCurrentPageNumber = null;
+    
+    /**
+     * Logfile used
+     * @var string
+     */
+    protected $_sLogFile = 'lvamzpn.log';
+
     
     /**
      * Constructor adds configuration of logging
@@ -111,11 +123,17 @@ class lvamzpnapiconnector extends oxBase {
      * @return int
      */
     public function lvGetSearchPageAmount() {
+        $iPageAmount = 0;
         $sSignedRequestUrl = $this->_lvGetSignedRequest( 'search' );
-        if ( $sSignedUrl ) {
+        
+        if ( $sSignedRequestUrl ) {
             $oResponse = $this->_lvGetRequestResult( $sSignedRequestUrl );
-            print_r( $oResponse );
+            if ( isset( $oResponse->Items->TotalPages ) ) {
+                $iPageAmount = (int)$oResponse->Items->TotalPages;
+            }
         }
+        
+        return $iPageAmount;
     }
     
     /**
@@ -125,18 +143,109 @@ class lvamzpnapiconnector extends oxBase {
      * @return array
      */
     public function lvGetItemSearchAsins( $iPageNumber = null ) {
+        $this->_iCurrentPageNumber = $iPageNumber;
         
+        $sSignedRequestUrl = $this->_lvGetSignedRequest( 'search' );
+        
+        if ( $sSignedRequestUrl ) {
+            $oResponse = $this->_lvGetRequestResult( $sSignedRequestUrl );
+            print_r( $oResponse );
+        }
+
+        $this->_iCurrentPageNumber = null;
     }
     
+    
+    /**
+     * Method returns an array of ASINS including detailed information of defined browse node which are on the given page 
+     * 
+     * @param int $iPageNumber (optional)
+     * @return array
+     */
+    public function lvGetItemSearchAsinDetails( $iPageNumber = null ) {
+        $aArticleData = array();
+        $this->_iCurrentPageNumber = $iPageNumber;
+        
+        $sSignedRequestUrl = $this->_lvGetSignedRequest( 'search' );
+        
+        if ( $sSignedRequestUrl ) {
+            $oResponse = $this->_lvGetRequestResult( $sSignedRequestUrl );
+            foreach ( $oResponse->Items->{Item} as $oItem ) {
+                $sAsin = (string)$oItem->ASIN;
+                $aArticleData[$sAsin]['ARTNUM'] = $sAsin;
+                
+                // fetching additional information from title
+                $sTitle = (string)$oItem->ItemAttributes->Title;
+                $sDRMInfo = $this->_lvFetchDRMInfoFromTitle( $sTitle );
+                if ( $sDRMInfo ) {
+                    $aArticleData[$sAsin]['DRM'] = $sDRMInfo;
+                }
+                $sTitle = $this->_lvCleanupAmazonTitle( $sTitle );
+                $aArticleData[$sAsin]['TITLE'] = $sTitle;
+                
+                $aArticleData[$sAsin]['EXTURL'] = (string)$oItem->DetailPageURL;
+                $aArticleData[$sAsin]['COVERIMAGE'] = (string)$oItem->LargeImage->URL;
+                // go through image sets
+                $iIndex = 1;
+                foreach ( $oItem->ImageSets->{ImageSet} as $oImageSet ) {
+                    $aArticleData[$sAsin]['PIC'.$iIndex] = (string)$oImageSet->LargeImage->URL;
+                    $iIndex++;
+                }
+                $aArticleData[$sAsin]['MANUFACTURER'] = (string)$oItem->ItemAttributes->Manufacturer;
+                $aArticleData[$sAsin]['GENRE'] = (string)$oItem->ItemAttributes->Genre;
+                $aArticleData[$sAsin]['RELEASE'] = (string)$oItem->ItemAttributes->ReleaseDate;
+                // fetching language information
+                foreach ( $oItem->ItemAttributes->Languages->{Language} as $oLanguage ) {
+                    $sType = (string)$oLanguage->Type;
+                    if ( $sType == 'Subtitled' ) {
+                        $aArticleData[$sAsin]['LANGUAGEINFO']['SUBTITLE'] = (string)$oLanguage->Name;
+                    }
+                    if ( $sType == 'Dubbed' ) {
+                        $aArticleData[$sAsin]['LANGUAGEINFO']['DUBBED'] = (string)$oLanguage->Name;
+                    }
+                    if ( $sType == 'Original' ) {
+                        $aArticleData[$sAsin]['LANGUAGEINFO']['ORIGINAL'] = (string)$oLanguage->Name;
+                    }
+                    /**
+                     * @todo: There might be more to come it seems that language data is made for german market
+                     */
+                }
+                // Price handling
+                $sTPriceCent    = (string)$oItem->ItemAttributes->ListPrice->Amount;
+                $sPriceCent     = (string)$oItem->OfferSummary->LowestNewPrice->Amount;
+                // double values
+                $dTPrice        = (double)$sTPriceCent/100;
+                $dPrice         = (double)$sPriceCent/100;
+                // assign prices
+                $aArticleData[$sAsin]['TPRICE'] = $dTPrice;
+                $aArticleData[$sAsin]['PRICE'] = $dPrice;
+                
+                
+                
+            }
+        }
+print_r( $aArticleData );
+die();
+        $this->_iCurrentPageNumber = null;
+    }
+
     
     /**
      * Loggs a message depending on the defined loglevel. Default is debug-level
      * 
      * @param string $sMessage
      * @param int $iLogLevel
+     * @return void
      */
     public function lvLog( $sMessage, $iLogLevel=4 ) {
+        $oUtils = oxRegistry::getUtils();
         
+        if ( $iLogLevel <= $this->_iLvAmzPnLogLevel ) {
+            $sPrefix        = "[".date( 'Y-m-d H:i:s' )."] ";
+            $sFullMessage   = $sPrefix.$sMessage;
+            
+            $oUtils->writeToLog($sFullMessage, $this->_sLogFile );
+        }
     }
     
     
@@ -151,6 +260,44 @@ class lvamzpnapiconnector extends oxBase {
     }
     
     
+    /**
+     * Returns DRM Information if available via title
+     * 
+     * @param string $sTitle
+     * @return string
+     */
+    protected function _lvFetchDRMInfoFromTitle( $sTitle ) {
+        $sDrm = "";
+        // check if we have a steam code
+        if ( strpos( $sTitle, '[PC Steam Code]' ) !== false ) {
+            $sDrm = "Steam";
+        }
+        else if ( strpos( $sTitle, '[PC/Mac Steam Code]' ) !== false ) {
+            $sDrm = "Steam";
+        }
+        else if ( strpos( $sTitle, '[PC/Mac Online Code]' ) !== false ) {
+            $sDrm = "Online-Account";
+        }
+        else if ( strpos( $sTitle, '[PC Online Code]' ) !== false ) {
+            $sDrm = "Online-Account";
+        }
+        
+        return $sDrm;
+    }
+    
+    
+    protected function _lvCleanupAmazonTitle( $sTitle ) {
+        $sReturnTitle = $sTitle;
+        // check if cleanup needed 
+        if ( strpos( $sTitle, "[" ) !== false ) {
+            $aTitleParts = explode( "[", $sTitle );
+            $sReturnTitle = trim( $aTitleParts[0] );
+        }
+        
+        return $sReturnTitle;
+    }
+
+
     /**
      * Method returns a well formed signed API Request for api request
      * 
@@ -180,8 +327,9 @@ class lvamzpnapiconnector extends oxBase {
             'SearchIndex'       => $this->_lvSpecialUrlEncode( $sLvAmzPnSearchIndex ),
             'ItemId'            => $this->_lvSpecialUrlEncode( $this->_sCurrentAsin ),
             'Timestamp'         => $this->_lvSpecialUrlEncode( $this->_lvGetCurrentRequestTimestamp() ),
+            'ItemPage'          => ( $this->_iCurrentPageNumber ) ? (string)$this->_iCurrentPageNumber : '1',
         );
-        
+
         // select request template by type
         switch( $sType ) {
             case 'search':
@@ -194,7 +342,7 @@ class lvamzpnapiconnector extends oxBase {
                 break;
         }
         
-        if ( !isset( $sTemplate ) ) {
+        if ( !isset( $aTemplate ) ) {
             $this->lvLog( "ERROR: Wrong request type" , 1 );
             return;
         }
@@ -207,19 +355,30 @@ class lvamzpnapiconnector extends oxBase {
         }
         
         // preparing values by imploding things back to strings
-        $sCanonicalUrl  = implode( '&', $aTemplate );
+        $iIndex = 0 ;
+        $sCanonicalUrl="";
+        foreach ( $aTemplate as $sOption=>$sValue ) {
+            if ( $iIndex > 0 ) {
+                $sCanonicalUrl .= "&";
+            }
+            $sCanonicalUrl .= $sOption."=".$sValue;
+            $iIndex++;
+        }
         $sSignHeader    = implode( "\n", $this->_aLvSignHeader ); 
         
         $sToBeSigned = $sSignHeader."\n".$sCanonicalUrl;
         
-        // build hash
-        $sRawSignature = hash( 'sha256', $sToBeSigned );
-        
-        $sSignature = $this->_lvHashUrlEncode( $sRawSignature );
+        // build signature
+        $sRawSignature      = hash_hmac( "sha256", $sToBeSigned, $sLvAmzPnAWSSecretKey, true );
+        $sRawBaseSignature  = base64_encode( $sRawSignature );
+        $sSignature         = $this->_lvHashUrlEncode( $sRawBaseSignature );
         
         // building complete request
+        /**
+         * @todo There should be flexible ways to create multilang functionality. Currently this only Requests Amazon.de
+         */
         $sSignedRequestUrl = "http://webservices.amazon.de/onca/xml?".$sCanonicalUrl."&Signature=".$sSignature;
-        
+
         return $sSignedRequestUrl;
     }
     
@@ -253,8 +412,8 @@ class lvamzpnapiconnector extends oxBase {
             ':'=>urlencode( ':' ),
         );
 
-        $sOutString = strstr( $sInString, $aTrans );
-        
+        $sOutString = strtr( $sInString, $aTrans );
+
         return $sOutString;
     }
     
@@ -271,7 +430,7 @@ class lvamzpnapiconnector extends oxBase {
             '='=>urlencode( '=' ),
         );
 
-        $sOutString = strstr( $sInString, $aTrans );
+        $sOutString = strtr( $sInString, $aTrans );
         
         return $sOutString;
     }
