@@ -25,8 +25,25 @@
  */
 class lvaffiliate_import extends oxBase {
     
-    public function lvAddArticle( $aArticleData, $sVendorId ) {
-        echo $sVendorId."\n";
+    /**
+     * VendorId of current import
+     * @var string
+     */
+    protected $_sLvVendorId = null;
+    
+    
+    /**
+     * Setter for vendor id
+     * 
+     * @param string $sVendorId
+     */
+    public function lvSetVendorId( $sVendorId ) { 
+        $this->_sLvVendorId = $sVendorId;
+    }
+
+
+    public function lvAddArticle( $aArticleData ) {
+        echo $this->_sLvVendorId."\n";
         print_r( $aArticleData );
     }
     
