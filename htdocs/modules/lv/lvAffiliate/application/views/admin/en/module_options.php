@@ -25,5 +25,7 @@ $sLangName = 'English';
 
 $aLang = array(
     'charset'                                           => 'UTF-8',
+    'SHOP_MODULE_GROUP_lvaffiliateassignment'           => 'Assignments',
+    'SHOP_MODULE_aLvField2Attribute'                    => 'Assign values of data array to shop attribute ids',
 );
 

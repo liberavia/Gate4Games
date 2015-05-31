@@ -27,5 +27,6 @@ $aLang = array(
     'charset'                                           => 'UTF-8',
     'LV_MAIN_VENDOR'                                    => 'Hauptlieferant',
     'LV_VENDOR_SHORTCUT'                                => 'Lieferantenkürzel',
+    'LV_MANUFACTURER_SHORTCUT'                          => 'Herstellerkürzel',
 );
 

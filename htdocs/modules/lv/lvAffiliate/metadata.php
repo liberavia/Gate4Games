@@ -57,8 +57,30 @@ $aModule = array(
         array( 'template' => 'page/details/inc/fullproductinfo.tpl',        'block'=>'lv_fullproductinfo_details_tabs',             'file'=>'extend/application/views/blocks/block_lv_fullproductinfo_details_tabs.tpl' ),
         array( 'template' => 'layout/base.tpl',                             'block'=>'base_style',                                  'file'=>'extend/application/views/blocks/block_base_style.tpl' ),
         array( 'template' => 'vendor_main.tpl',                             'block'=>'admin_vendor_main_form',                      'file'=>'extend/application/views/blocks/block_admin_vendor_main_form.tpl' ),
+        array( 'template' => 'manufacturer_main.tpl',                       'block'=>'admin_manufacturer_main_form',                'file'=>'extend/application/views/blocks/block_admin_manufacturer_main_form.tpl' ),
     ),
     'settings' => array(
+        array( 
+            'group' => 'lvaffiliateassignment',      
+            'name' => 'aLvField2Attribute',         
+            'type' => 'aarr',  
+            'value' => array( 
+                'GENRE'                     => 'GameGenre', 
+                'GAMETYPE'                  => 'GameType', 
+                'DRM'                       => 'DRM',
+                'COMPATWIN'                 => 'CompatibilityTypeWin', 
+                'COMPATLIN'                 => 'CompatibilityTypeLin',
+                'COMPATMAC'                 => 'CompatibilityTypeMac',
+                'COMPATWINE'                => 'CompatibilityTypeWine',
+                'COMPATPOL'                 => 'CompatibilityTypePOL',
+                'LANGUAGEINFO|DUBBED'       => 'GameLanguageAudio',
+                'LANGUAGEINFO|INTERFACE'    => 'GameLanguageInterface',
+                'LANGUAGEINFO|SUBTITLE'     => 'GameLanguageSubtitles',
+                'USK'                       => 'RecommendedAgeUsk',
+                'PEGI'                      => 'RecommendedAgePegi',
+                'RELEASE'                   => 'ReleaseDate',
+            ) 
+        ),
     )
 );
  
