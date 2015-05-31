@@ -100,8 +100,21 @@ class lvamzpnapiconnector extends oxBase {
      * @var string
      */
     protected $_sLogFile = 'lvamzpn.log';
-
     
+    /**
+     * List of cateory mappings
+     * @var array 
+     */
+    protected $_aCategoryMapping = array();
+    
+    /**
+     * Default category which will be used there is no mapping match
+     * @var string
+     */
+    protected $_sDefaultCategoryId = '';
+
+
+
     /**
      * Constructor adds configuration of logging
      */
@@ -112,6 +125,9 @@ class lvamzpnapiconnector extends oxBase {
         if ( $sLogLevel ) {
             $this->_iLvAmzPnLogLevel = (int)$sLogLevel;
         }
+        $this->_lvLoadCategoryMapping();
+        $this->_sDefaultCategoryId = $oConfig->getConfigParam( 'sLvAmzPnDefaultCatId' );
+        
         parent::__construct();
     }
 
@@ -185,15 +201,31 @@ class lvamzpnapiconnector extends oxBase {
                 
                 $aArticleData[$sAsin]['EXTURL'] = (string)$oItem->DetailPageURL;
                 $aArticleData[$sAsin]['COVERIMAGE'] = (string)$oItem->LargeImage->URL;
+                
                 // go through image sets
                 $iIndex = 1;
                 foreach ( $oItem->ImageSets->{ImageSet} as $oImageSet ) {
                     $aArticleData[$sAsin]['PIC'.$iIndex] = (string)$oImageSet->LargeImage->URL;
                     $iIndex++;
                 }
+                
+                // manufacturer
                 $aArticleData[$sAsin]['MANUFACTURER'] = (string)$oItem->ItemAttributes->Manufacturer;
-                $aArticleData[$sAsin]['GENRE'] = (string)$oItem->ItemAttributes->Genre;
+                // category handling
+                $sAmazonGenre = (string)$oItem->ItemAttributes->Genre;
+                $aArticleData[$sAsin]['GENRE'] = $sAmazonGenre;
+                if ( isset( $this->_aCategoryMapping[$sAmazonGenre] ) ) {
+                    $aArticleData[$sAsin]['CATEGORYID']         = $this->_aCategoryMapping[$sAmazonGenre]['category'];
+                    $aArticleData[$sAsin]['CATEGORYID_SALE']    = $this->_aCategoryMapping[$sAmazonGenre]['sale_category'];
+                }
+                else {
+                    $aArticleData[$sAsin]['CATEGORYID']         = $this->_sDefaultCategoryId;
+                    $aArticleData[$sAsin]['CATEGORYID_SALE']    = $this->_aCategoryMapping[$sAmazonGenre]['category'];
+                }
+                
+
                 $aArticleData[$sAsin]['RELEASE'] = (string)$oItem->ItemAttributes->ReleaseDate;
+                
                 // fetching language information
                 foreach ( $oItem->ItemAttributes->Languages->{Language} as $oLanguage ) {
                     $sType = (string)$oLanguage->Type;
@@ -257,9 +289,25 @@ class lvamzpnapiconnector extends oxBase {
      * @return array
      */
     public function lvGetProductDetails( $sAsin ) {
-        
     }
     
+    
+    /**
+     * Loads category mapping from CSV and puts it into an array attribute
+     * 
+     */
+    protected function _lvLoadCategoryMapping() {
+        $sMappingFilePath = getShopBasePath()."/modules/lv/lvAmazonPartnerNetConnector/config/category_mapping.csv";
+        
+        if ( file_exists( $sMappingFilePath ) ) {
+            $resMappingFile = fopen( $sMappingFilePath, "r" );
+            while ( ( $aData = fgetcsv( $resMappingFile, 1000, "," ) ) !== false ) {
+                $sAmazonCategory = $aData[0];
+                $this->_aCategoryMapping[$sAmazonCategory]['category'] = $aData[1];
+                $this->_aCategoryMapping[$sAmazonCategory]['sale_category'] = $aData[2];
+            }                        
+        }
+    }
     
     /**
      * Returns DRM Information if available via title

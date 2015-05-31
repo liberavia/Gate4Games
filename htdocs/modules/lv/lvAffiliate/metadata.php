@@ -31,8 +31,8 @@ $aModule = array(
     'id'           => 'lvAfffiliate',
     'title'        => 'Affiliate Module',
     'description'  => array(
-        'de' => 'Modul welches den Shop in einen Affiliate Shop verwandelt. Es deaktiviert auch verschiedene Funktionen des Shops.',
-        'en' => 'Module for transforming shop into an affiliate shop. It also deactivates some components of the shop system',
+        'de' => 'Modul deaktiviert Shopfunktionen und bietet eine Importschnittstelle an mit welcher darauf aufsetzende Module Daten in das Shopsystem importieren können.',
+        'en' => 'Module deactivates shop functions and offers an interface for importing products which other modules can build on',
     ),
     'thumbnail'    => '',
     'version'      => '1.0.0',
@@ -44,6 +44,7 @@ $aModule = array(
         'oxwarticledetails'                         => 'lv/lvAffiliate/extend/application/components/widgets/lvaffiliate_oxwarticledetails',
     ),
     'files' => array(
+        'lvaffiliate_import'                        => 'lv/lvAffiliate/application/models/lvaffiliate_import.php',
     ),
     'events'       => array(
     ),

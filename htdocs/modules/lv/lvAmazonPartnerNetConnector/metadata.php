@@ -29,7 +29,7 @@ $sMetadataVersion = '1.2';
  */
 $aModule = array(
     'id'           => 'lvAmazonPartnerNetConnector',
-    'title'        => 'Amazon Partner net Connector',
+    'title'        => 'Amazon PartnerNet-Connector',
     'description'  => array(
         'de' => 'Dieses Modul verbindet sich mit Ihrem Amazon PartnerNet API und Importiert Produkte eines definierten Browse-Nodes über Affiliate-Modul in ihren Shop',
         'en' => 'This module connects to your Amazon PartnerNet API and imports products of a defined BrowseNode via the Affiliate Module into your Shop',
@@ -57,6 +57,7 @@ $aModule = array(
         array( 'group' => 'lvamzpn_connect',        'name' => 'sLvAmzPnAWSSecretKey',           'type' => 'str',        'value' => "" ),
         // group import
         array( 'group' => 'lvamzpn_import',         'name' => 'sLvAmzPnVendorId',               'type' => 'str',        'value' => '' ),
+        array( 'group' => 'lvamzpn_import',         'name' => 'sLvAmzPnDefaultCatId',           'type' => 'str',        'value' => '' ),
         array( 'group' => 'lvamzpn_import',         'name' => 'sLvAmzPnBrowseNode',             'type' => 'str',        'value' => '' ),
         array( 'group' => 'lvamzpn_import',         'name' => 'sLvAmzPnSearchIndex',            'type' => 'str',        'value' => '' ),
         array( 'group' => 'lvamzpn_import',         'name' => 'sLvAmzPnCondition',              'type' => 'str',        'value' => 'New' ),
