@@ -42,6 +42,8 @@ $aModule = array(
     'extend'       => array(
         // components->widgets
         'oxwarticledetails'                         => 'lv/lvAffiliate/extend/application/components/widgets/lvaffiliate_oxwarticledetails',
+        // controllers admin
+        'vendor_main'                               => 'lv/lvAffiliate/extend/application/controllers/admin/lvaffiliate_vendor_main',
     ),
     'files' => array(
         'lvaffiliate_import'                        => 'lv/lvAffiliate/application/models/lvaffiliate_import.php',
@@ -54,6 +56,7 @@ $aModule = array(
     'blocks' => array(
         array( 'template' => 'page/details/inc/fullproductinfo.tpl',        'block'=>'lv_fullproductinfo_details_tabs',             'file'=>'extend/application/views/blocks/block_lv_fullproductinfo_details_tabs.tpl' ),
         array( 'template' => 'layout/base.tpl',                             'block'=>'base_style',                                  'file'=>'extend/application/views/blocks/block_base_style.tpl' ),
+        array( 'template' => 'vendor_main.tpl',                             'block'=>'admin_vendor_main_form',                      'file'=>'extend/application/views/blocks/block_admin_vendor_main_form.tpl' ),
     ),
     'settings' => array(
     )
