@@ -25,7 +25,8 @@
  */
 class lvaffiliate_import extends oxBase {
     
-    public function lvAddArticle( $aArticleData ) {
+    public function lvAddArticle( $aArticleData, $sVendorId ) {
+        echo $sVendorId."\n";
         print_r( $aArticleData );
     }
     

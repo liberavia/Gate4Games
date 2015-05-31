@@ -37,14 +37,16 @@ class lvamzpn_import_catalog extends oxBase {
     
     
     public function start() {
+        $oConfig            = $this->getConfig();
         $oApiConnector      = oxNew( 'lvamzpnapiconnector' );
         $oAffiliateImport   = oxNew( 'lvaffiliate_import' );
         $iPageAmount        = $oApiConnector->lvGetSearchPageAmount();
+        $sVendorId          = $oConfig->getConfigParam( 'sLvAmzPnVendorId' );
         
         for ( $iPage=1; $iPage<=$iPageAmount; $iPage++ ) {
             $aSearchDetails = $oApiConnector->lvGetItemSearchAsinDetails( $iPage );
             foreach ( $aSearchDetails as $aArticleData ) {
-                $oAffiliateImport->lvAddArticle( $aArticleData );
+                $oAffiliateImport->lvAddArticle( $aArticleData, $sVendorId );
             }
             die();
         }
