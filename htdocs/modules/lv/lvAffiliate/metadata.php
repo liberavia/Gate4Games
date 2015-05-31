@@ -62,6 +62,56 @@ $aModule = array(
     'settings' => array(
         array( 
             'group' => 'lvaffiliateassignment',      
+            'name' => 'aLvField2MatchManufacturer',         
+            'type' => 'aarr',  
+            'value' => array( 
+                'MANUFACTURER'              => 'oxmanufacturers|OXTITLE', 
+            ) 
+        ),
+        array( 
+            'group' => 'lvaffiliateassignment',      
+            'name' => 'aLvField2MatchArticle',         
+            'type' => 'aarr',  
+            'value' => array( 
+                'ARTNUM'                    => 'OXARTNUM|child',
+                'TITLE'                     => 'OXTITLE|parent', 
+            ) 
+        ),
+        array( 
+            'group' => 'lvaffiliateassignment',      
+            'name' => 'aLvField2DirectTable',         
+            'type' => 'aarr',  
+            'value' => array( 
+                'ARTNUM'                    => 'oxarticles|OXARTNUM', 
+                'DRM'                       => 'oxarticles|DRM',
+                'EXTURL'                    => 'oxarticles|OXEXTURL', 
+                'COVERIMAGE'                => 'oxarticles|OXPIC1',
+                'PIC1'                      => 'oxarticles|OXPIC2',
+                'PIC2'                      => 'oxarticles|OXPIC3',
+                'PIC3'                      => 'oxarticles|OXPIC4',
+                'PIC4'                      => 'oxarticles|OXPIC5',
+                'PIC5'                      => 'oxarticles|OXPIC6',
+                'PIC6'                      => 'oxarticles|OXPIC7',
+                'PIC7'                      => 'oxarticles|OXPIC8',
+                'PIC8'                      => 'oxarticles|OXPIC9',
+                'PIC9'                      => 'oxarticles|OXPIC10',
+                'PIC10'                     => 'oxarticles|OXPIC11',
+                'PIC11'                     => 'oxarticles|OXPIC12',
+                'PRICE'                     => 'oxarticles|OXPRICE',
+                'TPRICE'                    => 'oxarticles|OXTPRICE',
+            ) 
+        ),
+        array( 
+            'group' => 'lvaffiliateassignment',      
+            'name' => 'aLvField2CategoryAssignment',         
+            'type' => 'aarr',  
+            'value' => array( 
+                'CATEGORYID'                => 'oxobject2category|OXCATNID',
+                'CATEGORYID_SALE'           => 'oxobject2category|OXCATNID',
+            ) 
+        ),
+        array( 
+            'group' => 'lvaffiliateassignment',      
             'name' => 'aLvField2Attribute',         
             'type' => 'aarr',  
             'value' => array( 
