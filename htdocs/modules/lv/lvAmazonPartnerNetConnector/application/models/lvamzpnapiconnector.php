@@ -167,7 +167,7 @@ class lvamzpnapiconnector extends oxBase {
         $sLvAmzPnBrowseNode             = $oConfig->getConfigParam( 'sLvAmzPnBrowseNode' );
         $sLvAmzPnSearchIndex            = $oConfig->getConfigParam( 'sLvAmzPnSearchIndex' );
         $sLvAmzPnCondition              = $oConfig->getConfigParam( 'sLvAmzPnCondition' );
-        $sLvAmzPnSearchResponseGroups   = $Config->getConfigParam( 'sLvAmzPnSearchResponseGroups' );
+        $sLvAmzPnSearchResponseGroups   = $oConfig->getConfigParam( 'sLvAmzPnSearchResponseGroups' );
         $sLvAmzPnLookupResponseGroups   = $oConfig->getConfigParam( 'sLvAmzPnLookupResponseGroups' );
         
         // build configuration array to fetch from
