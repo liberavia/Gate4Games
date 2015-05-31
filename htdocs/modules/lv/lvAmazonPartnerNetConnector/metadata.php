@@ -56,10 +56,11 @@ $aModule = array(
         array( 'group' => 'lvamzpn_connect',        'name' => 'sLvAmzPnAWSAccessKeyId',         'type' => 'str',        'value' => "" ),
         array( 'group' => 'lvamzpn_connect',        'name' => 'sLvAmzPnAWSSecretKey',           'type' => 'str',        'value' => "" ),
         // group import
+        array( 'group' => 'lvamzpn_import',         'name' => 'sLvAmzPnVendorId',               'type' => 'str',        'value' => '' ),
         array( 'group' => 'lvamzpn_import',         'name' => 'sLvAmzPnBrowseNode',             'type' => 'str',        'value' => '' ),
         array( 'group' => 'lvamzpn_import',         'name' => 'sLvAmzPnSearchIndex',            'type' => 'str',        'value' => '' ),
         array( 'group' => 'lvamzpn_import',         'name' => 'sLvAmzPnCondition',              'type' => 'str',        'value' => 'New' ),
-        array( 'group' => 'lvamzpn_import',         'name' => 'sLvAmzPnSearchResponseGroups',   'type' => 'str',        'value' => 'Images,ItemAttributes,Offers,VariationSummary,Variations' ),
+        array( 'group' => 'lvamzpn_import',         'name' => 'sLvAmzPnSearchResponseGroups',   'type' => 'str',        'value' => 'Images,ItemAttributes,Offers,EditorialReview,OfferFull,VariationSummary,Variations' ),
         array( 'group' => 'lvamzpn_import',         'name' => 'sLvAmzPnLookupResponseGroups',   'type' => 'str',        'value' => 'Images,ItemAttributes,Offers,BrowseNodes,EditorialReview,VariationMatrix,VariationSummary,Variations,SalesRank' ),
         // group debug
         array( 'group' => 'lvamzpn_debug',          'name' => 'blLvAmzPnLogActive',             'type' => 'bool',       'value' => false ),

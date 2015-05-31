@@ -224,9 +224,10 @@ class lvamzpnapiconnector extends oxBase {
                 
             }
         }
-print_r( $aArticleData );
-die();
+        
         $this->_iCurrentPageNumber = null;
+        
+        return $aArticleData;
     }
 
     

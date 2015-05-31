@@ -34,6 +34,7 @@ $aLang = array(
     'SHOP_MODULE_sLvAmzPnAWSAccessKeyId'                => 'AWS Access Key',  
     'SHOP_MODULE_sLvAmzPnAWSSecretKey'                  => 'AWS Secret Key',
     // group import
+    'SHOP_MODULE_sLvAmzPnVendorId'                      => 'Assigning to Vendor ID',
     'SHOP_MODULE_sLvAmzPnBrowseNode'                    => 'Amazon Browse-Node from which products shall be imported',
     'SHOP_MODULE_sLvAmzPnSearchIndex'                   => 'Amazon Search-Index from which products shall be imported',
     'SHOP_MODULE_sLvAmzPnCondition'                     => 'Condition of result products',
