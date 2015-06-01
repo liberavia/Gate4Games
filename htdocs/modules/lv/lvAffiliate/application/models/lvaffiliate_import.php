@@ -48,6 +48,12 @@ class lvaffiliate_import extends oxBase {
      * @var string
      */
     protected $_sLvCurrentParentId = null;
+    
+    /**
+     * Manufacturer shortcut
+     * @var string
+     */
+    protected $_sLvCurrentManufacturerShortCut = null;
 
     /**
      * Current set of article data needs to be importet
@@ -209,9 +215,67 @@ die();
      * @return void
      */
     protected function _lvCreateArticle( $blComplete ) {
+        $oUtilsObject   = oxRegistry::get( 'oxUtilsObject' );
+        $oDb            = oxDb::getDb( MODE_FETCH_ASSOC );
+        
+        if ( $blComplete === true ) {
+            // the article is completely new and have not been created by another merchant import until now
+            // we need to create parent article then
+            $oParentArticle             = oxNew( 'oxarticle' );
+            $this->_sLvCurrentParentId  = $oUtilsObject->generateUId();
+            $sTitle                     = $this->_aLvCurrentArticleData['TITLE'];
+            $iParentArtNumberNumeric    = $this->_lvGetNextArtNumCounter();
+            $sParentArtNum              = $this->_sLvCurrentManufacturerShortCut.(string)$iParentArtNumberNumeric;
+                    
+            $oParentArticle->setId( $this->_sLvCurrentParentId );
+            $oParentArticle->oxarticles__oxtitle->value         = new oxField( $sTitle );
+            $oParentArticle->oxarticles__oxartnum->value        = new oxField( $sParentArtNum );
+            $oParentArticle->save();
+        }
+        
+        $this->_sLvCurrentArticleId     = $oUtilsObject->generateUId();
+        
+        $oArticle = oxNew( 'oxarticle' );
+        $oArticle->setId( $this->_sLvCurrentArticleId );
+        
+        foreach ( $this->_aLvField2DirectTable as $sDataFieldName=>$sAssignTableField ) {
+            $aTargetTableField  = explode( "|", $sAssignTableField );
+            $sTargetTable       = $aTargetTableField[0];
+            $sTargetField       = $aTargetTableField[1];
+            $sTarget            = strtolower( $sTargetTable )."__".strtolower( $sTargetField );
+            
+            $oArticle->$sTarget = new oxField( $this->_aLvCurrentArticleData[$sDataFieldName] );
+        }
+/**
+ * @todo go on here next time
+ */        
+        $oArticle->save();
+    }
+    
+    
+    /**
+     * Fetches next free artnum and increases number counter
+     * 
+     * @param void
+     * @return int
+     */
+    protected function _lvGetNextArtNumCounter() {
+        $oDb = oxDb::getDb( MODE_FETCH_ASSOC );
+        
         /**
-         * @todo: Go further here next time
+         * @todo possibly it would be saver to lock tables on select
          */
+        
+        $sQuery         = "SELECT OXCOUNT FROM oxcounters WHERE OXIDENT='oxArtnum' LIMIT 1";
+        $sArtNum        = $oDb->GetOne( $sQuery);
+        $iArtNum        = (int)$sArtNum;
+        $iNextArtNum    = $iArtNum +1;
+        
+        // update counter
+        $sQuery         = "UPDATE oxcounters SET OXCOUNT='".(string)$iNextArtNum."' WHERE OXIDENT='oxArtnum' LIMIT 1";
+        $oDb->Execute( $sQuery );
+        
+        return $iArtNum;
     }
     
     
@@ -242,6 +306,30 @@ die();
                 $this->_sLvCurrentManufacturerId = $sManufacturerId;
             }
         }
+        
+        // finally set manufacturershortcut for later use
+        $this->_lvSetCurrentManufacturerShortCutById();
+    }
+    
+    
+    /**
+     * Sets current manufacturer shortcut for later use
+     * 
+     * @param void
+     * @return void
+     */
+    protected function _lvSetCurrentManufacturerShortCutById() {
+        $oDb                    = oxDb::getDb( MODE_FETCH_ASSOC );
+        $sManufacturersTable    = getViewName( 'oxmanufacturers' );
+        
+        $sQuery = "SELECT LVSHORTCUT FROM ".$sManufacturersTable." WHERE OXID='".$this->_sLvCurrentManufacturerId."' LIMIT 1";
+        $sManufacturerShortCut = $oDb->GetOne( $sQuery );
+        
+        if ( !$sManufacturerShortCut ) {
+            $sManufacturerShortCut = "g4g";
+        }
+        
+        $this->_sLvCurrentManufacturerShortCut = $sManufacturerShortCut;
     }
     
     
