@@ -28,7 +28,7 @@ $sMetadataVersion = '1.2';
  * Module information
  */
 $aModule = array(
-    'id'           => 'lvAfffiliate',
+    'id'           => 'lvAffiliate',
     'title'        => 'Affiliate Module',
     'description'  => array(
         'de' => 'Modul deaktiviert Shopfunktionen und bietet eine Importschnittstelle an mit welcher darauf aufsetzende Module Daten in das Shopsystem importieren können.',
