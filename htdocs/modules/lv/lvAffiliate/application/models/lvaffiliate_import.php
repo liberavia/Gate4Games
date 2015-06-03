@@ -328,7 +328,7 @@ class lvaffiliate_import extends oxBase {
                 }
                 else {
                     $sParentId  = $aResult['OXID'];
-                    $sQuery     = "SELECT OXID FROM oxarticles WHERE OXPARENTID='".$sParentId."' AND ".$this->_sLvVendorId." LIMIT 1";
+                    $sQuery     = "SELECT OXID FROM oxarticles WHERE OXPARENTID='".$sParentId."' AND  OXVENDORID='".$this->_sLvVendorId."' LIMIT 1";
                     $sArticleId = $oDb->GetOne( $sQuery );
                     if ( !$sArticleId ) {
                         $blCreateComplete = false;
