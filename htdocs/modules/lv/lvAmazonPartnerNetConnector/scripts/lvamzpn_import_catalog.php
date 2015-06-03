@@ -42,7 +42,6 @@ class lvamzpn_import_catalog extends oxBase {
         $oAffiliateImport   = oxNew( 'lvaffiliate_import' );
         $iPageAmount        = $oApiConnector->lvGetSearchPageAmount();
         $sVendorId          = $oConfig->getConfigParam( 'sLvAmzPnVendorId' );
-        
         $oAffiliateImport->lvSetVendorId( $sVendorId );
         for ( $iPage=1; $iPage<=$iPageAmount; $iPage++ ) {
             $aSearchDetails = $oApiConnector->lvGetItemSearchAsinDetails( $iPage );

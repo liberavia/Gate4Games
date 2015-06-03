@@ -324,7 +324,7 @@ class lvaffiliate_import extends oxBase {
             $sConfigFamily      = $aConfigFieldValue[1];
             $sValueToMatch      = $this->_aLvCurrentArticleData[$sDataFieldName];
             
-            $sQuery     = "SELECT OXID, OXPARENTID FROM oxarticles WHERE ".$sConfigDbField."='".$sValueToMatch."' LIMIT 1";
+            $sQuery     = "SELECT OXID, OXPARENTID FROM oxarticles WHERE ".$sConfigDbField."='".mysql_real_escape_string( $sValueToMatch )."' LIMIT 1";
             $aResult    = $oDb->GetRow( $sQuery );
             
             $blCreateComplete = true;
