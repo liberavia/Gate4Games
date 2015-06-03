@@ -22,7 +22,7 @@
                         [{$oAffiliateProduct->oxarticles__oxtitle->value}] [{oxmultilang ident="LVAFFILIATE_AT_VENDOR"}] <strong>[{$oAffiliateVendor->getTitle()}]</strong>
                     </td>
                     <td class="lvAffiliateDetailsToOffer">
-                        <a href="http://[{$oAffiliateProduct->oxarticles__oxexturl->rawValue}]" target="_blank"><button class="submitButton largeButton">[{oxmultilang ident="LVAFFILIATE_TO_OFFER"}]</button></a>
+                        <a href="[{$oAffiliateProduct->oxarticles__oxexturl->rawValue}]" target="_blank"><button class="submitButton largeButton">[{oxmultilang ident="LVAFFILIATE_TO_OFFER"}]</button></a>
                     </td>
                 </tr>
             </table>
