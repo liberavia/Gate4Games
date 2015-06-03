@@ -165,8 +165,12 @@ class lvaffiliate_import extends oxBase {
      * @return void
      */
     public function lvAddArticle( $aArticleData ) {
-        $this->_aLvCurrentArticleData = $aArticleData;
+        // reset data
+        $this->_sLvCurrentArticleId = null;
+        $this->_sLvCurrentParentId = null;
+        $this->_sLvCurrentManufacturerId = null;
         
+        $this->_aLvCurrentArticleData = $aArticleData;
         $this->_lvSetManufacturerId();
         
         $blCreateComplete = $this->_lvSetArticleIds();
@@ -311,7 +315,10 @@ class lvaffiliate_import extends oxBase {
         $sParentId  = "";
         
         // go through configuration
+        $blMatch=false;
         foreach ( $this->_aLvField2MatchArticle as $sDataFieldName=>$sConfigFieldValue ) {
+            if ( $blMatch ) continue;
+            
             $aConfigFieldValue  = explode( "|", $sConfigFieldValue );
             $sConfigDbField     = $aConfigFieldValue[0];
             $sConfigFamily      = $aConfigFieldValue[1];
@@ -330,9 +337,16 @@ class lvaffiliate_import extends oxBase {
                     $sParentId  = $aResult['OXID'];
                     $sQuery     = "SELECT OXID FROM oxarticles WHERE OXPARENTID='".$sParentId."' AND  OXVENDORID='".$this->_sLvVendorId."' LIMIT 1";
                     $sArticleId = $oDb->GetOne( $sQuery );
+                    
                     if ( !$sArticleId ) {
                         $blCreateComplete = false;
                     }
+                }
+                
+                if ( $sArticleId && $sParentId ) {
+                    $this->_sLvCurrentArticleId = $sArticleId;
+                    $this->_sLvCurrentParentId  = $sParentId;
+                    $blMatch = true;
                 }
             }
         }
@@ -366,7 +380,6 @@ class lvaffiliate_import extends oxBase {
     protected function _lvCreateArticle( $blCreateComplete ) {
         $oUtilsObject   = oxRegistry::get( 'oxUtilsObject' );
         $oDb            = oxDb::getDb( MODE_FETCH_ASSOC );
-        
         if ( $blCreateComplete === true && isset( $this->_aLvCurrentArticleData['TITLE'] ) ) {
             // the article is completely new and have not been created by another merchant import until now
             // we need to create parent article then
@@ -377,8 +390,11 @@ class lvaffiliate_import extends oxBase {
             $sParentArtNum              = $this->_sLvCurrentManufacturerShortCut.(string)$iParentArtNumberNumeric;
                     
             $oParentArticle->setId( $this->_sLvCurrentParentId );
-            $oParentArticle->oxarticles__oxtitle->value         = new oxField( $sTitle );
-            $oParentArticle->oxarticles__oxartnum->value        = new oxField( $sParentArtNum );
+            $oParentArticle->oxarticles__oxtitle            = new oxField( $sTitle );
+            $oParentArticle->oxarticles__oxmanufacturerid   = new oxField( $this->_sLvCurrentManufacturerId );
+            $oParentArticle->oxarticles__oxartnum           = new oxField( $sParentArtNum );
+            $oParentArticle->oxarticles__oxartnum           = new oxField( $sParentArtNum );
+            
             try {
                 $oParentArticle->save();
             } 
@@ -391,7 +407,9 @@ class lvaffiliate_import extends oxBase {
         
         $oArticle = oxNew( 'oxarticle' );
         $oArticle->setId( $this->_sLvCurrentArticleId );
-        
+        $oArticle->oxarticles__oxparentid       = new oxField( $this->_sLvCurrentParentId );
+        $oArticle->oxarticles__oxvendorid       = new oxField( $this->_sLvVendorId );
+        $oArticle->oxarticles__lvcoverpic       = new oxField( 'oxpic1' );
         foreach ( $this->_aLvField2DirectTable as $sDataFieldName=>$sAssignTableField ) {
             $aTargetTableField  = explode( "|", $sAssignTableField );
             $sTargetTable       = $aTargetTableField[0];
@@ -569,6 +587,10 @@ class lvaffiliate_import extends oxBase {
                 $sShortCut .= strtoupper( substr( $sWord, 0, 2 ) );
             }
         }
+        
+        /**
+         * @todo check if shortcut exists and add a number as long it doesn't still exist
+         */
         
         return $sShortCut;
     }
