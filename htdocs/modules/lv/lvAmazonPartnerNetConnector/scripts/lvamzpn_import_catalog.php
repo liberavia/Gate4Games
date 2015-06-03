@@ -49,7 +49,6 @@ class lvamzpn_import_catalog extends oxBase {
             foreach ( $aSearchDetails as $aArticleData ) {
                 $oAffiliateImport->lvAddArticle( $aArticleData );
             }
-            die();
         }
     }
 }
