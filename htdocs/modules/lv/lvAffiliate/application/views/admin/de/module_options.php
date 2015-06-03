@@ -25,11 +25,16 @@ $sLangName = 'Deutsch';
 
 $aLang = array(
     'charset'                                           => 'UTF-8',
+    // group assignment
     'SHOP_MODULE_GROUP_lvaffiliateassignment'           => 'Zuordnungen',
     'SHOP_MODULE_aLvField2MatchManufacturer'            => 'Werte des Datenarrays Hersteller zuordnen. Wird angelegt, wenn es keinen Treffer gibt.',
     'SHOP_MODULE_aLvField2MatchArticle'                 => 'Zuordnungsreihenfolge über welche versucht wird einen existierenden Artikel zu finden.',
     'SHOP_MODULE_aLvField2DirectTable'                  => 'Direkte Tabellenzuordnungen, sobald die ID des Artikels bekannt ist.',
     'SHOP_MODULE_aLvField2CategoryAssignment'           => 'Direkte Zuordnung zur Kategorie, sobald die ID des Artikels bekannt ist.',
     'SHOP_MODULE_aLvField2Attribute'                    => 'Werte des Datenarrays die als Attributswerte zugeordnet werden. Erfolgt nur, wenn ID des Artikels ermittelt wurde.',
+    // group debug
+    'SHOP_MODULE_GROUP_lvaffiliate_debug'               => 'Logs and Debugging',
+    'SHOP_MODULE_blLvAffiliateLogActive'                => 'Aktivitäten in Log protokollieren (lvaffiliate_import.log)',
+    'SHOP_MODULE_sLvAffiliateLogLevel'                  => 'Log-Level (1=Fehler,2=Fehler+Warnungen,3=Alle Aktivitäten, 4=Alle Aktivitäten+Debug-Ausgaben)',
 );
 

@@ -60,6 +60,7 @@ $aModule = array(
         array( 'template' => 'manufacturer_main.tpl',                       'block'=>'admin_manufacturer_main_form',                'file'=>'extend/application/views/blocks/block_admin_manufacturer_main_form.tpl' ),
     ),
     'settings' => array(
+        // group assignments
         array( 
             'group' => 'lvaffiliateassignment',      
             'name' => 'aLvField2MatchManufacturer',         
@@ -83,7 +84,6 @@ $aModule = array(
             'type' => 'aarr',  
             'value' => array( 
                 'ARTNUM'                    => 'oxarticles|OXARTNUM', 
-                'DRM'                       => 'oxarticles|DRM',
                 'EXTURL'                    => 'oxarticles|OXEXTURL', 
                 'COVERIMAGE'                => 'oxarticles|OXPIC1',
                 'PIC1'                      => 'oxarticles|OXPIC2',
@@ -131,6 +131,9 @@ $aModule = array(
                 'RELEASE'                   => 'ReleaseDate',
             ) 
         ),
+        // group debug
+        array( 'group' => 'lvaffiliate_debug',          'name' => 'blLvAffiliateLogActive',             'type' => 'bool',       'value' => false ),
+        array( 'group' => 'lvaffiliate_debug',          'name' => 'sLvAffiliateLogLevel',               'type' => 'str',        'value' => '1' ),
     )
 );
  

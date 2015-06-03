@@ -215,12 +215,12 @@ class lvamzpnapiconnector extends oxBase {
                 $sAmazonGenre = (string)$oItem->ItemAttributes->Genre;
                 $aArticleData[$sAsin]['GENRE'] = $sAmazonGenre;
                 if ( isset( $this->_aCategoryMapping[$sAmazonGenre] ) ) {
-                    $aArticleData[$sAsin]['CATEGORYID']         = $this->_aCategoryMapping[$sAmazonGenre]['category'];
-                    $aArticleData[$sAsin]['CATEGORYID_SALE']    = $this->_aCategoryMapping[$sAmazonGenre]['sale_category'];
+                    $aArticleData[$sAsin]['CATEGORYID']         = array( $this->_aCategoryMapping[$sAmazonGenre]['category'] );
+                    $aArticleData[$sAsin]['CATEGORYID_SALE']    = array( $this->_aCategoryMapping[$sAmazonGenre]['sale_category'] );
                 }
                 else {
-                    $aArticleData[$sAsin]['CATEGORYID']         = $this->_sDefaultCategoryId;
-                    $aArticleData[$sAsin]['CATEGORYID_SALE']    = $this->_aCategoryMapping[$sAmazonGenre]['category'];
+                    $aArticleData[$sAsin]['CATEGORYID']         = array( $this->_sDefaultCategoryId );
+                    $aArticleData[$sAsin]['CATEGORYID_SALE']    = array( $this->_aCategoryMapping[$sAmazonGenre]['category'] );
                 }
                 
 

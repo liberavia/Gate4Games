@@ -96,17 +96,33 @@ class lvaffiliate_import extends oxBase {
      * @var string
      */
     protected $_sLogFile = 'lvaffiliate_import.log';
+    
+    /**
+     * Is logging set to active
+     * @var int
+     */
+    protected $_blLvAffiliateLogActive = false;
+    
+    /**
+     * Configured loglevel
+     * @var int
+     */
+    protected $_iLvAffiliateLogLevel = 1;
 
     
     
     public function __construct() {
         // loading configuration into object
         $oConfig = $this->getConfig();
-        $this->_aLvField2MatchManufacturer = $oConfig->getConfigParam( 'aLvField2MatchManufacturer' );
-        $this->_aLvField2MatchArticle = $oConfig->getConfigParam( 'aLvField2MatchArticle' );
-        $this->_aLvField2DirectTable = $oConfig->getConfigParam( 'aLvField2DirectTable' );
-        $this->_aLvField2CategoryAssignment = $oConfig->getConfigParam( 'aLvField2CategoryAssignment' );
-        $this->_aLvField2Attribute = $oConfig->getConfigParam( 'aLvField2Attribute' );
+        // group assignment
+        $this->_aLvField2MatchManufacturer      = $oConfig->getConfigParam( 'aLvField2MatchManufacturer' );
+        $this->_aLvField2MatchArticle           = $oConfig->getConfigParam( 'aLvField2MatchArticle' );
+        $this->_aLvField2DirectTable            = $oConfig->getConfigParam( 'aLvField2DirectTable' );
+        $this->_aLvField2CategoryAssignment     = $oConfig->getConfigParam( 'aLvField2CategoryAssignment' );
+        $this->_aLvField2Attribute              = $oConfig->getConfigParam( 'aLvField2Attribute' );
+        // group debug
+        $this->_blLvAffiliateLogActive          = (bool)$oConfig->getConfigParam( 'blLvAffiliateLogActive' );
+        $this->_iLvAffiliateLogLevel            = (int)$oConfig->getConfigParam( 'sLvAffiliateLogLevel' );
         
         parent::__construct();
     }
@@ -133,7 +149,7 @@ class lvaffiliate_import extends oxBase {
     public function lvLog( $sMessage, $iLogLevel=4 ) {
         $oUtils = oxRegistry::getUtils();
         
-        if ( $iLogLevel <= $this->_iLvAmzPnLogLevel ) {
+        if ( $iLogLevel <= $this->_iLvAffiliateLogLevel ) {
             $sPrefix        = "[".date( 'Y-m-d H:i:s' )."] ";
             $sFullMessage   = $sPrefix.$sMessage;
             
@@ -150,14 +166,136 @@ class lvaffiliate_import extends oxBase {
      */
     public function lvAddArticle( $aArticleData ) {
         $this->_aLvCurrentArticleData = $aArticleData;
-        $this->_lvSetManufacturerId();
-        $this->_lvSetArticleIds();
-die();        
-//        $this->_lvSetArticleData();
-//        $this->_lvAssignCategories();
-//        $this->_lvAssignAttributes();
         
-        print_r( $aArticleData );
+        $this->_lvSetManufacturerId();
+        
+        $blCreateComplete = $this->_lvSetArticleIds();
+        $this->_lvSetArticleData( $blCreateComplete );
+        
+        $this->_lvAssignCategories();
+
+        $this->_lvAssignAttributes();
+    }
+    
+    
+    /**
+     * Assigning attributes of article
+     * 
+     * @param void
+     * @return void
+     */
+    protected function _lvAssignAttributes() {
+        $oDb            = oxDb::getDb( MODE_FETCH_ASSOC );
+        $oUtilsObject   = oxRegistry::get( 'oxUtilsObject' );
+        
+        foreach ( $this->_aLvField2Attribute as $sDataFieldTarget=>$sTargetAttributeId ) {
+            $aDataFieldTarget = explode( "|", $sDataFieldTarget );
+            
+            /**
+             * @todo needs to be improved to be more flexible => check if variable variables could also be build with array indexes
+             */
+            $sDataFieldValue = '';
+            if ( count( $aDataFieldTarget ) == 2 ) {
+                if ( isset( $this->_aLvCurrentArticleData[$aDataFieldTarget[0]][$aDataFieldTarget[1]] ) ) {
+                    $sDataFieldValue = $this->_aLvCurrentArticleData[$aDataFieldTarget[0]][$aDataFieldTarget[1]];
+                }
+            }
+            else {
+                if ( isset( $this->_aLvCurrentArticleData[$sDataFieldTarget] ) ) {
+                    $sDataFieldValue = $this->_aLvCurrentArticleData[$sDataFieldTarget];
+                }
+            }
+            
+            if ( $sDataFieldValue ) {
+                $sAttributeAssignmentId = $this->_lvGetAttributeAssignmentId( $sTargetAttributeId );
+                if ( !$sAttributeAssignmentId ) {
+                    // generate new id then and insert value into oxobject2attribute
+                    $sNewId = $oUtilsObject->generateUId();
+                    $sQuery = "INSERT INTO oxobject2attribute ( OXID, OXATTRID, OXOBJECTID, OXVALUE ) VALUES ( '".$sNewId."', '".$sTargetAttributeId."', '".$this->_sLvCurrentArticleId."', '".$sDataFieldValue."' )";
+                }
+                else {
+                    // update existing assignment
+                    $sQuery = "UPDATE oxobject2attribute SET OXVALUE='".$sDataFieldValue."' WHERE OXID='".$sAttributeAssignmentId."' LIMIT 1";
+                }
+                
+                $oDb->Execute( $sQuery );
+            }
+        }
+    }
+
+
+    /**
+     * Checks if a given article-attribute combo exists or not. Returns id if it exists or false if not
+     * 
+     * @param string $sTargetAttributeId
+     * @return mixed
+     */
+    protected function _lvGetAttributeAssignmentId( $sTargetAttributeId ) {
+        $oDb            = oxDb::getDb( MODE_FETCH_ASSOC );
+        $sTargetTable   = getViewName( 'oxobject2attribute' );
+        
+        $sQuery = "SELECT OXID FROM ".$sTargetTable." WHERE OXATTRID='".$sTargetCategoryId."' AND OXOBJECTID='".$this->_sLvCurrentArticleId."' LIMIT 1";
+        $sOxid  = $oDb->GetOne( $sQuery );
+        
+        $mReturn = false;
+        if ( $sOxid ) {
+            $mReturn = $sOxid;
+        }
+        
+        return $mReturn;
+    }
+
+
+    /**
+     * Method assigns current article to belonging categories
+     * 
+     * @param void
+     * @return void
+     */
+    protected function _lvAssignCategories() {
+        $oDb            = oxDb::getDb( MODE_FETCH_ASSOC );
+        $oUtilsObject   = oxRegistry::get( 'oxUtilsObject' );
+        
+        foreach ( $this->_aLvField2CategoryAssignment as $sDataFieldName=>$sConfigFieldValue ) {
+            $aTargetTableField  = explode( "|", $sAssignTableField );
+            $sTargetTable       = $aTargetTableField[0];
+            $sTargetField       = $aTargetTableField[1];
+
+            if ( $this->_sLvCurrentParentId ) {
+                foreach ( $this->_aLvCurrentArticleData[$sDataFieldName] as $sTargetCategoryId ) {
+                    $blAssignmentExists = $this->_lvCheckCategoryAssignmentExists( $sTargetCategoryId );
+                    
+                    if ( $blAssignmentExists === false ) {
+                        $sNewId = $oUtilsObject->generateUId();
+                        
+                        $sQuery = "INSERT INTO oxobject2category ( OXID, OXOBJECTID, OXCATNID ) VALUES ( '".$sNewId."', '".$this->_sLvCurrentParentId."', '".$sTargetCategoryId."' )";
+                        $oDb->Execute( $sQuery );
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    /**
+     * Checks if a given article-category combo exists or not
+     * 
+     * @param string $sTargetCategoryId
+     * @return bool
+     */
+    protected function _lvCheckCategoryAssignmentExists( $sTargetCategoryId ) {
+        $oDb            = oxDb::getDb( MODE_FETCH_ASSOC );
+        $sTargetTable   = getViewName( 'oxobject2category' );
+        
+        $sQuery = "SELECT OXID FROM ".$sTargetTable." WHERE OXCATNID='".$sTargetCategoryId."' AND OXOBJECTID='".$this->_sLvCurrentParentId."' LIMIT 1";
+        $sOxid  = $oDb->GetOne( $sQuery );
+        
+        $blReturn = false;
+        if ( $sOxid ) {
+            $blReturn = true;
+        }
+        
+        return $blReturn;
     }
     
     
@@ -165,7 +303,7 @@ die();
      * Method tries to match an existing article Id
      * 
      * @param void
-     * @return void
+     * @return bool
      */
     protected function _lvSetArticleIds() {
         $oDb = oxDb::getDb( MODE_FETCH_ASSOC );
@@ -199,8 +337,19 @@ die();
             }
         }
         
-        if ( !$sArticleId || $sArticleId != "" ) {
-            $this->_lvCreateArticle( $blComplete );
+        return $blCreateComplete;
+    }
+    
+    
+    /**
+     * Creating or updating article data (direct assignments)
+     * 
+     * @param bool $blCreateComplete
+     * @return
+     */
+    protected function _lvSetArticleData( $blCreateComplete ) {
+        if ( !$this->_sLvCurrentArticleId || $this->_sLvCurrentArticleId == "" ) {
+            $this->_lvCreateArticle( $blCreateComplete );
         }
         else {
             $this->_lvUpdateArticle();
@@ -214,11 +363,11 @@ die();
      * @param bool $blComplete
      * @return void
      */
-    protected function _lvCreateArticle( $blComplete ) {
+    protected function _lvCreateArticle( $blCreateComplete ) {
         $oUtilsObject   = oxRegistry::get( 'oxUtilsObject' );
         $oDb            = oxDb::getDb( MODE_FETCH_ASSOC );
         
-        if ( $blComplete === true ) {
+        if ( $blCreateComplete === true && isset( $this->_aLvCurrentArticleData['TITLE'] ) ) {
             // the article is completely new and have not been created by another merchant import until now
             // we need to create parent article then
             $oParentArticle             = oxNew( 'oxarticle' );
@@ -230,7 +379,12 @@ die();
             $oParentArticle->setId( $this->_sLvCurrentParentId );
             $oParentArticle->oxarticles__oxtitle->value         = new oxField( $sTitle );
             $oParentArticle->oxarticles__oxartnum->value        = new oxField( $sParentArtNum );
-            $oParentArticle->save();
+            try {
+                $oParentArticle->save();
+            } 
+            catch (Exception $ex) {
+                $this->lvLog( "ERROR: Exception has been thrown while trying to save created parent article with ID".$this->_sLvCurrentParentId."\nException message was:\n".$e->message(), 1 );
+            }
         }
         
         $this->_sLvCurrentArticleId     = $oUtilsObject->generateUId();
@@ -244,12 +398,52 @@ die();
             $sTargetField       = $aTargetTableField[1];
             $sTarget            = strtolower( $sTargetTable )."__".strtolower( $sTargetField );
             
-            $oArticle->$sTarget = new oxField( $this->_aLvCurrentArticleData[$sDataFieldName] );
+            if ( isset( $this->_aLvCurrentArticleData[$sDataFieldName] ) ) {
+                $oArticle->$sTarget = new oxField( $this->_aLvCurrentArticleData[$sDataFieldName] );
+            }
+            $this->lvLog( "Adding value ".$this->_aLvCurrentArticleData[$sDataFieldName]." to target ".$sTargetField." with ArticleID:".$this->_sLvCurrentArticleId, 3 );
         }
-/**
- * @todo go on here next time
- */        
-        $oArticle->save();
+        
+        try {
+            $oArticle->save();
+        } 
+        catch (Exception $ex) {
+            $this->lvLog( "ERROR: Exception has been thrown while trying to save created article with ID".$this->_sLvCurrentArticleId."\nException message was:\n".$e->message(), 1 );
+        }
+    }
+    
+    
+    /**
+     * Updates existing article
+     * 
+     * @param void
+     * @return void
+     */
+    protected function _lvUpdateArticle() {
+        $oArticle = oxNew( 'oxarticle' );
+        $oArticle->load( $this->_sLvCurrentArticleId );
+        
+        if ( $oArticle ) {
+            foreach ( $this->_aLvField2DirectTable as $sDataFieldName=>$sAssignTableField ) {
+                $aTargetTableField  = explode( "|", $sAssignTableField );
+                $sTargetTable       = $aTargetTableField[0];
+                $sTargetField       = $aTargetTableField[1];
+                $sTarget            = strtolower( $sTargetTable )."__".strtolower( $sTargetField );
+                if ( isset( $this->_aLvCurrentArticleData[$sDataFieldName] ) ) {
+                    $oArticle->$sTarget = new oxField( $this->_aLvCurrentArticleData[$sDataFieldName] );
+                }
+            }
+
+            try {
+                $oArticle->save();
+            } 
+            catch (Exception $ex) {
+                $this->lvLog( "ERROR: Exception has been thrown while trying to save updated article with ID".$this->_sLvCurrentArticleId."\nException message was:\n".$e->message(), 1 );
+            }
+        }
+        else {
+            $this->lvLog("ERROR: Could not update Article with given ID".$this->_sLvCurrentArticleId."! Failed loading article.", 1);
+        }
     }
     
     
@@ -366,13 +560,13 @@ die();
         if ( $iAmountWords >= 3 ) {
             $sShortCut = "";
             foreach ( $aWords as $sWord ) {
-                $sShortCut .= strtolower( substr( $sWord, 0, 1 ) );
+                $sShortCut .= strtoupper( substr( $sWord, 0, 1 ) );
             }
         }
         else {
             $sShortCut = "";
             foreach ( $aWords as $sWord ) {
-                $sShortCut .= strtolower( substr( $sWord, 0, 2 ) );
+                $sShortCut .= strtoupper( substr( $sWord, 0, 2 ) );
             }
         }
         
