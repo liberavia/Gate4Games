@@ -164,7 +164,7 @@ class lvaffiliate_import extends oxBase {
      * @param array $aArticleData
      * @return void
      */
-    public function lvAddArticle( $aArticleData ) {
+    public function lvAddArticle( $aArticleData, $sLangAbbr ) {
         // reset data
         $this->_sLvCurrentArticleId = null;
         $this->_sLvCurrentParentId = null;

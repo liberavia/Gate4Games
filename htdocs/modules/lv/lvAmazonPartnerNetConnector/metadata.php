@@ -55,10 +55,20 @@ $aModule = array(
         array( 'group' => 'lvamzpn_connect',        'name' => 'sLvAmzPnAssociateTag',           'type' => 'str',        'value' => "" ),
         array( 'group' => 'lvamzpn_connect',        'name' => 'sLvAmzPnAWSAccessKeyId',         'type' => 'str',        'value' => "" ),
         array( 'group' => 'lvamzpn_connect',        'name' => 'sLvAmzPnAWSSecretKey',           'type' => 'str',        'value' => "" ),
+        array( 
+            'group' => 'lvamzpn_connect',        
+            'name' => 'aLvAmzPnAWSService2Lang',        
+            'type' => 'aarr',       
+            'value' => array(
+                'de' => 'webservices.amazon.de',
+            ) 
+        ),
+        
         // group import
         array( 'group' => 'lvamzpn_import',         'name' => 'sLvAmzPnVendorId',               'type' => 'str',        'value' => '' ),
         array( 'group' => 'lvamzpn_import',         'name' => 'sLvAmzPnDefaultCatId',           'type' => 'str',        'value' => '' ),
-        array( 'group' => 'lvamzpn_import',         'name' => 'sLvAmzPnBrowseNode',             'type' => 'str',        'value' => '' ),
+        array( 'group' => 'lvamzpn_import',         'name' => 'aLvAmzPnBrowseNodes',            'type' => 'aarr',       'value' => array() ),
+        array( 'group' => 'lvamzpn_import',         'name' => 'aLvAmzPnPriceRanges',            'type' => 'aarr',       'value' => array() ),
         array( 'group' => 'lvamzpn_import',         'name' => 'sLvAmzPnSearchIndex',            'type' => 'str',        'value' => '' ),
         array( 'group' => 'lvamzpn_import',         'name' => 'sLvAmzPnCondition',              'type' => 'str',        'value' => 'New' ),
         array( 'group' => 'lvamzpn_import',         'name' => 'sLvAmzPnSearchResponseGroups',   'type' => 'str',        'value' => 'Images,ItemAttributes,Offers,EditorialReview,OfferFull,VariationSummary,Variations' ),

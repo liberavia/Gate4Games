@@ -35,6 +35,8 @@ class lvamzpnapiconnector extends oxBase {
         'BrowseNode'        =>'',
         'Condition'         =>'',
         'ItemPage'          =>'',
+        'MaximumPrice'      =>'',
+        'MinimumPrice'      =>'',
         'Operation'         =>'ItemSearch',
         'ResponseGroup'     =>'',
         'SearchIndex'       =>'',
@@ -59,6 +61,13 @@ class lvamzpnapiconnector extends oxBase {
         'Timestamp'         =>'',
         'Version'           =>'2011-08-01',
     );
+    
+    
+    /**
+     * Maximum page result amazon is accepting to liver full results
+     * @var int
+     */
+    protected $_iMaxPageResult = 10;
     
     
     /**
@@ -138,9 +147,9 @@ class lvamzpnapiconnector extends oxBase {
      * @param void
      * @return int
      */
-    public function lvGetSearchPageAmount() {
+    public function lvGetSearchPageAmount( $sLangAbbr, $iBrowseNodeIndex, $iPriceRangeIndex ) {
         $iPageAmount = 0;
-        $sSignedRequestUrl = $this->_lvGetSignedRequest( 'search' );
+        $sSignedRequestUrl = $this->_lvGetSignedRequest( 'search', $sLangAbbr, $iBrowseNodeIndex, $iPriceRangeIndex );
         
         if ( $sSignedRequestUrl ) {
             $oResponse = $this->_lvGetRequestResult( $sSignedRequestUrl );
@@ -151,6 +160,18 @@ class lvamzpnapiconnector extends oxBase {
         
         return $iPageAmount;
     }
+    
+    
+    /**
+     * Public getter for returning maximum result pages amazon will deliver with full results
+     * 
+     * @param void
+     * @return int
+     */
+    public function lvGetMaxPageResult() {
+        return $this->_iMaxPageResult;
+    }
+    
     
     /**
      * Method returns an array of ASINS of defined browse node which are on the given page 
@@ -178,82 +199,81 @@ class lvamzpnapiconnector extends oxBase {
      * @param int $iPageNumber (optional)
      * @return array
      */
-    public function lvGetItemSearchAsinDetails( $iPageNumber = null ) {
+    public function lvGetItemSearchAsinDetails( $sLangAbbr, $iBrowseNodeIndex, $iPriceRangeIndex, $iPageNumber = null ) {
         $aArticleData = array();
         $this->_iCurrentPageNumber = $iPageNumber;
         
-        $sSignedRequestUrl = $this->_lvGetSignedRequest( 'search' );
+        $sSignedRequestUrl = $this->_lvGetSignedRequest( 'search', $sLangAbbr, $iBrowseNodeIndex, $iPriceRangeIndex );
         
         if ( $sSignedRequestUrl ) {
             $oResponse = $this->_lvGetRequestResult( $sSignedRequestUrl );
-            foreach ( $oResponse->Items->{Item} as $oItem ) {
-                $sAsin = (string)$oItem->ASIN;
-                $aArticleData[$sAsin]['ARTNUM'] = $sAsin;
-                
-                // fetching additional information from title
-                $sTitle = (string)$oItem->ItemAttributes->Title;
-                $sDRMInfo = $this->_lvFetchDRMInfoFromTitle( $sTitle );
-                if ( $sDRMInfo ) {
-                    $aArticleData[$sAsin]['DRM'] = $sDRMInfo;
-                }
-                $sTitle = $this->_lvCleanupAmazonTitle( $sTitle );
-                $aArticleData[$sAsin]['TITLE'] = $sTitle;
-                
-                $aArticleData[$sAsin]['EXTURL'] = (string)$oItem->DetailPageURL;
-                $aArticleData[$sAsin]['COVERIMAGE'] = (string)$oItem->LargeImage->URL;
-                
-                // go through image sets
-                $iIndex = 1;
-                foreach ( $oItem->ImageSets->{ImageSet} as $oImageSet ) {
-                    $aArticleData[$sAsin]['PIC'.$iIndex] = (string)$oImageSet->LargeImage->URL;
-                    $iIndex++;
-                }
-                
-                // manufacturer
-                $aArticleData[$sAsin]['MANUFACTURER'] = (string)$oItem->ItemAttributes->Manufacturer;
-                // category handling
-                $sAmazonGenre = (string)$oItem->ItemAttributes->Genre;
-                $aArticleData[$sAsin]['GENRE'] = $sAmazonGenre;
-                if ( isset( $this->_aCategoryMapping[$sAmazonGenre] ) ) {
-                    $aArticleData[$sAsin]['CATEGORYID']         = array( $this->_aCategoryMapping[$sAmazonGenre]['category'] );
-                    $aArticleData[$sAsin]['CATEGORYID_SALE']    = array( $this->_aCategoryMapping[$sAmazonGenre]['sale_category'] );
-                }
-                else {
-                    $aArticleData[$sAsin]['CATEGORYID']         = array( $this->_sDefaultCategoryId );
-                    $aArticleData[$sAsin]['CATEGORYID_SALE']    = array( $this->_aCategoryMapping[$sAmazonGenre]['category'] );
-                }
-                
+            if ( isset( $oResponse->Items->{Item} ) ) {
+                foreach ( $oResponse->Items->{Item} as $oItem ) {
+                    $sAsin = (string)$oItem->ASIN;
+                    $aArticleData[$sAsin]['ARTNUM'] = $sAsin;
 
-                $aArticleData[$sAsin]['RELEASE'] = (string)$oItem->ItemAttributes->ReleaseDate;
-                
-                // fetching language information
-                foreach ( $oItem->ItemAttributes->Languages->{Language} as $oLanguage ) {
-                    $sType = (string)$oLanguage->Type;
-                    if ( $sType == 'Subtitled' ) {
-                        $aArticleData[$sAsin]['LANGUAGEINFO']['SUBTITLE'] = (string)$oLanguage->Name;
+                    // fetching additional information from title
+                    $sTitle = (string)$oItem->ItemAttributes->Title;
+                    $sDRMInfo = $this->_lvFetchDRMInfoFromTitle( $sTitle );
+                    if ( $sDRMInfo ) {
+                        $aArticleData[$sAsin]['DRM'] = $sDRMInfo;
                     }
-                    if ( $sType == 'Dubbed' ) {
-                        $aArticleData[$sAsin]['LANGUAGEINFO']['DUBBED'] = (string)$oLanguage->Name;
+                    $sTitle = $this->_lvCleanupAmazonTitle( $sTitle );
+                    $aArticleData[$sAsin]['TITLE'] = $sTitle;
+
+                    $aArticleData[$sAsin]['EXTURL'] = (string)$oItem->DetailPageURL;
+                    $aArticleData[$sAsin]['COVERIMAGE'] = (string)$oItem->LargeImage->URL;
+
+                    // go through image sets
+                    $iIndex = 1;
+                    foreach ( $oItem->ImageSets->{ImageSet} as $oImageSet ) {
+                        $aArticleData[$sAsin]['PIC'.$iIndex] = (string)$oImageSet->LargeImage->URL;
+                        $iIndex++;
                     }
-                    if ( $sType == 'Original' ) {
-                        $aArticleData[$sAsin]['LANGUAGEINFO']['ORIGINAL'] = (string)$oLanguage->Name;
+
+                    // manufacturer
+                    $aArticleData[$sAsin]['MANUFACTURER'] = (string)$oItem->ItemAttributes->Manufacturer;
+                    // category handling
+                    $sAmazonGenre = (string)$oItem->ItemAttributes->Genre;
+                    $aArticleData[$sAsin]['GENRE'] = $sAmazonGenre;
+                    if ( isset( $this->_aCategoryMapping[$sAmazonGenre] ) ) {
+                        $aArticleData[$sAsin]['CATEGORYID']         = array( $this->_aCategoryMapping[$sAmazonGenre]['category'] );
+                        $aArticleData[$sAsin]['CATEGORYID_SALE']    = array( $this->_aCategoryMapping[$sAmazonGenre]['sale_category'] );
                     }
-                    /**
-                     * @todo: There might be more to come it seems that language data is made for german market
-                     */
+                    else {
+                        $aArticleData[$sAsin]['CATEGORYID']         = array( $this->_sDefaultCategoryId );
+                        $aArticleData[$sAsin]['CATEGORYID_SALE']    = array( $this->_aCategoryMapping[$sAmazonGenre]['category'] );
+                    }
+
+
+                    $aArticleData[$sAsin]['RELEASE'] = (string)$oItem->ItemAttributes->ReleaseDate;
+
+                    // fetching language information
+                    foreach ( $oItem->ItemAttributes->Languages->{Language} as $oLanguage ) {
+                        $sType = (string)$oLanguage->Type;
+                        if ( $sType == 'Subtitled' ) {
+                            $aArticleData[$sAsin]['LANGUAGEINFO']['SUBTITLE'] = (string)$oLanguage->Name;
+                        }
+                        if ( $sType == 'Dubbed' ) {
+                            $aArticleData[$sAsin]['LANGUAGEINFO']['DUBBED'] = (string)$oLanguage->Name;
+                        }
+                        if ( $sType == 'Original' ) {
+                            $aArticleData[$sAsin]['LANGUAGEINFO']['ORIGINAL'] = (string)$oLanguage->Name;
+                        }
+                        /**
+                         * @todo: There might be more to come it seems that language data is made for german market
+                         */
+                    }
+                    // Price handling
+                    $sTPriceCent    = (string)$oItem->ItemAttributes->ListPrice->Amount;
+                    $sPriceCent     = (string)$oItem->OfferSummary->LowestNewPrice->Amount;
+                    // double values
+                    $dTPrice        = (double)$sTPriceCent/100;
+                    $dPrice         = (double)$sPriceCent/100;
+                    // assign prices
+                    $aArticleData[$sAsin]['TPRICE'] = $dTPrice;
+                    $aArticleData[$sAsin]['PRICE'] = $dPrice;
                 }
-                // Price handling
-                $sTPriceCent    = (string)$oItem->ItemAttributes->ListPrice->Amount;
-                $sPriceCent     = (string)$oItem->OfferSummary->LowestNewPrice->Amount;
-                // double values
-                $dTPrice        = (double)$sTPriceCent/100;
-                $dPrice         = (double)$sPriceCent/100;
-                // assign prices
-                $aArticleData[$sAsin]['TPRICE'] = $dTPrice;
-                $aArticleData[$sAsin]['PRICE'] = $dPrice;
-                
-                
-                
             }
         }
         
@@ -352,30 +372,51 @@ class lvamzpnapiconnector extends oxBase {
      * @param void
      * @return string
      */
-    protected function _lvGetSignedRequest( $sType ) {
+    protected function _lvGetSignedRequest( $sType, $sLangAbbr, $iBrowseNodeIndex, $iPriceRangeIndex ) {
         $oConfig = $this->getConfig();
         
         // get all configured values
         $sLvAmzPnAssociateTag           = $oConfig->getConfigParam( 'sLvAmzPnAssociateTag' );
         $sLvAmzPnAWSAccessKeyId         = $oConfig->getConfigParam( 'sLvAmzPnAWSAccessKeyId' );
         $sLvAmzPnAWSSecretKey           = $oConfig->getConfigParam( 'sLvAmzPnAWSSecretKey' );
-        $sLvAmzPnBrowseNode             = $oConfig->getConfigParam( 'sLvAmzPnBrowseNode' );
+        $aLvAmzPnAWSService2Lang        = $oConfig->getConfigParam( 'aLvAmzPnAWSService2Lang' );
+        $aLvAmzPnBrowseNodes            = $oConfig->getConfigParam( 'aLvAmzPnBrowseNodes' );
+        $aLvAmzPnPriceRanges            = $oConfig->getConfigParam( 'aLvAmzPnPriceRanges' );
         $sLvAmzPnSearchIndex            = $oConfig->getConfigParam( 'sLvAmzPnSearchIndex' );
         $sLvAmzPnCondition              = $oConfig->getConfigParam( 'sLvAmzPnCondition' );
         $sLvAmzPnSearchResponseGroups   = $oConfig->getConfigParam( 'sLvAmzPnSearchResponseGroups' );
         $sLvAmzPnLookupResponseGroups   = $oConfig->getConfigParam( 'sLvAmzPnLookupResponseGroups' );
         
+        // choose language depending service url, browse node and price range lists
+        $sAmazonWebService              = $aLvAmzPnAWSService2Lang[$sLangAbbr];
+        $sBrowseNodes                   = $aLvAmzPnBrowseNodes[$sLangAbbr];
+        $sPriceRanges                   = $aLvAmzPnPriceRanges[$sLangAbbr];
+        
+        //get current browse node to request
+        $aBrowseNodes                   = explode( '|', $sBrowseNodes );
+        $sTargetBrowseNode              = $aBrowseNodes[$iBrowseNodeIndex];
+        
+        //get current price range to request
+        $aPriceRanges                   = explode( '|', $sPriceRanges );
+        $sPriceRange                    = $aPriceRanges[$iPriceRangeIndex];
+        $aPriceRange                    = explode( ':', $sPriceRange );
+        $iMaximumPrice                  = (int)$aPriceRange[1];
+        $iMinimumPrice                  = (int)$aPriceRange[0];
+        
+        
         // build configuration array to fetch from
         $aConfigSetup = array(
             'AWSAccessKeyId'    => $this->_lvSpecialUrlEncode( $sLvAmzPnAWSAccessKeyId ),
             'AssociateTag'      => $this->_lvSpecialUrlEncode( $sLvAmzPnAssociateTag ),
-            'BrowseNode'        => $this->_lvSpecialUrlEncode( $sLvAmzPnBrowseNode ),
+            'BrowseNode'        => $this->_lvSpecialUrlEncode( $sTargetBrowseNode ),
             'Condition'         => $this->_lvSpecialUrlEncode( $sLvAmzPnCondition ),
             'ResponseGroup'     => '',
             'SearchIndex'       => $this->_lvSpecialUrlEncode( $sLvAmzPnSearchIndex ),
             'ItemId'            => $this->_lvSpecialUrlEncode( $this->_sCurrentAsin ),
             'Timestamp'         => $this->_lvSpecialUrlEncode( $this->_lvGetCurrentRequestTimestamp() ),
             'ItemPage'          => ( $this->_iCurrentPageNumber ) ? (string)$this->_iCurrentPageNumber : '1',
+            'MaximumPrice'      => $iMaximumPrice,
+            'MinimumPrice'      => $iMinimumPrice,
         );
 
         // select request template by type
@@ -422,10 +463,7 @@ class lvamzpnapiconnector extends oxBase {
         $sSignature         = $this->_lvHashUrlEncode( $sRawBaseSignature );
         
         // building complete request
-        /**
-         * @todo There should be flexible ways to create multilang functionality. Currently this only Requests Amazon.de
-         */
-        $sSignedRequestUrl = "http://webservices.amazon.de/onca/xml?".$sCanonicalUrl."&Signature=".$sSignature;
+        $sSignedRequestUrl = "http://".$sAmazonWebService."/onca/xml?".$sCanonicalUrl."&Signature=".$sSignature;
 
         return $sSignedRequestUrl;
     }
