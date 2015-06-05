@@ -63,11 +63,25 @@ class lvamzpn_import_catalog extends oxBase {
             // now that we know max indexes we can iterate through them
             for( $iBrowseNodeIndex=0; $iBrowseNodeIndex <= $iMaxBrowseNodeIndex; $iBrowseNodeIndex++ ) {
                 
-                for ( $iPriceRangeIndex=0; $iPriceRangeIndex <= $iMaxPriceRangeIndex; $iPriceRangeIndex++ ) {
-                    
-                    $iPageAmount    = $oApiConnector->lvGetSearchPageAmount( $sLangAbbr, $iBrowseNodeIndex, $iPriceRangeIndex );
-                    
-                    if ( $iPageAmount <= $iMaxPageResult ) {
+                $iPageAmount = $oApiConnector->lvGetSearchPageAmount( $sLangAbbr, $iBrowseNodeIndex );
+                
+                if ( $iPageAmount <= $iMaxPageResult ) {
+                    for ( $iPage=1; $iPage<=$iPageAmount; $iPage++ ) {
+                        $aSearchDetails = $oApiConnector->lvGetItemSearchAsinDetails( $sLangAbbr, $iBrowseNodeIndex, null, $iPage );
+                        foreach ( $aSearchDetails as $aArticleData ) {
+                            $oAffiliateImport->lvAddArticle( $aArticleData, $sLangAbbr );
+                        }
+                    }
+                }
+                else {
+                    for ( $iPriceRangeIndex=0; $iPriceRangeIndex <= $iMaxPriceRangeIndex; $iPriceRangeIndex++ ) {
+
+                        $iPageAmount = $oApiConnector->lvGetSearchPageAmount( $sLangAbbr, $iBrowseNodeIndex, $iPriceRangeIndex );
+                        
+                        if ( $iPageAmount > $iMaxPageResult ) {
+                            $iPageAmount = $iMaxPageResult;
+                        }
+
                         for ( $iPage=1; $iPage<=$iPageAmount; $iPage++ ) {
                             $aSearchDetails = $oApiConnector->lvGetItemSearchAsinDetails( $sLangAbbr, $iBrowseNodeIndex, $iPriceRangeIndex, $iPage );
                             foreach ( $aSearchDetails as $aArticleData ) {
@@ -75,7 +89,6 @@ class lvamzpn_import_catalog extends oxBase {
                             }
                         }
                     }
-                    
                 }
                 
             }

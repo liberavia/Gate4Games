@@ -32,6 +32,12 @@ class lvaffiliate_import extends oxBase {
     protected $_sLvVendorId = null;
     
     /**
+     * Language abbreviation
+     * @var string
+     */
+    protected $_sLvCurrentLangAbbr = null;
+
+    /**
      * ManufacturerId of current importing article
      * @var string
      */
@@ -169,6 +175,7 @@ class lvaffiliate_import extends oxBase {
         $this->_sLvCurrentArticleId = null;
         $this->_sLvCurrentParentId = null;
         $this->_sLvCurrentManufacturerId = null;
+        $this->_sLvCurrentLangAbbr = $sLangAbbr;
         
         $this->_aLvCurrentArticleData = $aArticleData;
         $this->_lvSetManufacturerId();
@@ -410,6 +417,11 @@ class lvaffiliate_import extends oxBase {
         $oArticle->oxarticles__oxparentid       = new oxField( $this->_sLvCurrentParentId );
         $oArticle->oxarticles__oxvendorid       = new oxField( $this->_sLvVendorId );
         $oArticle->oxarticles__lvcoverpic       = new oxField( 'oxpic1' );
+        
+        if ( $this->_sLvCurrentLangAbbr !== null ) {
+            $oArticle->oxarticles__lvlangabbr       = new oxField( $this->_sLvCurrentLangAbbr );
+        }
+            
         foreach ( $this->_aLvField2DirectTable as $sDataFieldName=>$sAssignTableField ) {
             $aTargetTableField  = explode( "|", $sAssignTableField );
             $sTargetTable       = $aTargetTableField[0];

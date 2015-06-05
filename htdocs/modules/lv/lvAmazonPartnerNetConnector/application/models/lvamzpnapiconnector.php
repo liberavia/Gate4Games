@@ -45,7 +45,6 @@ class lvamzpnapiconnector extends oxBase {
         'Version'           =>'2011-08-01',
     );
     
-    
     /**
      * Data template for details requests
      * @var array
@@ -62,13 +61,20 @@ class lvamzpnapiconnector extends oxBase {
         'Version'           =>'2011-08-01',
     );
     
+    /**
+     *
+     * @var type 
+     */
+    protected $_aLvToggleAttributeYesByLangAbbr = array(
+        'de'    => 'Ja',
+        'en'    => 'Yes',
+    );
     
     /**
      * Maximum page result amazon is accepting to liver full results
      * @var int
      */
     protected $_iMaxPageResult = 10;
-    
     
     /**
      * Template for header for creating request signature
@@ -147,7 +153,7 @@ class lvamzpnapiconnector extends oxBase {
      * @param void
      * @return int
      */
-    public function lvGetSearchPageAmount( $sLangAbbr, $iBrowseNodeIndex, $iPriceRangeIndex ) {
+    public function lvGetSearchPageAmount( $sLangAbbr, $iBrowseNodeIndex, $iPriceRangeIndex = null ) {
         $iPageAmount = 0;
         $sSignedRequestUrl = $this->_lvGetSignedRequest( 'search', $sLangAbbr, $iBrowseNodeIndex, $iPriceRangeIndex );
         
@@ -199,7 +205,7 @@ class lvamzpnapiconnector extends oxBase {
      * @param int $iPageNumber (optional)
      * @return array
      */
-    public function lvGetItemSearchAsinDetails( $sLangAbbr, $iBrowseNodeIndex, $iPriceRangeIndex, $iPageNumber = null ) {
+    public function lvGetItemSearchAsinDetails( $sLangAbbr, $iBrowseNodeIndex, $iPriceRangeIndex = null, $iPageNumber = null ) {
         $aArticleData = array();
         $this->_iCurrentPageNumber = $iPageNumber;
         
@@ -264,6 +270,32 @@ class lvamzpnapiconnector extends oxBase {
                          * @todo: There might be more to come it seems that language data is made for german market
                          */
                     }
+                    
+                    // platform information (possible multiple tags)
+                    $aPlatforms = array();
+                    if ( isset( $oItem->ItemAttributes->Platform ) ) {
+                        if (is_array( $oItem->ItemAttributes->Platform ) ) {
+                            foreach ( $oItem->ItemAttributes->Platform as $sPlatform ) {
+                                $aPlatforms[] = $sPlatform;
+                            }
+                        }
+                        else {
+                            $aPlatforms[] = (string)$oItem->ItemAttributes->Platform;
+                        }
+                    }
+                    
+                    foreach ( $aPlatforms as $sRawPlatform ) {
+                        $sCleanedPlatform = $this->_lvGetPlatform( $sRawPlatform );
+                        if ( $sCleanedPlatform ) {
+                            $aArticleData[$sAsin]['COMPATIBILITY'][$sCleanedPlatform] = $this->_aLvToggleAttributeYesByLangAbbr[$sLangAbbr];
+                        }
+                    }
+                    
+                    //amazon sales rank
+                    if ( isset( $oItem->SalesRank )  ) {
+                        $aArticleData[$sAsin]['SALESRANK'] = (string)$oItem->SalesRank;
+                    }
+                    
                     // Price handling
                     $sTPriceCent    = (string)$oItem->ItemAttributes->ListPrice->Amount;
                     $sPriceCent     = (string)$oItem->OfferSummary->LowestNewPrice->Amount;
@@ -309,6 +341,29 @@ class lvamzpnapiconnector extends oxBase {
      * @return array
      */
     public function lvGetProductDetails( $sAsin ) {
+    }
+    
+    
+    /**
+     * Method checks amazon platform information to match compatibility data array
+     * 
+     * @param string $sRawPlatform
+     * @return string
+     */
+    protected function _lvGetPlatform( $sRawPlatform ) {
+        $sReturn = '';
+        $sRawPlatform = strtolower( $sRawPlatform );
+        if ( strpos( $sRawPlatform, 'windows' ) ) {
+            $sReturn = 'WIN';
+        }
+        else if ( strpos( $sRawPlatform, 'mac' ) ) {
+            $sReturn = 'MAC';
+        }
+        else if ( strpos( $sRawPlatform, 'linux' ) ) {
+            $sReturn = 'LIN';
+        }
+        
+        return $sReturn;
     }
     
     
@@ -372,7 +427,7 @@ class lvamzpnapiconnector extends oxBase {
      * @param void
      * @return string
      */
-    protected function _lvGetSignedRequest( $sType, $sLangAbbr, $iBrowseNodeIndex, $iPriceRangeIndex ) {
+    protected function _lvGetSignedRequest( $sType, $sLangAbbr, $iBrowseNodeIndex, $iPriceRangeIndex = null ) {
         $oConfig = $this->getConfig();
         
         // get all configured values
@@ -390,19 +445,20 @@ class lvamzpnapiconnector extends oxBase {
         // choose language depending service url, browse node and price range lists
         $sAmazonWebService              = $aLvAmzPnAWSService2Lang[$sLangAbbr];
         $sBrowseNodes                   = $aLvAmzPnBrowseNodes[$sLangAbbr];
-        $sPriceRanges                   = $aLvAmzPnPriceRanges[$sLangAbbr];
         
         //get current browse node to request
         $aBrowseNodes                   = explode( '|', $sBrowseNodes );
         $sTargetBrowseNode              = $aBrowseNodes[$iBrowseNodeIndex];
-        
-        //get current price range to request
-        $aPriceRanges                   = explode( '|', $sPriceRanges );
-        $sPriceRange                    = $aPriceRanges[$iPriceRangeIndex];
-        $aPriceRange                    = explode( ':', $sPriceRange );
-        $iMaximumPrice                  = (int)$aPriceRange[1];
-        $iMinimumPrice                  = (int)$aPriceRange[0];
-        
+
+        if ( $iPriceRangeIndex !== null ) {
+            $sPriceRanges                   = $aLvAmzPnPriceRanges[$sLangAbbr];
+            //get current price range to request
+            $aPriceRanges                   = explode( '|', $sPriceRanges );
+            $sPriceRange                    = $aPriceRanges[$iPriceRangeIndex];
+            $aPriceRange                    = explode( ':', $sPriceRange );
+            $iMaximumPrice                  = (int)$aPriceRange[1];
+            $iMinimumPrice                  = (int)$aPriceRange[0];
+        }
         
         // build configuration array to fetch from
         $aConfigSetup = array(
@@ -415,9 +471,12 @@ class lvamzpnapiconnector extends oxBase {
             'ItemId'            => $this->_lvSpecialUrlEncode( $this->_sCurrentAsin ),
             'Timestamp'         => $this->_lvSpecialUrlEncode( $this->_lvGetCurrentRequestTimestamp() ),
             'ItemPage'          => ( $this->_iCurrentPageNumber ) ? (string)$this->_iCurrentPageNumber : '1',
-            'MaximumPrice'      => $iMaximumPrice,
-            'MinimumPrice'      => $iMinimumPrice,
         );
+        
+        if ( $iPriceRangeIndex !== null ) {
+            $aConfigSetup['MaximumPrice'] = $iMaximumPrice;
+            $aConfigSetup['MinimumPrice'] = $iMinimumPrice;
+        }
 
         // select request template by type
         switch( $sType ) {
