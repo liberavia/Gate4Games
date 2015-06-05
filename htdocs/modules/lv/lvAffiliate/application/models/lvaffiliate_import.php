@@ -271,6 +271,21 @@ class lvaffiliate_import extends oxBase {
             $aTargetTableField  = explode( "|", $sAssignTableField );
             $sTargetTable       = $aTargetTableField[0];
             $sTargetField       = $aTargetTableField[1];
+            $blIsSale           = (bool)$aTargetTableField[2];
+            
+            if ( $blIsSale === true ) {
+                // check if tprice isset and bigger than price otherwise continue with next assignment
+                if ( !isset( $this->_aLvCurrentArticleData['TPRICE'] ) ) {
+                    continue;
+                }
+                
+                $dPrice     = (double)$this->_aLvCurrentArticleData['PRICE'];
+                $dTPrice    = (double)$this->_aLvCurrentArticleData['TPRICE'];
+                
+                if ( ( $dTPrice > $dPrice ) == false ) {
+                    continue;
+                }
+            }
 
             if ( $this->_sLvCurrentParentId ) {
                 foreach ( $this->_aLvCurrentArticleData[$sDataFieldName] as $sTargetCategoryId ) {
