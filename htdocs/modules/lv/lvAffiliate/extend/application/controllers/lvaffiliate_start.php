@@ -26,25 +26,39 @@
 class lvaffiliate_start extends lvaffiliate_start_parent {
     
     /**
+     * List of top seller articles action
+     * @var array
+     */
+    protected $_aTopSellerArticleList = null;
+
+    /**
+     * List of top sale articles action
+     * @var array
+     */
+    protected $_aTopSaleArticleList = null;
+    
+    
+    
+    /**
      * Template variable getter. Returns start page top seller
      *
      * @return array
      */
     public function lvGetTopSeller()
     {
-        if ($this->_aArticleList === null) {
-            $this->_aArticleList = array();
+        if ($this->_aTopSellerArticleList === null) {
+            $this->_aTopSellerArticleList = array();
             if ($this->_getLoadActionsParam()) {
                 // start list
                 $oArtList = oxNew('oxarticlelist');
                 $oArtList->loadActionArticles('lvtopseller');
                 if ($oArtList->count()) {
-                    $this->_aArticleList = $oArtList;
+                    $this->_aTopSellerArticleList = $oArtList;
                 }
             }
         }
 
-        return $this->_aArticleList;
+        return $this->_aTopSellerArticleList;
     }
     
     /**
@@ -54,18 +68,18 @@ class lvaffiliate_start extends lvaffiliate_start_parent {
      */
     public function lvGetTopSale()
     {
-        if ($this->_aArticleList === null) {
-            $this->_aArticleList = array();
+        if ($this->_aTopSaleArticleList === null) {
+            $this->_aTopSaleArticleList = array();
             if ($this->_getLoadActionsParam()) {
                 // start list
                 $oArtList = oxNew('oxarticlelist');
                 $oArtList->loadActionArticles('lvtopsale');
                 if ($oArtList->count()) {
-                    $this->_aArticleList = $oArtList;
+                    $this->_aTopSaleArticleList = $oArtList;
                 }
             }
         }
 
-        return $this->_aArticleList;
+        return $this->_aTopSaleArticleList;
     }
 }
