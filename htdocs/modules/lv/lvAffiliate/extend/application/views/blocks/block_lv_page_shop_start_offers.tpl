@@ -2,7 +2,7 @@
     [{include file="widget/product/list.tpl" type=$oViewConf->getViewThemeParam('sStartPageListDisplayType') head="LV_TOP_SELLER"|oxmultilangassign listId="lvTopSeller" products=$oView->lvGetTopSeller()  showMainLink=true}]
 [{/if}]
 [{if $oView->lvGetTopSale()}]
-    [{include file="widget/product/list.tpl" type=$oViewConf->getViewThemeParam('sStartPageListDisplayType') head="LV_TOP_SELLER"|oxmultilangassign listId="lvTopSale" products=$oView->lvGetTopSale()  showMainLink=true}]
+    [{include file="widget/product/list.tpl" type=$oViewConf->getViewThemeParam('sStartPageListDisplayType') head="LV_TOP_SALE"|oxmultilangassign listId="lvTopSale" products=$oView->lvGetTopSale()  showMainLink=true}]
 [{/if}]
 [{if $oView->getNewestArticles()}]
     [{assign var='rsslinks' value=$oView->getRssLinks() }]
