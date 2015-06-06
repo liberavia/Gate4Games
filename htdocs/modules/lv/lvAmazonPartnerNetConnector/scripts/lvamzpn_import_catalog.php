@@ -62,9 +62,8 @@ class lvamzpn_import_catalog extends oxBase {
             
             // now that we know max indexes we can iterate through them
             for( $iBrowseNodeIndex=0; $iBrowseNodeIndex <= $iMaxBrowseNodeIndex; $iBrowseNodeIndex++ ) {
-                
+
                 $iPageAmount = $oApiConnector->lvGetSearchPageAmount( $sLangAbbr, $iBrowseNodeIndex );
-                
                 if ( $iPageAmount <= $iMaxPageResult ) {
                     for ( $iPage=1; $iPage<=$iPageAmount; $iPage++ ) {
                         $aSearchDetails = $oApiConnector->lvGetItemSearchAsinDetails( $sLangAbbr, $iBrowseNodeIndex, null, $iPage );
@@ -75,7 +74,6 @@ class lvamzpn_import_catalog extends oxBase {
                 }
                 else {
                     for ( $iPriceRangeIndex=0; $iPriceRangeIndex <= $iMaxPriceRangeIndex; $iPriceRangeIndex++ ) {
-
                         $iPageAmount = $oApiConnector->lvGetSearchPageAmount( $sLangAbbr, $iBrowseNodeIndex, $iPriceRangeIndex );
                         
                         if ( $iPageAmount > $iMaxPageResult ) {
@@ -90,10 +88,10 @@ class lvamzpn_import_catalog extends oxBase {
                         }
                     }
                 }
-                
             }
         }
     }
+    
 }
 
 $oScript = new lvamzpn_import_catalog();

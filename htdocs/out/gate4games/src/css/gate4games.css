@@ -608,3 +608,9 @@ ul.tabs li.fbTab a {
     float: left;
     margin: 19px 0 8px 15px;
 }
+
+
+.pager .active {
+    background: #5d005d none repeat scroll 0 0;
+    color: #fff;
+}

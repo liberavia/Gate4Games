@@ -41,6 +41,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     width: 60%;
     text-align: left;
     vertical-align: middle;
+    line-height: 25px;
 }
 
 .lvAffiliateDetailsToOffer {

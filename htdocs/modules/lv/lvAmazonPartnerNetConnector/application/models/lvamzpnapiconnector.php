@@ -156,13 +156,15 @@ class lvamzpnapiconnector extends oxBase {
     public function lvGetSearchPageAmount( $sLangAbbr, $iBrowseNodeIndex, $iPriceRangeIndex = null ) {
         $iPageAmount = 0;
         $sSignedRequestUrl = $this->_lvGetSignedRequest( 'search', $sLangAbbr, $iBrowseNodeIndex, $iPriceRangeIndex );
-        
         if ( $sSignedRequestUrl ) {
             $oResponse = $this->_lvGetRequestResult( $sSignedRequestUrl );
             if ( isset( $oResponse->Items->TotalPages ) ) {
                 $iPageAmount = (int)$oResponse->Items->TotalPages;
             }
         }
+        
+        // we need to slow down requests due we don't want to run into throttled error
+        sleep(1);
         
         return $iPageAmount;
     }
@@ -231,12 +233,13 @@ class lvamzpnapiconnector extends oxBase {
                     $aArticleData[$sAsin]['COVERIMAGE'] = (string)$oItem->LargeImage->URL;
 
                     // go through image sets
-                    $iIndex = 1;
-                    foreach ( $oItem->ImageSets->{ImageSet} as $oImageSet ) {
-                        $aArticleData[$sAsin]['PIC'.$iIndex] = (string)$oImageSet->LargeImage->URL;
-                        $iIndex++;
+                    if ( isset( $oItem->ImageSets->{ImageSet} ) ) {
+                        $iIndex = 1;
+                        foreach ( $oItem->ImageSets->{ImageSet} as $oImageSet ) {
+                            $aArticleData[$sAsin]['PIC'.$iIndex] = (string)$oImageSet->LargeImage->URL;
+                            $iIndex++;
+                        }
                     }
-
                     // manufacturer
                     $aArticleData[$sAsin]['MANUFACTURER'] = (string)$oItem->ItemAttributes->Manufacturer;
                     // category handling
@@ -255,37 +258,35 @@ class lvamzpnapiconnector extends oxBase {
                     $aArticleData[$sAsin]['RELEASE'] = (string)$oItem->ItemAttributes->ReleaseDate;
 
                     // fetching language information
-                    foreach ( $oItem->ItemAttributes->Languages->{Language} as $oLanguage ) {
-                        $sType = (string)$oLanguage->Type;
-                        if ( $sType == 'Subtitled' ) {
-                            $aArticleData[$sAsin]['LANGUAGEINFO']['SUBTITLE'] = (string)$oLanguage->Name;
+                    if ( isset( $oItem->ItemAttributes->Languages->{Language} ) ) {
+                        foreach ( $oItem->ItemAttributes->Languages->{Language} as $oLanguage ) {
+                            $sType = (string)$oLanguage->Type;
+                            if ( $sType == 'Subtitled' ) {
+                                $aArticleData[$sAsin]['LANGUAGEINFO']['SUBTITLE'] = (string)$oLanguage->Name;
+                            }
+                            if ( $sType == 'Dubbed' ) {
+                                $aArticleData[$sAsin]['LANGUAGEINFO']['DUBBED'] = (string)$oLanguage->Name;
+                            }
+                            if ( $sType == 'Original' ) {
+                                $aArticleData[$sAsin]['LANGUAGEINFO']['ORIGINAL'] = (string)$oLanguage->Name;
+                            }
+                            /**
+                             * @todo: There might be more to come it seems that language data is made for german market
+                             */
                         }
-                        if ( $sType == 'Dubbed' ) {
-                            $aArticleData[$sAsin]['LANGUAGEINFO']['DUBBED'] = (string)$oLanguage->Name;
-                        }
-                        if ( $sType == 'Original' ) {
-                            $aArticleData[$sAsin]['LANGUAGEINFO']['ORIGINAL'] = (string)$oLanguage->Name;
-                        }
-                        /**
-                         * @todo: There might be more to come it seems that language data is made for german market
-                         */
                     }
                     
                     // platform information (possible multiple tags)
                     $aPlatforms = array();
                     if ( isset( $oItem->ItemAttributes->Platform ) ) {
-                        if (is_array( $oItem->ItemAttributes->Platform ) ) {
-                            foreach ( $oItem->ItemAttributes->Platform as $sPlatform ) {
-                                $aPlatforms[] = $sPlatform;
-                            }
-                        }
-                        else {
-                            $aPlatforms[] = (string)$oItem->ItemAttributes->Platform;
+                        foreach ( $oItem->ItemAttributes->Platform as $sPlatform ) {
+                            $aPlatforms[] = (string)$sPlatform;
                         }
                     }
                     
                     foreach ( $aPlatforms as $sRawPlatform ) {
                         $sCleanedPlatform = $this->_lvGetPlatform( $sRawPlatform );
+                        
                         if ( $sCleanedPlatform ) {
                             $aArticleData[$sAsin]['COMPATIBILITY'][$sCleanedPlatform] = $this->_aLvToggleAttributeYesByLangAbbr[$sLangAbbr];
                         }
@@ -353,13 +354,14 @@ class lvamzpnapiconnector extends oxBase {
     protected function _lvGetPlatform( $sRawPlatform ) {
         $sReturn = '';
         $sRawPlatform = strtolower( $sRawPlatform );
-        if ( strpos( $sRawPlatform, 'windows' ) ) {
+        
+        if ( strpos( $sRawPlatform, 'windows' ) !== false ) {
             $sReturn = 'WIN';
         }
-        else if ( strpos( $sRawPlatform, 'mac' ) ) {
+        else if ( strpos( $sRawPlatform, 'mac' ) !== false  ) {
             $sReturn = 'MAC';
         }
-        else if ( strpos( $sRawPlatform, 'linux' ) ) {
+        else if ( strpos( $sRawPlatform, 'linux' ) !== false  ) {
             $sReturn = 'LIN';
         }
         
