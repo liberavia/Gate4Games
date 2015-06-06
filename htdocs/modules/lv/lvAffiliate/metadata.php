@@ -60,6 +60,7 @@ $aModule = array(
         array( 'template' => 'layout/base.tpl',                             'block'=>'base_style',                                  'file'=>'extend/application/views/blocks/block_base_style.tpl' ),
         array( 'template' => 'vendor_main.tpl',                             'block'=>'admin_vendor_main_form',                      'file'=>'extend/application/views/blocks/block_admin_vendor_main_form.tpl' ),
         array( 'template' => 'manufacturer_main.tpl',                       'block'=>'admin_manufacturer_main_form',                'file'=>'extend/application/views/blocks/block_admin_manufacturer_main_form.tpl' ),
+        array( 'template' => 'start.tpl',                                   'block'=>'lv_page_shop_start_offers',                   'file'=>'extend/application/views/blocks/block_lv_page_shop_start_offers.tpl' ),
     ),
     'settings' => array(
         // group assignments

@@ -47,4 +47,25 @@ class lvaffiliate_start extends lvaffiliate_start_parent {
         return $this->_aArticleList;
     }
     
+    /**
+     * Template variable getter. Returns start page top sale offers
+     *
+     * @return array
+     */
+    public function lvGetTopSale()
+    {
+        if ($this->_aArticleList === null) {
+            $this->_aArticleList = array();
+            if ($this->_getLoadActionsParam()) {
+                // start list
+                $oArtList = oxNew('oxarticlelist');
+                $oArtList->loadActionArticles('lvtopsale');
+                if ($oArtList->count()) {
+                    $this->_aArticleList = $oArtList;
+                }
+            }
+        }
+
+        return $this->_aArticleList;
+    }
 }
