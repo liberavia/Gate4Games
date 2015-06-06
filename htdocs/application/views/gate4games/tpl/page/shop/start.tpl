@@ -31,6 +31,9 @@
         </div>
     [{/if}]
     [{include file="widget/manufacturersslider.tpl" }]
+    [{if $oView->lvGetTopSeller() }]
+        [{include file="widget/product/list.tpl" type=$oViewConf->getViewThemeParam('sStartPageListDisplayType') head="LV_TOP_SELLER"|oxmultilangassign listId="lvTopSeller" products=$oView->lvGetTopSeller()  showMainLink=true}]
+    [{/if}]
     [{if $oView->getNewestArticles() }]
         [{assign var='rsslinks' value=$oView->getRssLinks() }]
         [{include file="widget/product/list.tpl" type=$oViewConf->getViewThemeParam('sStartPageListDisplayType') head="JUST_ARRIVED"|oxmultilangassign listId="newItems" products=$oView->getNewestArticles() rsslink=$rsslinks.newestArticles rssId="rssNewestProducts" showMainLink=true}]

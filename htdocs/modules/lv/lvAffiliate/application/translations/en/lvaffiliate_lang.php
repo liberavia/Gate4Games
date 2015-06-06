@@ -26,5 +26,6 @@ $aLang = array(
     'charset'                                           => 'UTF-8',
     'LVAFFILIATE_AT_VENDOR'                             => 'at',
     'LVAFFILIATE_TO_OFFER'                              => 'To Offer',
+    'LV_TOP_SELLER'                                     => 'Most wanted Games',
 );
 
