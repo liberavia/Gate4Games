@@ -341,7 +341,19 @@ class lvamzpnapiconnector extends oxBase {
      * @param string $sAsin
      * @return array
      */
-    public function lvGetProductDetails( $sAsin ) {
+    public function lvGetProductDetails( $sAsin, $sLangAbbr ) {
+        return array();
+        
+        /**
+         * Could not determine more detailed result set, so I guess I will drop functionality completely
+         */
+//        $this->_sCurrentAsin = $sAsin;
+//        $aArticleData = array();
+//        
+//        $sSignedRequestUrl = $this->_lvGetSignedRequest( 'details', $sLangAbbr );
+//
+//        
+//        return $aArticleData;
     }
     
     

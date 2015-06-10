@@ -273,6 +273,7 @@ class lvaffiliate_import extends oxBase {
             $sTargetField       = $aTargetTableField[1];
             $blIsSale           = (bool)$aTargetTableField[2];
             
+            $blCheckForRemoval = false;
             if ( $blIsSale === true ) {
                 // check if tprice isset and bigger than price otherwise continue with next assignment
                 if ( !isset( $this->_aLvCurrentArticleData['TPRICE'] ) ) {
@@ -283,7 +284,7 @@ class lvaffiliate_import extends oxBase {
                 $dTPrice    = (double)$this->_aLvCurrentArticleData['TPRICE'];
                 
                 if ( ( $dTPrice > $dPrice ) == false ) {
-                    continue;
+                    $blCheckForRemoval = true;
                 }
             }
 
@@ -295,6 +296,10 @@ class lvaffiliate_import extends oxBase {
                         $sNewId = $oUtilsObject->generateUId();
                         
                         $sQuery = "INSERT INTO oxobject2category ( OXID, OXOBJECTID, OXCATNID ) VALUES ( '".$sNewId."', '".$this->_sLvCurrentParentId."', '".$sTargetCategoryId."' )";
+                        $oDb->Execute( $sQuery );
+                    }
+                    else if ( $blCheckForRemoval === true ) {
+                        $sQuery = "DELETE FROM oxobject2category WHERE OXOBJECTID='".$this->_sLvCurrentParentId."' AND OXCATNID='".$sTargetCategoryId."' LIMIT 1";
                         $oDb->Execute( $sQuery );
                     }
                 }
