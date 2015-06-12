@@ -77,6 +77,8 @@ class lvamzpn_import_catalog extends oxBase {
                         $iPageAmount = $oApiConnector->lvGetSearchPageAmount( $sLangAbbr, $iBrowseNodeIndex, $iPriceRangeIndex );
                         
                         if ( $iPageAmount > $iMaxPageResult ) {
+                            // log this problem which causes drop of some products
+                            $oApiConnector->lvLog( 'WARNING: There were more than 100 results when requesting BrowseNodeIndex '.$iBrowseNodeIndex.' with PriceRangeIndex '.$iPriceRangeIndex, 2 );
                             $iPageAmount = $iMaxPageResult;
                         }
 

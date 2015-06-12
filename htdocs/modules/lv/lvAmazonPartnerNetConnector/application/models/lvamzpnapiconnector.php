@@ -212,6 +212,7 @@ class lvamzpnapiconnector extends oxBase {
         $this->_iCurrentPageNumber = $iPageNumber;
         
         $sSignedRequestUrl = $this->_lvGetSignedRequest( 'search', $sLangAbbr, $iBrowseNodeIndex, $iPriceRangeIndex );
+        $this->lvLog( 'DEBUG: Requesting search page with LangAbbr '.$sLangAbbr.' and BrowseNodeIndex '.(string)$iBrowseNodeIndex.' and PriceRangeIndex '.(string)$iPriceRangeIndex."Signed URL is:\n".$sSignedRequestUrl );
         
         if ( $sSignedRequestUrl ) {
             $oResponse = $this->_lvGetRequestResult( $sSignedRequestUrl );
@@ -225,6 +226,10 @@ class lvamzpnapiconnector extends oxBase {
                     $sDRMInfo = $this->_lvFetchDRMInfoFromTitle( $sTitle );
                     if ( $sDRMInfo ) {
                         $aArticleData[$sAsin]['DRM'] = $sDRMInfo;
+                        $sDownloadType = $this->_lvFetchDownloadTypeFromDRM( $sDRMInfo );
+                        if ( $sDownloadType ) {
+                            $aArticleData[$sAsin]['DOWNLOADTYPE'] = $sDownloadType;
+                        }
                     }
                     $sTitle = $this->_lvCleanupAmazonTitle( $sTitle );
                     $aArticleData[$sAsin]['TITLE'] = $sTitle;
@@ -258,6 +263,9 @@ class lvamzpnapiconnector extends oxBase {
                     $aArticleData[$sAsin]['RELEASE'] = (string)$oItem->ItemAttributes->ReleaseDate;
 
                     // fetching language information
+                    /**
+                     * @todo Temporarily removed getting language information due its simply cram coming from API
+                     * 
                     if ( isset( $oItem->ItemAttributes->Languages->{Language} ) ) {
                         foreach ( $oItem->ItemAttributes->Languages->{Language} as $oLanguage ) {
                             $sType = (string)$oLanguage->Type;
@@ -270,10 +278,20 @@ class lvamzpnapiconnector extends oxBase {
                             if ( $sType == 'Original' ) {
                                 $aArticleData[$sAsin]['LANGUAGEINFO']['ORIGINAL'] = (string)$oLanguage->Name;
                             }
-                            /**
-                             * @todo: There might be more to come it seems that language data is made for german market
-                             */
                         }
+                    }
+                    */
+                    
+                    // addon?
+                    $blAddon = $this->_lvFetchAddonFromTitle( $sTitle );
+                    if ( $blAddon ) {
+                        $aArticleData[$sAsin]['ADDON'] = true;
+                    }
+                    
+                    // DLC?
+                    $blDLC = $this->_lvFetchDLCFromTitle( $sTitle );
+                    if ( $blDLC ) {
+                        $aArticleData[$sAsin]['DLC'] = true;
                     }
                     
                     // platform information (possible multiple tags)
@@ -309,6 +327,10 @@ class lvamzpnapiconnector extends oxBase {
                 }
             }
         }
+        else {
+            // request failed => into log
+            $this->lvLog( 'ERROR: Requested search page with LangAbbr '.$sLangAbbr.' and BrowseNodeIndex '.(string)$iBrowseNodeIndex.' and PriceRangeIndex '.(string)$iPriceRangeIndex." FAILED! Signed URL was:\n".$sSignedRequestUrl, 1 );
+        }
         
         $this->_iCurrentPageNumber = null;
         
@@ -330,7 +352,7 @@ class lvamzpnapiconnector extends oxBase {
             $sPrefix        = "[".date( 'Y-m-d H:i:s' )."] ";
             $sFullMessage   = $sPrefix.$sMessage;
             
-            $oUtils->writeToLog($sFullMessage, $this->_sLogFile );
+            $oUtils->writeToLog( $sFullMessage, $this->_sLogFile );
         }
     }
     
@@ -415,14 +437,85 @@ class lvamzpnapiconnector extends oxBase {
         else if ( strpos( $sTitle, '[PC/Mac Online Code]' ) !== false ) {
             $sDrm = "Online-Account";
         }
+        else if ( strpos( $sTitle, '[PC Code - Origin]' ) !== false ) {
+            $sDrm = "Origin";
+        }
+        else if ( strpos( $sTitle, '[PC/Mac Origin Code]' ) !== false ) {
+            $sDrm = "Origin";
+        }
         else if ( strpos( $sTitle, '[PC Online Code]' ) !== false ) {
             $sDrm = "Online-Account";
+        }
+        else if ( strpos( $sTitle, '[PC Download]' ) !== false ) {
+            $sDrm = "Online-Activation";
         }
         
         return $sDrm;
     }
     
     
+    /**
+     * Determine download type from DRM
+     * 
+     * @param string $sDrm
+     * @return string
+     */
+    protected function _lvFetchDownloadTypeFromDRM( $sDrm ) {
+        $sDownloadType = '';
+        
+        switch( $sDrm ) {
+            case 'Steam':
+                $sDownloadType = 'Steam Download Key';
+                break;
+            case 'Origin':
+                $sDownloadType = 'Origin Download Key';
+                break;
+        }
+        
+        return $sDownloadType;
+    }
+    
+    
+    /**
+     * Guesses from title if the download is an addon
+     * 
+     * @param string $sTitle
+     * @return boolean
+     */
+    protected function _lvFetchAddonFromTitle( $sTitle ) {
+        $blAddon = false;
+        
+        if ( stripos( $sTitle, 'Add-on' ) ) {
+            $blAddon = true;
+        }
+        
+        return $blAddon;
+    }
+    
+    
+    /**
+     * Guesses from title if download is DLC
+     * 
+     * @param string $sTitle
+     * @return boolean
+     */
+    protected function _lvFetchDLCFromTitle( $sTitle ) {
+        $blDLC = false;
+        
+        if ( strpos( $sTitle, 'DLC' ) ) {
+            $blDLC = true;
+        }
+                
+        return $blDLC;
+    }
+    
+    
+    /**
+     * Cleanup title from things in brackets
+     * 
+     * @param string $sTitle
+     * @return boolean
+     */
     protected function _lvCleanupAmazonTitle( $sTitle ) {
         $sReturnTitle = $sTitle;
         // check if cleanup needed 
@@ -612,19 +705,20 @@ class lvamzpnapiconnector extends oxBase {
                 CURLOPT_URL => $sSignedRequestUrl,
             )
         );
-        
-        $sXmlResponse = curl_exec( $resCurl );
+
+        $sXmlResponse = false;
+        try {
+            $sXmlResponse = curl_exec( $resCurl );
+        } 
+        catch ( Exception $e ) {
+            $this->lvLog( 'ERROR: Requesting signed url '.$sSignedRequestUrl.'ended up with the following error:'.$e->getMessage(), 1 );
+        }
         curl_close( $resCurl );
         
         // process xml with simplexml
         $oResponse = null;
         if ( $sXmlResponse ) {
             $oResonse = new SimpleXMLElement( $sXmlResponse );
-        }
-        else {
-            /**
-             * @todo some error handling
-             */
         }
         
         return $oResonse;

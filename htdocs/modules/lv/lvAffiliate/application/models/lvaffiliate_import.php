@@ -31,6 +31,13 @@ class lvaffiliate_import extends oxBase {
      */
     protected $_sLvVendorId = null;
     
+    
+    /**
+     * Vendorname of current import
+     * @var string
+     */
+    protected $_sLvVendorName = '';
+    
     /**
      * Language abbreviation
      * @var string
@@ -55,6 +62,12 @@ class lvaffiliate_import extends oxBase {
      */
     protected $_sLvCurrentParentId = null;
     
+    /**
+     * Current stockflag default is 4
+     * @var int
+     */
+    protected $_iLvCurrentStockFlag = 4;
+
     /**
      * Manufacturer shortcut
      * @var string
@@ -141,7 +154,12 @@ class lvaffiliate_import extends oxBase {
      * @return void
      */
     public function lvSetVendorId( $sVendorId ) { 
+        $oDb    = oxDb::getDb( MODE_FETCH_ASSOC );
+        
         $this->_sLvVendorId = $sVendorId;
+        
+        $sQuery = "SELECT OXTITLE FROM oxvendor WHERE OXID='".$this->_sLvVendorId."' LIMIT 1";
+        $this->_sLvVendorName = (string)$oDb->GetOne( $sQuery );
     }
 
 
@@ -172,10 +190,11 @@ class lvaffiliate_import extends oxBase {
      */
     public function lvAddArticle( $aArticleData, $sLangAbbr ) {
         // reset data
-        $this->_sLvCurrentArticleId = null;
-        $this->_sLvCurrentParentId = null;
-        $this->_sLvCurrentManufacturerId = null;
-        $this->_sLvCurrentLangAbbr = $sLangAbbr;
+        $this->_sLvCurrentArticleId         = null;
+        $this->_sLvCurrentParentId          = null;
+        $this->_sLvCurrentManufacturerId    = null;
+        $this->_sLvCurrentLangAbbr          = $sLangAbbr;
+        $this->_iLvCurrentStockFlag         = 4; // improvement would be to make this configurable indeed 4 is mostly needed
         
         $this->_aLvCurrentArticleData = $aArticleData;
         $this->_lvSetManufacturerId();
@@ -421,6 +440,7 @@ class lvaffiliate_import extends oxBase {
             $oParentArticle->oxarticles__oxmanufacturerid   = new oxField( $this->_sLvCurrentManufacturerId );
             $oParentArticle->oxarticles__oxartnum           = new oxField( $sParentArtNum );
             $oParentArticle->oxarticles__oxartnum           = new oxField( $sParentArtNum );
+            $oParentArticle->oxarticles__oxstockflag        = new oxField( $this->_iCurrentStockFlag );
             
             try {
                 $oParentArticle->save();
@@ -437,6 +457,8 @@ class lvaffiliate_import extends oxBase {
         $oArticle->oxarticles__oxparentid       = new oxField( $this->_sLvCurrentParentId );
         $oArticle->oxarticles__oxvendorid       = new oxField( $this->_sLvVendorId );
         $oArticle->oxarticles__lvcoverpic       = new oxField( 'oxpic1' );
+        $oArticle->oxarticles__oxstockflag      = new oxField( $this->_iCurrentStockFlag );
+        $oArticle->oxarticles__oxvarselect      = new oxField( $this->_sLvVendorName );
         
         if ( $this->_sLvCurrentLangAbbr !== null ) {
             $oArticle->oxarticles__lvlangabbr       = new oxField( $this->_sLvCurrentLangAbbr );
