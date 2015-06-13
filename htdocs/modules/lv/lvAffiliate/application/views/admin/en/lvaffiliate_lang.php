@@ -29,5 +29,6 @@ $aLang = array(
     'LV_VENDOR_SHORTCUT'                                => 'Vendor shortcut',
     'LV_MANUFACTURER_SHORTCUT'                          => 'Manufacturer shortcut',
     'LV_VENDOR_LANGABBR'                                => 'Assigned lang abbreviations (seperated by comma)',
+    'LV_TOP_MANUFACTURER'                               => 'Top Manufacturer (will be shown in slider on startpage)',
 );
 
