@@ -350,7 +350,7 @@ class lvamzpnapiconnector extends oxBase {
         
         if ( $iLogLevel <= $this->_iLvAmzPnLogLevel ) {
             $sPrefix        = "[".date( 'Y-m-d H:i:s' )."] ";
-            $sFullMessage   = $sPrefix.$sMessage;
+            $sFullMessage   = $sPrefix.$sMessage."\n";
             
             $oUtils->writeToLog( $sFullMessage, $this->_sLogFile );
         }
