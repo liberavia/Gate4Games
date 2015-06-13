@@ -189,32 +189,17 @@ body {
 }
 
 #sidebar .tree a:hover {
-    background: -moz-linear-gradient(#000, #5D005D);
-    background: -ms-linear-gradient(#000, #5D005D);
-    background: -webkit-gradient(linear, left top, left bottom, from(#000), to(#5D005D));
-    background: -webkit-linear-gradient(#000, #5D005D);
-    background: -o-linear-gradient(#000, #5D005D);
-    background: linear-gradient(#000, #5D005D);
+    background: #5D005D;
     color:#fff;
 }
 
 #sidebar .tree li.active>a {
-    background: -moz-linear-gradient(#000, #5D005D);
-    background: -ms-linear-gradient(#000, #5D005D);
-    background: -webkit-gradient(linear, left top, left bottom, from(#000), to(#5D005D));
-    background: -webkit-linear-gradient(#000, #5D005D);
-    background: -o-linear-gradient(#000, #5D005D);
-    background: linear-gradient(#000, #5D005D);
+    background: #5D005D;
     color:#fff;
 }
 
 #sidebar .tree li.exp>a {
-    background: -moz-linear-gradient(#000, #5d005d);
-    background: -ms-linear-gradient(#000, #5d005d);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #000), color-stop(50%, #5d005d));
-    background: -webkit-linear-gradient(#000, #5d005d);
-    background: -o-linear-gradient(#000, #5d005d);
-    background: linear-gradient(#000, #5d005d);
+    background: #5d005d;
     color:#fff;
 }
 
@@ -443,12 +428,7 @@ ul.tabs li {
 }
 
 ul.tabs li.ui-state-active {
-    background: -moz-linear-gradient(#000, #5D005D);
-    background: -ms-linear-gradient(#000, #5D005D);
-    background: -webkit-gradient(linear, left top, left bottom, from(#000), to(#5D005D));
-    background: -webkit-linear-gradient(#000, #5D005D);
-    background: -o-linear-gradient(#000, #5D005D);
-    background: linear-gradient(#000, #5D005D);
+    background: #5D005D;
     color:#fff;
     border-bottom-color: #fff;
     border-top-color: #5d005d;
