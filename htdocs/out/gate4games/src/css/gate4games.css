@@ -619,3 +619,12 @@ ul.tabs li.fbTab a {
 .corners, .button, .input, .textbox, .areabox, .checkbox, .submitButton, .widgetBox, .dropDown ul, div.anythingSlider .arrow, .promoBox {
     border-radius: 0;
 }
+
+
+.sf-menu > li {
+    border-radius: 0px;
+}
+
+.tabs li, .thumbNav, #navigation ul li:first-child, #currencies li:first-child a, #languages li:first-child a, .flyoutMenu li:first-child a, .dropDown li:first-child a {
+    border-radius: 0px;
+}
