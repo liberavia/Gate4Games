@@ -9,7 +9,7 @@
 [{assign var="blShowMore" value=false }]
 [{assign var="iCatCnt" value=0}]
 <ul id="navigation" class="sf-menu">
-    <li [{if $homeSelected == 'true' }]class="current"[{/if}]><a [{if $homeSelected == 'true'}]class="current"[{/if}] href="[{$oViewConf->getHomeLink()}]">[{oxmultilang ident="HOME"}]</a></li>
+    [{*<li [{if $homeSelected == 'true' }]class="current"[{/if}]><a [{if $homeSelected == 'true'}]class="current"[{/if}] href="[{$oViewConf->getHomeLink()}]">[{oxmultilang ident="HOME"}]</a></li>*}]
     [{foreach from=$oxcmp_categories item=ocat key=catkey name=root}]
       [{if $ocat->getIsVisible() }]
         [{foreach from=$ocat->getContentCats() item=oTopCont name=MoreTopCms}]
