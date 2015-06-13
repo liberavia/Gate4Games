@@ -45,7 +45,9 @@ $aModule = array(
         // controllers admin
         'vendor_main'                               => 'lv/lvAffiliate/extend/application/controllers/admin/lvaffiliate_vendor_main',
         // controllers
-        'start'                                     => 'lv/lvAffiliate/extend/application/controllers/lvaffiliate_start'
+        'start'                                     => 'lv/lvAffiliate/extend/application/controllers/lvaffiliate_start',
+        'account'                                   => 'lv/lvAffiliate/extend/application/controllers/lvaffiliate_account',
+        'basket'                                    =>  'lv/lvAffiliate/extend/application/controllers/lvaffiliate_basket',
     ),
     'files' => array(
         'lvaffiliate_import'                        => 'lv/lvAffiliate/application/models/lvaffiliate_import.php',
