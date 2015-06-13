@@ -85,16 +85,28 @@ class lvaffiliate_start extends lvaffiliate_start_parent {
     
     
     public function getManufacturerForSlider() {
-        $oConfig = $this->getConfig();
+        $oConfig    = $this->getConfig();
+        $oDb        = oxDb::getDb( MODE_FETCH_ASSOC );
         
         $blLvOnlyLoadTopManufacturer = (bool)$oConfig->getConfigParam( 'blLvOnlyLoadTopManufacturer' );
         
         if ( $blLvOnlyLoadTopManufacturer ) {
-            $oList = oxNew( 'oxList' );
             $sViewName = getViewName( 'oxmanufacturers' );
-            $sQuery = "SELECT * FROM ".$sViewName." WHERE LVTOPMANUFACTURER='1'";
-            $oList->selectString( $sQuery );
-            $this->setManufacturerlist( $oList->getArray() );
+            $sQuery = "SELECT OXID FROM ".$sViewName." WHERE LVTOPMANUFACTURER='1'";
+            $oRs = $oDb->Execute( $sQuery );
+            $aList = array();
+            
+            if ( $oRs != false && $oRs->recordCount() > 0 ) {
+                while ( !$oRs->EOF ) {
+                    $oManufacturer = oxNew( 'oxManufacurer' );
+                    $oManufacturer->load( $oRs->fields['OXID'] );
+                    $aList[] = $oManufacturer;
+                    
+                    $oRs->moveNext();
+                }
+            }
+            
+            $this->setManufacturerlist( $aList );
         }
 
         $aReturn = parent::getManufacturerForSlider();
