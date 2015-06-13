@@ -301,7 +301,7 @@ a.sliderHover {
 div.searchBox {
     position: absolute;
     right: 30px;
-    top: 30px;
+    top: 50px;
 }
 
 div.searchBox input.textbox {
@@ -309,7 +309,7 @@ div.searchBox input.textbox {
     float: left;
     margin: 0px 0px 0 0;
     padding-left: 4px;
-    width: 520px;
+    width: 500px;
 /*    border-radius: 6px 0 0 6px;*/
     border: 1px solid #5d005d;
     font-weight: bold;
@@ -606,11 +606,16 @@ ul.tabs li.fbTab a {
 
 #logo {
     float: left;
-    margin: 19px 0 8px 15px;
+    margin: 0px;
 }
 
 
 .pager .active {
     background: #5d005d none repeat scroll 0 0;
     color: #fff;
+}
+
+
+.corners, .button, .input, .textbox, .areabox, .checkbox, .submitButton, .widgetBox, .dropDown ul, div.anythingSlider .arrow, .promoBox {
+    border-radius: 0;
 }
