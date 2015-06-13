@@ -91,7 +91,7 @@ class lvaffiliate_start extends lvaffiliate_start_parent {
         
         if ( $blLvOnlyLoadTopManufacturer ) {
             $oList = oxNew( 'oxList' );
-            $sViewName = getViewName( 'oxmanufacturer' );
+            $sViewName = getViewName( 'oxmanufacturers' );
             $sQuery = "SELECT * FROM ".$sViewName." WHERE LVTOPMANUFACTURER='1'";
             $oList->selectString( $sQuery );
             $this->setManufacturerlist( $oList->getArray() );
