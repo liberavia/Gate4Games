@@ -91,14 +91,14 @@ class lvaffiliate_start extends lvaffiliate_start_parent {
         $blLvOnlyLoadTopManufacturer = (bool)$oConfig->getConfigParam( 'blLvOnlyLoadTopManufacturer' );
         
         if ( $blLvOnlyLoadTopManufacturer ) {
+            $aList = array();
             $sViewName = getViewName( 'oxmanufacturers' );
             $sQuery = "SELECT OXID FROM ".$sViewName." WHERE LVTOPMANUFACTURER='1'";
             $oRs = $oDb->Execute( $sQuery );
-            $aList = array();
             
             if ( $oRs != false && $oRs->recordCount() > 0 ) {
                 while ( !$oRs->EOF ) {
-                    $oManufacturer = oxNew( 'oxManufacurer' );
+                    $oManufacturer = oxNew( 'oxManufacturer' );
                     $oManufacturer->load( $oRs->fields['OXID'] );
                     $aList[] = $oManufacturer;
                     
