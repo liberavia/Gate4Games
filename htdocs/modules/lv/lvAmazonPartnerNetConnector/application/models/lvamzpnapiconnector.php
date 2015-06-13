@@ -285,13 +285,13 @@ class lvamzpnapiconnector extends oxBase {
                     // addon?
                     $blAddon = $this->_lvFetchAddonFromTitle( $sTitle );
                     if ( $blAddon ) {
-                        $aArticleData[$sAsin]['ADDON'] = true;
+                        $aArticleData[$sAsin]['ADDON'] = $this->_aLvToggleAttributeYesByLangAbbr[$sLangAbbr];
                     }
                     
                     // DLC?
                     $blDLC = $this->_lvFetchDLCFromTitle( $sTitle );
                     if ( $blDLC ) {
-                        $aArticleData[$sAsin]['DLC'] = true;
+                        $aArticleData[$sAsin]['DLC'] = $this->_aLvToggleAttributeYesByLangAbbr[$sLangAbbr];
                     }
                     
                     // platform information (possible multiple tags)
