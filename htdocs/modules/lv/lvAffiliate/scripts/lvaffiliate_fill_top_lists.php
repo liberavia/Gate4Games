@@ -215,7 +215,7 @@ class lvaffiliate_fill_toplists extends oxBase {
      */
     protected function _lvAddToList( $sActionList, $sArticleId, $iSort ) {
         $oUtilsObject = oxRegistry::get( 'oxUtilsObject' );
-        $sNewId = $oUtilsView->generateUId();
+        $sNewId = $oUtilsObject->generateUId();
         
         $sQuery = "
             INSERT INTO oxactions2article
