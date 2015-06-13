@@ -138,6 +138,7 @@ $aModule = array(
         array( 'group' => 'lvaffiliate_debug',          'name' => 'blLvAffiliateLogActive',             'type' => 'bool',       'value' => false ),
         array( 'group' => 'lvaffiliate_debug',          'name' => 'sLvAffiliateLogLevel',               'type' => 'str',        'value' => '1' ),
         // group toplists
+        array( 'group' => 'lvaffiliate_toplists',       'name' => 'blLvOnlyLoadTopManufacturer',        'type' => 'bool',       'value' => true ),
         array( 'group' => 'lvaffiliate_toplists',       'name' => 'sLvListTopSellerId',                 'type' => 'str',        'value' => '' ),
         array( 'group' => 'lvaffiliate_toplists',       'name' => 'sLvListTopSaleId',                   'type' => 'str',        'value' => '' ),
         array( 'group' => 'lvaffiliate_toplists',       'name' => 'sLvListLatestId',                    'type' => 'str',        'value' => '' ),

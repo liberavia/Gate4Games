@@ -38,6 +38,7 @@ $aLang = array(
     'SHOP_MODULE_sLvAffiliateLogLevel'                  => 'Log-Level (1=Errors,2=Errors+warnings,3=All activity, 4=All activity+Debug-messages)',
     // group top lists
     'SHOP_MODULE_GROUP_lvaffiliate_toplists'            => 'Top-Lists',
+    'SHOP_MODULE_blLvOnlyLoadTopManufacturer'           => 'Load only top manufacturer on startpage',
     'SHOP_MODULE_sLvListTopSellerId'                    => 'Action-ID of Top-Seller',
     'SHOP_MODULE_sLvListTopSaleId'                      => 'Action-ID of Top-Sale',
     'SHOP_MODULE_sLvListLatestId'                       => 'Action-ID of list for latest arrived articles',

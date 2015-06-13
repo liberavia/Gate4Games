@@ -82,4 +82,23 @@ class lvaffiliate_start extends lvaffiliate_start_parent {
 
         return $this->_aTopSaleArticleList;
     }
+    
+    
+    public function getManufacturerForSlider() {
+        $oConfig = $this->getConfig();
+        
+        $blLvOnlyLoadTopManufacturer = (bool)$oConfig->getConfigParam( 'blLvOnlyLoadTopManufacturer' );
+        
+        if ( $blLvOnlyLoadTopManufacturer ) {
+            $oList = oxNew( 'oxList' );
+            $sViewName = getViewName( 'oxmanufacturer' );
+            $sQuery = "SELECT * FROM ".$sViewName." WHERE LVTOPMANUFACTURER='1'";
+            $oList->selectString( $sQuery );
+            $this->setManufacturerlist( $oList->getArray() );
+        }
+
+        $aReturn = parent::getManufacturerForSlider();
+        
+        return $aReturn;
+    }
 }
