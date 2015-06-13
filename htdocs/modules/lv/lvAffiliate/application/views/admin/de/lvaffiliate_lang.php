@@ -28,5 +28,6 @@ $aLang = array(
     'LV_MAIN_VENDOR'                                    => 'Hauptlieferant',
     'LV_VENDOR_SHORTCUT'                                => 'Lieferantenkürzel',
     'LV_MANUFACTURER_SHORTCUT'                          => 'Herstellerkürzel',
+    'LV_VENDOR_LANGABBR'                                => 'Zugeordnete Sprachkürzel (getrennt mit Komma)',
 );
 

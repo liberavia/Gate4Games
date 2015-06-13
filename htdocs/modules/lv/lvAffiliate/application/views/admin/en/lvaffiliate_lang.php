@@ -28,5 +28,6 @@ $aLang = array(
     'LV_MAIN_VENDOR'                                    => 'Main vendor',
     'LV_VENDOR_SHORTCUT'                                => 'Vendor shortcut',
     'LV_MANUFACTURER_SHORTCUT'                          => 'Manufacturer shortcut',
+    'LV_VENDOR_LANGABBR'                                => 'Assigned lang abbreviations (seperated by comma)',
 );
 

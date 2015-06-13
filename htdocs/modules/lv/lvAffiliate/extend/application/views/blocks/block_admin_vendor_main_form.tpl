@@ -16,3 +16,11 @@
         <input type="text" class="editinput" size="6" maxlength="[{$edit->oxvendor__lvshortcut->fldmax_length}]" id="oLockTarget" name="editval[oxvendor__lvshortcut]" value="[{$edit->oxvendor__lvshortcut->value}]" [{ $readonly }]>
     </td>
 </tr>
+<tr>
+    <td class="edittext">
+        [{oxmultilang ident="LV_VENDOR_LANGABBR"}]
+    </td>
+    <td class="edittext">
+        <input type="text" class="editinput" size="12" maxlength="[{$edit->oxvendor__lvlangabbr->fldmax_length}]" id="oLockTarget" name="editval[oxvendor__lvlangabbr]" value="[{$edit->oxvendor__lvlangabbr->value}]" [{ $readonly }]>
+    </td>
+</tr>
