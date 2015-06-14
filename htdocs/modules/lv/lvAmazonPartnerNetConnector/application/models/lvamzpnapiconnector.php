@@ -315,6 +315,11 @@ class lvamzpnapiconnector extends oxBase {
                         $aArticleData[$sAsin]['SALESRANK'] = (string)$oItem->SalesRank;
                     }
                     
+                    if ( !isset( $oItem->OfferSummary->LowestNewPrice->Amount ) ) {
+                        unset( $aArticleData[$sAsin] );
+                        continue;
+                    }
+                    
                     // Price handling
                     $sTPriceCent    = (string)$oItem->ItemAttributes->ListPrice->Amount;
                     $sPriceCent     = (string)$oItem->OfferSummary->LowestNewPrice->Amount;
