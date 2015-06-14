@@ -324,6 +324,16 @@ class lvamzpnapiconnector extends oxBase {
                     // assign prices
                     $aArticleData[$sAsin]['TPRICE'] = $dTPrice;
                     $aArticleData[$sAsin]['PRICE'] = $dPrice;
+                    
+                    // check if free to play or if article should be skipped
+                    if ( $dTPrice = 0.01 && $dPrice = 0 ) {
+                        // free to play article
+                        $aArticleData[$sAsin]['FREETOPLAY'] = $this->_aLvToggleAttributeYesByLangAbbr[$sLangAbbr];;
+                    }
+                    else if ( $dPrice = 0 ) {
+                        // remove article from import
+                        unset( $aArticleData[$sAsin] );
+                    }
                 }
             }
         }
