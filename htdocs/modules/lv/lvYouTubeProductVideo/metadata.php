@@ -42,7 +42,7 @@ $aModule = array(
     'extend'       => array(
     ),
     'files' => array(
-        'lvyoutube'                        => 'lv/lvAgeCheck/application/models/lvyoutube.php',
+        'lvyoutube'                        => 'lv/lvYouTubeProductVideo/application/models/lvyoutube.php',
     ),
     'events'       => array(
     ),
