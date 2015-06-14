@@ -92,7 +92,6 @@ class lvyoutube extends oxBase {
                 oa.OXPARENTID != '' AND 
                 om.OXURL IS NULL             
         ";
-        
         $oRs = $this->_oLvDb->Execute( $sQuery );
         
         if ( $oRs != false && $oRs->recordCount() > 0 ) {
@@ -119,9 +118,60 @@ class lvyoutube extends oxBase {
         $sRequestUrl    = $this->_lvGetRequestUrl( $sOxid );
         $aResult        = $this->_lvGetRequestResult( $sRequestUrl );
         
-        if ( count( $aResult ) ) {
-            print_r( $aResult );
-            die();
+        if ( count( $aResult ) > 0 ) {
+            foreach ( $aResult['items'] as $aVideoInfo ) {
+                $sVideoId       = (string)$aVideoInfo['id']['videoId'];
+                $sVideoTitle    = (string)$aVideoInfo['snippet']['title'];
+                
+                if ( $sVideoId != '' ) {
+                    $this->_lvAddVideoUrlToProduct( $sOxid, $sVideoId, $sVideoTitle );
+                }
+            }
+        }
+    }
+    
+    
+    /**
+     * Adding YouTube videoUrl to certain product
+     * 
+     * @param string $sOxid
+     * @param string $sVideoId
+     * @return void
+     */
+    protected function _lvAddVideoUrlToProduct( $sOxObjectId, $sVideoId, $sVideoTitle ) {
+        $oUtilsObject               = oxRegistry::get( 'oxUtilsObject' );
+        $sNewId                     = $oUtilsObject->generateUId();
+        $sLvApiBaseTargetAddress    = $this->_oLvConfig->getConfigParam( 'sLvApiBaseTargetAddress' );
+        
+        if ( $sLvApiBaseTargetAddress ) {
+            $sYouTubeVideoUrl = $sLvApiBaseTargetAddress.$sVideoId;
+            
+            $sQuery ="
+                INSERT INTO oxmediaurls
+                (
+                    OXID,
+                    OXOBJECTID,
+                    OXURL,
+                    OXDESC,
+                    OXDESC_1,
+                    OXDESC_2,
+                    OXDESC_3,
+                    OXISUPLOADED
+                )
+                VALUES
+                (
+                    '".$sNewId."',
+                    '".$sOxObjectId."',
+                    '".$sYouTubeVideoUrl."',
+                    '".$sVideoTitle."',
+                    '".$sVideoTitle."',
+                    '".$sVideoTitle."',
+                    '".$sVideoTitle."',
+                    '0'
+                )
+            ";
+            
+            $this->_oLvDb->Execute( $sQuery );
         }
     }
     
@@ -132,7 +182,7 @@ class lvyoutube extends oxBase {
      * @param string $sOxid
      * @return string
      */
-    protected function _lvGetRequestUrl( $sOxid ) {
+    protected function _lvGetRequestUrl( $sOxid, $sExtendId=null ) {
         $sRequestUrl = "";
         
         $sQuery = "
@@ -155,6 +205,7 @@ class lvyoutube extends oxBase {
             $sLvApiRequestOrder                 = $this->_oLvConfig->getConfigParam( 'sLvApiRequestOrder' );
             $sLvApiRequestPrefix                = $this->_oLvConfig->getConfigParam( 'sLvApiRequestPrefix' );
             $sLvApiRequestSuffix                = $this->_oLvConfig->getConfigParam( 'sLvApiRequestSuffix' );
+            $sLvApiChannelId                    = $this->_oLvConfig->getConfigParam( 'sLvApiChannelId' );
             
             $sRequestUrl     = $sLvApiBaseRequestAddress.$sLvApiRequestAction."?part=".$sLvApiRequestPart;
             if ( $sLvApiRequestMaxResults && $sLvApiRequestMaxResults != '' && is_numeric( $sLvApiRequestMaxResults ) ) {
@@ -163,8 +214,13 @@ class lvyoutube extends oxBase {
             if ( $sLvApiRequestOrder && $sLvApiRequestOrder != '' ) {
                 $sRequestUrl    .= "&order=".trim( $sLvApiRequestOrder );
             }
+            if ( $sLvApiChannelId && $sLvApiChannelId != '' ) {
+                $sRequestUrl    .= "&channelId=".$sLvApiChannelId;
+            }
             
             // search title
+            // first quote title so it will be surely found
+            $sTitle = '"'.$sTitle.'"';
             if ( $sLvApiRequestPrefix && $sLvApiRequestPrefix != '' ) {
                 $sLvApiRequestPrefix = trim( $sLvApiRequestPrefix );
                 $sTitle = $sLvApiRequestPrefix." ".$sTitle;
@@ -173,9 +229,9 @@ class lvyoutube extends oxBase {
                 $sLvApiRequestSuffix = trim( $sLvApiRequestSuffix );
                 $sTitle = $sTitle." ".$sLvApiRequestSuffix;
             }
-            $sTitleUrlEncoded = urldecode( $sTitle );
+            $sTitleUrlEncoded = urlencode( $sTitle );
             
-            $sRequestUrl        .= "q=".$sTitleUrlEncoded;
+            $sRequestUrl        .= "&q=".$sTitleUrlEncoded;
             
             $sRequestUrl        .= "&type=video&videoDefinition=high";
             
@@ -213,7 +269,6 @@ class lvyoutube extends oxBase {
             $this->lvLog( 'ERROR: Requesting url '.$sRequestUrl.'ended up with the following error:'.$e->getMessage(), 1 );
         }
         curl_close( $resCurl );
-        
         // process json
         if ( $sJsonResponse ) {
             $aResponse = json_decode( $sJsonResponse, true );

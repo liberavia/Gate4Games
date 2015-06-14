@@ -40,6 +40,7 @@ $aLang = array(
     'SHOP_MODULE_sLvApiRequestOrder'                    => 'Sorting criteria',
     'SHOP_MODULE_sLvApiRequestPrefix'                   => 'Searchprefix which will be put in front of article title (optional)',
     'SHOP_MODULE_sLvApiRequestSuffix'                   => 'Searchsuffix which will be put behind article title (optional)',
+    'SHOP_MODULE_sLvApiChannelId'                       => 'Search in channel-ID (optional)',
     // group debug
     'SHOP_MODULE_blLvYouTubeLogActive'                  => 'Log activity in file (lvyoutube.log)',
     'SHOP_MODULE_sLvYouTubeLogLevel'                    => 'Log-Level (1=Errors,2=Errors+Warnings,3=All activity, 4=All activity + Debug-Output)',
