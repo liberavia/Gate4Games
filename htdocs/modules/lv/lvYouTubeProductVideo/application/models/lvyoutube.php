@@ -145,7 +145,7 @@ class lvyoutube extends oxBase {
         
         if ( $sLvApiBaseTargetAddress ) {
             $sYouTubeVideoUrl = $sLvApiBaseTargetAddress.$sVideoId;
-            $sVideoTitle = $this->_oLvDb->quote( $sYouTubeVideoUrl );
+            $sVideoTitle = $this->_oLvDb->quote( $sVideoTitle );
             
             $sQuery ="
                 INSERT INTO oxmediaurls
