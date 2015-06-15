@@ -35,7 +35,7 @@ class lvyoutube_letsplay_oxwarticledetails extends lvyoutube_letsplay_oxwarticle
         $aReturn    = array();
         $oArticle   = $this->getProduct();
         
-        foreach ( $oProduct->getMediaUrls() as $oMediaUrl ) {
+        foreach ( $oArticle->getMediaUrls() as $oMediaUrl ) {
             if ( $oMediaUrl->oxmediaurls__lvmediatype->value != 'productletsplay' ) continue;
             
             $aReturn[] = $oMediaUrl;            
