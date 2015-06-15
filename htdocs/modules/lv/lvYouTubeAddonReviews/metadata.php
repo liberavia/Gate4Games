@@ -43,7 +43,7 @@ $aModule = array(
         // components->widgets
         'oxwarticledetails'                 => 'lv/lvYouTubeAddonReviews/extend/application/components/widgets/lvyoutube_reviews_oxwarticledetails',
         // models
-        'lvyoutube'                        => 'lv/lvYouTubeAddonReviews/extend/application/models/lvyoutube_reviews.php',
+        'lvyoutube'                         => 'lv/lvYouTubeAddonReviews/extend/application/models/lvyoutube_reviews',
     ),
     'files' => array(
     ),
