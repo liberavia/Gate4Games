@@ -33,7 +33,7 @@ class lvyoutube_reviews_oxwarticledetails extends lvyoutube_reviews_oxwarticlede
      */
     public function lvGetReviewVideos() {
         $aReturn    = array();
-        $oArticle   = $this->getProduct();
+        $oArticle   = $this->getProduct()->lvGetProduct();
         
         foreach ( $oArticle->getMediaUrls() as $oMediaUrl ) {
             if ( $oMediaUrl->oxmediaurls__lvmediatype->value != 'productreview' ) continue;
