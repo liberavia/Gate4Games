@@ -115,7 +115,7 @@ class lvyoutube_reviews extends lvyoutube_reviews_parent {
             
         }
         else {
-            $sRequestUrl = parent::_lvRequestUrl( $sOxid );
+            $sRequestUrl = parent::_lvGetRequestUrl( $sOxid, $sExtendId );
         }
         
         return $sRequestUrl;
