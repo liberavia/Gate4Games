@@ -90,7 +90,7 @@ class lvyoutube extends oxBase {
                 oxmediaurls om ON ( oa.OXID=om.OXOBJECTID ) 
             WHERE 
                 oa.OXPARENTID != '' AND 
-                om.OXURL IS NULL             
+                om.OXURL IS NULL AND        
                 LVMEDIATYPE = '".$sMediaType."';
         ";
         $oRs = $this->_oLvDb->Execute( $sQuery );
