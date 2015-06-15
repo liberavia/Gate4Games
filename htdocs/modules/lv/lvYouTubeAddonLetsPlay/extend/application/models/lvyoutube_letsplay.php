@@ -33,7 +33,7 @@ class lvyoutube_letsplay extends lvyoutube_letsplay_parent {
      * @param string $sOxid
      * @return void
      */
-    public function lvAddVideoReviewForProduct( $sOxid ) {
+    public function lvAddVideoLetsPlayForProduct( $sOxid ) {
         $sRequestUrl    = $this->_lvGetRequestUrl( $sOxid, 'productletsplay' );
         $aResult        = $this->_lvGetRequestResult( $sRequestUrl );
         
