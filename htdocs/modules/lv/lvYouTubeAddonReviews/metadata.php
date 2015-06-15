@@ -50,7 +50,7 @@ $aModule = array(
     'events'       => array(
     ),
     'templates' => array(
-        'lvyoutube_reviews.tpl'             => 'lv/lvYouTubeAddonReviews/application/views/frontend/page/details/inc/lvyoutube_reviews.tpl'
+        'lvyoutube_reviews.tpl'             => 'lv/lvYouTubeAddonReviews/application/views/frontend/tpl/page/details/inc/lvyoutube_reviews.tpl'
     ),
     'blocks' => array(
         array( 'template' => 'page/details/inc/tabs.tpl',               'block'=>'details_tabs_attributes',                         'file'=>'extend/application/views/blocks/block_widget_details_tabs_attributes.tpl' ),
