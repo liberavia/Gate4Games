@@ -50,5 +50,5 @@ class lvyoutube_import_review_videos extends oxBase {
     
 }
 
-$oScript = new lvyoutube_import_letsplay_videos();
+$oScript = new lvyoutube_import_review_videos();
 $oScript->start();
