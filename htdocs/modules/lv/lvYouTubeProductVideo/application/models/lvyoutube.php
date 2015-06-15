@@ -79,7 +79,7 @@ class lvyoutube extends oxBase {
      * @param void
      * @return array
      */
-    public function lvGetProductsWithoutVideo() {
+    public function lvGetProductsWithoutVideo( $sMediaType='productvideo' ) {
         $aReturn = array();
         
         $sQuery = "
@@ -91,6 +91,7 @@ class lvyoutube extends oxBase {
             WHERE 
                 oa.OXPARENTID != '' AND 
                 om.OXURL IS NULL             
+                LVMEDIATYPE = '".$sMediaType."';
         ";
         $oRs = $this->_oLvDb->Execute( $sQuery );
         
@@ -138,7 +139,7 @@ class lvyoutube extends oxBase {
      * @param string $sVideoId
      * @return void
      */
-    protected function _lvAddVideoUrlToProduct( $sOxObjectId, $sVideoId, $sVideoTitle ) {
+    protected function _lvAddVideoUrlToProduct( $sOxObjectId, $sVideoId, $sVideoTitle, $sMediaType='productvideo' ) {
         $oUtilsObject               = oxRegistry::get( 'oxUtilsObject' );
         $sNewId                     = $oUtilsObject->generateUId();
         $sLvApiBaseTargetAddress    = $this->_oLvConfig->getConfigParam( 'sLvApiBaseTargetAddress' );
@@ -157,7 +158,8 @@ class lvyoutube extends oxBase {
                     OXDESC_1,
                     OXDESC_2,
                     OXDESC_3,
-                    OXISUPLOADED
+                    OXISUPLOADED,
+                    LVMEDIATYPE
                 )
                 VALUES
                 (
@@ -168,7 +170,8 @@ class lvyoutube extends oxBase {
                     ".$sVideoTitle.",
                     ".$sVideoTitle.",
                     ".$sVideoTitle.",
-                    '0'
+                    '0',
+                    '".$sMediaType."'
                 )
             ";
             

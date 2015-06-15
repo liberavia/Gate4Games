@@ -81,6 +81,8 @@ class lvextmedia_oxarticle extends lvextmedia_oxarticle_parent {
 
         $iVideoIndex = 1;
         foreach ( $this->_aLvMediaFiles as $oMediaUrl ) {
+            if ( $oMediaUrl->oxmediaurls__lvmediatype->value != 'productvideo' ) continue;
+            
             $oMediaUrl->lvSetIFrameId( 'detailsvideoiframe_'.$iVideoIndex );
             $oMediaUrl->lvSetIFrameVisible(false);
             if ( $iVideoIndex == 1 ) {

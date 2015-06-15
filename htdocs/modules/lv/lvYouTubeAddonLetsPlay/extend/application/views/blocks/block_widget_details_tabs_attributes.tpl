@@ -1,0 +1,5 @@
+[{$smarty.block.parent}]
+[{if $oView->lvGetLetsPlayVideos()}]
+    [{capture append="tabs"}]<a href="#lvyoutube_letsplay">[{oxmultilang ident="LV_TAB_YOUTUBE_LETSPLAY"}]</a>[{/capture}]
+    [{capture append="tabsContent"}]<div id="lvyoutube_letsplay">[{include file="lvyoutube_letsplay.tpl"}]</div>[{/capture}]
+[{/if}]
