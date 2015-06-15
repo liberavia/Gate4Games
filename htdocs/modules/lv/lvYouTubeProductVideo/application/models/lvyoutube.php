@@ -87,11 +87,10 @@ class lvyoutube extends oxBase {
             FROM 
                 oxarticles oa 
             LEFT JOIN 
-                oxmediaurls om ON ( oa.OXID=om.OXOBJECTID ) 
+                ( SELECT * FROM oxmediaurls WHERE LVMEDIATYPE='".$sMediaType."' ) om ON ( oa.OXID=om.OXOBJECTID ) 
             WHERE 
                 oa.OXPARENTID != '' AND 
-                om.OXURL IS NULL AND        
-                LVMEDIATYPE = '".$sMediaType."';
+                om.OXURL IS NULL
         ";
         $oRs = $this->_oLvDb->Execute( $sQuery );
         
