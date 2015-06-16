@@ -162,13 +162,13 @@ class lvaffiliate_fill_toplists extends oxBase {
             $sJoinTable = getViewName( 'oxobject2attribute' );
             
             $sQuery = "
-                SELECT 
+                SELECT DISTINCT
                     oa.OXPARENTID, 
                     o2a.OXVALUE
                 FROM 
                     ".$sTable." oa
                 LEFT JOIN 
-                    ".$sJoinTable." o2a ON ( oa.OXID=o2a.OXOBJECTID AND oxattrid='".$sAttriId."' )
+                    ".$sJoinTable." o2a ON ( oa.OXID=o2a.OXOBJECTID AND o2a.OXATRRID='".$sAttriId."' )
                 WHERE 
                     oa.OXPARENTID != '' AND
                     o2a.OXVALUE <= NOW()
