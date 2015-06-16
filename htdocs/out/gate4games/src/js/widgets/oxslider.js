@@ -26,7 +26,7 @@
                 height               : 220,
                 autoPlay             : true,
                 delay				 : 6700,
-                animationTime 		 : 2700,
+                animationTime 		 : 500,
                 startStopped		 : false,
                 classPanel           : '.panel',
                 classStartStop       : '.start-stop',
