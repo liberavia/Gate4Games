@@ -168,7 +168,7 @@ class lvaffiliate_fill_toplists extends oxBase {
                 FROM 
                     ".$sTable." oa
                 LEFT JOIN 
-                    ".$sJoinTable." o2a ON ( oa.OXID=o2a.OXOBJECTID AND o2a.OXATRRID='".$sAttriId."' )
+                    ".$sJoinTable." o2a ON ( oa.OXID=o2a.OXOBJECTID AND o2a.OXATTRID='".$sAttriId."' )
                 WHERE 
                     oa.OXPARENTID != '' AND
                     o2a.OXVALUE <= NOW()
