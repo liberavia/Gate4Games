@@ -352,11 +352,17 @@ label.innerLabel {
 }
 
 .sf-menu li ul {
-    border-radius: none;
+    border-radius: 0px;
+    box-shadow: 0 0px 0px #fff;
 }
 
 .sf-menu a, .sf-menu a:visited {
     color: #FFF;
+}
+
+.sf-menu li li {
+    border-bottom: 0px;
+    border-top: 0px;
 }
 
 .box .catPicOnly {
