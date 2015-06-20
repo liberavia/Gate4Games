@@ -209,12 +209,12 @@ body {
 
 .itemSlider a.sliderHover,
 a.sliderHover {
-    background: #000;
+    background: none;
     opacity: 0.5;
     filter: alpha(opacity =60);
     width: 124px;
     height: 75px;
-    display: none;
+    display: block;
     position: absolute;
     left: 0;
     top: 0;
@@ -619,6 +619,7 @@ ul.tabs li.fbTab a {
     text-decoration: none;
     text-shadow: 0 0px 0 #486066;
     z-index: 4;
+    top: 0px;
 }
 
 .rightShadow, .itemSlider .leftHolder {
@@ -645,4 +646,20 @@ ul.tabs li.fbTab a {
     padding: 0;
     text-align: center;
     width: 124px;
+}
+
+.itemSlider .prevItem {
+    bottom: 0;
+    left: 0;
+    width: 40px;
+}
+
+.itemSlider .prevItem span.slidePointer, .itemSlider .nextItem span.slidePointer {
+    float: right;
+    height: 32px;
+    margin: 23px 5px 0 0;
+    position: relative;
+    text-indent: -9999px;
+    width: 30px;
+    z-index: 5;
 }
