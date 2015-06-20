@@ -83,7 +83,7 @@ class lvattr_oxwarticlebox extends lvattr_oxwarticlebox_parent {
             }
         }
         
-        return $sResult;
+        return $sVariantId;
     }
     
         
