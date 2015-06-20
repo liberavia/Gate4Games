@@ -35,5 +35,56 @@ class lvattr_oxwarticlebox extends lvattr_oxwarticlebox_parent {
         $oArticle = $this->getProduct();
         return $oArticle->lvGetCompatibilityInformation();
     }
+    
+    
+    /**
+     * Template getter delivers information for best affiliate offer
+     * 
+     * @param void
+     * @return array
+     */
+    public function lvGetBestAffiliateDetails() {
+        $aBestAffiliateForProduct = array();
+        $sBestPriceId = $this->_lvGetBestPriceVariantId();
+        
+        if ( $sBestPriceId ) {
+            $iCurrentLangId = oxRegistry::getLang()->getBaseLanguage();
+            $oArticle = oxNew( 'oxarticle' );
+            $oArticle->loadInLang( $iCurrentLangId, $sBestPriceId );
+
+            if ( $oArticle ) {
+                $aBestAffiliateForProduct['vendor']    = $oArticle->getVendor();
+                $aBestAffiliateForProduct['product']   = $oArticle;
+            }
+        }
+        
+        return $aBestAffiliateForProduct;
+    }
+    
+    
+    /**
+     * Returns variant ids sorted by best price
+     * 
+     * @param void
+     * @return string
+     */
+    protected function _lvGetBestPriceVariantId() {
+        $sVariantId = '';
+        $sOxid = $this->getProduct()->getId();
+        
+        if ( $sOxid ) {
+            $oDb                = oxDb::getDb( FETCH_MODE_ASSOC );
+            $sArticlesTable     = getViewName( 'oxarticles' );
+            $sQuery = "SELECT OXID FROM ".$sArticlesTable." WHERE OXPARENTID='".$sOxid."' ORDER BY OXPRICE ASC LIMIT 1";
+            
+            $sResult = $oDb->GetOne( $sQuery );
+            if ( $sResult ) {
+                $sVariantId = $sResult;
+            }
+        }
+        
+        return $sResult;
+    }
+    
         
 }

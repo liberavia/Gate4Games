@@ -44,5 +44,6 @@ $aLang = array(
     // age
     'LV_ATTR_AGE_PEGI'                                  => 'Recommended Age PEGI',
     'LV_ATTR_AGE_USK'                                   => 'Recommended Age USK',
+    'LV_GO_DIRECTLY_TO_BEST_OFFER_OF'                   => 'Best price at',
 );
 

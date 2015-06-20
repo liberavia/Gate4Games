@@ -232,7 +232,7 @@ a.sliderHover {
 
 
 .gridView li:hover .priceBlock{
-    height: 35px;
+    height: 60px;
     padding-top:0px;
     padding-bottom: 10px;
     padding-right: 10px;
@@ -523,7 +523,7 @@ ul.tabs li.fbTab a {
     background: #fff none repeat scroll 0 0;
     bottom: 0;
     font-size: 14px;
-    height: 35px;
+    height: 60px;
     left: 0;
     padding: 10px 10px;
     position: absolute;
@@ -669,7 +669,7 @@ ul.tabs li.fbTab a {
 
 .gridView li {
     float: left;
-    height: 260px;
+    height: 300px;
     list-style: outside none none;
     margin: 1px;
     margin-top: 10px;
@@ -684,7 +684,7 @@ ul.tabs li.fbTab a {
     color: #000;
     display: block;
     font-weight: 700;
-    height: 30px;
+    height: 40px;
     line-height: 15px;
     padding: 5px 10px;
     text-decoration: none;
