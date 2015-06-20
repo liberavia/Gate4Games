@@ -3,11 +3,9 @@
         [{if $oManufacturer->oxmanufacturers__oxicon->value }]
         [{counter assign="slideCount"}]
             <li>
-                <a href="[{ $oManufacturer->getLink() }]" class="viewAllHover">
-                    <span>[{ oxmultilang ident="VIEW_ALL_PRODUCTS" }]</span>
+                <a class="sliderHover" href="[{$oManufacturer->getLink()}]">
+                    <img src="[{$oManufacturer->getIconUrl()}]" alt="[{$oManufacturer->oxmanufacturers__oxtitle->value}]">
                 </a>
-                <a class="sliderHover" href="[{ $oManufacturer->getLink() }]"></a>
-                <img src="[{ $oManufacturer->getIconUrl() }]" alt="[{ $oManufacturer->oxmanufacturers__oxtitle->value }]">
             </li>
         [{/if}]
     [{/foreach}]
@@ -17,10 +15,7 @@
     [{oxscript include="js/widgets/oxmanufacturerslider.js" priority=10 }]
     [{oxscript add="$( '#manufacturerSlider' ).oxManufacturerSlider();"}]
     <div class="itemSlider">
-        <div class="leftHolder">            
-            <div class="titleBlock slideNav"><strong>[{ oxmultilang ident="OUR_BRANDS" }]</strong></div>
-            <a class="prevItem slideNav" href="#" rel="nofollow"><span class="slidePointer">&laquo;</span><span class="slideBg"></span></a>
-        </div>
+        <a class="prevItem slideNav" href="#" rel="nofollow"><span class="slidePointer">&laquo;</span><span class="slideBg"></span></a>
         <a class="nextItem slideNav" href="#" rel="nofollow"><span class="slidePointer">&raquo;</span><span class="slideBg"></span></a>
         <div id="manufacturerSlider">
             <ul>

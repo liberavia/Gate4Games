@@ -213,7 +213,7 @@ a.sliderHover {
     opacity: 0.5;
     filter: alpha(opacity =60);
     width: 124px;
-    height: 148px;
+    height: 75px;
     display: none;
     position: absolute;
     left: 0;
@@ -632,4 +632,17 @@ ul.tabs li.fbTab a {
     position: absolute;
     width: 0px;
     z-index: 3;
+}
+
+.itemSlider li {
+    position: relative;
+}
+
+.itemSlider li {
+    height: 75px;
+    line-height: 75px;
+    list-style: outside none none;
+    padding: 0;
+    text-align: center;
+    width: 124px;
 }
