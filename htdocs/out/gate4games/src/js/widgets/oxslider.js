@@ -23,7 +23,7 @@
     oxSlider = {
             options: {
                 width                : 940,
-                height               : 220,
+                height               : 300,
                 autoPlay             : true,
                 delay				 : 4000,
                 animationTime 		 : 500,
@@ -58,7 +58,7 @@
                 aNavigationTabs = self.getNavigationTabsArray(el, options.elementLi);
 
                 el.anythingSlider({
-                        width               : window.innerWidth,
+                        width               : window.innerWidth-15,
                         height              : options.height,
                         autoPlay            : options.autoPlay,
                         startStopped        : options.startStopped,
