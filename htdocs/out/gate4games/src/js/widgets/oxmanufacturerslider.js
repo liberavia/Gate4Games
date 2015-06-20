@@ -35,7 +35,7 @@
                  el.jCarouselLite({
                      btnNext: options.classButtonNext,
                      btnPrev: options.classButtonPrev,
-                   visible: 8,
+                   visible: 7,
                    scroll: 1
                 });
             }
