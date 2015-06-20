@@ -2,7 +2,7 @@
     [{oxscript include="js/widgets/oxequalizer.js" priority=10 }]
     [{oxscript add="$(function(){oxEqualizer.equalHeight($( '#panel dl' ));});"}]
     <div id="footer">
-        <div id="panel" class="corners">
+        <div>
 [{*            
                 <div class="bar">
                     [{block name="footer_fblike"}]
@@ -32,7 +32,7 @@
 
             [{oxid_include_widget cl="oxwInformation" noscript=1 nocookie=1}]
 
-            [{oxid_include_widget cl="oxwManufacturerList" _parent=$oView->getClassName() noscript=1 nocookie=1}]
+            [{*oxid_include_widget cl="oxwManufacturerList" _parent=$oView->getClassName() noscript=1 nocookie=1*}]
 
             [{oxid_include_widget cl="oxwCategoryTree" _parent=$oView->getClassName() sWidgetType="footer" noscript=1 nocookie=1}]
 
