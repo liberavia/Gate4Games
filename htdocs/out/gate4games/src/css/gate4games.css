@@ -529,12 +529,13 @@ ul.tabs li.fbTab a {
     height: 150px;
     margin: 0;
     position: relative;
-    background: linear-gradient (90deg, #999,#fff);
+    background: url(../bg/g4gheaderbg.png) repeat-x;
+/*    background: linear-gradient (90deg, #999,#fff);
     background: -moz-linear-gradient(#999,#fff);
     background: -ms-linear-gradient(#999,#fff);
     background: -webkit-gradient(linear, left, right, from(#999), to(#fff));
     background: -webkit-linear-gradient(#999,#fff);
-    background: -o-linear-gradient(#999,#fff);
+    background: -o-linear-gradient(#999,#fff);*/
 }
 
 
