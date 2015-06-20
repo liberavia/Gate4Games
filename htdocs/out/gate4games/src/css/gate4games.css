@@ -185,7 +185,6 @@ body {
     position:relative;
 /*    background: url(../bg/page_background.png);*/
     background: none;
-    box-shadow: 0 0 15px 2px #fff;
 }
 
 #sidebar .tree a:hover {

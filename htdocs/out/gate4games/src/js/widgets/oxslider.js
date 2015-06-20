@@ -25,7 +25,7 @@
                 width                : 940,
                 height               : 220,
                 autoPlay             : true,
-                delay				 : 6700,
+                delay				 : 4000,
                 animationTime 		 : 500,
                 startStopped		 : false,
                 classPanel           : '.panel',
@@ -58,7 +58,7 @@
                 aNavigationTabs = self.getNavigationTabsArray(el, options.elementLi);
 
                 el.anythingSlider({
-                        width               : options.width,
+                        width               : window.innerWidth,
                         height              : options.height,
                         autoPlay            : options.autoPlay,
                         startStopped        : options.startStopped,
