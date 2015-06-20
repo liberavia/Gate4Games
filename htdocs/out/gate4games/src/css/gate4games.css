@@ -597,3 +597,39 @@ ul.tabs li.fbTab a {
 .tabs li, .thumbNav, #navigation ul li:first-child, #currencies li:first-child a, #languages li:first-child a, .flyoutMenu li:first-child a, .dropDown li:first-child a {
     border-radius: 0px;
 }
+
+.itemSlider {
+    border: 1px solid #5d005d;
+    height: 75px;
+    margin: 0 1px 20px;
+    position: relative;
+    width: 936px;
+}
+
+.itemSlider .slideNav {
+    bottom: -1px;
+    color: #fff;
+    display: block;
+    font-size: 21px;
+    font-weight: 700;
+    height: 75px;
+    line-height: 24px;
+    opacity: 0.9;
+    position: absolute;
+    text-decoration: none;
+    text-shadow: 0 0px 0 #486066;
+    z-index: 4;
+}
+
+.rightShadow, .itemSlider .leftHolder {
+    box-shadow: 0px 0 0px 0px #555555;
+}
+
+.itemSlider .leftHolder {
+    bottom: -1px;
+    height: 75px;
+    left: -1px;
+    position: absolute;
+    width: 0px;
+    z-index: 3;
+}
