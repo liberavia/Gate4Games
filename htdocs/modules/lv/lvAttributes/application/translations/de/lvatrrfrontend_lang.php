@@ -44,6 +44,6 @@ $aLang = array(
     // age
     'LV_ATTR_AGE_PEGI'                                  => 'Altersfreigabe PEGI',
     'LV_ATTR_AGE_USK'                                   => 'Altersfreigabe USK',
-    'LV_GO_DIRECTLY_TO_BEST_OFFER_OF'                   => 'Bester Preis bei',
+    'LV_GO_DIRECTLY_TO_BEST_OFFER_OF'                   => 'bei',
 );
 
