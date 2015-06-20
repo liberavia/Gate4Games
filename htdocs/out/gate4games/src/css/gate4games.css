@@ -350,6 +350,7 @@ label.innerLabel {
 
 .FXgradGreyLight, .sf-menu li ul, #footer #panel, .box ul, .box ol, .box .content, .loginForm, #currencies, #languages, .flyoutMenu, .basketFlyout, div.anythingSlider .arrow, .thumbNav {
     background: #53585F;
+    color: #fff;
 }
 
 .sf-menu li ul {
@@ -704,4 +705,24 @@ ul.tabs li.fbTab a {
     border: solid 1px #5d005d;
     margin: 0px;
     margin-top: 9px;
+}
+
+.dropDown ul a {
+    border-bottom: none;
+    border-top: none;
+    display: block;
+    padding: 3px 5px;
+    text-decoration: none;
+    color: #fff;
+}
+
+.dropDown ul {
+    border: none;
+    display: none;
+    left: -1px;
+    margin: 0;
+    position: absolute;
+    top: -4px;
+    z-index: 20;
+    color: #fff;
 }
