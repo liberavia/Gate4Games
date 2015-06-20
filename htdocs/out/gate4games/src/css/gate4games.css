@@ -348,8 +348,17 @@ label.innerLabel {
 
 
 .FXgradGreyLight, .sf-menu li ul, #footer #panel, .box ul, .box ol, .box .content, .loginForm, #currencies, #languages, .flyoutMenu, .basketFlyout, div.anythingSlider .arrow, .thumbNav {
-    background: rgba(0, 0, 0, 0) linear-gradient(#fff, #d1d8db) repeat scroll 0 0;
+    background: #53585F;
 }
+
+.sf-menu li ul {
+    border-radius: none;
+}
+
+.sf-menu a, .sf-menu a:visited {
+    color: #FFF;
+}
+
 .box .catPicOnly {
     padding: 0;
 }
