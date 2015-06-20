@@ -1,5 +1,5 @@
 <div class="priceBlock">
-    <div>
+    <div class="lvVerticalMiddle">
         [{assign var="aAffiliateDetails" value=$oView->lvGetBestAffiliateDetails()}]
         [{assign var="oAffiliateProduct" value=$aAffiliateDetails.product}]
         [{assign var="oAffiliateVendor" value=$aAffiliateDetails.vendor}]
