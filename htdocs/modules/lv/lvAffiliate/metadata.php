@@ -49,7 +49,8 @@ $aModule = array(
         'account'                                   => 'lv/lvAffiliate/extend/application/controllers/lvaffiliate_account',
         'basket'                                    =>  'lv/lvAffiliate/extend/application/controllers/lvaffiliate_basket',
         // models
-        'oxarticle'                                 =>  'lv/lvAffiliate/extend/application/models/lvaffiliate_oxarticle',
+        'oxarticle'                                 => 'lv/lvAffiliate/extend/application/models/lvaffiliate_oxarticle',
+        'oxarticlelist'                             => 'lv/lvAffiliate/extend/application/models/lvaffiliate_oxarticlelist'
     ),
     'files' => array(
         'lvaffiliate_import'                        => 'lv/lvAffiliate/application/models/lvaffiliate_import.php',

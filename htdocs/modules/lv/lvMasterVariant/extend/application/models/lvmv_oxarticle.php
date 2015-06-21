@@ -183,8 +183,7 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
             $oDb = oxDb::getDb( FETCH_MODE_ASSOC );
             $sArticleTable = getViewName( 'oxarticles' );
             
-            $sQuery = "SELECT OXID, LVMASTERVARIANT FROM ".$sArticleTable." WHERE OXPARENTID='".$sOxid."' AND '".$sLangAbbr."'";
-            
+            $sQuery = "SELECT OXID, LVMASTERVARIANT FROM ".$sArticleTable." WHERE OXPARENTID='".$sOxid."' AND LVLANGABBR='".$sLangAbbr."'";
             $oResult = $oDb->Execute( $sQuery );
             
             if ( $oResult != false && $oResult->recordCount() > 0 ) {
