@@ -4,6 +4,9 @@
         [{assign var="oAffiliateProduct" value=$aAffiliateDetails.product}]
         [{assign var="oAffiliateVendor" value=$aAffiliateDetails.vendor}]
         <a href="[{$oAffiliateProduct->oxarticles__oxexturl->rawValue}]" target="_blank" style="text-decoration:none;">
+            [{if $oAffiliateProduct->getTPrice()}]
+            <span><s>[{$oAffiliateProduct->getTPrice()->getBruttoPrice()}]</s></span>
+            [{/if}]
             <span style="font-size:20px;">[{$smarty.capture.product_price}]</span>
             [{oxmultilang ident="LV_GO_DIRECTLY_TO_BEST_OFFER_OF"}]
             <img width="15" height="15" src="[{$oAffiliateVendor->getIconUrl()}]" title="[{$oAffiliateProduct->oxarticles__oxtitle->value}] [{oxmultilang ident="LVAFFILIATE_AT_VENDOR"}] [{$oAffiliateVendor->getTitle()}]" alt="[{$oAffiliateVendor->getTitle()}]">
