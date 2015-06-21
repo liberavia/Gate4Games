@@ -29,7 +29,7 @@ $aLang = array(
     'LV_TOP_SELLER'                                     => 'Most wanted Games',
     'LV_TOP_SALE'                                       => 'SALE',
     'LV_JUST_ARRIVED'                                   => 'Just arrived',
-    'LVAMZSALESRANK'                                    => 'Most wanted',
+    'LVSALESRANK'                                       => 'Most wanted',
     'LV_OLD_PRICE'                                      => 'old price',
     'LVAFFILIATE_GO_DIRECTLY_TO_BEST_OFFER'             => 'Best offer',
 );

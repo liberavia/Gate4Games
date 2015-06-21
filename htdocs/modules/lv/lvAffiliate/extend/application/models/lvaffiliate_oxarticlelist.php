@@ -41,15 +41,15 @@ class lvaffiliate_oxarticlelist extends lvaffiliate_oxarticlelist_parent {
         // split existing query to implement own stuff in between
         $aSelectParts           = explode( 'ORDER BY', $sSelect );
         $sSelectConditions      = $aSelectParts[0];
-        $sSelectOrdering        = " ORDER BY ".$aSelectParts[0];
+        $sSelectOrdering        = " ORDER BY ".$aSelectParts[1];
         $sArticleTable          = getViewName('oxarticles');
         $oLang                  = oxRegistry::getLang();
         $sLangAbbr              = $oLang->getLanguageAbbr();
 
-        $sAddSelect = " AND LVLANGABBR LIKE '%".$sLangAbbr."%' ";
+        $sAddSelect = " AND ".$sArticleTable.".LVLANGABBR LIKE '%".$sLangAbbr."%' ";
         
         $sNewSelect = $sSelectConditions.$sAddSelect.$sSelectOrdering;
-        
+
         return $sNewSelect;
     }
     

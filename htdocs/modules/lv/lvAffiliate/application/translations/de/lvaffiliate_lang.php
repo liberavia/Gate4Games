@@ -30,7 +30,7 @@ $aLang = array(
     'LV_TOP_SELLER'                                     => 'Top Seller',
     'LV_TOP_SALE'                                       => 'Top Angebote',
     'LV_JUST_ARRIVED'                                   => 'Zuletzt angekommen',
-    'LVAMZSALESRANK'                                    => 'Beliebtheit',
+    'LVSALESRANK'                                       => 'Beliebtheit',
     'LV_OLD_PRICE'                                      => 'statt',
     'LVAFFILIATE_GO_DIRECTLY_TO_BEST_OFFER'             => 'Bestes Angebot',
 );
