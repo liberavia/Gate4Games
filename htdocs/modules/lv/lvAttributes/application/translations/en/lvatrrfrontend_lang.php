@@ -46,5 +46,6 @@ $aLang = array(
     'LV_ATTR_AGE_USK'                                   => 'Recommended Age USK',
     'LV_GO_DIRECTLY_TO_BEST_OFFER_OF'                   => 'Best price at',
     'LV_DIRECTLY_TO_SHOP'                               => 'To Shop',
+    'LV_DETAILS'                                        => 'Details',
 );
 
