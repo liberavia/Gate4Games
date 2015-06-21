@@ -29,5 +29,6 @@ $aLang = array(
     'LV_TOP_SELLER'                                     => 'Most wanted Games',
     'LV_TOP_SALE'                                       => 'SALE',
     'LV_JUST_ARRIVED'                                   => 'Just arrived',
+    'LVAMZSALESRANK'                                    => 'Most wanted',
 );
 
