@@ -101,7 +101,7 @@ class lvaffiliate_calc_salesrank extends oxBase {
                     $iSumRank           = array_sum( $aSalesRank );
                     $iAmountSalesRank   = count( $aSalesRank );
                     
-                    if ( $iAmountSalesRank > 0 ) {
+                    if ( $iAmountSalesRank > 0 && $iSumRank > 0 ) {
                         $iAvgSalesRank = abs( $iSumRank/$iAmountSalesRank ); 
                     }
                     else {

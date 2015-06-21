@@ -83,7 +83,7 @@ class lvaffiliate_fill_toplists extends oxBase {
             $this->_lvEmptyList( $sActionList );
             $sTable = getViewName( 'oxarticles' );
             $sQuery = "
-                SELECT OXPARENTID FROM ".$sTable." WHERE OXPARENTID != '' ORDER BY LVAMZSALESRANK ASC LIMIT ".$this->_iListLimit."
+                SELECT OXPARENTID FROM ".$sTable." WHERE OXPARENTID != '' ORDER BY LVSALESRANK ASC LIMIT ".$this->_iListLimit."
             ";
             
             $oRs = $this->_oLvDb->Execute( $sQuery );
