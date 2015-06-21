@@ -223,11 +223,13 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
         if ( count( $aVariants ) > 0 ) {
             foreach ( $aVariants as $oVariant ) {
                 $oVariantTPrice = $oVariant->getTPrice();
-                $dVariantTPrice = $oVariantTPrice->getBruttoPrice();
+                if ( $oVariantTPrice ) {
+                    $dVariantTPrice = $oVariantTPrice->getBruttoPrice();
 
-                if ( $dVariantTPrice > $dMaxTPrice ) {
-                    $dMaxTPrice = $dVariantTPrice;
-                    $oReturn = $oVariantTPrice;
+                    if ( $dVariantTPrice > $dMaxTPrice ) {
+                        $dMaxTPrice = $dVariantTPrice;
+                        $oReturn = $oVariantTPrice;
+                    }
                 }
             }
         }
