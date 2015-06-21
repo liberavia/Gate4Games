@@ -10,7 +10,7 @@
             [{/if}]
             <br>
             <span style="font-size:20px;">[{$smarty.capture.product_price}]</span>
-            [{oxmultilang ident="LVAFFILIATE_GO_DIRECTLY_TO_BEST_OFFER_OF"}]
+            [{oxmultilang ident="LV_GO_DIRECTLY_TO_BEST_OFFER_OF"}]
             <img width="15" height="15" src="[{$oAffiliateVendor->getIconUrl()}]" title="[{$oAffiliateProduct->oxarticles__oxtitle->value}] [{oxmultilang ident="LVAFFILIATE_AT_VENDOR"}] [{$oAffiliateVendor->getTitle()}]" alt="[{$oAffiliateVendor->getTitle()}]">
         </a>
     </div>
