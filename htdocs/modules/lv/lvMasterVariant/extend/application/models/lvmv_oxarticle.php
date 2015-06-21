@@ -207,4 +207,35 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
         
         return $mReturn;
     }
+    
+    
+    /**
+     * Public getter delivers highest tprice of all variants
+     * 
+     * @param void
+     * @return object
+     */
+    public function lvGetMostExpansiveTPrice() {
+        $dMaxTPrice     = 0;
+        $oReturn        = false;
+        $aVariants      = $this->getVariants();
+        
+        if ( count( $aVariants ) > 0 ) {
+            foreach ( $aVariants as $oVariant ) {
+                $oVariantTPrice = $oVariant->getTPrice();
+                $dVariantTPrice = $oVariantTPrice->getBruttoPrice();
+
+                if ( $dVariantTPrice > $dMaxTPrice ) {
+                    $dMaxTPrice = $dVariantTPrice;
+                    $oReturn = $oVariantTPrice;
+                }
+            }
+        }
+        else {
+            $oReturn = $this->getTPrice();
+        }
+        
+        return $oReturn;
+    }
+    
 }

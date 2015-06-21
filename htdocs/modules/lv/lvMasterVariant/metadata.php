@@ -40,6 +40,8 @@ $aModule = array(
     'url'          => 'http://www.gate4games.com',
     'email'        => 'info@gate4games.com',
     'extend'       => array(
+        // components widgets
+        'oxwarticledetails'                     => 'lv/lvMasterVariant/extend/application/components/widgets/lvmv_oxwarticledetails',
         // controllers admin
         'article_main'                          => 'lv/lvMasterVariant/extend/application/controllers/admin/lvmv_article_main',
         // models
@@ -54,9 +56,9 @@ $aModule = array(
     'blocks' => array(
         array( 'template' => 'article_main.tpl',                            'block'=>'admin_article_main_form',                     'file'=>'extend/application/views/blocks/block_admin_article_main_form.tpl' ),
         array( 'template' => 'page/details/inc/productmain.tpl',            'block'=>'details_productmain_shortdesc',               'file'=>'extend/application/views/blocks/block_details_productmain_shortdesc.tpl' ),
+        array( 'template' => 'page/details/inc/productmain.tpl',            'block'=>'details_productmain_tprice',                  'file'=>'extend/application/views/blocks/block_details_productmain_tprice.tpl' ),        
         array( 'template' => 'widget/product/listitem_infogrid.tpl',        'block'=>'widget_product_listitem_infogrid_price',      'file'=>'extend/application/views/blocks/block_widget_product_listitem_infogrid_price.tpl' ),
         array( 'template' => 'widget/product/listitem_line.tpl',            'block'=>'widget_product_listitem_line_description',    'file'=>'extend/application/views/blocks/block_widget_product_listitem_line_description.tpl' ),
-        
     ),
     'settings' => array(
     )
