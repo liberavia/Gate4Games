@@ -15,16 +15,16 @@
         </a>
     </div>
     <div style="margin-top: 8px;">
+        [{foreach from=$oView->lvGetCompatibilityInformation() item="aCompatibilty"}]
+            <span><img src="[{$aCompatibilty.iconurl}]" title="[{$aCompatibilty.title}]"></span>
+        [{/foreach}]
+    </div>
+    <div style="margin-top: 8px;">
         <a href="[{$oAffiliateProduct->oxarticles__oxexturl->rawValue}]" target="_blank">
             <button class="submitButton largeButton">[{oxmultilang ident="LV_DIRECTLY_TO_SHOP"}]</button>
         </a>
         <a href="[{$_productLink}]">
             <button class="submitButton largeButton">[{oxmultilang ident="LV_DETAILS"}]</button>
         </a>
-    </div>
-    <div style="margin-top: 8px;">
-        [{foreach from=$oView->lvGetCompatibilityInformation() item="aCompatibilty"}]
-            <span><img src="[{$aCompatibilty.iconurl}]" title="[{$aCompatibilty.title}]"></span>
-        [{/foreach}]
     </div>
 </div>
