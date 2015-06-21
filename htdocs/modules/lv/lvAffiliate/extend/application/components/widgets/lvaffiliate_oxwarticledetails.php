@@ -81,4 +81,17 @@ class lvaffiliate_oxwarticledetails extends lvaffiliate_oxwarticledetails_parent
         
         return $aVariantIds;
     }
+    
+    
+    /**
+     * Template getter delivers information for best affiliate offer
+     * 
+     * @param void
+     * @return array
+     */
+    public function lvGetBestAffiliateDetails() {
+        $oProduct = $this->getProduct();
+        
+        return $oProduct->lvGetBestAffiliateDetails();
+    }
 }

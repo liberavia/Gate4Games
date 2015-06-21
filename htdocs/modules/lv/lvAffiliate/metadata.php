@@ -48,6 +48,8 @@ $aModule = array(
         'start'                                     => 'lv/lvAffiliate/extend/application/controllers/lvaffiliate_start',
         'account'                                   => 'lv/lvAffiliate/extend/application/controllers/lvaffiliate_account',
         'basket'                                    =>  'lv/lvAffiliate/extend/application/controllers/lvaffiliate_basket',
+        // models
+        'oxarticle'                                 =>  'lv/lvAffiliate/extend/application/models/lvaffiliate_oxarticle',
     ),
     'files' => array(
         'lvaffiliate_import'                        => 'lv/lvAffiliate/application/models/lvaffiliate_import.php',
@@ -63,6 +65,7 @@ $aModule = array(
         array( 'template' => 'vendor_main.tpl',                             'block'=>'admin_vendor_main_form',                      'file'=>'extend/application/views/blocks/block_admin_vendor_main_form.tpl' ),
         array( 'template' => 'manufacturer_main.tpl',                       'block'=>'admin_manufacturer_main_form',                'file'=>'extend/application/views/blocks/block_admin_manufacturer_main_form.tpl' ),
         array( 'template' => 'page/shop/start.tpl',                         'block'=>'lv_page_shop_start_offers',                   'file'=>'extend/application/views/blocks/block_lv_page_shop_start_offers.tpl' ),
+        array( 'template' => 'page/details/inc/productmain.tpl',            'block'=>'details_productmain_price',                   'file'=>'extend/application/views/blocks/block_details_productmain_price.tpl' ),
     ),
     'settings' => array(
         // group assignments

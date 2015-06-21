@@ -36,55 +36,21 @@ class lvattr_oxwarticlebox extends lvattr_oxwarticlebox_parent {
         return $oArticle->lvGetCompatibilityInformation();
     }
     
-    
     /**
      * Template getter delivers information for best affiliate offer
+     * Needs lvAffiliate module to be activated to deliver results
      * 
      * @param void
      * @return array
      */
     public function lvGetBestAffiliateDetails() {
-        $aBestAffiliateForProduct = array();
-        $sBestPriceId = $this->_lvGetBestPriceVariantId();
+        $oProduct   = $this->getProduct();
+        $aReturn    = false;
         
-        if ( $sBestPriceId ) {
-            $iCurrentLangId = oxRegistry::getLang()->getBaseLanguage();
-            $oArticle = oxNew( 'oxarticle' );
-            $oArticle->loadInLang( $iCurrentLangId, $sBestPriceId );
-
-            if ( $oArticle ) {
-                $aBestAffiliateForProduct['vendor']    = $oArticle->getVendor();
-                $aBestAffiliateForProduct['product']   = $oArticle;
-            }
+        if ( method_exists( $oProduct, 'lvGetBestAffiliateDetails' ) ) {
+            $aReturn = $oProduct->lvGetBestAffiliateDetails();
         }
         
-        return $aBestAffiliateForProduct;
+        return $aReturn;
     }
-    
-    
-    /**
-     * Returns variant ids sorted by best price
-     * 
-     * @param void
-     * @return string
-     */
-    protected function _lvGetBestPriceVariantId() {
-        $sVariantId = '';
-        $sOxid = $this->getProduct()->getId();
-        
-        if ( $sOxid ) {
-            $oDb                = oxDb::getDb( FETCH_MODE_ASSOC );
-            $sArticlesTable     = getViewName( 'oxarticles' );
-            $sQuery = "SELECT OXID FROM ".$sArticlesTable." WHERE OXPARENTID='".$sOxid."' ORDER BY OXPRICE ASC LIMIT 1";
-            
-            $sResult = $oDb->GetOne( $sQuery );
-            if ( $sResult ) {
-                $sVariantId = $sResult;
-            }
-        }
-        
-        return $sVariantId;
-    }
-    
-        
 }
