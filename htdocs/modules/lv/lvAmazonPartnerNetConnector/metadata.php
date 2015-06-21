@@ -65,7 +65,7 @@ $aModule = array(
         ),
         
         // group import
-        array( 'group' => 'lvamzpn_import',         'name' => 'sLvAmzPnVendorId',               'type' => 'str',        'value' => '' ),
+        array( 'group' => 'lvamzpn_import',         'name' => 'aLvAmzPnVendorId',               'type' => 'aarr',       'value' => array() ),
         array( 'group' => 'lvamzpn_import',         'name' => 'sLvAmzPnDefaultCatId',           'type' => 'str',        'value' => '' ),
         array( 'group' => 'lvamzpn_import',         'name' => 'aLvAmzPnBrowseNodes',            'type' => 'aarr',       'value' => array() ),
         array( 'group' => 'lvamzpn_import',         'name' => 'aLvAmzPnPriceRanges',            'type' => 'aarr',       'value' => array() ),

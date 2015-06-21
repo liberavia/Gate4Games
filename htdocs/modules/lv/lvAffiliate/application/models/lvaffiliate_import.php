@@ -287,7 +287,7 @@ class lvaffiliate_import extends oxBase {
         $oUtilsObject   = oxRegistry::get( 'oxUtilsObject' );
         
         foreach ( $this->_aLvField2CategoryAssignment as $sDataFieldName=>$sConfigFieldValue ) {
-            $aTargetTableField  = explode( "|", $sAssignTableField );
+            $aTargetTableField  = explode( "|", $sConfigFieldValue );
             $sTargetTable       = $aTargetTableField[0];
             $sTargetField       = $aTargetTableField[1];
             $blIsSale           = (bool)$aTargetTableField[2];

@@ -35,7 +35,7 @@ $aLang = array(
     'SHOP_MODULE_sLvAmzPnAWSSecretKey'                  => 'AWS Secret Key',
     'SHOP_MODULE_aLvAmzPnAWSService2Lang'               => 'Zuordnung Sprackkürzel zu Amazon Webservice',
     // group import
-    'SHOP_MODULE_sLvAmzPnVendorId'                      => 'Zuzuordnende Lieferanten ID',
+    'SHOP_MODULE_aLvAmzPnVendorId'                      => 'Zuordnung Sprachkürzel zu zuzuordnende Lieferanten ID',
     'SHOP_MODULE_sLvAmzPnDefaultCatId'                  => 'Standardkategorie der Produkte zugeordnet werden, wenn das Mapping fehlschlägt',
     'SHOP_MODULE_aLvAmzPnBrowseNodes'                   => 'Zuordnung Sprachkürzel zu Amazon Browse-Nodes aus denen Produkte importiert werden sollen',
     'SHOP_MODULE_aLvAmzPnPriceRanges'                   => 'Zuordnung Sprachkürzel zu Preisbereichen (in Cent), nach denen in den einzelnen Browse-Nodes gefiltert werden soll',

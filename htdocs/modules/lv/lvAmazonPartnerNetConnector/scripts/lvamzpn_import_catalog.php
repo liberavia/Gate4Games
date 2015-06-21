@@ -41,14 +41,13 @@ class lvamzpn_import_catalog extends oxBase {
         $oConfig                    = $this->getConfig();
         $oApiConnector              = oxNew( 'lvamzpnapiconnector' );
         $oAffiliateImport           = oxNew( 'lvaffiliate_import' );
-        $sVendorId                  = $oConfig->getConfigParam( 'sLvAmzPnVendorId' );
+        $aVendorIds                 = $oConfig->getConfigParam( 'aLvAmzPnVendorId' );
         $aLvAmzPnAWSService2Lang    = $oConfig->getConfigParam( 'aLvAmzPnAWSService2Lang' );
         $aLvAmzPnBrowseNodes        = $oConfig->getConfigParam( 'aLvAmzPnBrowseNodes' );
         $aLvAmzPnPriceRanges        = $oConfig->getConfigParam( 'aLvAmzPnPriceRanges' );
         $iMaxPageResult             = $oApiConnector->lvGetMaxPageResult();
         
         
-        $oAffiliateImport->lvSetVendorId( $sVendorId );
         
         foreach ( $aLvAmzPnAWSService2Lang as $sLangAbbr=>$sAmazonService ) {
             $sBrowseNodes                   = $aLvAmzPnBrowseNodes[$sLangAbbr];
@@ -59,6 +58,8 @@ class lvamzpn_import_catalog extends oxBase {
             
             $iMaxBrowseNodeIndex            = count( $aBrowseNodes )-1;
             $iMaxPriceRangeIndex            = count( $aPriceRanges )-1;
+            
+            $oAffiliateImport->lvSetVendorId( $aVendorIds[$sLangAbbr] );
             
             // now that we know max indexes we can iterate through them
             for( $iBrowseNodeIndex=0; $iBrowseNodeIndex <= $iMaxBrowseNodeIndex; $iBrowseNodeIndex++ ) {

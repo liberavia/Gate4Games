@@ -35,7 +35,7 @@ $aLang = array(
     'SHOP_MODULE_sLvAmzPnAWSSecretKey'                  => 'AWS Secret Key',
     'SHOP_MODULE_aLvAmzPnAWSService2Lang'               => 'Assign language abbreviation to belonging Amazon service',
     // group import
-    'SHOP_MODULE_sLvAmzPnVendorId'                      => 'Assigning to Vendor ID',
+    'SHOP_MODULE_sLvAmzPnVendorId'                      => 'Assign language abbreviation to Vendor ID',
     'SHOP_MODULE_sLvAmzPnDefaultCatId'                  => 'Default category if mapping fails',
     'SHOP_MODULE_aLvAmzPnBrowseNodes'                   => 'Assign language abbreviation to Amazon Browse-Nodes from which products will be imported',
     'SHOP_MODULE_aLvAmzPnPriceRanges'                   => 'Assign language abbreviation to price ranges (in Cent) where single browse nodes will be filtered to',
