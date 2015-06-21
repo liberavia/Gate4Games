@@ -1,3 +1,4 @@
+[{assign var="currency" value=$oView->getActCurrency()}]
 <div class="priceBlock">
     <div class="lvVerticalMiddle lvPrice">
         [{assign var="aAffiliateDetails" value=$oView->lvGetBestAffiliateDetails()}]
@@ -5,9 +6,9 @@
         [{assign var="oAffiliateVendor" value=$aAffiliateDetails.vendor}]
         <a href="[{$oAffiliateProduct->oxarticles__oxexturl->rawValue}]" target="_blank" style="text-decoration:none;">
             [{if $oAffiliateProduct->getTPrice()}]
-                [{assign var="oTPrice" value=$oAffiliateProduct->getTPrice()}]
-                <span>[{oxmultilang ident="LV_OLD_PRICE"}] <s>[{$oTPrice->getBruttoPrice()|replace:".":","}]</s></span><br>
+                <span>[{oxmultilang ident="LV_OLD_PRICE"}] <s>{oxprice price=$oAffiliateProduct->getTPrice() currency=$currency}]</s></span>
             [{/if}]
+            <br>
             <span style="font-size:20px;">[{$smarty.capture.product_price}]</span>
             [{oxmultilang ident="LV_GO_DIRECTLY_TO_BEST_OFFER_OF"}]
             <img width="15" height="15" src="[{$oAffiliateVendor->getIconUrl()}]" title="[{$oAffiliateProduct->oxarticles__oxtitle->value}] [{oxmultilang ident="LVAFFILIATE_AT_VENDOR"}] [{$oAffiliateVendor->getTitle()}]" alt="[{$oAffiliateVendor->getTitle()}]">
