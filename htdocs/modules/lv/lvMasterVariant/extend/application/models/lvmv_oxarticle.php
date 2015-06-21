@@ -176,12 +176,14 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
         $mReturn = false;
         
         if ( $this->oxarticles__oxparentid == '' ) {
-            $sOxid = $this->getId();
+            $sOxid      = $this->getId();
+            $oLang      = oxRegistry::getLang();
+            $sLangAbbr  = $oLang->getLanguageAbbr();
             
             $oDb = oxDb::getDb( FETCH_MODE_ASSOC );
             $sArticleTable = getViewName( 'oxarticles' );
             
-            $sQuery = "SELECT OXID, LVMASTERVARIANT FROM ".$sArticleTable." WHERE OXPARENTID='".$sOxid."'";
+            $sQuery = "SELECT OXID, LVMASTERVARIANT FROM ".$sArticleTable." WHERE OXPARENTID='".$sOxid."' AND '".$sLangAbbr."'";
             
             $oResult = $oDb->Execute( $sQuery );
             

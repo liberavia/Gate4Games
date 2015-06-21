@@ -64,7 +64,7 @@ class lvmv_article_main extends lvmv_article_main_parent {
             if ( $oParent ) {
                 $sParentId  = $oParent->getId();
                 $oDb        = oxDb::getDb();
-                $sQuery = "UPDATE oxarticles SET LVMASTERVARIANT='0' WHERE OXPARENTID='".$sParentId."'";
+                $sQuery = "UPDATE oxarticles SET LVMASTERVARIANT='0' WHERE OXPARENTID='".$sParentId."' AND LVLANGABBR='".$oArticle->oxarticles__lvlangabbr->value."'";
                 $oDb->Execute( $sQuery );
             }
         }
