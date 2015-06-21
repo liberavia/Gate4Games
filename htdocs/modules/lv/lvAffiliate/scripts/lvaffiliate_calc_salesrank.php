@@ -145,3 +145,7 @@ class lvaffiliate_calc_salesrank extends oxBase {
     }
     
 }
+
+
+$oScript = new lvaffiliate_calc_salesrank();
+$oScript->start();
