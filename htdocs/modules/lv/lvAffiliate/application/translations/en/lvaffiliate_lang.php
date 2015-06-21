@@ -30,5 +30,6 @@ $aLang = array(
     'LV_TOP_SALE'                                       => 'SALE',
     'LV_JUST_ARRIVED'                                   => 'Just arrived',
     'LVAMZSALESRANK'                                    => 'Most wanted',
+    'LV_OLD_PRICE'                                      => 'old price',
 );
 

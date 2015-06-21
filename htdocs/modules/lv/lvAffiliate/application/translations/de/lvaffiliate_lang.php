@@ -31,5 +31,6 @@ $aLang = array(
     'LV_TOP_SALE'                                       => 'Top Angebote',
     'LV_JUST_ARRIVED'                                   => 'Zuletzt angekommen',
     'LVAMZSALESRANK'                                    => 'Beliebtheit',
+    'LV_OLD_PRICE'                                      => 'statt',
 );
 
