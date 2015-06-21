@@ -6,7 +6,7 @@
         <a href="[{$oAffiliateProduct->oxarticles__oxexturl->rawValue}]" target="_blank" style="text-decoration:none;">
             [{if $oAffiliateProduct->getTPrice()}]
                 [{assign var="oTPrice" value=$oAffiliateProduct->getTPrice()}]
-                <span>[{oxmultilang ident="LV_OLD_PRICE"}] <s>[{$oTPrice->getBruttoPrice()|replace:".":","}]</s></span>
+                <span>[{oxmultilang ident="LV_OLD_PRICE"}] <s>[{$oTPrice->getBruttoPrice()|replace:".":","}]</s></span><br>
             [{/if}]
             <span style="font-size:20px;">[{$smarty.capture.product_price}]</span>
             [{oxmultilang ident="LV_GO_DIRECTLY_TO_BEST_OFFER_OF"}]
