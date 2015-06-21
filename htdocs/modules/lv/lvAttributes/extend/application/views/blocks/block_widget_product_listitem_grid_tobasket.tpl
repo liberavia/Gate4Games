@@ -9,7 +9,7 @@
             <img width="15" height="15" src="[{$oAffiliateVendor->getIconUrl()}]" title="[{$oAffiliateProduct->oxarticles__oxtitle->value}] [{oxmultilang ident="LVAFFILIATE_AT_VENDOR"}] [{$oAffiliateVendor->getTitle()}]" alt="[{$oAffiliateVendor->getTitle()}]">
         </a>
     </div>
-    <div style="margin-top: 4px;">
+    <div style="margin-top: 8px;">
         <a href="[{$oAffiliateProduct->oxarticles__oxexturl->rawValue}]" target="_blank">
             <button class="submitButton largeButton">[{oxmultilang ident="LV_DIRECTLY_TO_SHOP"}]</button>
         </a>
@@ -17,7 +17,7 @@
             <button class="submitButton largeButton">[{oxmultilang ident="LV_DETAILS"}]</button>
         </a>
     </div>
-    <div style="margin-top: 4px;">
+    <div style="margin-top: 8px;">
         [{foreach from=$oView->lvGetCompatibilityInformation() item="aCompatibilty"}]
             <span><img src="[{$aCompatibilty.iconurl}]" title="[{$aCompatibilty.title}]"></span>
         [{/foreach}]
