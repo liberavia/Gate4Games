@@ -538,7 +538,7 @@ ul.tabs li.fbTab a {
     position: absolute;
     right: 10px;
     text-transform: uppercase;
-    top: 0px;
+    top: 10px;
 }
 
 #header {
