@@ -744,3 +744,17 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 .lvPrice {
     height: 40px;
 }
+
+.itemSlider .nextItem {
+    box-shadow: 0px 0 0px 0px #555555;
+}
+
+.slideBg {
+    background: none !important;
+}
+
+.arrow {
+    background: none !important;
+    border: none !important;
+    box-shadow: 0px 0 0px 0px #555555 !important;
+}
