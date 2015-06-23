@@ -58,15 +58,24 @@ class lvpegi extends oxBase {
         $this->_oLvConfig   = $this->getConfig();
         $this->_oLvDb       = oxDb::getDb( MODE_FETCH_ASSOC );
     }
+
     
     /**
-     * Trigger for importing latest game information from confuigured values
+     * Loggs a message depending on the defined loglevel. Default is debug-level
      * 
-     * @param void
+     * @param string $sMessage
+     * @param int $iLogLevel
      * @return void
      */
-    public function lvImportNew() {
+    public function lvLog( $sMessage, $iLogLevel=4 ) {
+        $oUtils = oxRegistry::getUtils();
         
+        if ( $iLogLevel <= $this->_iLvAmzPnLogLevel ) {
+            $sPrefix        = "[".date( 'Y-m-d H:i:s' )."] ";
+            $sFullMessage   = $sPrefix.$sMessage."\n";
+            
+            $oUtils->writeToLog( $sFullMessage, $this->_sLogFile );
+        }
     }
     
     
@@ -98,8 +107,155 @@ class lvpegi extends oxBase {
         
         $this->_lvAssignProducts2Pegi();
     }
-    
 
+    
+    /**
+     * Trigger for importing latest game information from confuigured values
+     * 
+     * @param void
+     * @return void
+     */
+    public function lvImportNew() {
+        $iLvPegiRequestPastMonths   = (int)$this->_oLvConfig->getConfigParam( 'sLvPegiRequestPastMonths' );
+        
+        $aRequestUris = array(
+            'monthly/latest.xml',
+        );
+        
+        $iCurrentMonth = date( 'n' );
+        $iMaxPastMonth = $iCurrentMonth-$iLvPegiRequestPastMonths-1;
+        
+        for ( $iProcessMonth = $iCurrentMonth-1; $iProcessMonth > $iMaxPastMonthm; $iProcessMonth-- ) {
+            $sProcessMonth = str_pad( $iProcessMonth, 2,'0', STR_PAD_LEFT );
+            $aRequestUris[] = 'monthly/'.$sProcessMonth.".xml";
+        }
+
+        $this->_lvPerformRequests( $aRequestUris );
+    }
+    
+    
+    /**
+     * Performs requests on PEGI export xmls
+     * 
+     * @param array $aRequestUris
+     * @return void
+     */
+    protected function _lvPerformRequests( $aRequestUris ) {
+        $sLvPegiRequestBase = $this->_oLvConfig->getConfigParam( 'sLvPegiRequestBase' );
+        
+        foreach ( $aRequestUris as $sRequestUri ) {
+            $sRequestUrl = $sLvPegiRequestBase.$sRequestUri;
+            
+            $oResponse = $this->_lvGetRequestResult( $sRequestUrl );
+            if ( $oResponse ) {
+                $this->_lvHandleResponse( $oResponse );
+            }
+        }
+    }
+    
+    
+    /**
+     * Handles XML response
+     * 
+     * @param simplexml $oRespone
+     * @return void
+     */
+    protected function _lvHandleResponse( $oRespone ) {
+        foreach ( $oRespone->item as $oItem ) {
+            $sUrn           = (string)$oItem->urn;
+            $sTitle         = trim( (string)$oItem->title );
+            $sAgeCategory   = (string)$oItem->ageCategory;
+            $sPlatform      = (string)$oItem->platform;
+
+            if ( strtoupper( trim( $sPlatform ) ) == 'PC' ) {
+                $blTitleExists = $this->_lvCheckTitleExists( $sTitle );
+                if ( !$blTitleExists ) {
+                    $aData = array(
+                        'urn'           =>$sUrn,
+                        'title'         =>$sTitle,
+                        'ageCategory'   =>$sAgeCategory,
+                        'platform'      =>$sPlatform,
+                    );
+                    
+                    $this->_lvImportNewData( $aData );
+                }
+            }
+        }
+    }
+    
+    
+    /**
+     * Adds xml fetched data into pegi table
+     * 
+     * @param array $aData
+     * @return void
+     */
+    protected function _lvImportNewData( $aData ) {
+            $oUtilsObject   = oxRegistry::get( 'oxUtilsObject' );
+            $sNewId         = $oUtilsObject->generateUId();
+
+            $sQuery = "
+                INSERT INTO ".$this->_sLvPegiTable."
+                (
+                    OXID,
+                    OXOBJECTID,
+                    LVURN,
+                    LVGAMETITLE,
+                    LVPLATFORM,
+                    LVBASEAGECATEGORY
+                )
+                VALUES
+                (
+                    '".$sNewId."',
+                    '',
+                    '".$aData['urn']."',
+                    ".$this->_oLvDb->quote( $aData['title'] ).",
+                    '".$aData['platform']."',
+                    '".$aData['ageCategory']."'
+                )
+            ";
+
+            $this->_oLvDb->Execute( $sQuery );
+    }
+
+
+    /**
+     * Performs the REST Request  and returns simplexml object
+     * 
+     * @param string $sRequestUrl
+     * @return object
+     */
+    protected function _lvGetRequestResult( $sRequestUrl ) {
+        $resCurl = curl_init();
+        
+        // configuration
+        curl_setopt_array( 
+            $resCurl, 
+            array(
+                CURLOPT_RETURNTRANSFER => 1,
+                CURLOPT_URL => $sRequestUrl,
+            )
+        );
+
+        $sXmlResponse = false;
+        try {
+            $sXmlResponse = curl_exec( $resCurl );
+        } 
+        catch ( Exception $e ) {
+            $this->lvLog( 'ERROR: Requesting signed url '.$sRequestUrl.'ended up with the following error:'.$e->getMessage(), 1 );
+        }
+        curl_close( $resCurl );
+        
+        // process xml with simplexml
+        $oResponse = null;
+        if ( $sXmlResponse ) {
+            $oResonse = new SimpleXMLElement( $sXmlResponse );
+        }
+        
+        return $oResonse;
+    }
+
+    
     /**
      * Assigning data to existing products
      * 
