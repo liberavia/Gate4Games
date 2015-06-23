@@ -74,7 +74,7 @@ class lvpegi extends oxBase {
         if ( file_exists( $sImportPath ) ) {
             $resCsvFile = fopen( $sImportPath, 'r' );
             
-            while ( $aData = fgets( $resCsvFile, 1000, ';' ) != false ) {
+            while ( $aData = fgetcsv( $resCsvFile, 1000, ';' ) != false ) {
                 $this->_lvImportInitData( $aData );
             }
         }
