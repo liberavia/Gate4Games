@@ -1,5 +1,5 @@
+#!/usr/bin/php
 <?php
-
 /*
  * Copyright (C) 2015 André Gregor-Herrmann
  *
