@@ -121,7 +121,7 @@ class lvpegi extends oxBase {
                 
                 if ( count($aObjectIds) > 0 ) {
                     $sAssignObjectId = $aObjectIds[0];
-                    $sQuery = "UPDATE ".$this->_sLvPegiTable." SET OXOBJECTID='".$sAssignObjectId."' WHERE LVGAMETITLE='".$sLvGameTitle."'";
+                    $sQuery = "UPDATE ".$this->_sLvPegiTable." SET OXOBJECTID='".$sAssignObjectId."' WHERE LVGAMETITLE=".$this->_oLvDb->quote( $sLvGameTitle )."";
                     $oRsUpdate = $this->_oLvDb->Execute( $sQuery );
                     
                     // assign attributes
@@ -205,8 +205,8 @@ class lvpegi extends oxBase {
         $aIds = array();
         $sArticleTable = getViewName( 'oxarticles' );
         
-        $sQuery = "SELECT OXID FROM ".$sArticleTable." WHERE OXPARENTID!='' AND LVMASTERARIANT='1' OXTITLE=".$this->_oLvDb->quote( $sLvGameTitle )."";
-        
+        $sQuery = "SELECT OXID FROM ".$sArticleTable." WHERE OXPARENTID!='' AND LVMASTERVARIANT='1' AND OXTITLE=".$this->_oLvDb->quote( $sLvGameTitle )."";
+
         $oRs = $this->_oLvDb->Execute( $sQuery );
         
         if ( $oRs != false && $oRs->recordCount() > 0 ) {
