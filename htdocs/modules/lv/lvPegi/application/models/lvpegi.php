@@ -60,6 +60,17 @@ class lvpegi extends oxBase {
     }
     
     /**
+     * Trigger for importing latest game information from confuigured values
+     * 
+     * @param void
+     * @return void
+     */
+    public function lvImportNew() {
+        
+    }
+    
+    
+    /**
      * Trigger to start importing initial csv file from configured path
      * 
      * @param void
@@ -70,25 +81,143 @@ class lvpegi extends oxBase {
         $sImportFolder  = $this->_oLvConfig->getConfigParam( 'sLvPegiInitImportFolder' );
         
         $sImportPath = getShopBasePath().$sImportFolder.$sImportFile;
-        
         if ( file_exists( $sImportPath ) ) {
             $resCsvFile = fopen( $sImportPath, 'r' );
             
-            while ( $aData = fgetcsv( $resCsvFile, 1000, ';' ) != false ) {
+            $iIndex = 0;
+            while ( ( $aData = fgetcsv( $resCsvFile, 1000, ';' ) ) != false ) {
+                if ( $iIndex == 0 ) {
+                    $iIndex++;
+                    continue;
+                }
                 $this->_lvImportInitData( $aData );
+                $iIndex++;
+            }
+            fclose( $resCsvFile );
+        }
+        
+        $this->_lvAssignProducts2Pegi();
+    }
+    
+
+    /**
+     * Assigning data to existing products
+     * 
+     * @param void
+     * @return void
+     */
+    protected function _lvAssignProducts2Pegi() {
+        $sQuery = "SELECT OXID, LVGAMETITLE, LVBASEAGECATEGORY FROM lvpegi WHERE OXOBJECTID=''";
+        
+        $oRs = $this->_oLvDb->Execute( $sQuery );
+        
+        if ( $oRs != false && $oRs->recordCount() > 0 ) {
+            while ( !$oRs->EOF ) {
+                $sOxid = $oRs->fields['OXID'];
+                $sLvGameTitle = trim( $oRs->fields['LVGAMETITLE'] );
+                $iLvBaseAgeCategory = (int)trim( $oRs->fields['LVBASEAGECATEGORY'] );
+                
+                $aObjectIds = $this->_lvFetchArticleIdsByTitle( $sLvGameTitle );
+                
+                if ( count($aObjectIds) > 0 ) {
+                    $sAssignObjectId = $aObjectIds[0];
+                    $sQuery = "UPDATE ".$this->_sLvPegiTable." SET OXOBJECTID='".$sAssignObjectId."' WHERE LVGAMETITLE='".$sLvGameTitle."'";
+                    $oRsUpdate = $this->_oLvDb->Execute( $sQuery );
+                    
+                    // assign attributes
+                    $sAttributeId = $this->_oLvConfig->getConfigParam( 'sLvPegiAttributeId' );
+                    foreach ( $aObjectIds as $sOxid ) {
+                        
+                        $blAssignmentExists = $this->_lvCheckAttributeAssignmentExists( $sOxid, $sAttributeId );
+                        
+                        if ( !$blAssignmentExists ) {
+                            $oUtilsObject           = oxRegistry::get( 'oxUtilsObject' );
+                            $sNewId                 = $oUtilsObject->generateUId();
+                            
+                            $sQuery = "
+                                INSERT INTO oxobject2attribute
+                                (
+                                    OXID,
+                                    OXOBJECTID,
+                                    OXATTRID,
+                                    OXPOS,
+                                    OXVALUE,
+                                    OXVALUE_1,
+                                    OXVALUE_2,
+                                    OXVALUE_3
+                                )
+                                VALUES
+                                (
+                                    '".$sNewId."',
+                                    '".$sOxid."',
+                                    '".$sAttributeId."',
+                                    '9999',
+                                    '".(string)$iLvBaseAgeCategory."',
+                                    '".(string)$iLvBaseAgeCategory."',
+                                    '".(string)$iLvBaseAgeCategory."',
+                                    '".(string)$iLvBaseAgeCategory."'
+                                )
+                            ";
+                            
+                            $this->_oLvDb->Execute( $sQuery );
+                        }
+                    }
+                }
+                
+                
+                $oRs->moveNext();
             }
         }
     }
     
     
     /**
-     * Trigger for importing latest game information from confuigured values
+     * Checks if attribute assignment already exists
      * 
-     * @param void
-     * @return void
+     * @param string $sOxid
+     * @param string $sAttributeId
+     * @return bool
      */
-    public function lvImportNew() {
+    protected function _lvCheckAttributeAssignmentExists( $sOxid, $sAttributeId ) {
+        $sObject2AttributeTable = getViewName( 'oxobject2attribute' );
+        $sQuery = "SELECT OXID FROM ".$sObject2AttributeTable." WHERE OXOBJECTID='".$sOxid."' AND OXATTRID='".$sAttributeId."'";
         
+        $oRs = $this->_oLvDb->Execute( $sQuery );
+        
+        if ( $oRs != false && $oRs->recordCount() > 0 ) {
+            $blReturn = true;
+        }
+        else {
+            $blReturn = false;
+        }
+        
+        return $blReturn;
+    }
+    
+    
+    /**
+     * Checks product for title already exists and returns its list of oxids
+     * 
+     * @param string $sLvGameTitle
+     * @return array
+     */
+    protected function _lvFetchArticleIdsByTitle( $sLvGameTitle ) {
+        $aIds = array();
+        $sArticleTable = getViewName( 'oxarticles' );
+        
+        $sQuery = "SELECT OXID FROM ".$sArticleTable." WHERE OXPARENTID!='' AND LVMASTERARIANT='1' OXTITLE=".$this->_oLvDb->quote( $sLvGameTitle )."";
+        
+        $oRs = $this->_oLvDb->Execute( $sQuery );
+        
+        if ( $oRs != false && $oRs->recordCount() > 0 ) {
+            while ( !$oRs->EOF ) {
+                $sOxid = $oRs->fields['OXID'];
+                $aIds[] = $sOxid;
+                $oRs->moveNext();
+            }
+        }
+        
+        return $aIds;
     }
     
     
@@ -149,7 +278,7 @@ class lvpegi extends oxBase {
                             '".$sNewId."',
                             '',
                             '',
-                            '".$sLvGameTitle."',
+                            ".$this->_oLvDb->quote($sLvGameTitle).",
                             '".$sLvReleaseDate."',
                             '".$sLvWebAddress."',
                             '".$sLvPlatform."',
@@ -181,7 +310,7 @@ class lvpegi extends oxBase {
      * @return boolean
      */
     protected function _lvCheckTitleExists( $sLvGameTitle ) {
-        $sQuery = "SELECT OXID FROM ".$this->_sLvPegiTable." WHERE LVGAMETITLE='".$sLvGameTitle."' LIMIT 1";
+        $sQuery = "SELECT OXID FROM ".$this->_sLvPegiTable." WHERE LVGAMETITLE=".$this->_oLvDb->quote($sLvGameTitle)." LIMIT 1";
         $sDbGameTitle = $this->_oLvDb->GetOne( $sQuery );
         
         if ( $sDbGameTitle ) {
