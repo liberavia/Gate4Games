@@ -442,7 +442,7 @@ ul.tabs li {
     color: #515353;
     height: 15px;
     text-transform: uppercase;
-    text-shadow: 0 1px 1px #fff;
+    text-shadow: 0 0px 0px #fff;
 }
 
 ul.tabs li.ui-state-active {
@@ -513,7 +513,7 @@ ul.tabs li.fbTab a {
     line-height: 18px;
     overflow: visible;
     padding: 0 10px 1px;
-/*    text-shadow: 0 -1px 0 #000;*/
+    text-shadow: 0 0px 0 #000;
     text-transform: uppercase;
     width: auto;
 /*    box-shadow: 0 0 15px 2px #5d005d;*/
