@@ -117,20 +117,27 @@ class lvpegi extends oxBase {
      */
     public function lvImportNew() {
         $iLvPegiRequestPastMonths   = (int)$this->_oLvConfig->getConfigParam( 'sLvPegiRequestPastMonths' );
+        $iCurrentMonth              = date( 'n' );
+        $sCurrentYear               = date( 'Y' );
+        $iMaxPastMonth              = $iCurrentMonth-$iLvPegiRequestPastMonths-1;
         
         $aRequestUris = array(
-            'monthly/latest.xml',
+            $sCurrentYear.'/monthly/latest.xml',
         );
         
-        $iCurrentMonth = date( 'n' );
-        $iMaxPastMonth = $iCurrentMonth-$iLvPegiRequestPastMonths-1;
         
-        for ( $iProcessMonth = $iCurrentMonth-1; $iProcessMonth > $iMaxPastMonthm; $iProcessMonth-- ) {
-            $sProcessMonth = str_pad( $iProcessMonth, 2,'0', STR_PAD_LEFT );
-            $aRequestUris[] = 'monthly/'.$sProcessMonth.".xml";
+        if ( $iMaxPastMonth <= 0 ) {
+            $iMaxPastMonth= 1;
         }
 
+
+        for ( $iProcessMonth = $iCurrentMonth-1; $iProcessMonth > $iMaxPastMonth; $iProcessMonth-- ) {
+            $sProcessMonth = str_pad( $iProcessMonth, 2,'0', STR_PAD_LEFT );
+            $aRequestUris[] = $sCurrentYear.'/monthly/'.$sProcessMonth.".xml";
+        }
+        
         $this->_lvPerformRequests( $aRequestUris );
+        $this->_lvAssignProducts2Pegi();
     }
     
     
@@ -145,7 +152,6 @@ class lvpegi extends oxBase {
         
         foreach ( $aRequestUris as $sRequestUri ) {
             $sRequestUrl = $sLvPegiRequestBase.$sRequestUri;
-            
             $oResponse = $this->_lvGetRequestResult( $sRequestUrl );
             if ( $oResponse ) {
                 $this->_lvHandleResponse( $oResponse );
@@ -176,7 +182,6 @@ class lvpegi extends oxBase {
                         'ageCategory'   =>$sAgeCategory,
                         'platform'      =>$sPlatform,
                     );
-                    
                     $this->_lvImportNewData( $aData );
                 }
             }
@@ -214,7 +219,7 @@ class lvpegi extends oxBase {
                     '".$aData['ageCategory']."'
                 )
             ";
-
+            
             $this->_oLvDb->Execute( $sQuery );
     }
 
