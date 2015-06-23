@@ -36,6 +36,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     overflow: hidden;
 }
 
+a:hover {
+    text-decoration: none;
+}
 
 
 /******/
@@ -119,6 +122,8 @@ div.anythingSlider .arrow,
 
 .submitButton:hover {
     background: #C800C8;
+    cursor:pointer;
+    text-shadow: 0 0px 0 #aa6826;
 /*    background: -moz-linear-gradient(#000, #C800C8);
     background: -ms-linear-gradient(#000, #C800C8);
     background: -webkit-gradient(linear, left top, left bottom, from(#000), to(#C800C8));
@@ -211,8 +216,8 @@ body {
 .itemSlider a.sliderHover,
 a.sliderHover {
     background: none;
-    opacity: 0.5;
-    filter: alpha(opacity =60);
+    opacity: 1.0;
+    filter: alpha(opacity =100);
     width: 124px;
     height: 75px;
     display: block;
