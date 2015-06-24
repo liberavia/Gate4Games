@@ -51,7 +51,7 @@ $aModule = array(
     'blocks' => array(
     ),
     'settings' => array(
-        array( 'group' => 'lvwinehqmain',       'name' => 'sLvWineHqListRequestBase',               'type' => 'str',       'value' => 'https://appdb.winehq.org/objectManager.php?sappCategoryData0=2&iappCategoryOp0=11&iItemsPerPage=200&sClass=application&iPage=1&iappVersion-ratingOp0=5&sappVersion-ratingData0=' ),
+        array( 'group' => 'lvwinehqmain',       'name' => 'sLvWineHqListRequestBase',               'type' => 'str',       'value' => 'https://appdb.winehq.org/objectManager.php?sappCategoryData0=2&iappCategoryOp0=11&iItemsPerPage=200&sClass=application&iappVersion-ratingOp0=5&sappVersion-ratingData0=' ),
         array( 
             'group'     => 'lvwinehqmain',       
             'name'      => 'aLvWineHqRatings',                   
