@@ -39,6 +39,7 @@ class lvwinehq_update extends oxBase {
         
         if ( is_object( $oLvWineHq ) && method_exists( $oLvWineHq, 'lvFillLists' ) ) {
             $oLvWineHq->lvFillLists();
+            $oLvWineHq->_lvUpdateProductAttributes();
         }
     }
 }

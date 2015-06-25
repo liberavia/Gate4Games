@@ -63,6 +63,7 @@ $aModule = array(
             ), 
         ),
         array( 'group' => 'lvwinehqmain',       'name' => 'sLvWineHqDetailsLinkBase',               'type' => 'str',        'value' => 'https://appdb.winehq.org/objectManager.php?sClass=application&iId=' ),
+        array( 'group' => 'lvwinehqmain',       'name' => 'sLvWineRatingAttribute',                 'type' => 'str',        'value' => 'CompatibilityWine' ),
     )
 );
  

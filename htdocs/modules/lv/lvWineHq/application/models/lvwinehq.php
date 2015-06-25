@@ -109,6 +109,174 @@ class lvwinehq extends oxBase {
     
     
     /**
+     * Update product attributes with wine information
+     * 
+     * @param void
+     * @return void
+     */
+    public function _lvUpdateProductAttributes() {
+        $sQuery = "SELECT OXID LVAPPID, LVTITLE, LVRATING FROM ".$this->_sLvWineHqTable;
+        
+        $oRs = $this->_oLvDb->execute( $sQuery );
+        
+        if ( $oRs != false && $oRs->recordCount() > 0 ) {
+            while ( !$oRs->EOF ) {
+                $sOxid      = $oRs->fields['OXID'];
+                $sLvAppId   = $oRs->fields['LVAPPID'];
+                $sLvTitle   = $oRs->fields['LVRATING'];
+                $sLvRating  = $oRs->fields['LVRATING'];
+                
+                $aArticleIds = $this->_lvGetArticleIdsByName( $sLvTitle );
+                
+                if ( count( $aArticleIds ) > 0 ) {
+                    foreach ( $aArticleIds as $sArticleId ) {
+                        $this->_lvAssignRating( $sArticleId, $sLvAppId, $sLvRating, $sLvTitle );
+                    }
+                }
+                
+                $oRs->moveNext();
+            }
+        }
+    }
+    
+    
+    
+    /**
+     * Assigns rating and link to certain article
+     * 
+     * @param string $sArticleId
+     * @param string $sAppId
+     * @param string $sRating
+     * @param string $sTitle
+     * @return void
+     */
+    protected function _lvAssignRating( $sArticleId, $sAppId, $sRating, $sTitle ) {
+        $sLvWineRatingAttribute = $this->_oLvConfig->getConfigParam( 'sLvWineRatingAttribute' );
+        $sAssignmentId          = $this->_lvGetExistingAssignmentId( $sArticleId, $sLvWineRatingAttribute );
+        $sHtmlWineHqDetailsLink = $this->_lvGetHtmlWineHqDetailsLink( $sAppId, $sTitle );
+        
+        if ( $sAssignmentId ) {
+            $sQuery = "
+                UPDATE oxobject2attribute
+                SET 
+                    OXVALUE='".$sRating."', 
+                    LVDESC='".$sHtmlWineHqDetailsLink."', 
+                    LVDESC_1='".$sHtmlWineHqDetailsLink."', 
+                    LVDESC_2='".$sHtmlWineHqDetailsLink."', 
+                    LVDESC_3='".$sHtmlWineHqDetailsLink."'
+                WHERE 
+                    OXID='".$sAssignmentId."'
+                LIMIT 1
+            ";
+        }
+        else {
+            $oUtilsObject   = oxRegistry::get( 'oxUtilsObject' );
+            $sNewId         = $oUtilsObject->generateUId();
+            
+            $sQuery = "
+                INSERT INTO oxobject2attribute
+                (
+                    OXID,
+                    OXOBJECTID,
+                    OXATTRID,
+                    OXVALUE,
+                    OXPOS,
+                    OXVALUE_1,
+                    OXVALUE_2,
+                    OXVALUE_3,
+                    OXTIMESTAMP,
+                    LVATTRDESC,
+                    LVATTRDESC_1,
+                    LVATTRDESC_2,
+                    LVATTRDESC_3
+                )
+                VALUES
+                (
+                    '".$sNewId."',
+                    '".$sArticleId."',
+                    '".$sLvWineRatingAttribute."',
+                    '".$sRating."',
+                    '0',
+                    '".$sRating."',
+                    '".$sRating."',
+                    '".$sRating."',
+                    NOW(),
+                    '".$sHtmlWineHqDetailsLink."',
+                    '".$sHtmlWineHqDetailsLink."',
+                    '".$sHtmlWineHqDetailsLink."',
+                    '".$sHtmlWineHqDetailsLink."'
+                )
+            ";
+        }
+        
+        $this->_oLvDb->Execute( $sQuery );
+    }
+    
+    
+    /**
+     * Creates a html link that can be put into lvdesc for linking to details page
+     * 
+     * @param string $sAppId
+     * @return string
+     */
+    protected function _lvGetHtmlWineHqDetailsLink( $sAppId, $sTitle ) {
+        $sLvWineHqDetailsLinkBase = $this->_oLvConfig->getConfigParam( 'sLvWineHqDetailsLinkBase' );
+        
+        $sHtmlLink  = '<a href="'.$sLvWineHqDetailsLinkBase.$sAppId.'" target="_blank">';
+        $sHtmlLink .= 'WineHQ: '.$sTitle;
+        $sHtmlLink .= '</a>';
+        
+        return $sHtmlLink;
+    }
+    
+    
+    /**
+     * Checks and returns id of possibly already existing attribute assignment
+     * 
+     * @param string $sArticleId
+     * @param string $sLvWineRatingAttribute
+     * @return mixed string/bool
+     */
+    protected function _lvGetExistingAssignmentId( $sArticleId, $sAttributeId ) {
+        $sObject2AttributeTable = getViewName( 'oxobject2attribute' );
+        
+        $sQuery = "SELECT OXID FROM ".$sObject2AttributeTable." WHERE OXOBJECTID='".$sArticleId."' AND OXATTRID='".$sAttributeId."' LIMIT 1";
+        
+        $sAttributeAssignmentId = $this->_oLvDb->GetOne( $sQuery );
+        
+        return $sAttributeAssignmentId;
+    }
+    
+    
+    /**
+     * Returns list of child article ids matching with given title
+     * 
+     * @param type $sTitle
+     * @return array
+     */
+    protected function _lvGetArticleIdsByName( $sTitle ) {
+        $aArticleIds    = array();
+        $sArticleTable  = getViewName( 'oxarticles' );
+        
+        $sQuery = "SELECT OXID FROM ".$sArticleTable." WHERE OXTITLE=".$this->_oLvDb->quote( $sTitle );
+        
+        $oRs = $this->_oLvDb->Execute( $sQuery );
+        
+        if ( $oRs != false && $oRs->recordCount() > 0 ) {
+            while ( !$oRs->EOF ) {
+                $sArticleId = $oRs->fields['OXID'];
+                if ( $sArticleId ) {
+                    $aArticleIds[] = $sArticleId;
+                }
+                $oRs->moveNext();
+            }
+        }
+        
+        return $aArticleIds;
+    }
+    
+    
+    /**
      * Put scraped app data into database
      * 
      * @param array $aReturnApps

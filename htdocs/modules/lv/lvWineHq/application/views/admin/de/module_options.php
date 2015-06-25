@@ -31,5 +31,6 @@ $aLang = array(
     'SHOP_MODULE_sLvWineHqListRequestBase'              => 'Basisadresse zur Listenabfrage bei winehq.org.',
     'SHOP_MODULE_aLvWineHqRatings'                      => 'Abfragestati die abgefragt werden sollen.',
     'SHOP_MODULE_sLvWineHqDetailsLinkBase'              => 'Basisadresse zur Detailabfrage.',
+    'SHOP_MODULE_sLvWineRatingAttribute'                => 'AttributsID welchem das Ranking zugeordnet werden soll',
 );
 
