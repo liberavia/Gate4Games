@@ -115,19 +115,18 @@ class lvwinehq extends oxBase {
      * @return void
      */
     public function _lvUpdateProductAttributes() {
-        $sQuery = "SELECT OXID LVAPPID, LVTITLE, LVRATING FROM ".$this->_sLvWineHqTable;
-        
-        $oRs = $this->_oLvDb->execute( $sQuery );
+        $sQuery = "SELECT OXID, LVAPPID, LVTITLE, LVRATING FROM ".$this->_sLvWineHqTable;
+
+        $oRs = $this->_oLvDb->Execute( $sQuery );
         
         if ( $oRs != false && $oRs->recordCount() > 0 ) {
             while ( !$oRs->EOF ) {
                 $sOxid      = $oRs->fields['OXID'];
                 $sLvAppId   = $oRs->fields['LVAPPID'];
-                $sLvTitle   = $oRs->fields['LVRATING'];
+                $sLvTitle   = $oRs->fields['LVTITLE'];
                 $sLvRating  = $oRs->fields['LVRATING'];
                 
                 $aArticleIds = $this->_lvGetArticleIdsByName( $sLvTitle );
-                
                 if ( count( $aArticleIds ) > 0 ) {
                     foreach ( $aArticleIds as $sArticleId ) {
                         $this->_lvAssignRating( $sArticleId, $sLvAppId, $sLvRating, $sLvTitle );
@@ -160,10 +159,10 @@ class lvwinehq extends oxBase {
                 UPDATE oxobject2attribute
                 SET 
                     OXVALUE='".$sRating."', 
-                    LVDESC='".$sHtmlWineHqDetailsLink."', 
-                    LVDESC_1='".$sHtmlWineHqDetailsLink."', 
-                    LVDESC_2='".$sHtmlWineHqDetailsLink."', 
-                    LVDESC_3='".$sHtmlWineHqDetailsLink."'
+                    LVATTRDESC=".$this->_oLvDb->quote( $sHtmlWineHqDetailsLink ).", 
+                    LVATTRDESC_1=".$this->_oLvDb->quote( $sHtmlWineHqDetailsLink ).", 
+                    LVATTRDESC_2=".$this->_oLvDb->quote( $sHtmlWineHqDetailsLink ).", 
+                    LVATTRDESC_3=".$this->_oLvDb->quote( $sHtmlWineHqDetailsLink )."
                 WHERE 
                     OXID='".$sAssignmentId."'
                 LIMIT 1
@@ -201,10 +200,10 @@ class lvwinehq extends oxBase {
                     '".$sRating."',
                     '".$sRating."',
                     NOW(),
-                    '".$sHtmlWineHqDetailsLink."',
-                    '".$sHtmlWineHqDetailsLink."',
-                    '".$sHtmlWineHqDetailsLink."',
-                    '".$sHtmlWineHqDetailsLink."'
+                    ".$this->_oLvDb->quote( $sHtmlWineHqDetailsLink ).",
+                    ".$this->_oLvDb->quote( $sHtmlWineHqDetailsLink ).",
+                    ".$this->_oLvDb->quote( $sHtmlWineHqDetailsLink ).",
+                    ".$this->_oLvDb->quote( $sHtmlWineHqDetailsLink )."
                 )
             ";
         }
@@ -258,8 +257,8 @@ class lvwinehq extends oxBase {
         $aArticleIds    = array();
         $sArticleTable  = getViewName( 'oxarticles' );
         
-        $sQuery = "SELECT OXID FROM ".$sArticleTable." WHERE OXTITLE=".$this->_oLvDb->quote( $sTitle );
-        
+        $sQuery = "SELECT OXID FROM ".$sArticleTable." WHERE OXTITLE=".$this->_oLvDb->quote( $sTitle )." AND OXPARENTID != ''";
+
         $oRs = $this->_oLvDb->Execute( $sQuery );
         
         if ( $oRs != false && $oRs->recordCount() > 0 ) {
