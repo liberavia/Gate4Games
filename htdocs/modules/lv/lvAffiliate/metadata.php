@@ -54,6 +54,7 @@ $aModule = array(
     ),
     'files' => array(
         'lvaffiliate_import'                        => 'lv/lvAffiliate/application/models/lvaffiliate_import.php',
+        'lvaffiliate_tools'                         => 'lv/lvAffiliate/application/models/lvaffiliate_tools.php',
     ),
     'events'       => array(
     ),

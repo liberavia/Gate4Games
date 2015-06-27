@@ -62,7 +62,7 @@ class lvamzpnapiconnector extends oxBase {
     );
     
     /**
-     *
+     * Toggle yes by lang
      * @var type 
      */
     protected $_aLvToggleAttributeYesByLangAbbr = array(
