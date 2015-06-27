@@ -86,7 +86,7 @@ class lvgamesplanet extends oxBase {
         $this->_oLvConf         = $this->getConfig();
         $this->_iLogLevel       = (int)$this->_oLvConf->getConfigParam( 'sLvGpLogLevel' );
         $this->_blLogActive     = (bool)$this->_oLvConf->getConfigParam( 'blLvGpLogActive' );
-        $this->_sVendorId       = (string)$this->_oLvConf->getConfigParam( 'sLvGpVendorId' );
+        $this->_aVendorId       = (string)$this->_oLvConf->getConfigParam( 'aLvGpVendorId' );
         
         $this->_oAffiliateTools->lvSetLogInformation( $this->_blLogActive, $this->_sLogFile, $this->_iLogLevel );
         $this->_lvLoadCategoryMapping();
@@ -99,8 +99,8 @@ class lvgamesplanet extends oxBase {
      * @param void
      * @return string
      */
-    public function lvGetVendorId() {
-        return $this->_sVendorId;
+    public function lvGetVendorId( $sLangAbbr ) {
+        return $this->_aVendorId[$sLangAbbr];
     }
 
 

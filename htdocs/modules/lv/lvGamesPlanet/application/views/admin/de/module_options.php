@@ -29,7 +29,7 @@ $aLang = array(
     'SHOP_MODULE_GROUP_lvgpmain'                        => 'GamesPlanet Einstellungen',
     'SHOP_MODULE_GROUP_lvgp_debug'                      => 'Logs und Loglevel',
     // settings
-    'SHOP_MODULE_sLvGpVendorId'                         => 'LieferantenId',
+    'SHOP_MODULE_aLvGpVendorId'                         => 'Zuordnung Sprache zu Lieferanten ID',
     'SHOP_MODULE_aLvGamesplanetXmlStdFeeds'             => 'Zuordnung Sprache zu Standard-Feeds',
     'SHOP_MODULE_aLvGamesplanetXmlFlashDeals'           => 'Zuordnung Sprache zu Flash-Deal-Feeds.',
     'SHOP_MODULE_aLvGamesplanetXmlCharts'               => 'Zuordnung Sprache zu Charts-Feeds.',

@@ -51,7 +51,13 @@ $aModule = array(
     'blocks' => array(
     ),
     'settings' => array(
-        array( 'group' => 'lvgpmain',                   'name' => 'sLvGpVendorId',              'type' => 'str',        'value' => '' ),
+        array( 
+            'group' => 'lvgpmain',
+            'name' => 'aLvGpVendorId',
+            'type' => 'aarr',
+            'value' => array(
+            ),
+        ),
         array( 
             'group' => 'lvgpmain',
             'name' => 'aLvGamesplanetXmlStdFeeds',

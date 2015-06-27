@@ -36,7 +36,7 @@ class lvgp_import extends oxBase {
     public function start() {
         $oConfig                = $this->getConfig();
         $oLvGp                  = oxNew( 'lvgamesplanet' );
-        $sVendorId              = $oLvGp->lvGetVendorId();
+        $sVendorId              = $oLvGp->lvGetVendorId( 'de' );
         $oAffiliateImport       = oxNew( 'lvaffiliate_import' );
         
         $aArticleData = $oLvGp->lvGetImportData( 'de', 'std' );
@@ -47,3 +47,6 @@ class lvgp_import extends oxBase {
     }
     
 }
+
+$oScript = new lvgp_import();
+$oScript->start();
