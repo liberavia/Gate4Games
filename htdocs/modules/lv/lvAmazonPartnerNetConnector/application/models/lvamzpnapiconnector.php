@@ -252,11 +252,9 @@ class lvamzpnapiconnector extends oxBase {
                     $aArticleData[$sAsin]['GENRE'] = $sAmazonGenre;
                     if ( isset( $this->_aCategoryMapping[$sAmazonGenre] ) ) {
                         $aArticleData[$sAsin]['CATEGORYID']         = array( $this->_aCategoryMapping[$sAmazonGenre]['category'] );
-                        $aArticleData[$sAsin]['CATEGORYID_SALE']    = array( $this->_aCategoryMapping[$sAmazonGenre]['sale_category'] );
                     }
                     else {
                         $aArticleData[$sAsin]['CATEGORYID']         = array( $this->_sDefaultCategoryId );
-                        $aArticleData[$sAsin]['CATEGORYID_SALE']    = array( $this->_aCategoryMapping[$sAmazonGenre]['category'] );
                     }
 
 
@@ -429,7 +427,6 @@ class lvamzpnapiconnector extends oxBase {
             while ( ( $aData = fgetcsv( $resMappingFile, 1000, ";" ) ) !== false ) {
                 $sAmazonCategory = $aData[0];
                 $this->_aCategoryMapping[$sAmazonCategory]['category'] = $aData[1];
-                $this->_aCategoryMapping[$sAmazonCategory]['sale_category'] = $aData[2];
             }                        
         }
     }

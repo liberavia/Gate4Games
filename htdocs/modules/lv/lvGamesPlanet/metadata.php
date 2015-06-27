@@ -55,8 +55,7 @@ $aModule = array(
             'group' => 'lvgpmain',
             'name' => 'aLvGpVendorId',
             'type' => 'aarr',
-            'value' => array(
-            ),
+            'value' => array(),
         ),
         array( 
             'group' => 'lvgpmain',

@@ -38,12 +38,14 @@ class lvgp_import extends oxBase {
         $oLvGp                  = oxNew( 'lvgamesplanet' );
         $sVendorId              = $oLvGp->lvGetVendorId( 'de' );
         $oAffiliateImport       = oxNew( 'lvaffiliate_import' );
-        
+
+        $oAffiliateImport->lvSetVendorId( $sVendorId );
         $aArticleData = $oLvGp->lvGetImportData( 'de', 'std' );
         
         foreach ( $aArticleData as $aArticle ) {
             $oAffiliateImport->lvAddArticle( $aArticle, 'de' );
         }
+        
     }
     
 }

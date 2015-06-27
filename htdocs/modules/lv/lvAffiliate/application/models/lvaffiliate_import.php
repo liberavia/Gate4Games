@@ -308,18 +308,20 @@ class lvaffiliate_import extends oxBase {
             }
 
             if ( $this->_sLvCurrentParentId ) {
-                foreach ( $this->_aLvCurrentArticleData[$sDataFieldName] as $sTargetCategoryId ) {
-                    $blAssignmentExists = $this->_lvCheckCategoryAssignmentExists( $sTargetCategoryId );
-                    
-                    if ( $blAssignmentExists === false ) {
-                        $sNewId = $oUtilsObject->generateUId();
-                        
-                        $sQuery = "INSERT INTO oxobject2category ( OXID, OXOBJECTID, OXCATNID ) VALUES ( '".$sNewId."', '".$this->_sLvCurrentParentId."', '".$sTargetCategoryId."' )";
-                        $oDb->Execute( $sQuery );
-                    }
-                    else if ( $blCheckForRemoval === true ) {
-                        $sQuery = "DELETE FROM oxobject2category WHERE OXOBJECTID='".$this->_sLvCurrentParentId."' AND OXCATNID='".$sTargetCategoryId."' LIMIT 1";
-                        $oDb->Execute( $sQuery );
+                if ( isset( $this->_aLvCurrentArticleData[$sDataFieldName] ) && is_array( $this->_aLvCurrentArticleData[$sDataFieldName] ) ) {
+                    foreach ( $this->_aLvCurrentArticleData[$sDataFieldName] as $sTargetCategoryId ) {
+                        $blAssignmentExists = $this->_lvCheckCategoryAssignmentExists( $sTargetCategoryId );
+
+                        if ( $blAssignmentExists === false ) {
+                            $sNewId = $oUtilsObject->generateUId();
+
+                            $sQuery = "INSERT INTO oxobject2category ( OXID, OXOBJECTID, OXCATNID ) VALUES ( '".$sNewId."', '".$this->_sLvCurrentParentId."', '".$sTargetCategoryId."' )";
+                            $oDb->Execute( $sQuery );
+                        }
+                        else if ( $blCheckForRemoval === true ) {
+                            $sQuery = "DELETE FROM oxobject2category WHERE OXOBJECTID='".$this->_sLvCurrentParentId."' AND OXCATNID='".$sTargetCategoryId."' LIMIT 1";
+                            $oDb->Execute( $sQuery );
+                        }
                     }
                 }
             }

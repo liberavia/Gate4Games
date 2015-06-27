@@ -86,7 +86,7 @@ class lvgamesplanet extends oxBase {
         $this->_oLvConf         = $this->getConfig();
         $this->_iLogLevel       = (int)$this->_oLvConf->getConfigParam( 'sLvGpLogLevel' );
         $this->_blLogActive     = (bool)$this->_oLvConf->getConfigParam( 'blLvGpLogActive' );
-        $this->_aVendorId       = (string)$this->_oLvConf->getConfigParam( 'aLvGpVendorId' );
+        $this->_aVendorId       = $this->_oLvConf->getConfigParam( 'aLvGpVendorId' );
         
         $this->_oAffiliateTools->lvSetLogInformation( $this->_blLogActive, $this->_sLogFile, $this->_iLogLevel );
         $this->_lvLoadCategoryMapping();
@@ -128,8 +128,8 @@ class lvgamesplanet extends oxBase {
         
         $sRequestUrl = $aFeeds[$sLangAbbr];
         
-        $oResponse = $this->_oAffiliateTools->lvGetRestRequestResult( $sRequestUrl, 'XML' );
-        
+        $oResponse = $this->_oAffiliateTools->lvGetRestRequestResult( $this->_blLogActive, $sRequestUrl, 'XML' );
+
         $aResult = array();
         if ( $oResponse ) {
             $aResult = $this->_lvParseRequest( $oResponse, $sLangAbbr );
@@ -148,8 +148,8 @@ class lvgamesplanet extends oxBase {
      */
     protected function _lvParseRequest( $oResponse, $sLangAbbr ) {
         $aArticleData = array();
-        if ( isset( $oResponse->products->{product} ) ) {
-            foreach ( $oResponse->products->{product} as $oProduct ) {
+        if ( isset( $oResponse->product ) ) {
+            foreach ( $oResponse->product as $oProduct ) {
                 $sId = (string)$oProduct->uid;
                 $aArticleData[$sId]['ARTNUM']               = $sId;
                 $sTitle                                     = trim( (string)$oProduct->name );
@@ -161,7 +161,7 @@ class lvgamesplanet extends oxBase {
                 $sCategory                                  = trim( (string)$oProduct->category );
                 $aArticleData[$sId]['GENRE']                = $sCategory;
                 $aArticleData[$sId]['CATEGORYID']           = array( $this->_aCategoryMapping[$sCategory]['category'] );
-                $aArticleData[$sId]['SHORTDESC']            = trim( (string)$oProduct->shortdesc );
+                $aArticleData[$sId]['SHORTDESC']            = trim( (string)$oProduct->desc );
                 $aArticleData[$sId]['COVERIMAGE']           = trim( (string)$oProduct->packshot );
                 
                 // addon?
@@ -171,7 +171,7 @@ class lvgamesplanet extends oxBase {
                 }
 
                 // DLC?
-                $blDLC = $this->_lvFetchDLCFromTitle( $sTitle );
+                $blDLC = $this->_oAffiliateTools->lvFetchDLCFromTitle( $sTitle );
                 if ( $blDLC ) {
                     $aArticleData[$sId]['DLC']      = $this->_aLvToggleAttributeYesByLangAbbr[$sLangAbbr];
                 }

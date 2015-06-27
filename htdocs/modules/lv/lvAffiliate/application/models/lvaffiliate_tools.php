@@ -84,8 +84,8 @@ class lvaffiliate_tools extends oxBase {
      * @return mixed
      */
     public function lvGetRestRequestResult( $blLogActive, $sRequestUrl, $sResponseType='XML' ) {
+        $this->_blLogActive = $blLogActive;
         $resCurl = curl_init();
-        
         // configuration
         curl_setopt_array( 
             $resCurl, 
@@ -118,7 +118,7 @@ class lvaffiliate_tools extends oxBase {
                 $mResponse  = $sResponse;
         }
         
-        return $oResonse;
+        return $mResonse;
     }
     
     /**
