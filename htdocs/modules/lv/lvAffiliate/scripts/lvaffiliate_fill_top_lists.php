@@ -83,7 +83,7 @@ class lvaffiliate_fill_toplists extends oxBase {
             $this->_lvEmptyList( $sActionList );
             $sTable = getViewName( 'oxarticles' );
             $sQuery = "
-                SELECT OXPARENTID FROM ".$sTable." WHERE OXPARENTID != '' ORDER BY LVSALESRANK ASC LIMIT ".$this->_iListLimit."
+                SELECT OXID FROM ".$sTable." WHERE OXPARENTID='' AND LVSALESRANK > 0 ORDER BY LVSALESRANK ASC LIMIT ".$this->_iListLimit."
             ";
             
             $oRs = $this->_oLvDb->Execute( $sQuery );
@@ -91,7 +91,7 @@ class lvaffiliate_fill_toplists extends oxBase {
             if ( $oRs != false && $oRs->recordCount() > 0 ) {
                 $iSort = 0;
                 while( !$oRs->EOF ) {
-                    $sArticleId = $oRs->fields['OXPARENTID'];
+                    $sArticleId = $oRs->fields['OXID'];
                     
                     $this->_lvAddToList( $sActionList, $sArticleId, $iSort );
                     $iSort++;

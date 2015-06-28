@@ -89,7 +89,7 @@ class lvaffiliate_calc_salesrank extends oxBase {
                 while ( !$oRs->EOF ) {
                     $iCurrentSalesRank = (int)$oRs->fields['LVSALESRANK'];
                     
-                    if ( $iCurrentSalesRank > 0 && $iCurrentSalesRank < 999999 ) {
+                    if ( $iCurrentSalesRank > 0 && $iCurrentSalesRank <= 999999 ) {
                         $aSalesRank[] = $iCurrentSalesRank;
                     }
                     

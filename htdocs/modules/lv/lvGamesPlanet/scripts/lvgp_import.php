@@ -50,7 +50,7 @@ class lvgp_import extends oxBase {
         $aChartData = $oLvGp->lvGetImportData( 'de', 'charts' );
         $iPosition = 1;
         foreach ( $aChartData as $aArticle ) {
-            $oAffiliateImport->lvSetSalesRank( $aArticle['uid'], $iPosition );
+            $oAffiliateImport->lvSetSalesRank( $aArticle['ARTNUM'], $iPosition );
             $iPosition++;
         }
         
