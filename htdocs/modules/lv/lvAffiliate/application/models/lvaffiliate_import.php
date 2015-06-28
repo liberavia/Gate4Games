@@ -39,6 +39,12 @@ class lvaffiliate_import extends oxBase {
     protected $_sLvVendorName = '';
     
     /**
+     * Flag for main vendor
+     * @var bool
+     */
+    protected $_blMainVendor = false;
+    
+    /**
      * Language abbreviation
      * @var string
      */
@@ -165,8 +171,10 @@ class lvaffiliate_import extends oxBase {
         
         $this->_sLvVendorId = $sVendorId;
         
-        $sQuery = "SELECT OXTITLE FROM oxvendor WHERE OXID='".$this->_sLvVendorId."' LIMIT 1";
-        $this->_sLvVendorName = (string)$oDb->GetOne( $sQuery );
+        $sQuery = "SELECT OXTITLE, LVMAINVENDOR FROM oxvendor WHERE OXID='".$this->_sLvVendorId."' LIMIT 1";
+        $aResult = $oDb->GetRow( $sQuery );
+        $this->_sLvVendorName   = (string)$aResult['OXTITLE'];
+        $this->_blMainVendor    = (bool)$aResult['LVMAINVENDOR'];
     }
 
 
@@ -490,6 +498,10 @@ class lvaffiliate_import extends oxBase {
         $oArticle->oxarticles__lvcoverpic       = new oxField( 'oxpic1' );
         $oArticle->oxarticles__oxstockflag      = new oxField( $this->_iCurrentStockFlag );
         $oArticle->oxarticles__oxvarselect      = new oxField( $this->_sLvVendorName );
+        if ( $this->_blMainVendor ) {
+            $this->_lvClearMastervariantForLang( $sPar );
+            $oArticle->oxarticles__lvmastervariant  = new oxField( $this->_blMainVendor );
+        }
         
         if ( $this->_sLvCurrentLangAbbr !== null ) {
             $oArticle->oxarticles__lvlangabbr       = new oxField( $this->_sLvCurrentLangAbbr );
@@ -516,6 +528,22 @@ class lvaffiliate_import extends oxBase {
         } 
         catch (Exception $ex) {
             $this->lvLog( "ERROR: Exception has been thrown while trying to save created article with ID".$this->_sLvCurrentArticleId."\nException message was:\n".$e->message(), 1 );
+        }
+    }
+    
+    
+    /**
+     * Resets mastervariants for current lang
+     * 
+     * @param void
+     * @return void
+     */
+    protected function _lvClearMastervariantForLang() {
+        if ( $this->_sLvCurrentLangAbbr !== null ) {
+            $oDb            = oxDb::getDb( MODE_FETCH_ASSOC );
+            
+            $sQuery = "UPDATE oxarticles SET LVMASTERVARIANT='0' WHERE OXPARENTID='".$this->_sLvCurrentParentId."' AND LVLANGABBR='".$this->_sLvCurrentLangAbbr."'";
+            $oDb->Execute( $sQuery );
         }
     }
     
