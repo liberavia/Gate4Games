@@ -396,7 +396,7 @@ class lvaffiliate_import extends oxBase {
             
             // we need to check if matching is by name. If so we need to normalize the name due vendors use different namings
             if ( $sConfigDbField == 'OXTITLE' ) {
-                $sValueToMatch = $this->_lvGetNormalizedName( $sValueToMatch );
+                $sValueToMatch = $this->_oAffiliateTools->lvGetNormalizedName( $sValueToMatch );
             }
             
             $sQuery     = "SELECT OXID, OXPARENTID FROM oxarticles WHERE ".$sConfigDbField."='".mysql_real_escape_string( $sValueToMatch )."' LIMIT 1";
