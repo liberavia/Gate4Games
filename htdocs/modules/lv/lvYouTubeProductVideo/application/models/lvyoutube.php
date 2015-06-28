@@ -198,6 +198,27 @@ class lvyoutube extends oxBase {
         
         $sTitle = $this->_oLvDb->GetOne( $sQuery );
         
+        if ( !$sTitle ) {
+            // try to fetch title from parent
+            $sQuery = "
+                SELECT OXPARENTID
+                FROM 
+                    oxarticles
+                WHERE 
+                    OXID = '".$sOxid."'
+            ";
+            $sParentOxid = $this->_oLvDb->GetOne( $sQuery );
+
+            $sQuery = "
+                SELECT OXTITLE
+                FROM 
+                    oxarticles
+                WHERE 
+                    OXID = '".$sParentOxid."'
+            ";
+            $sTitle = $this->_oLvDb->GetOne( $sQuery );
+        }
+        
         if ( $sTitle ) {
             // get configuration
             $sLvApiKey                          = $this->_oLvConfig->getConfigParam( 'sLvApiKey' );

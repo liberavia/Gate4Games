@@ -374,10 +374,19 @@ class lvaffiliate_import extends oxBase {
             
             // we need to check if matching is by name. If so we need to normalize the name due vendors use different namings
             if ( $sConfigDbField == 'OXTITLE' ) {
+//if ( stripos( $sValueToMatch, 'Skyrim' ) ) {                
+//    echo "Vorher:".$sValueToMatch."\n";
+//}
                 $sValueToMatch = $this->_lvGetNormalizedName( $sValueToMatch );
+//if ( stripos( $sValueToMatch, 'Skyrim' ) ) {                
+//    echo "Danach:".$sValueToMatch."\n";
+//}
             }
             
             $sQuery     = "SELECT OXID, OXPARENTID FROM oxarticles WHERE ".$sConfigDbField."='".mysql_real_escape_string( $sValueToMatch )."' LIMIT 1";
+//if ( stripos( $sValueToMatch, 'Skyrim' ) ) {                
+//    echo "Vorher:".$sQuery."\n\n";
+//}
             $aResult    = $oDb->GetRow( $sQuery );
             
             $blCreateComplete = true;
@@ -387,7 +396,9 @@ class lvaffiliate_import extends oxBase {
                     $sParentId      = $aResult['OXPARENTID'];
                 }
                 else {
-                    $sParentId  = $aResult['OXID'];
+                    $sParentId                  = $aResult['OXID'];
+                    $this->_sLvCurrentParentId  = $sParentId;
+                    
                     $sQuery     = "SELECT OXID FROM oxarticles WHERE OXPARENTID='".$sParentId."' AND  OXVENDORID='".$this->_sLvVendorId."' LIMIT 1";
                     $sArticleId = $oDb->GetOne( $sQuery );
                     
@@ -459,7 +470,7 @@ class lvaffiliate_import extends oxBase {
             $sParentArtNum              = $this->_sLvCurrentManufacturerShortCut.(string)$iParentArtNumberNumeric;
                     
             $oParentArticle->setId( $this->_sLvCurrentParentId );
-            $oParentArticle->oxarticles__oxtitle            = new oxField( $sTitle );
+            $oParentArticle->oxarticles__oxtitle            = new oxField( $this->_lvGetNormalizedName( $sTitle ) );
             $oParentArticle->oxarticles__oxmanufacturerid   = new oxField( $this->_sLvCurrentManufacturerId );
             $oParentArticle->oxarticles__oxartnum           = new oxField( $sParentArtNum );
             $oParentArticle->oxarticles__oxartnum           = new oxField( $sParentArtNum );
@@ -492,6 +503,16 @@ class lvaffiliate_import extends oxBase {
             $sTargetTable       = $aTargetTableField[0];
             $sTargetField       = $aTargetTableField[1];
             $sTarget            = strtolower( $sTargetTable )."__".strtolower( $sTargetField );
+
+            if ( $sTarget == 'oxarticles__oxtitle' ) {
+//if ( stripos( $sValueToMatch, 'Skyrim' ) ) {                
+//    echo "Vorher:".$sValueToMatch."\n";
+//}
+                $this->_aLvCurrentArticleData[$sDataFieldName] = $this->_lvGetNormalizedName( $this->_aLvCurrentArticleData[$sDataFieldName] );
+//if ( stripos( $sValueToMatch, 'Skyrim' ) ) {                
+//    echo "Danach:".$sValueToMatch."\n";
+//}
+            }
             
             if ( isset( $this->_aLvCurrentArticleData[$sDataFieldName] ) ) {
                 $oArticle->$sTarget = new oxField( $this->_aLvCurrentArticleData[$sDataFieldName] );
