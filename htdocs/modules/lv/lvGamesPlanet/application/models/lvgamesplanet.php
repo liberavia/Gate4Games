@@ -190,10 +190,36 @@ class lvgamesplanet extends oxBase {
                 if ( $sLin == 'true' ) {
                     $aArticleData[$sId]['COMPATIBILITY']['LIN'] = $this->_aLvToggleAttributeYesByLangAbbr[$sLangAbbr];
                 }
+
+                $blValidData = $this->_lvValidateData( $aArticleData[$sId] );
+                
+                if ( !$blValidData ) {
+                    unset( $aArticleData[$sId] );
+                }
             }
         }
         
         return $aArticleData;
+    }
+    
+    
+    /**
+     * Method checks if data fulfills minimum
+     * 
+     * @param type $aCurrentArticle
+     * @return bool
+     */
+    protected function _lvValidateData( $aCurrentArticle ) {
+        $blDataIsValid = true;
+        
+        if ( !isset( $aCurrentArticle['TITLE'] ) || trim( $aCurrentArticle['TITLE'] )  == '' ) {
+            $blDataIsValid = false;
+        }
+        if ( !isset( $aCurrentArticle['ARTNUM'] ) || trim( $aCurrentArticle['ARTNUM'] )  == '' ) {
+            $blDataIsValid = false;
+        }
+        
+        return $blDataIsValid;
     }
     
     

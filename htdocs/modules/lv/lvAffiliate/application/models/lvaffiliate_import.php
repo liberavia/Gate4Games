@@ -372,6 +372,11 @@ class lvaffiliate_import extends oxBase {
             $sConfigFamily      = $aConfigFieldValue[1];
             $sValueToMatch      = $this->_aLvCurrentArticleData[$sDataFieldName];
             
+            // we need to check if matching is by name. If so we need to normalize the name due vendors use different namings
+            if ( $sConfigDbField == 'OXTITLE' ) {
+                $sValueToMatch = $this->_lvGetNormalizedName( $sValueToMatch );
+            }
+            
             $sQuery     = "SELECT OXID, OXPARENTID FROM oxarticles WHERE ".$sConfigDbField."='".mysql_real_escape_string( $sValueToMatch )."' LIMIT 1";
             $aResult    = $oDb->GetRow( $sQuery );
             
@@ -402,6 +407,22 @@ class lvaffiliate_import extends oxBase {
         return $blCreateComplete;
     }
     
+    
+    /**
+     * Method tries to normalize name so it can be better matched with existing articles
+     * 
+     * @param string $sTitleFromVendor
+     * @return string
+     */
+    protected function _lvGetNormalizedName( $sTitleFromVendor ) {
+        $sNormalizedTitle = str_replace( ":", "", $sTitleFromVendor );
+        $sNormalizedTitle = str_replace( "-", "", $sNormalizedTitle );        
+        $sNormalizedTitle = str_replace( "  ", " ", $sNormalizedTitle );        
+        
+        return $sNormalizedTitle;
+    }
+
+
     
     /**
      * Creating or updating article data (direct assignments)
