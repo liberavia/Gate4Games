@@ -127,6 +127,12 @@ class lvaffiliate_import extends oxBase {
      * @var int
      */
     protected $_iLvAffiliateLogLevel = 1;
+    
+    /**
+     * Affiliate Tools
+     * @var object
+     */
+    protected $_oAffiliateTools = null;
 
     
     
@@ -142,6 +148,7 @@ class lvaffiliate_import extends oxBase {
         // group debug
         $this->_blLvAffiliateLogActive          = (bool)$oConfig->getConfigParam( 'blLvAffiliateLogActive' );
         $this->_iLvAffiliateLogLevel            = (int)$oConfig->getConfigParam( 'sLvAffiliateLogLevel' );
+        $this->_oAffiliateTools                 = oxNew( 'lvaffiliate_tools' );
         
         parent::__construct();
     }
@@ -205,6 +212,21 @@ class lvaffiliate_import extends oxBase {
         $this->_lvAssignCategories();
 
         $this->_lvAssignAttributes();
+    }
+    
+    
+    /**
+     * Sets sales rank by artnum
+     * 
+     * @param type $sArtNum
+     * @param type $iRank
+     * @return void
+     */
+    public function lvSetSalesRank( $sArtNum, $iRank ) {
+        $oDb            = oxDb::getDb( MODE_FETCH_ASSOC );
+        
+        $sQuery = "UPDATE oxarticles SET LVSALESRANK='".(string)$iRank."' WHERE OXARTNUM='".$sArtNum."' LIMIT 1";
+        $oDb->Execute( $sQuery );
     }
     
     
@@ -374,19 +396,10 @@ class lvaffiliate_import extends oxBase {
             
             // we need to check if matching is by name. If so we need to normalize the name due vendors use different namings
             if ( $sConfigDbField == 'OXTITLE' ) {
-//if ( stripos( $sValueToMatch, 'Skyrim' ) ) {                
-//    echo "Vorher:".$sValueToMatch."\n";
-//}
                 $sValueToMatch = $this->_lvGetNormalizedName( $sValueToMatch );
-//if ( stripos( $sValueToMatch, 'Skyrim' ) ) {                
-//    echo "Danach:".$sValueToMatch."\n";
-//}
             }
             
             $sQuery     = "SELECT OXID, OXPARENTID FROM oxarticles WHERE ".$sConfigDbField."='".mysql_real_escape_string( $sValueToMatch )."' LIMIT 1";
-//if ( stripos( $sValueToMatch, 'Skyrim' ) ) {                
-//    echo "Vorher:".$sQuery."\n\n";
-//}
             $aResult    = $oDb->GetRow( $sQuery );
             
             $blCreateComplete = true;
@@ -418,22 +431,6 @@ class lvaffiliate_import extends oxBase {
         return $blCreateComplete;
     }
     
-    
-    /**
-     * Method tries to normalize name so it can be better matched with existing articles
-     * 
-     * @param string $sTitleFromVendor
-     * @return string
-     */
-    protected function _lvGetNormalizedName( $sTitleFromVendor ) {
-        $sNormalizedTitle = str_replace( ":", "", $sTitleFromVendor );
-        $sNormalizedTitle = str_replace( "-", "", $sNormalizedTitle );        
-        $sNormalizedTitle = str_replace( "  ", " ", $sNormalizedTitle );        
-        
-        return $sNormalizedTitle;
-    }
-
-
     
     /**
      * Creating or updating article data (direct assignments)
@@ -470,7 +467,7 @@ class lvaffiliate_import extends oxBase {
             $sParentArtNum              = $this->_sLvCurrentManufacturerShortCut.(string)$iParentArtNumberNumeric;
                     
             $oParentArticle->setId( $this->_sLvCurrentParentId );
-            $oParentArticle->oxarticles__oxtitle            = new oxField( $this->_lvGetNormalizedName( $sTitle ) );
+            $oParentArticle->oxarticles__oxtitle            = new oxField( $this->_oAffiliateTools->lvGetNormalizedName( $sTitle ) );
             $oParentArticle->oxarticles__oxmanufacturerid   = new oxField( $this->_sLvCurrentManufacturerId );
             $oParentArticle->oxarticles__oxartnum           = new oxField( $sParentArtNum );
             $oParentArticle->oxarticles__oxartnum           = new oxField( $sParentArtNum );
@@ -505,13 +502,7 @@ class lvaffiliate_import extends oxBase {
             $sTarget            = strtolower( $sTargetTable )."__".strtolower( $sTargetField );
 
             if ( $sTarget == 'oxarticles__oxtitle' ) {
-//if ( stripos( $sValueToMatch, 'Skyrim' ) ) {                
-//    echo "Vorher:".$sValueToMatch."\n";
-//}
-                $this->_aLvCurrentArticleData[$sDataFieldName] = $this->_lvGetNormalizedName( $this->_aLvCurrentArticleData[$sDataFieldName] );
-//if ( stripos( $sValueToMatch, 'Skyrim' ) ) {                
-//    echo "Danach:".$sValueToMatch."\n";
-//}
+                $this->_aLvCurrentArticleData[$sDataFieldName] = $this->_oAffiliateTools->lvGetNormalizedName( $this->_aLvCurrentArticleData[$sDataFieldName] );
             }
             
             if ( isset( $this->_aLvCurrentArticleData[$sDataFieldName] ) ) {

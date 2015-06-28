@@ -33,6 +33,7 @@ $aLang = array(
     'SHOP_MODULE_aLvGamesplanetXmlStdFeeds'             => 'Assignment language to standard-feed.',
     'SHOP_MODULE_aLvGamesplanetXmlFlashDeals'           => 'Assignment language to flash-feed.',
     'SHOP_MODULE_aLvGamesplanetXmlCharts'               => 'Assignment language to chart-feed.',
+    'SHOP_MODULE_sLvGpDefaultCategoryId'                => 'Fallback Kategorie ID',
     // group debug
     'SHOP_MODULE_blLvGpLogActive'                       => 'Log activity in log (lvgp.log)',
     'SHOP_MODULE_sLvGpLogLevel'                         => 'Log-Level (1=Errors,2=Errors+Warnings,3=All activity, 4=All activity+debug messages)',

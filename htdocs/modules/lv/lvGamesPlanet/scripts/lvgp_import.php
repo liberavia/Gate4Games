@@ -46,6 +46,14 @@ class lvgp_import extends oxBase {
             $oAffiliateImport->lvAddArticle( $aArticle, 'de' );
         }
         
+        // set sales rank for games by current charts
+        $aChartData = $oLvGp->lvGetImportData( 'de', 'charts' );
+        $iPosition = 1;
+        foreach ( $aChartData as $aArticle ) {
+            $oAffiliateImport->lvSetSalesRank( $aArticle['uid'], $iPosition );
+            $iPosition++;
+        }
+        
     }
     
 }

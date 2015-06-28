@@ -81,8 +81,9 @@ $aModule = array(
                 'de' => 'https://de.gamesplanet.com/api/v1/products/charts.xml?ref=gate4games',
             ),
         ),
+        array( 'group' => 'lvgpmain',                   'name' => 'sLvGpDefaultCategoryId',         'type' => 'str',        'value' => '' ),
         // group debug
-        array( 'group' => 'lvgp_debug',                 'name' => 'blLvGpLogActive',             'type' => 'bool',       'value' => false ),
-        array( 'group' => 'lvgp_debug',                 'name' => 'sLvGpLogLevel',               'type' => 'str',        'value' => '1' ),
+        array( 'group' => 'lvgp_debug',                 'name' => 'blLvGpLogActive',                'type' => 'bool',       'value' => false ),
+        array( 'group' => 'lvgp_debug',                 'name' => 'sLvGpLogLevel',                  'type' => 'str',        'value' => '1' ),
     )
 );

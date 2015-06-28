@@ -163,6 +163,7 @@ class lvgamesplanet extends oxBase {
                 $aArticleData[$sId]['CATEGORYID']           = array( $this->_aCategoryMapping[$sCategory]['category'] );
                 $aArticleData[$sId]['SHORTDESC']            = trim( (string)$oProduct->desc );
                 $aArticleData[$sId]['COVERIMAGE']           = trim( (string)$oProduct->packshot );
+                $aArticleData[$sId]['SALESRANK']            = '999999';
                 
                 // addon?
                 $blAddon = $this->_oAffiliateTools->lvFetchAddonFromTitle( $sTitle );
