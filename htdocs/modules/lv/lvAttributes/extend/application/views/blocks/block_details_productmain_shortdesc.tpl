@@ -13,11 +13,10 @@
             [{foreach from=$oAffiliateProduct->lvGetCompatibilityInformation() item="aCompatibilty"}]
                 <span><img src="[{$aCompatibilty.iconurl}]" title="[{$aCompatibilty.title}]"></span>
             [{/foreach}]
-        [{else}]   
-            [{foreach from=$oView->lvGetCompatibilityInformation() item="aCompatibilty"}]
-                <span><img src="[{$aCompatibilty.iconurl}]" title="[{$aCompatibilty.title}]"></span>
-            [{/foreach}]
         [{/if}]
+        [{foreach from=$oView->lvGetSumCompatibilityInformation() item="aCompatibilty"}]
+            <span><img src="[{$aCompatibilty.iconurl}]" title="[{$aCompatibilty.title}]"></span>
+        [{/foreach}]
     </div>
 </div>
 [{$smarty.block.parent}]
