@@ -48,6 +48,12 @@ class lvpegi extends oxBase {
      */
     protected $_sLvPegiTable = 'lvpegi';
     
+    /**
+     * Affiliate Tools from affiliate module
+     * @var object
+     */
+    protected $_oAffiliateTools = null;
+    
     
     /**
      * Initiate needed objects and values
@@ -55,8 +61,9 @@ class lvpegi extends oxBase {
     public function __construct() {
         parent::__construct();
         
-        $this->_oLvConfig   = $this->getConfig();
-        $this->_oLvDb       = oxDb::getDb( MODE_FETCH_ASSOC );
+        $this->_oLvConfig       = $this->getConfig();
+        $this->_oLvDb           = oxDb::getDb( MODE_FETCH_ASSOC );
+        $this->_oAffiliateTools = oxNew( 'lvaffiliate_tools' );
     }
 
     
@@ -471,6 +478,7 @@ class lvpegi extends oxBase {
      * @return boolean
      */
     protected function _lvCheckTitleExists( $sLvGameTitle ) {
+        $sLvGameTitle = $this->_oAffiliateTools->lvGetNormalizedName( $sLvGameTitle );
         $sQuery = "SELECT OXID FROM ".$this->_sLvPegiTable." WHERE LVGAMETITLE=".$this->_oLvDb->quote($sLvGameTitle)." LIMIT 1";
         $sDbGameTitle = $this->_oLvDb->GetOne( $sQuery );
         
