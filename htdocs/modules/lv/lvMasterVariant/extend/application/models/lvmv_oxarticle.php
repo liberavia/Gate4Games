@@ -108,10 +108,47 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
         if ( $oProduct ) {
             $sShortDesc = $oProduct->oxarticles__oxshortdesc->value;
         }
+
+        // search all existing variants for shortdesc as default
+        if ( !$sShortDesc ) {
+            $sShortDesc = $this->_lvGetDefaultShortDesc();
+        }
         
         return $sShortDesc;
     }
     
+    
+    /**
+     * Searches all variants for a shortdesc
+     * 
+     * @param void
+     * @return string
+     */
+    protected function _lvGetDefaultShortDesc() {
+        $sShortDesc = '';
+        
+        if ( $this->oxarticles__oxparentid->value == '' ) {
+            $oParentProduct = $this;
+        }
+        else {
+            $oParentProduct = $this->getParentArticle();
+        }
+        
+        $aVariants = $oParentProduct->getVariants();
+        
+        $blMatch = false;
+        foreach ( $aVariants as $oVariant ) {
+            if ( $blMatch === false ) continue; 
+            
+            if ( $oVariant->oxarticles__oxshortdesc->value != '' ) {
+                $sShortDesc = $oVariant->oxarticles__oxshortdesc->value;
+                $blMatch = true;
+            }
+        }
+        
+        return $sShortDesc;
+    }
+
     
     /**
      * Loads and returns attribute list associated with this article
