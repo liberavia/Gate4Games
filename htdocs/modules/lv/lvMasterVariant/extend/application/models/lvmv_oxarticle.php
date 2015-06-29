@@ -135,11 +135,10 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
         }
         
         $aVariants = $oParentProduct->getVariants();
-        
         $blMatch = false;
         foreach ( $aVariants as $oVariant ) {
-            if ( $blMatch === false ) continue; 
-            
+            if ( $blMatch === true ) continue; 
+
             if ( $oVariant->oxarticles__oxshortdesc->value != '' ) {
                 $sShortDesc = $oVariant->oxarticles__oxshortdesc->value;
                 $blMatch = true;
@@ -158,6 +157,7 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
     public function getAttributes()
     {
         $sMasterVariantOxid = $this->_lvGetMasterVariantId();
+// echo "MasterVariantID:".$sMasterVariantOxid."<br>";        
         if ( $sMasterVariantOxid ) {
             if ($this->_oAttributeList === null) {
                 $this->_oAttributeList = oxNew('oxattributelist');
@@ -211,8 +211,7 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
     protected function _lvGetMasterVariantId() {
         // Maybe we are still in a variant. Return false in case
         $mReturn = false;
-        
-        if ( $this->oxarticles__oxparentid == '' ) {
+        if ( !$this->getParentId() ) {
             $sOxid      = $this->getId();
             $oLang      = oxRegistry::getLang();
             $sLangAbbr  = $oLang->getLanguageAbbr();

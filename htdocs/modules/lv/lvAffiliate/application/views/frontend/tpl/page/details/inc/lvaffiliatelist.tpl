@@ -23,9 +23,9 @@
                     </td>
                     <td class="lvAffiliateDetailsToOffer">
                         <a href="[{$oAffiliateProduct->oxarticles__oxexturl->rawValue}]" target="_blank"><button class="submitButton largeButton">[{oxmultilang ident="LVAFFILIATE_TO_OFFER"}]</button></a>
-                        [{if method_exists( $oView, 'lvGetCompatibilityInformation' )}]
+                        [{if method_exists( $oAffiliateProduct, 'lvGetCompatibilityInformation' )}]
                             <div style="padding-top:10px ; text-align: right;">
-                                [{foreach from=$oView->lvGetCompatibilityInformation() item="aCompatibilty"}]
+                                [{foreach from=$oAffiliateProduct->lvGetCompatibilityInformation() item="aCompatibilty"}]
                                     <span><img src="[{$aCompatibilty.iconurl}]" title="[{$aCompatibilty.title}]"></span>
                                 [{/foreach}]
                             </div>                        
