@@ -14,6 +14,8 @@
                 <span><img src="[{$aCompatibilty.iconurl}]" title="[{$aCompatibilty.title}]"></span>
             [{/foreach}]
         [{/if}]
+    </div>
+    <div style="text-align: right;">
         [{foreach from=$oView->lvGetSumCompatibilityInformation() item="aCompatibilty"}]
             <span><img src="[{$aCompatibilty.iconurl}]" title="[{$aCompatibilty.title}]"></span>
         [{/foreach}]

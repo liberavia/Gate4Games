@@ -38,32 +38,14 @@ class lvattr_oxwarticledetails extends lvattr_oxwarticledetails_parent {
     
     
     /**
-     * Summs up all compatibility information available of all variants
+     * Sums up all compatibility information available of all variants
      * 
      * @param void
      * @return array
      */
     public function lvGetSumCompatibilityInformation() {
         $oArticle = $this->getProduct();
-        
-        // first make sure we have a parent article
-        if ( $oArticle->getParentId() ) {
-            $oParentArticle = $oArticle->getParentArticle();
-        }
-        else {
-            $oParentArticle = $oArticle;
-        }
-        
-        // get all variants
-        $aVariants = $oParentArticle->getVariants();
-        
-        $aSumCompatibilityInformation = array();
-        
-        foreach ( $aVariants as $oVariant ) {
-            $aSumCompatibilityInformation = array_merge( $aSumCompatibilityInformation, $oVariant->lvGetCompatibilityInformation() );
-        }
-        
-        return $aSumCompatibilityInformation;
+        return $oArticle->lvGetSumCompatibilityInformation();
     }
 
     

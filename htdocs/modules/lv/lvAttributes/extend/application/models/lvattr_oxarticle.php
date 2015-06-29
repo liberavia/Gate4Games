@@ -90,6 +90,33 @@ class lvattr_oxarticle extends lvattr_oxarticle_parent {
         return $aCompatibilityIcons;
     }
     
+
+    /**
+     * Sums up all compatibility information available of all variants
+     * 
+     * @param void
+     * @return array
+     */
+    public function lvGetSumCompatibilityInformation() {
+        // first make sure we have a parent article
+        if ( $this->getParentId() ) {
+            $oParentArticle = $this->getParentArticle();
+        }
+        else {
+            $oParentArticle = $this;
+        }
+        
+        // get all variants
+        $aVariants = $oParentArticle->getVariants();
+        
+        $aSumCompatibilityInformation = array();
+        
+        foreach ( $aVariants as $oVariant ) {
+            $aSumCompatibilityInformation = array_merge( $aSumCompatibilityInformation, $oVariant->lvGetCompatibilityInformation() );
+        }
+        
+        return $aSumCompatibilityInformation;
+    }
     
     /**
      * Template getter returns an array with age icons
