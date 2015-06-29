@@ -37,6 +37,17 @@ class lvattr_oxwarticlebox extends lvattr_oxwarticlebox_parent {
     }
     
     /**
+     * Sums up all compatibility information available of all variants
+     * 
+     * @param void
+     * @return array
+     */
+    public function lvGetSumCompatibilityInformation() {
+        $oArticle = $this->getProduct();
+        return $oArticle->lvGetSumCompatibilityInformation();
+    }
+
+    /**
      * Template getter delivers information for best affiliate offer
      * Needs lvAffiliate module to be activated to deliver results
      * 
