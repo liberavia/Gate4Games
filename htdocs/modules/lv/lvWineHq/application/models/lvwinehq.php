@@ -48,6 +48,12 @@ class lvwinehq extends oxBase {
      */
     protected $_sLvWineHqTable = 'lvwinehq';
     
+    /**
+     * Affiliate Tools from affiliate module
+     * @var object
+     */
+    protected $_oAffiliateTools = null;
+    
     
     /**
      * Initiate needed objects and values
@@ -55,8 +61,9 @@ class lvwinehq extends oxBase {
     public function __construct() {
         parent::__construct();
         
-        $this->_oLvConfig   = $this->getConfig();
-        $this->_oLvDb       = oxDb::getDb( MODE_FETCH_ASSOC );
+        $this->_oLvConfig       = $this->getConfig();
+        $this->_oLvDb           = oxDb::getDb( MODE_FETCH_ASSOC );
+        $this->_oAffiliateTools = oxNew( 'lvaffiliate_tools' );
     }
 
     /**
@@ -114,7 +121,7 @@ class lvwinehq extends oxBase {
      * @param void
      * @return void
      */
-    public function _lvUpdateProductAttributes() {
+    public function lvUpdateProductAttributes() {
         $sQuery = "SELECT OXID, LVAPPID, LVTITLE, LVRATING FROM ".$this->_sLvWineHqTable;
 
         $oRs = $this->_oLvDb->Execute( $sQuery );
@@ -256,6 +263,7 @@ class lvwinehq extends oxBase {
     protected function _lvGetArticleIdsByName( $sTitle ) {
         $aArticleIds    = array();
         $sArticleTable  = getViewName( 'oxarticles' );
+        $sTitle         = $this->_oAffiliateTools->lvGetNormalizedName( $sTitle );
         
         $sQuery = "SELECT OXID FROM ".$sArticleTable." WHERE OXTITLE=".$this->_oLvDb->quote( $sTitle )." AND OXPARENTID != ''";
 
