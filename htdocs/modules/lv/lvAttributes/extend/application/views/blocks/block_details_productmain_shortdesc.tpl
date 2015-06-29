@@ -6,9 +6,18 @@
     </div>
     <br>
     <div style="text-align: right;">
-        [{foreach from=$oView->lvGetCompatibilityInformation() item="aCompatibilty"}]
-            <span><img src="[{$aCompatibilty.iconurl}]" title="[{$aCompatibilty.title}]"></span>
-        [{/foreach}]
+        [{if $oView->lvGetBestAffiliateDetails()}]
+            [{assign var="aAffiliateDetails" value=$oView->lvGetBestAffiliateDetails()}]
+            [{assign var="oAffiliateProduct" value=$aAffiliateDetails.product}]
+            [{assign var="oAffiliateVendor" value=$aAffiliateDetails.vendor}]
+            [{foreach from=$oAffiliateProduct->lvGetCompatibilityInformation() item="aCompatibilty"}]
+                <span><img src="[{$aCompatibilty.iconurl}]" title="[{$aCompatibilty.title}]"></span>
+            [{/foreach}]
+        [{else}]   
+            [{foreach from=$oView->lvGetCompatibilityInformation() item="aCompatibilty"}]
+                <span><img src="[{$aCompatibilty.iconurl}]" title="[{$aCompatibilty.title}]"></span>
+            [{/foreach}]
+        [{/if}]
     </div>
 </div>
 [{$smarty.block.parent}]
