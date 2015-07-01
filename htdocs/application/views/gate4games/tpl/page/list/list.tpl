@@ -142,4 +142,4 @@
     [{/if}]
     [{/block}]
 [{/capture}]
-[{include file="layout/page.tpl" sidebar="Left" tree_path=$oView->getTreePath()}]
+[{include file="layout/page.tpl" tree_path=$oView->getTreePath()}]
