@@ -27,4 +27,4 @@
   [{/if}]
   [{/block}]
 [{/capture}]
-[{include file="layout/page.tpl" sidebar="Left"}]
+[{include file="layout/page.tpl"}]

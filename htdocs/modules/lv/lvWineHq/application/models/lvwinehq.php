@@ -265,7 +265,7 @@ class lvwinehq extends oxBase {
         $sArticleTable  = getViewName( 'oxarticles' );
         $sTitle         = $this->_oAffiliateTools->lvGetNormalizedName( $sTitle );
         
-        $sQuery = "SELECT OXID FROM ".$sArticleTable." WHERE OXTITLE=".$this->_oLvDb->quote( $sTitle )." AND OXPARENTID != ''";
+        $sQuery = "SELECT OXID FROM ".$sArticleTable." WHERE OXTITLE LIKE ".$this->_oLvDb->quote( "%".$sTitle."%" )." AND OXPARENTID != ''";
 
         $oRs = $this->_oLvDb->Execute( $sQuery );
         
