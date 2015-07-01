@@ -154,13 +154,21 @@ class lvextmedia_oxarticle extends lvextmedia_oxarticle_parent {
     
     /**
      * Public getter returns defined cover pic if exists and first image if not
+     * For fair traffic reasons we will always try to fetch packshot from 
+     * best offer which will be presented
      * 
      * @param void
      * @return string
      */
     public function lvGetCoverPictureUrl() {
-        // target field
-        $oProduct = $this->lvGetProduct();
+        // target field 
+        if ( method_exists( $this, 'lvGetBestAffiliateDetails' ) ) {
+            $aBestArticleDetails = $this->lvGetBestAffiliateDetails();
+            $oProduct = $aBestArticleDetails['product'];
+        }
+        else {
+            $oProduct = $this->lvGetProduct();
+        }
 
         $sCoverPicFieldName = $oProduct->oxarticles__lvcoverpic->value;
         

@@ -38,13 +38,50 @@ class lvattr_oxwarticlebox extends lvattr_oxwarticlebox_parent {
     
     /**
      * Sums up all compatibility information available of all variants
+     * Has option to grey out compatibilty icons that are generally available in offers but not 
+     * in current best offer
      * 
-     * @param void
+     * @param $blGreyOutBestNotAvailable
      * @return array
      */
-    public function lvGetSumCompatibilityInformation() {
+    public function lvGetSumCompatibilityInformation( $blGreyOutBestNotAvailable = false ) {
+        $aReturn = array();
         $oArticle = $this->getProduct();
-        return $oArticle->lvGetSumCompatibilityInformation();
+        $aSumCompatibilityInformation = $oArticle->lvGetSumCompatibilityInformation();
+        
+        if ( $blGreyOutBestNotAvailable === false ) {
+            // add dummy greyout
+            foreach ( $aSumCompatibilityInformation as $sAttrId=>$aCompatibility ) {
+                $aSumCompatibilityInformation[$sAttrId]['greyout'] = '';
+            }
+            
+            $aReturn = $aSumCompatibilityInformation;
+        }
+        else {
+            // compare best offers compatibilty against sum compatibility
+            $oLang                      = oxRegistry::getLang();
+            $aBestOfferDetails          = $this->lvGetBestAffiliateDetails();
+            $oBestOfferProduct          = $aBestOfferDetails['product'];
+            $aBestOfferCompatibility    = $oBestOfferProduct->lvGetCompatibilityInformation();
+            
+            foreach ( $aSumCompatibilityInformation as $sAttrId=>$aCompatibility ) {
+                if ( isset( $aBestOfferCompatibility[$sAttrId] )  ) {
+                    // compatibility given in best offer
+                    $aSumCompatibilityInformation[$sAttrId]['greyout'] = '';
+                }
+                else {
+                    // compatibility not given, so grey out compatibility
+                    $aSumCompatibilityInformation[$sAttrId]['greyout']  = 'opacity:0.3;';
+                    // add different title
+                    $sCombatibilityTitle                                = $oLang->translateString( 'LV_ATTR_COMPATIBILITY_AVAILABLE' );
+                    $aSumCompatibilityInformation[$sAttrId]['title']    = $sCombatibilityTitle;                   
+                }
+            }
+            
+            $aReturn = $aSumCompatibilityInformation;
+        }
+        
+        return $aReturn;
     }
 
     /**

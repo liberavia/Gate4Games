@@ -47,5 +47,8 @@ $aLang = array(
     'LV_GO_DIRECTLY_TO_BEST_OFFER_OF'                   => 'Best price at',
     'LV_DIRECTLY_TO_SHOP'                               => 'To Shop',
     'LV_DETAILS'                                        => 'Details',
+    'LV_ATTR_AVAILABLE_FOR_BEST'                        => 'Best offer compatible with:',
+    'LV_ATTR_AVAILABLE_FOR_SUM'                         => 'Available compatibility:',
+    'LV_ATTR_COMPATIBILITY_AVAILABLE'                   => 'Platform available at different parter. Click on Details!',
 );
 

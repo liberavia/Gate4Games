@@ -17,8 +17,8 @@
         [{/if}]
     </div>
     <div style="margin-top: 8px;">
-        [{foreach from=$oView->lvGetSumCompatibilityInformation() item="aCompatibilty"}]
-            <span><img src="[{$aCompatibilty.iconurl}]" title="[{$aCompatibilty.title}]"></span>
+        [{foreach from=$oView->lvGetSumCompatibilityInformation(true) item="aCompatibilty"}]
+            <span><img style="[{$aCompatibilty.greyout}]" src="[{$aCompatibilty.iconurl}]" title="[{$aCompatibilty.title}]"></span>
         [{/foreach}]
     </div>
     <div style="margin-top: 8px;">

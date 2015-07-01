@@ -6,19 +6,35 @@
     </div>
     <br>
     <div style="text-align: right;">
-        [{if $oView->lvGetBestAffiliateDetails()}]
-            [{assign var="aAffiliateDetails" value=$oView->lvGetBestAffiliateDetails()}]
-            [{assign var="oAffiliateProduct" value=$aAffiliateDetails.product}]
-            [{assign var="oAffiliateVendor" value=$aAffiliateDetails.vendor}]
-            [{foreach from=$oAffiliateProduct->lvGetCompatibilityInformation() item="aCompatibilty"}]
-                <span><img src="[{$aCompatibilty.iconurl}]" title="[{$aCompatibilty.title}]"></span>
-            [{/foreach}]
-        [{/if}]
-    </div>
-    <div style="text-align: right;">
-        [{foreach from=$oView->lvGetSumCompatibilityInformation() item="aCompatibilty"}]
-            <span><img src="[{$aCompatibilty.iconurl}]" title="[{$aCompatibilty.title}]"></span>
-        [{/foreach}]
+        <table border="0" cellpadding="2" cellspacing="2">
+            [{if $oView->lvGetBestAffiliateDetails()}]
+                <tr>
+                    <td align="right">
+                        [{oxmultilang ident="LV_ATTR_AVAILABLE_FOR_BEST"}]
+                    </td>
+                    <td>
+                        [{assign var="aAffiliateDetails" value=$oView->lvGetBestAffiliateDetails()}]
+                        [{assign var="oAffiliateProduct" value=$aAffiliateDetails.product}]
+                        [{assign var="oAffiliateVendor" value=$aAffiliateDetails.vendor}]
+                        [{foreach from=$oAffiliateProduct->lvGetCompatibilityInformation() item="aCompatibilty"}]
+                            <span><img src="[{$aCompatibilty.iconurl}]" title="[{$aCompatibilty.title}]"></span>
+                        [{/foreach}]
+                    </td>
+                </tr>
+            [{/if}]
+            [{if $oView->lvGetSumCompatibilityInformation()}]
+                <tr>
+                    <td align="right">
+                            [{oxmultilang ident="LV_ATTR_AVAILABLE_FOR_SUM"}]
+                    </td>
+                    <td>
+                        [{foreach from=$oView->lvGetSumCompatibilityInformation() item="aCompatibilty"}]
+                            <span><img src="[{$aCompatibilty.iconurl}]" title="[{$aCompatibilty.title}]"></span>
+                        [{/foreach}]
+                    </td>
+                </tr>
+            [{/if}]
+        </table>
     </div>
 </div>
 [{$smarty.block.parent}]
