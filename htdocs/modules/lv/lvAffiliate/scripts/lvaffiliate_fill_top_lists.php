@@ -255,7 +255,7 @@ class lvaffiliate_fill_toplists extends oxBase {
         $sAmount    = $this->_oLvDb->GetOne( $sQuery );
         
         if ( $sAmount ) {
-            $sQuery = "UPDATE oxcoounters SET OXCOUNT='".$sAmount."' WHERE OXIDENT='lvAvailableArticles'";
+            $sQuery = "UPDATE oxcounters SET OXCOUNT='".$sAmount."' WHERE OXIDENT='lvAvailableArticles'";
             $this->_oLvDb->Execute( $sQuery );
         }
     }
