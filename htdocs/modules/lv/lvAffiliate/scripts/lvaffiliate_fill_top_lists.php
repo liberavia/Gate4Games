@@ -67,6 +67,7 @@ class lvaffiliate_fill_toplists extends oxBase {
         $this->_lvFillTopSeller();
         $this->_lvFillTopSale();
         $this->_lvFillLatest();
+        $this->_lvSetArticleAmount();
     }
     
     
@@ -239,6 +240,25 @@ class lvaffiliate_fill_toplists extends oxBase {
         $this->_oLvDb->Execute( $sQuery );
     }
     
+    
+    /**
+     * Sets the amount of currently available articles
+     * 
+     * @param void
+     * @return void
+     */
+    protected function _lvSetArticleAmount() {
+        /**
+         * @todo needs to improved due article amount my differ by language
+         */
+        $sQuery     = "SELECT count(*) FROM oxarticles WHERE OXPARENTID=''";
+        $sAmount    = $this->_oLvDb->GetOne( $sQuery );
+        
+        if ( $sAmount ) {
+            $sQuery = "UPDATE oxcoounters SET OXCOUNT='".$sAmount."' WHERE OXIDENT='lvAvailableArticles'";
+            $this->_oLvDb->Execute( $sQuery );
+        }
+    }
     
 }
 

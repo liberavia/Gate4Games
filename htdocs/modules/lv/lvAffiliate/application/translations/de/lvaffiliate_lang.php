@@ -33,5 +33,7 @@ $aLang = array(
     'LVSALESRANK'                                       => 'Beliebtheit',
     'LV_OLD_PRICE'                                      => 'statt',
     'LVAFFILIATE_GO_DIRECTLY_TO_BEST_OFFER'             => 'Bestes Angebot',
+    'LV_SEARCH_IN_CURRENTLY'                            => 'Suche in aktuell',
+    'LV_GAME_TITLES'                                    => 'Titeln',
 );
 
