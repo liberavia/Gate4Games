@@ -32,10 +32,8 @@
 [{/block}]
 
 [{block name="details_tabs_pricealarm"}]
-    [{if $oView->isPriceAlarm() && !$oDetailsProduct->isParentNotBuyable()}]
-        [{capture append="tabs"}]<a href="#pricealarm">[{oxmultilang ident="PRICE_ALERT"}]</a>[{/capture}]
-        [{capture append="tabsContent"}]<div id="pricealarm">[{include file="form/pricealarm.tpl"}]</div>[{/capture}]
-    [{/if}]
+    [{capture append="tabs"}]<a href="#pricealarm">[{oxmultilang ident="PRICE_ALERT"}]</a>[{/capture}]
+    [{capture append="tabsContent"}]<div id="pricealarm">[{include file="form/pricealarm.tpl"}]</div>[{/capture}]
 [{/block}]
 
 [{block name="details_tabs_tags"}]
