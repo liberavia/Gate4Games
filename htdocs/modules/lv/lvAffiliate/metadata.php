@@ -50,7 +50,9 @@ $aModule = array(
         'basket'                                    =>  'lv/lvAffiliate/extend/application/controllers/lvaffiliate_basket',
         // models
         'oxarticle'                                 => 'lv/lvAffiliate/extend/application/models/lvaffiliate_oxarticle',
-        'oxarticlelist'                             => 'lv/lvAffiliate/extend/application/models/lvaffiliate_oxarticlelist'
+        'oxarticlelist'                             => 'lv/lvAffiliate/extend/application/models/lvaffiliate_oxarticlelist',
+        // core
+        'oxviewconfig'                              => 'lv/lvAffiliate/extend/core/lvaffiliate_oxviewconfig',
     ),
     'files' => array(
         'lvaffiliate_import'                        => 'lv/lvAffiliate/application/models/lvaffiliate_import.php',

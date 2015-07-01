@@ -119,21 +119,4 @@ class lvaffiliate_start extends lvaffiliate_start_parent {
         
         return $aReturn;
     }
-    
-    
-    /**
-     * Returns amount of available articles
-     * 
-     * @param void
-     * @return int
-     */
-    public function lvGetAmountArticles() {
-        $oDb = oxDb::getDb( MODE_FETCH_ASSOC );
-        
-        $sQuery = "SELECT OXCOUNT FROM oxcounters WHERE OXIDENT='lvAvailableArticles'";
-        
-        $sAmount = $oDb->GetOne( $sQuery );
-        
-        return (int)$sAmount;
-    }
 }
