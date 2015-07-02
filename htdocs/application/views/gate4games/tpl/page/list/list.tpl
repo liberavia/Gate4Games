@@ -35,9 +35,6 @@
         [{if $listType!='tag' && $actCategory && $actCategory->getShortDescription() }]
             <div class="categoryTopDescription" id="catDesc">[{$actCategory->getShortDescription()}]</div>
         [{/if}]
-        [{if $actCategory->oxcategories__oxlongdesc->value }]
-            <div class="categoryTopLongDescription" id="catLongDesc">[{oxeval var=$actCategory->oxcategories__oxlongdesc}]</div>
-        [{/if}]
 
         [{if $oView->hasVisibleSubCats()}]
             [{assign var="iSubCategoriesCount" value=0}]
@@ -139,6 +136,9 @@
         [{* List types: grid|line|infogrid *}]
         [{include file="widget/product/list.tpl" type=$oView->getListDisplayType() listId="productList" products=$oView->getArticleList()}]
         [{include file="widget/locator/listlocator.tpl" locator=$oView->getPageNavigationLimitedBottom() place="bottom"}]
+        [{if $actCategory->oxcategories__oxlongdesc->value }]
+            <div class="categoryTopLongDescription" id="catLongDesc">[{oxeval var=$actCategory->oxcategories__oxlongdesc}]</div>
+        [{/if}]
     [{/if}]
     [{/block}]
 [{/capture}]
