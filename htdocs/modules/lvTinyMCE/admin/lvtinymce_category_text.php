@@ -23,7 +23,7 @@ class lvtinymce_category_text extends lvtinymce_category_text_parent {
         $sContent = "";
         if ( $soxId != "-1" && isset( $soxId)) {
             // load object
-            $iCatLang = oxConfig::getParameter("catlang");
+            $iCatLang = $this->getConfig()->getRequestParameter("catlang");
 
             if (!isset($iCatLang))
                 $iCatLang = $this->_iEditLang;

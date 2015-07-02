@@ -15,7 +15,7 @@ $aModule = array(
             'en'=>'WYSIWYG Editor f&uuml; for Admin Interface',
      ),
     'thumbnail'    => '',
-    'version'      => '1.0',
+    'version'      => '1.1',
     'author'       => 'Liberavia',
     'extend'       => array(
         'article_main' => 'lvTinyMCE/admin/lvtinymce_article_main',
