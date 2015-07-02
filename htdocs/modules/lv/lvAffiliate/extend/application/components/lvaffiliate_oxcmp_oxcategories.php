@@ -26,7 +26,7 @@
 class lvaffiliate_oxcmp_oxcategories extends lvaffiliate_oxcmp_oxcategories_parent {
     
     /**
-     * Returns list of children contents for given laod id
+     * Returns list of children contents for given load id
      * 
      * @param string $sParentLoadId
      * @return array
