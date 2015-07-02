@@ -29,12 +29,18 @@ class lvaffiliate_oxcontentlist extends lvaffiliate_oxcontentlist_parent {
      */
     public function loadCatMenues()
     {
-        $aArray = parent::loadCatMenues();
+        parent::loadCatMenues();
         
-        // only let those categories in where no parentloadid is given
-        foreach ( $aArray as $sCatId=>$oContent ) {
-            if ( $oContent->oxcontents__lvparentloadid->value != '' ) {
-                unset( $aArray[$sCatId] );
+        $aArray = $this->_aArray;
+
+        if ( is_array( $aArray ) && count( $aArray ) > 0 ) {
+            // only let those categories in where no parentloadid is given
+            foreach ( $aArray as $sCatId=>$aContents ) {
+                foreach ( $aContents as $iIndex=>$oContent )  {
+                    if ( $oContent->oxcontents__lvparentloadid->value != '' ) {
+                        unset( $aArray[$sCatId][$iIndex] );
+                    }
+                }
             }
         }
         

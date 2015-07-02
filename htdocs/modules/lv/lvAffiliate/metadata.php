@@ -40,8 +40,8 @@ $aModule = array(
     'url'          => 'http://www.gate4games.com',
     'email'        => 'info@gate4games.com',
     'extend'       => array(
-        // components->widgets
-        'oxcmp_oxcategories'                         => 'lv/lvAffiliate/extend/application/components/lvaffiliate_oxcmp_oxcategories',
+        // components
+        'oxcmp_oxcategories'                        => 'lv/lvAffiliate/extend/application/components/lvaffiliate_oxcmp_oxcategories',
         // components->widgets
         'oxwarticledetails'                         => 'lv/lvAffiliate/extend/application/components/widgets/lvaffiliate_oxwarticledetails',
         // controllers admin
@@ -52,6 +52,7 @@ $aModule = array(
         'basket'                                    =>  'lv/lvAffiliate/extend/application/controllers/lvaffiliate_basket',
         // models
         'oxarticle'                                 => 'lv/lvAffiliate/extend/application/models/lvaffiliate_oxarticle',
+        'oxcategory'                                => 'lv/lvAffiliate/extend/application/models/lvaffiliate_oxcategory',
         'oxarticlelist'                             => 'lv/lvAffiliate/extend/application/models/lvaffiliate_oxarticlelist',
         'oxcontentlist'                             => 'lv/lvAffiliate/extend/application/models/lvaffiliate_oxcontentlist',
         // core

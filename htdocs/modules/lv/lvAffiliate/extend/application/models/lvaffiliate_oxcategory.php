@@ -18,13 +18,13 @@
  */
 
 /**
- * Description of lvaffiliate_oxcmp_oxcategories
+ * Description of lvaffiliate_oxcategory
  *
  * @author Gate4Games
  * @author André Gregor-Herrmann
  */
-class lvaffiliate_oxcmp_oxcategories extends lvaffiliate_oxcmp_oxcategories_parent {
-    
+class lvaffiliate_oxcategory extends lvaffiliate_oxcategory_parent {
+
     /**
      * Returns list of children contents for given load id
      * 
@@ -58,5 +58,4 @@ die("Angekommen");
         
         return $aContents;
     }
-    
 }

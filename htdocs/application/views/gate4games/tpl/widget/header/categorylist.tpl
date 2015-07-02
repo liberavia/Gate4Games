@@ -46,10 +46,10 @@
             [{assign var="iCatCnt" value=$iCatCnt+1 }]
             [{if $iCatCnt <= $oView->getTopNavigationCatCnt()}]
                 <li><a href="[{$oTopCont->getLink()}]">[{$oTopCont->oxcontents__oxtitle->value}]</a></li>
-                [{assign var="lvCurrentLoadId" value=$oTopCont->oxcontents__oxloadid->value}]
-                [{if method_exists( $ocat, 'lvGetSubContentCats' ) && $ocat->lvGetSubContentCats( $lvCurrentLoadId )}]
+                [{assign var="sLvCurrentLoadId" value=$oTopCont->oxcontents__oxloadid->value}]
+                [{if method_exists( $ocat, 'lvGetSubContentCats' ) && $ocat->lvGetSubContentCats("`$sLvCurrentLoadId`")}]
                     <ul>
-                        [{foreach from=$ocat->lvGetSubContentCats( $lvCurrentLoadId ) item="ocontentsubcat" key=contentsubcatkey name=ContentSubCat}]
+                        [{foreach from=$ocat->lvGetSubContentCats("`$sLvCurrentLoadId`") item="ocontentsubcat" key=contentsubcatkey name=ContentSubCat}]
                             <li><a href="[{$ocontentsubcat->getLink()}]">[{$ocontentsubcat->oxcontents__oxtitle->value}]</a></li>
                         [{/foreach}]
                     </ul>
