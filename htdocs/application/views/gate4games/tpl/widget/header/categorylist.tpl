@@ -12,18 +12,6 @@
     [{*<li [{if $homeSelected == 'true' }]class="current"[{/if}]><a [{if $homeSelected == 'true'}]class="current"[{/if}] href="[{$oViewConf->getHomeLink()}]">[{oxmultilang ident="HOME"}]</a></li>*}]
     [{foreach from=$oxcmp_categories item=ocat key=catkey name=root}]
       [{if $ocat->getIsVisible() }]
-        [{foreach from=$ocat->getContentCats() item=oTopCont name=MoreTopCms}]
-            [{assign var="iCatCnt" value=$iCatCnt+1 }]
-            [{if $iCatCnt <= $oView->getTopNavigationCatCnt()}]
-                <li><a href="[{$oTopCont->getLink()}]">[{$oTopCont->oxcontents__oxtitle->value}]</a></li>
-            [{else}]
-                [{assign var="blShowMore" value=true }]
-                [{capture append="moreLinks"}]
-                    <li><a href="[{$oTopCont->getLink()}]">[{$oTopCont->oxcontents__oxtitle->value}]</a></li>
-                [{/capture}]
-            [{/if}]
-        [{/foreach}]
-
         [{assign var="iCatCnt" value=$iCatCnt+1 }]
         [{if $iCatCnt <= $oView->getTopNavigationCatCnt() }]
             <li [{if $homeSelected == 'false' && $ocat->expanded}]class="current"[{/if}]>
@@ -52,6 +40,17 @@
             [{/capture}]
         [{/if}]
       [{/if}]
+        [{foreach from=$ocat->getContentCats() item=oTopCont name=MoreTopCms}]
+            [{assign var="iCatCnt" value=$iCatCnt+1 }]
+            [{if $iCatCnt <= $oView->getTopNavigationCatCnt()}]
+                <li><a href="[{$oTopCont->getLink()}]">[{$oTopCont->oxcontents__oxtitle->value}]</a></li>
+            [{else}]
+                [{assign var="blShowMore" value=true }]
+                [{capture append="moreLinks"}]
+                    <li><a href="[{$oTopCont->getLink()}]">[{$oTopCont->oxcontents__oxtitle->value}]</a></li>
+                [{/capture}]
+            [{/if}]
+        [{/foreach}]
     [{/foreach}]
     [{if $blShowMore }]
         <li>
