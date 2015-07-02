@@ -32,7 +32,6 @@ class lvaffiliate_oxcategory extends lvaffiliate_oxcategory_parent {
      * @return array
      */
     public function lvGetSubContentCats( $sParentLoadId ) {
-die("Angekommen");        
         $aContents      = array();
         $oDb            = oxDb::getDb( MODE_FETCH_ASSOC );
         $sContentTable  = getViewName( 'oxcontents' );
