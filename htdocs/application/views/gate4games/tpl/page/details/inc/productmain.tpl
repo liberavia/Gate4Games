@@ -137,6 +137,28 @@
             [{block name="details_productmain_artnumber"}]
                 [{*<span id="productArtnum" class="itemCode">[{oxmultilang ident="PRODUCT_NO" suffix="COLON" }] [{$oDetailsProduct->oxarticles__oxartnum->value}]</span>*}]
             [{/block}]
+            [{block name="details_productmain_social"}]
+                <div class="social">
+                    [{if ( $oView->isActive('FbShare') || $oView->isActive('FbLike') && $oViewConf->getFbAppId() ) }]
+                        [{ if $oView->isActive('FacebookConfirm') && !$oView->isFbWidgetVisible()  }]
+                            <div class="socialButton" id="productFbShare">
+                                [{include file="widget/facebook/enable.tpl" source="widget/facebook/share.tpl" ident="#productFbShare"}]
+                                [{include file=widget/facebook/like.tpl assign="fbfile"}]
+                                [{assign var='fbfile' value=$fbfile|strip|escape:'url'}]
+                                [{oxscript add="oxFacebook.buttons['#productFbLike']={html:'`$fbfile`',script:''};"}]
+                            </div>
+                            <div class="socialButton" id="productFbLike"></div>
+                        [{else}]
+                            <div class="socialButton" id="productFbShare">
+                                [{include file="widget/facebook/enable.tpl" source="widget/facebook/share.tpl" ident="#productFbShare"}]
+                            </div>
+                            <div class="socialButton" id="productFbLike">
+                                [{include file="widget/facebook/enable.tpl" source="widget/facebook/like.tpl" ident="#productFbLike"}]
+                            </div>
+                        [{/if}]
+                    [{/if}]
+                </div>
+            [{/block}]
 
             [{* ratings *}]
             [{if $oView->ratingIsActive()}]
@@ -347,28 +369,6 @@
 
             </div>
 
-            [{block name="details_productmain_social"}]
-                <div class="social">
-                    [{if ( $oView->isActive('FbShare') || $oView->isActive('FbLike') && $oViewConf->getFbAppId() ) }]
-                        [{ if $oView->isActive('FacebookConfirm') && !$oView->isFbWidgetVisible()  }]
-                            <div class="socialButton" id="productFbShare">
-                                [{include file="widget/facebook/enable.tpl" source="widget/facebook/share.tpl" ident="#productFbShare"}]
-                                [{include file=widget/facebook/like.tpl assign="fbfile"}]
-                                [{assign var='fbfile' value=$fbfile|strip|escape:'url'}]
-                                [{oxscript add="oxFacebook.buttons['#productFbLike']={html:'`$fbfile`',script:''};"}]
-                            </div>
-                            <div class="socialButton" id="productFbLike"></div>
-                        [{else}]
-                            <div class="socialButton" id="productFbShare">
-                                [{include file="widget/facebook/enable.tpl" source="widget/facebook/share.tpl" ident="#productFbShare"}]
-                            </div>
-                            <div class="socialButton" id="productFbLike">
-                                [{include file="widget/facebook/enable.tpl" source="widget/facebook/like.tpl" ident="#productFbLike"}]
-                            </div>
-                        [{/if}]
-                    [{/if}]
-                </div>
-            [{/block}]
         </div>
     </div>
 </div>
