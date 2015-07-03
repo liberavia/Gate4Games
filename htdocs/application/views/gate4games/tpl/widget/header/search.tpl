@@ -11,7 +11,7 @@
                 <input type="hidden" name="cur" value="[{$currency->id}]">
             [{/if}]
             [{block name="header_search_field"}]
-            <label for="searchParam" class="innerLabel">[{oxmultilang ident="LV_SEARCH_IN_CURRENTLY"}] <span class="G4GCiColor">[{$oViewConf->lvGetAmountArticles()}]</span> [{oxmultilang ident="LV_GAME_TITLES"}]...</label>
+            <label for="searchParam" class="innerLabel">[{oxmultilang ident="LV_SEARCH_IN_CURRENTLY"}] <span class="G4GCiSearchColor">[{$oViewConf->lvGetAmountArticles()}]</span> [{oxmultilang ident="LV_GAME_TITLES"}]...</label>
                 <input class="textbox" type="text" id="searchParam" name="searchparam" value="[{$oView->getSearchParamForHtml()}]">
             [{/block}]
             <button class="searchButton" type="submit">[{oxmultilang ident="SEARCH" }]</button>
