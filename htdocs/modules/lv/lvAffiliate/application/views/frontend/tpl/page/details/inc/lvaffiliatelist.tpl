@@ -7,19 +7,26 @@
                 <tr>
                     <td class="lvAffiliateDetailsPrice">
                         <label id="productPrice" class="price">
-                            <strong>
-                                <span>[{oxprice price=$oAffiliateProduct->getPrice() currency=$currency}]</span>
-                                [{if $oView->isVatIncluded() }]
-                                    <span>*</span>
-                                [{/if}]
-                            </strong>
+                            <a href="[{$oAffiliateProduct->oxarticles__oxexturl->rawValue}]" target="_blank">
+                                <strong>
+                                    <span>[{oxprice price=$oAffiliateProduct->getPrice() currency=$currency}]</span>
+                                    [{if $oView->isVatIncluded() }]
+                                        <span>*</span>
+                                    [{/if}]
+                                </strong>
+                            </a>
                         </label>
                     </td>
                     <td class="lvAffiliateDetailsIcon">
-                        <img src="[{$oAffiliateVendor->getIconUrl()}]">
+                        <a href="[{$oAffiliateProduct->oxarticles__oxexturl->rawValue}]" target="_blank">
+                            <img src="[{$oAffiliateVendor->getIconUrl()}]">
+                        </a>
                     </td>
                     <td class="lvAffiliateDetailsTitle">
-                        [{$oAffiliateProduct->oxarticles__oxtitle->value}] [{oxmultilang ident="LVAFFILIATE_AT_VENDOR"}] <strong>[{$oAffiliateVendor->getTitle()}]</strong>
+                        [{$oAffiliateProduct->oxarticles__oxtitle->value}] [{oxmultilang ident="LVAFFILIATE_AT_VENDOR"}] 
+                        <a href="[{$oAffiliateProduct->oxarticles__oxexturl->rawValue}]" target="_blank">
+                            <strong>[{$oAffiliateVendor->getTitle()}]</strong>
+                        </a>
                     </td>
                     <td class="lvAffiliateDetailsToOffer">
                         <a href="[{$oAffiliateProduct->oxarticles__oxexturl->rawValue}]" target="_blank"><button class="submitButton largeButton">[{oxmultilang ident="LVAFFILIATE_TO_OFFER"}]</button></a>
