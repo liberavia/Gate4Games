@@ -6,26 +6,23 @@
             <table class="lvAffiliateDetailsTable">
                 <tr>
                     <td class="lvAffiliateDetailsPrice">
-                        <label id="productPrice" class="price">
-                            <a href="[{$oAffiliateProduct->oxarticles__oxexturl->rawValue}]" target="_blank">
+                        <a href="[{$oAffiliateProduct->oxarticles__oxexturl->rawValue}]" target="_blank">
+                            <label id="productPrice" class="price">
                                 <strong>
                                     <span>[{oxprice price=$oAffiliateProduct->getPrice() currency=$currency}]</span>
                                     [{if $oView->isVatIncluded() }]
                                         <span>*</span>
                                     [{/if}]
                                 </strong>
-                            </a>
-                        </label>
-                    </td>
-                    <td class="lvAffiliateDetailsIcon">
-                        <a href="[{$oAffiliateProduct->oxarticles__oxexturl->rawValue}]" target="_blank">
-                            <img src="[{$oAffiliateVendor->getIconUrl()}]">
+                            </label>
                         </a>
                     </td>
+                    <td class="lvAffiliateDetailsIcon">
+                        <a href="[{$oAffiliateProduct->oxarticles__oxexturl->rawValue}]" target="_blank"><img src="[{$oAffiliateVendor->getIconUrl()}]"></a>
+                    </td>
                     <td class="lvAffiliateDetailsTitle">
-                        [{$oAffiliateProduct->oxarticles__oxtitle->value}] [{oxmultilang ident="LVAFFILIATE_AT_VENDOR"}] 
                         <a href="[{$oAffiliateProduct->oxarticles__oxexturl->rawValue}]" target="_blank">
-                            <strong>[{$oAffiliateVendor->getTitle()}]</strong>
+                            [{$oAffiliateProduct->oxarticles__oxtitle->value}] [{oxmultilang ident="LVAFFILIATE_AT_VENDOR"}] <strong>[{$oAffiliateVendor->getTitle()}]</strong>
                         </a>
                     </td>
                     <td class="lvAffiliateDetailsToOffer">
