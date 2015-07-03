@@ -1,4 +1,4 @@
-<div style="float:right;margin-top: 30px;">
+<div style="float:right;height:190px;width:250px;">
     <div style="text-align: right;">
         [{foreach from=$oView->lvGetAgeIcons() item="aAge"}]
             <span><img src="[{$aAge.url}]" title="[{$aAge.title}]"></span>
@@ -6,7 +6,7 @@
     </div>
     <br>
     <div style="text-align: right;">
-        <table border="0" cellpadding="2" cellspacing="2">
+        <table border="0" style="width:100%;height:100%;padding:3px;">
             [{if $oView->lvGetBestAffiliateDetails()}]
                 <tr>
                     <td align="right">

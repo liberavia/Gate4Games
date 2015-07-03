@@ -47,8 +47,8 @@ $aLang = array(
     'LV_GO_DIRECTLY_TO_BEST_OFFER_OF'                   => 'bei',
     'LV_DIRECTLY_TO_SHOP'                               => 'Zum Shop',
     'LV_DETAILS'                                        => 'Details',
-    'LV_ATTR_AVAILABLE_FOR_BEST'                        => 'Top Angebot Kompatibel mit:',
-    'LV_ATTR_AVAILABLE_FOR_SUM'                         => 'Verfügbare Kompatibilität:',
+    'LV_ATTR_AVAILABLE_FOR_BEST'                        => 'Top Angebot für: ',
+    'LV_ATTR_AVAILABLE_FOR_SUM'                         => 'Verfügbar für: ',
     'LV_ATTR_COMPATIBILITY_AVAILABLE'                   => 'Plattform verfügbar bei anderen Partnern. Klicke auf Details!',
 );
 
