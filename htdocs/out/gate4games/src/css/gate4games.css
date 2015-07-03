@@ -758,3 +758,24 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
     border: none !important;
     box-shadow: 0px 0 0px 0px #555555 !important;
 }
+
+.itemSlider .prevItem:hover span.slidePointer {
+    background-position: -23px -86px;
+}
+
+.itemSlider .prevItem span.slidePointer {
+    background-position: -23px -162px;
+}
+
+.itemSlider .nextItem:hover span.slidePointer {
+    background-position: -95px -86px;
+}
+
+.itemSlider .nextItem {
+    right: 2px;
+    width: 40px;
+}
+
+.G4GCiColor {
+    color: #5d005d;
+}
