@@ -34,14 +34,14 @@
             [{if $aLvExtUrl.mediatype == 'youtube'}]
                 <li>
                     <a id="morePics_[{$smarty.foreach.sMorePics.iteration}]" onclick="lvChangeDetailsToVideo( '[{$smarty.foreach.sMorePics.iteration}]' )">
-                        <span class="marker"><img src="[{$oViewConf->getImageUrl('marker.png')}]" alt=""></span>
+                        <span class="marker"><img src="" alt=""></span>
                         <span class="artIcon"><img src="[{$aLvExtUrl.iconurl}]" style="height:auto;width:auto;max-height:[{$aLvExtUrl.iconheight}]px;max-width:[{$aLvExtUrl.iconwidth}]px;" alt=""></span>
                     </a>
                 </li>
             [{elseif $aLvExtUrl.mediatype == 'extpic'}]
                 <li>
                     <a id="morePics_[{$smarty.foreach.sMorePics.iteration}]" onclick="lvChangeDetailsToPicture( '[{$aLvExtUrl.iconurl}]' )">
-                        <span class="marker"><img src="[{$oViewConf->getImageUrl('marker.png')}]" alt=""></span>
+                        <span class="marker"><img src="" alt=""></span>
                         <span class="artIcon"><img src="[{$aLvExtUrl.iconurl}]" style="height:auto;width:auto;max-height:[{$aLvExtUrl.iconheight}]px;max-width:[{$aLvExtUrl.iconwidth}]px;" alt=""></span>
                     </a>
                 </li>
