@@ -38,7 +38,6 @@ class lvaffiliate_oxcategory extends lvaffiliate_oxcategory_parent {
         $iCurrentLangId = oxRegistry::getLang()->getBaseLanguage();
         
         $sQuery = "SELECT OXID FROM ".$sContentTable." WHERE LVPARENTLOADID='".$sParentLoadId."'";
-        
         $oRs = $oDb->execute( $sQuery );
         
         if ( $oRs != false && $oRs->recordCount() > 0 ) {

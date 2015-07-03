@@ -45,15 +45,17 @@
         [{foreach from=$ocat->getContentCats() item=oTopCont name=MoreTopCms}]
             [{assign var="iCatCnt" value=$iCatCnt+1 }]
             [{if $iCatCnt <= $oView->getTopNavigationCatCnt()}]
-                <li><a href="[{$oTopCont->getLink()}]">[{$oTopCont->oxcontents__oxtitle->value}]</a></li>
-                [{assign var="sLvCurrentLoadId" value=$oTopCont->oxcontents__oxloadid->value}]
-                [{if method_exists( $ocat, 'lvGetSubContentCats' ) && $ocat->lvGetSubContentCats("`$sLvCurrentLoadId`")}]
-                    <ul>
-                        [{foreach from=$ocat->lvGetSubContentCats("`$sLvCurrentLoadId`") item="ocontentsubcat" key=contentsubcatkey name=ContentSubCat}]
-                            <li><a href="[{$ocontentsubcat->getLink()}]">[{$ocontentsubcat->oxcontents__oxtitle->value}]</a></li>
-                        [{/foreach}]
-                    </ul>
-                [{/if}]
+                <li>
+                    <a href="[{$oTopCont->getLink()}]">[{$oTopCont->oxcontents__oxtitle->value}]</a>
+                    [{assign var="sLvCurrentLoadId" value=$oTopCont->oxcontents__oxloadid->value}]
+                    [{if method_exists( $ocat, 'lvGetSubContentCats' ) && $ocat->lvGetSubContentCats("`$sLvCurrentLoadId`")}]
+                        <ul>
+                            [{foreach from=$ocat->lvGetSubContentCats("`$sLvCurrentLoadId`") item="ocontentsubcat" key=contentsubcatkey name=ContentSubCat}]
+                                <li><a href="[{$ocontentsubcat->getLink()}]">[{$ocontentsubcat->oxcontents__oxtitle->value}]</a></li>
+                            [{/foreach}]
+                        </ul>
+                    [{/if}]
+                </li>
             [{else}]
                 [{assign var="blShowMore" value=true }]
                 [{capture append="moreLinks"}]
