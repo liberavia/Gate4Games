@@ -5,7 +5,7 @@
     [{assign var="oAffiliateVendor" value=$aAffiliateDetails.vendor}]
     <br>&nbsp;
     <a href="[{$oAffiliateProduct->oxarticles__oxexturl->rawValue}]" target="_blank" style="text-decoration:none;">
-        <div class="widgetBox">    
+        <div class="widgetBox" style="width:335px;">    
             [{oxmultilang ident="LVAFFILIATE_GO_DIRECTLY_TO_BEST_OFFER"}] [{oxmultilang ident="LVAFFILIATE_AT_VENDOR"}] [{$oAffiliateVendor->getTitle()}]
             <img width="25" height="25" src="[{$oAffiliateVendor->getIconUrl()}]" title="[{$oAffiliateProduct->oxarticles__oxtitle->value}] [{oxmultilang ident="LVAFFILIATE_AT_VENDOR"}] [{$oAffiliateVendor->getTitle()}]" alt="[{$oAffiliateVendor->getTitle()}]">
             <button class="submitButton largeButton">[{oxmultilang ident="LVAFFILIATE_TO_OFFER"}]</button>
