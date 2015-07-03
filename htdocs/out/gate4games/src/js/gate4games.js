@@ -21,9 +21,10 @@ scrollIntervalID = setInterval(lvStickMenu, 10);
 function lvStickMenu() {
 
     var targetElementPos = $('#navigation').offset();
-    targetElementTop = targetElementPos.top;               
+    targetElementTop    = targetElementPos.top;               
+    headerHeight        = $('#header').css('height');               
 
-    if ($(window).scrollTop() >= (targetElementTop)) {
+    if ($(window).scrollTop() >= (targetElementTop) && $(window).scrollTop() >= (headerHeight)) {
         // scrolled past the original position; now only show the cloned, sticky element.
         // make header sticky and hide 
         $('#header').css( 'top', '-125px' );
