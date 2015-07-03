@@ -100,6 +100,7 @@
             [{oxscript include='js/libs/superfish/hoverIntent.js'}]
             [{oxscript include='js/libs/superfish/supersubs.js'}]
             [{oxscript include='js/libs/superfish/superfish.js'}]
+            [{oxscript include='js/gate4games.js'}]
         [{/block}]
 
         [{if $oViewConf->isTplBlocksDebugMode()}]
