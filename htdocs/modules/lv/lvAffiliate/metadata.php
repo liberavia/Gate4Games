@@ -74,6 +74,7 @@ $aModule = array(
         array( 'template' => 'manufacturer_main.tpl',                       'block'=>'admin_manufacturer_main_form',                'file'=>'extend/application/views/blocks/block_admin_manufacturer_main_form.tpl' ),
         array( 'template' => 'page/shop/start.tpl',                         'block'=>'lv_page_shop_start_offers',                   'file'=>'extend/application/views/blocks/block_lv_page_shop_start_offers.tpl' ),
         array( 'template' => 'page/details/inc/productmain.tpl',            'block'=>'details_productmain_price',                   'file'=>'extend/application/views/blocks/block_details_productmain_price.tpl' ),
+        array( 'template' => 'widget/header/search.tpl',                    'block'=>'header_search_field',                         'file'=>'extend/application/views/blocks/block_header_search_field.tpl' ),
     ),
     'settings' => array(
         // group assignments
@@ -156,6 +157,9 @@ $aModule = array(
         array( 'group' => 'lvaffiliate_toplists',       'name' => 'sLvListTopSaleId',                   'type' => 'str',        'value' => '' ),
         array( 'group' => 'lvaffiliate_toplists',       'name' => 'sLvListLatestId',                    'type' => 'str',        'value' => '' ),
         array( 'group' => 'lvaffiliate_toplists',       'name' => 'sLvListLatestAttributeId',           'type' => 'str',        'value' => '' ),
+        // group facebook
+        array( 'group' => 'lvaffiliate_facebook',       'name' => 'sLvFbHomePage',                      'type' => 'str',        'value' => '' ),
+        
     )
 );
  

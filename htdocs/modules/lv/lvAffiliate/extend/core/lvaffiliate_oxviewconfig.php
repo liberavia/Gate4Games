@@ -41,4 +41,34 @@ class lvaffiliate_oxviewconfig extends lvaffiliate_oxviewconfig_parent {
         return (int)$sAmount;
     }
     
+    
+    /**
+     * Get configured facebook link
+     * 
+     * @param void
+     * @return string
+     */
+    public function lvGetFbPageLink() {
+        $oConfig = $this->getConfig();
+        
+        $sLvFbHomePage = $oConfig->getConfigParam( 'sLvFbHomePage' );
+
+        return (string)$sLvFbHomePage;
+    }
+    
+    
+    /**
+     * Returns image url of facebook logo
+     * 
+     * @param void
+     * @return string
+     */
+    public function lvGetFbSearchLogoUrl() {
+        $oConfig    = $this->getConfig();
+        $sShopUrl   = $oConfig->getShopUrl();
+        $sPath      = "modules/lv/lvAffiliate/out/img/fblogo_search.png";
+        
+        return $sShopUrl.$sPath;
+    }
+    
 }

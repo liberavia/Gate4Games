@@ -43,5 +43,8 @@ $aLang = array(
     'SHOP_MODULE_sLvListTopSaleId'                      => 'Action-ID of Top-Sale',
     'SHOP_MODULE_sLvListLatestId'                       => 'Action-ID of list for latest arrived articles',
     'SHOP_MODULE_sLvListLatestAttributeId'              => 'Attribute ID for realesedate',
+    // group facebook
+    'SHOP_MODULE_GROUP_lvaffiliate_facebook'            => 'Facebook',
+    'SHOP_MODULE_sLvFbHomePage'                         => 'Link to facebook homepage of affiliate shop',
 );
 
