@@ -15,16 +15,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-scrollIntervalID = setInterval(lvStickMenu, 10);
+headerElementPos    = $('#header').offset();
+scrollIntervalID    = setInterval(lvStickMenu, 10);
 
 
 function lvStickMenu() {
 
-    var targetElementPos = $('#navigation').offset();
-    targetElementTop    = targetElementPos.top;               
-    headerHeight        = $('#header').css('height');               
+    var targetElementPos    = $('#navigation').offset();
+    targetElementTop        = targetElementPos.top;               
+    headerElementTop        = headerElementPos.top;               
 
-    if ($(window).scrollTop() >= (targetElementTop) && $(window).scrollTop() >= (headerHeight)) {
+    if ($(window).scrollTop() >= (targetElementTop) && $(window).scrollTop() >= (headerElementTop + 132) ) {
         // scrolled past the original position; now only show the cloned, sticky element.
         // make header sticky and hide 
         $('#header').css( 'top', '-125px' );
