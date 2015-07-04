@@ -36,7 +36,7 @@
             <div class="categoryTopDescription" id="catDesc">[{$actCategory->getShortDescription()}]</div>
         [{/if}]
 
-        [{if $oView->hasVisibleSubCats()}]
+{*        [{if $oView->hasVisibleSubCats()}]
             [{assign var="iSubCategoriesCount" value=0}]
             [{oxscript include="js/widgets/oxequalizer.js" priority=10 }]
             [{oxscript add="$(function(){oxEqualizer.equalHeight($( '.subcatList li .content' ));});"}]
@@ -111,7 +111,7 @@
             </li>
             </ul>
         [{/if}]
-    [{/block}]
+*}    [{/block}]
 
     [{block name="page_list_listbody"}]
     [{if $oView->getArticleList()|@count > 0}]
