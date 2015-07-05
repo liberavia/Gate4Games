@@ -126,6 +126,7 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
      */
     protected function _lvGetDefaultShortDesc() {
         $sShortDesc = '';
+        $sLangAbbr  = $oLang->getLanguageAbbr();
         
         if ( $this->oxarticles__oxparentid->value == '' ) {
             $oParentProduct = $this;
@@ -137,7 +138,7 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
         $aVariants = $oParentProduct->getVariants();
         $blMatch = false;
         foreach ( $aVariants as $oVariant ) {
-            if ( $blMatch === true ) continue; 
+            if ( $blMatch === true || $oVariant->oxarticles__lvlangabbr->value != $sLangAbbr ) continue; 
 
             if ( $oVariant->oxarticles__oxshortdesc->value != '' ) {
                 $sShortDesc = $oVariant->oxarticles__oxshortdesc->value;
