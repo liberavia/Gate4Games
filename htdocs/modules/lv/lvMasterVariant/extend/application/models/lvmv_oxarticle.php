@@ -126,6 +126,7 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
      */
     protected function _lvGetDefaultShortDesc() {
         $sShortDesc = '';
+        $oLang              = oxRegistry::getLang();
         $sLangAbbr  = $oLang->getLanguageAbbr();
         
         if ( $this->oxarticles__oxparentid->value == '' ) {
