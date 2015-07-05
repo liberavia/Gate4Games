@@ -37,4 +37,30 @@ class lvmv_oxwarticledetails extends lvmv_oxwarticledetails_parent {
         return $oProduct->lvGetMostExpansiveTPrice();
     }
     
+    
+    /**
+     * Template getter for attributes. Using summed attributes if parent and std if not
+     * 
+     * @param void
+     * @return array
+     */
+    public function getAttributes() {
+        $aAttributes    = array();
+        $oProduct       = $this->getProduct();
+        
+        if ( $oProduct->oxarticles__oxparentid->value == '' ) {
+            $aSummedAttributes = $oProduct->lvGetSummedAttributes();
+            foreach ( $aSummedAttributes as $sKey=>$aSummedAttribute ) {
+                $aAttributes[$sKey]         = new stdClass();
+                $aAttributes[$sKey]->title  = $aSummedAttribute['title'];
+                $aAttributes[$sKey]->value  = $aSummedAttribute['value'];
+            }
+        }
+        else {
+            $aAttributes = parent::getAttributes();
+        }
+        
+        return $aAttributes;
+    }
+    
 }

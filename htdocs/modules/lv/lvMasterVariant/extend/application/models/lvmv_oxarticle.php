@@ -161,7 +161,7 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
 // echo "MasterVariantID:".$sMasterVariantOxid."<br>";        
         if ( $sMasterVariantOxid ) {
             if ($this->_oAttributeList === null) {
-                $this->_oAttributeList = oxNew('oxattributelist');
+                $this->_oAttributeList = oxNew( 'oxattributelist' );
                 $this->_oAttributeList->loadAttributes($sMasterVariantOxid, $this->getParentId());
             }
 
@@ -172,6 +172,49 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
         }
     }
     
+    
+    /**
+     * Method delivers sum of all attributes of all variants of selected language
+     * 
+     * @param void
+     * @return array
+     */
+    public function lvGetSummedAttributes() {
+        $aSummedAttributes  = array();
+        $sLangAbbr          = $oLang->getLanguageAbbr();
+        
+        if ( $this->oxarticles__oxparentid->value == '' ) {
+            $oParentProduct = $this;
+        }
+        else {
+            $oParentProduct = $this->getParentArticle();
+        }
+        
+        $aVariants = $oParentProduct->getVariants();
+        
+        // parse through each variant if of same language and merge with return array
+        foreach ( $aVariants as $oVariant ) {
+            if ( $oVariant->oxarticles__lvlangabbr->value != $sLangAbbr ) continue; 
+            
+            $oCurrentAttributeList = oxNew( 'oxattributelist' );
+            $oCurrentAttributeList->loadAttributes( $oVariant->getId(), $oParentProduct->getId() );
+            
+            foreach ( $oCurrentAttributeList as $sKey=>$oAttribute ) {
+                $sTitleHash = md5( $oAttribute->oxattribute__oxtitle->value );
+                
+                // check if key with title hash already exists. merge value if true, add new if false
+                if ( isset( $aSummedAttributes[$sTitleHash] ) ) {
+                    $aSummedAttributes[$sTitleHash]['value'] .= ', '.$oAttribute->oxattribute__oxvalue->value;
+                }
+                else {
+                    $aSummedAttributes[$sTitleHash]['title'] = $oAttribute->oxattribute__oxtitle->value;
+                    $aSummedAttributes[$sTitleHash]['value'] = $oAttribute->oxattribute__oxvalue->value;
+                }
+            }
+        }
+        
+        return $aSummedAttributes;
+    } 
     
 
     
