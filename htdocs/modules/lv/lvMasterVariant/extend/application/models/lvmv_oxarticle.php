@@ -206,7 +206,9 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
                 
                 // check if key with title hash already exists. merge value if true, add new if false
                 if ( isset( $aSummedAttributes[$sTitleHash] ) ) {
-                    $aSummedAttributes[$sTitleHash]['value'] .= ', '.$oAttribute->oxattribute__oxvalue->value;
+                    if ( $oAttribute->oxattribute__oxvalue->value != $aSummedAttributes[$sTitleHash]['value'] ) {
+                        $aSummedAttributes[$sTitleHash]['value'] .= ', '.$oAttribute->oxattribute__oxvalue->value;
+                    }
                 }
                 else {
                     $aSummedAttributes[$sTitleHash]['title'] = $oAttribute->oxattribute__oxtitle->value;
