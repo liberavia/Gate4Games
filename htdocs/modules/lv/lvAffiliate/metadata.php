@@ -55,6 +55,7 @@ $aModule = array(
         'oxcategory'                                => 'lv/lvAffiliate/extend/application/models/lvaffiliate_oxcategory',
         'oxarticlelist'                             => 'lv/lvAffiliate/extend/application/models/lvaffiliate_oxarticlelist',
         'oxcontentlist'                             => 'lv/lvAffiliate/extend/application/models/lvaffiliate_oxcontentlist',
+        'oxpricealarm'                              => 'lv/lvAffiliate/extend/application/models/lvaffiliate_oxpricealarm',
         // core
         'oxviewconfig'                              => 'lv/lvAffiliate/extend/core/lvaffiliate_oxviewconfig',
     ),
