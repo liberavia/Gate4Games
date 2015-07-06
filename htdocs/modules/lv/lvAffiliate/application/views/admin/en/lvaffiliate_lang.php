@@ -30,6 +30,6 @@ $aLang = array(
     'LV_MANUFACTURER_SHORTCUT'                          => 'Manufacturer shortcut',
     'LV_VENDOR_LANGABBR'                                => 'Assigned lang abbreviations (seperated by comma)',
     'LV_TOP_MANUFACTURER'                               => 'Top Manufacturer (will be shown in slider on startpage)',
-    'LVAFFILIATE_PARENT_IDENT'                          => 'Parent LoadId (For content menus)',
+    'LVAFFILIATE_PARENT_IDENT'                          => 'Parent ident (For content menus)',
 );
 
