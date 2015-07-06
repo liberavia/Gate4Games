@@ -76,6 +76,7 @@ $aModule = array(
         array( 'template' => 'page/shop/start.tpl',                         'block'=>'lv_page_shop_start_offers',                   'file'=>'extend/application/views/blocks/block_lv_page_shop_start_offers.tpl' ),
         array( 'template' => 'page/details/inc/productmain.tpl',            'block'=>'details_productmain_price',                   'file'=>'extend/application/views/blocks/block_details_productmain_price.tpl' ),
         array( 'template' => 'widget/header/search.tpl',                    'block'=>'header_search_field',                         'file'=>'extend/application/views/blocks/block_header_search_field.tpl' ),
+        array( 'template' => 'content_main.tpl',                            'block'=>'admin_content_main_form',                     'file'=>'extend/application/views/blocks/block_admin_content_main_form.tpl' ),
     ),
     'settings' => array(
         // group assignments
