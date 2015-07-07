@@ -38,7 +38,7 @@ class lvaffiliate_cron_pricealarm extends oxBase {
      * Here's where it starts
      */
     public function start() {
-        $oPriceAlarm = oxNew( 'oxdpricealarm' );
+        $oPriceAlarm = oxNew( 'oxpricealarm' );
         $oPriceAlarm->lvCheckAndSendPricealarm();
     }
     

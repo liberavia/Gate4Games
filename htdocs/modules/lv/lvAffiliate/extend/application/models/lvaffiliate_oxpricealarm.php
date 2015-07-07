@@ -70,7 +70,7 @@ class lvaffiliate_oxpricealarm extends lvaffiliate_oxpricealarm_parent {
                    "from oxpricealarm, oxarticles where oxarticles.oxid = oxpricealarm.oxartid " .
                    "and oxpricealarm.oxsended = '0000-00-00 00:00:00'";
         
-        if (isset($iStart)) {
+        if ( $iStart === false && is_numeric( $iStart ) ) {
             $rs = $oDB->SelectLimit($sSelect, $myConfig->getConfigParam('iCntofMails'), $iStart);
         } else {
             $rs = $oDB->Execute($sSelect);
@@ -119,7 +119,7 @@ class lvaffiliate_oxpricealarm extends lvaffiliate_oxpricealarm_parent {
         $oLang->setTplLanguage($iLang);
 
         $oEmail = oxNew('oxemail');
-        $blSuccess = (int) $oEmail->sendPricealarmToCustomer($sEMail, $oAlarm);
+        $blSuccess = (int) $oEmail->lvSendPricealarmToCustomer($sEMail, $oAlarm);
 
         $oLang->setTplLanguage($iOldLangId);
 
