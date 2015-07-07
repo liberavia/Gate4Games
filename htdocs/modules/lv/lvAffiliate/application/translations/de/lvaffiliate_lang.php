@@ -37,5 +37,16 @@ $aLang = array(
     'LV_GAME_TITLES'                                    => 'Titeln',
     'LVPRICEALARMFOR'                                   => 'Dein Preisalarm für',
     'LVIN'                                              => 'bei',
+    'LV_EMAIL_PRICEALARM_CUSTOMER_PRICEALARMIN'         => 'Preisalarm bei',
+    'LV_EMAIL_PRICEALARM_CUSTOMER_HY'                   => 'Hallo,',
+    'LV_EMAIL_PRICEALARM_CUSTOMER_HAVEPRICEALARM'       => 'Dein Preisalarm wurde ausgelöst!',
+    'LV_EMAIL_PRICEALARM_CUSTOMER_ITEM1'                => 'Der Artikel',
+    'LV_EMAIL_PRICEALARM_CUSTOMER_ITEM2'                => 'für den du dich interessiert und bei einem Preis unter',
+    'LV_EMAIL_PRICEALARM_CUSTOMER_ITEM3'                => 'beanachrichtigt werden wolltest ist nun für',
+    'LV_EMAIL_PRICEALARM_CUSTOMER_ITEM4'                => 'zu haben!',
+    'LV_EMAIL_PRICEALARM_CUSTOMER_CLICKHERE1'           => 'Um direkt zum Artikel zu kommen',
+    'LV_EMAIL_PRICEALARM_CUSTOMER_CLICKHERE2'           => 'klicke bitte hier',
+    'LV_EMAIL_PRICEALARM_CUSTOMER_TEAM1'                => 'Danke, dass du unseren Preisalarm verwendet hast. Dein',
+    'LV_EMAIL_PRICEALARM_CUSTOMER_TEAM2'                => 'Team',
 );
 

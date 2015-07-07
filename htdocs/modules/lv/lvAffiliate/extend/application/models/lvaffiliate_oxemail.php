@@ -64,9 +64,10 @@ class lvaffiliate_oxemail extends lvaffiliate_oxemail_parent {
         $this->_processViewArray();
 
         $this->setRecipient($sRecipient, $sRecipient);
+        $oArticle = $oAlarm->getArticle();
         
         $sPriceAlarmFor = $oLang->translateString( 'LVPRICEALARMFOR' );
-        $sTitle         = $oAlarm->getArticle()->getTitle();
+        $sTitle         = $oArticle->oxarticles__oxtitle->value;
         $sPriceAlarmIn  = $oLang->translateString( 'LVIN' );
         
         $sSubject = $sPriceAlarmFor." ".$sTitle." ".$sPriceAlarmIn." ".$oShop->oxshops__oxname->value;
