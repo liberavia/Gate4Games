@@ -15,15 +15,15 @@
 <br>
 [{oxmultilang ident="LV_EMAIL_PRICEALARM_CUSTOMER_HY"}]<br>
 <br>
-[{oxmultilang ident="LV_EMAIL_PRICEALARM_CUSTOMER_HAVEPRICEALARM"}] [{$shop->oxshops__oxname->value}]!<br>
+[{oxmultilang ident="LV_EMAIL_PRICEALARM_CUSTOMER_HAVEPRICEALARM"}]!<br>
 <br>
-[{oxmultilang ident="LV_EMAIL_PRICEALARM_CUSTOMER_ITEM1"}] [{ $oPriceAlarm->getTitle() }] [{oxmultilang ident="LV_EMAIL_PRICEALARM_CUSTOMER_ITEM2"}] [{ $oPriceAlarm->getFProposedPrice() }] [{ $currency->sign}]
-[{oxmultilang ident="LV_EMAIL_PRICEALARM_CUSTOMER_ITEM3"}] [{ $oPriceAlarm->getFPrice() }] [{ $currency->sign }] [{oxmultilang ident="LV_EMAIL_PRICEALARM_CUSTOMER_ITEM4"}]<br>
+[{oxmultilang ident="LV_EMAIL_PRICEALARM_CUSTOMER_ITEM1"}] <strong>[{$oPriceAlarm->getTitle()}]</strong> [{oxmultilang ident="LV_EMAIL_PRICEALARM_CUSTOMER_ITEM2"}] [{ $oPriceAlarm->getFProposedPrice() }] [{ $currency->sign}]
+[{oxmultilang ident="LV_EMAIL_PRICEALARM_CUSTOMER_ITEM3"}] <strong>[{$oPriceAlarm->getFPrice()}]</strong> [{$currency->sign}] [{oxmultilang ident="LV_EMAIL_PRICEALARM_CUSTOMER_ITEM4"}]<br>
 <br>
-[{oxmultilang ident="LV_EMAIL_PRICEALARM_CUSTOMER_CLICKHERE1"}]<a href="[{$oViewConf->getBaseDir()}]index.php?cl=details&anid=[{ $product->oxarticles__oxid->value }]" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;"><b>[{oxmultilang ident="LV_EMAIL_PRICEALARM_CUSTOMER_CLICKHERE2"}]</b></a>.
+[{oxmultilang ident="LV_EMAIL_PRICEALARM_CUSTOMER_CLICKHERE1"}] <a href="[{$oViewConf->getBaseDir()}]index.php?cl=details&anid=[{ $product->oxarticles__oxid->value }]" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 10px;"><b>[{oxmultilang ident="LV_EMAIL_PRICEALARM_CUSTOMER_CLICKHERE2"}]</b></a>.
 <br>
 <br>
-[{oxmultilang ident="LV_EMAIL_PRICEALARM_CUSTOMER_TEAM1"}] [{ $shop->oxshops__oxname->value }] [{oxmultilang ident="LV_EMAIL_PRICEALARM_CUSTOMER_TEAM2"}]<br>
+[{oxmultilang ident="LV_EMAIL_PRICEALARM_CUSTOMER_TEAM1"}] [{$shop->oxshops__oxname->value}] [{oxmultilang ident="LV_EMAIL_PRICEALARM_CUSTOMER_TEAM2"}]<br>
 <br><br>
 [{ oxcontent ident="oxemailfooter" }]
 </body>
