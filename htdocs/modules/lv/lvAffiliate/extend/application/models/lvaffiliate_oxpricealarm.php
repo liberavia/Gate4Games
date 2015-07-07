@@ -55,4 +55,79 @@ class lvaffiliate_oxpricealarm extends lvaffiliate_oxpricealarm_parent {
         return $this->_dPrice;
     }
     
+    
+    /**
+     * Due they were too stupid to put this code into model I needed to copy most of it from admin pricealarm send. Bravissimo :( 
+     * 
+     * @param void
+     * @return void
+     */
+    public function lvCheckAndSendPricealarm( $iStart = false  ) {
+        $myConfig   = $this->getConfig();
+        $oDB        = oxDb::getDb(oxDb::FETCH_MODE_ASSOC);
+
+        $sSelect = "select oxpricealarm.oxid, oxpricealarm.oxemail, oxpricealarm.oxartid, oxpricealarm.oxprice " .
+                   "from oxpricealarm, oxarticles where oxarticles.oxid = oxpricealarm.oxartid " .
+                   "and oxpricealarm.oxsended = '0000-00-00 00:00:00'";
+        
+        if (isset($iStart)) {
+            $rs = $oDB->SelectLimit($sSelect, $myConfig->getConfigParam('iCntofMails'), $iStart);
+        } else {
+            $rs = $oDB->Execute($sSelect);
+        }
+
+        $iAllCntTmp = 0;
+
+        if ($rs != false && $rs->recordCount() > 0) {
+            while (!$rs->EOF) {
+                $oArticle = oxNew("oxarticle");
+                $oArticle->load($rs->fields['oxid']);
+                if ($oArticle->getPrice()->getBruttoPrice() <= $rs->fields['oxprice']) {
+                    $this->lvSendMail(
+                        $rs->fields['oxemail'],
+                        $rs->fields['oxartid'],
+                        $rs->fields['oxid'],
+                        $rs->fields['oxprice']
+                    );
+                    $iAllCntTmp++;
+                }
+                $rs->moveNext();
+            }
+        }
+    }
+    
+    
+    /**
+     * creates and sends email with pricealarm information
+     * LV: Copy of pricealarm_send::sendeMail
+     *
+     * @param string $sEMail        email address
+     * @param string $sProductID    product id
+     * @param string $sPricealarmID price alarm id
+     * @param string $sBidPrice     bidded price
+     */
+    public function lvSendMail($sEMail, $sProductID, $sPricealarmID, $sBidPrice)
+    {
+        $myConfig = $this->getConfig();
+        $oAlarm = oxNew("oxpricealarm");
+        $oAlarm->load($sPricealarmID);
+
+        $oLang = oxRegistry::getLang();
+        $iLang = (int) $oAlarm->oxpricealarm__oxlang->value;
+
+        $iOldLangId = $oLang->getTplLanguage();
+        $oLang->setTplLanguage($iLang);
+
+        $oEmail = oxNew('oxemail');
+        $blSuccess = (int) $oEmail->sendPricealarmToCustomer($sEMail, $oAlarm);
+
+        $oLang->setTplLanguage($iOldLangId);
+
+        if ($blSuccess) {
+            $oAlarm->oxpricealarm__oxsended = new oxField(date("Y-m-d H:i:s"));
+            $oAlarm->save();
+        }
+    }
+    
+    
 }
