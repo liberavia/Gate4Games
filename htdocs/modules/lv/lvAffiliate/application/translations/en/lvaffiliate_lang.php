@@ -34,5 +34,7 @@ $aLang = array(
     'LVAFFILIATE_GO_DIRECTLY_TO_BEST_OFFER'             => 'Best offer',
     'LV_SEARCH_IN_CURRENTLY'                            => 'Search in ',
     'LV_GAME_TITLES'                                    => 'available titles',
+    'LVPRICEALARMFOR'                                   => 'Your price alert',
+    'LVIN'                                              => 'at',
 );
 
