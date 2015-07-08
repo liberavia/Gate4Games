@@ -162,7 +162,7 @@ class lvaffiliate_assign_categories extends oxBase {
      * @return void
      */
     protected function _lvCleanCategoryAssignment( $sCategoryId ) {
-        $sQuery = "DELETE FROM oxcategories WHERE OXCATNID='".$sCategoryId."'";
+        $sQuery = "DELETE FROM oxobject2category WHERE OXCATNID='".$sCategoryId."'";
         $this->_oLvDb->Execute( $sQuery );
     }
     
