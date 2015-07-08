@@ -166,7 +166,7 @@ class lvaffiliate_calc_salesrank extends oxBase {
     protected function _lvNormalizeAmazonSalesRank() {
         $iCurrentRank = 1;
         
-        $sQuery = "SELECT OXID FROM oxarticles WHERE OXPARENTID!='' OXVENDORID='".$this->_sAmazonVendorId."' ORDER BY LVSALESRANK ASC";
+        $sQuery = "SELECT OXID FROM oxarticles WHERE OXPARENTID!='' AND OXVENDORID='".$this->_sAmazonVendorId."' ORDER BY LVSALESRANK ASC";
         
         $oRs = $this->_oLvDb->Execute( $sQuery );
         
