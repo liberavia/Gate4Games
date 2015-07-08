@@ -306,7 +306,9 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
         $aVariants      = $this->getVariants();
         
         if ( count( $aVariants ) > 0 ) {
-            foreach ( $aVariants as $oVariant ) {
+            foreach ( $aVariants as $oSimpleVariant ) {
+                $oVariant = oxNew( 'oxarticle' );
+                $oVariant->load( $oSimpleVariant->getId() );
                 $oVariantTPrice = $oVariant->getTPrice();
                 if ( $oVariantTPrice ) {
                     $dVariantTPrice = $oVariantTPrice->getBruttoPrice();
