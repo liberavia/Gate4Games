@@ -53,6 +53,12 @@ class lvaffiliate_calc_salesrank extends oxBase {
     protected $_aParentArticles = array();
     
     /**
+     * VendorID for Amazon
+     * @var string
+     */
+    protected $_sAmazonVendorId = '693e22ddb44b522388de9fa0f90a611b';
+    
+    /**
      * Script start point
      * 
      * @param void
@@ -62,6 +68,7 @@ class lvaffiliate_calc_salesrank extends oxBase {
         $this->_oLvConfig           = $this->getConfig();
         $this->_oLvDb               = oxDb::getDb( MODE_FETCH_ASSOC );
         
+        $this->_lvNormalizeAmazonSalesRank();
         $this->_lvSetparentOxids();
         $this->_lvAssignSalesRank();
     }
@@ -144,6 +151,33 @@ class lvaffiliate_calc_salesrank extends oxBase {
         if ( $oRs != false && $oRs->recordCount() > 0 ) {
             while ( !$oRs->EOF ) {
                 $this->_aParentArticles[] = $oRs->fields['OXID'];
+                $oRs->moveNext();
+            }
+        }
+    }
+    
+    
+    /**
+     * Setting sales Rank of amazon to enumaration starting by 1
+     * 
+     * @param void
+     * @return void
+     */
+    protected function _lvNormalizeAmazonSalesRank() {
+        $iCurrentRank = 1;
+        
+        $sQuery = "SELECT OXID FROM oxarticles WHERE OXPARENTID!='' OXVENDORID='".$this->_sAmazonVendorId."' ORDER BY LVSALESRANK ASC";
+        
+        $oRs = $this->_oLvDb->Execute( $sQuery );
+        
+        if ( $oRs != false && $oRs->recordCount() > 0 ) {
+            while ( !$oRs->EOF ) {
+                $sOxid = $oRs->fields['OXID'];
+                
+                $sQuery = "UPDATE oxarticles SET LVSALESRANK='".(string)$iCurrentRank."' WHERE OXID='".$sOxid."' LIMIT 1";
+                $this->_oLvDb->Execute( $sQuery );
+                
+                $iCurrentRank++;
                 $oRs->moveNext();
             }
         }

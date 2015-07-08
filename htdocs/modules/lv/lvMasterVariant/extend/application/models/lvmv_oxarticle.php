@@ -309,10 +309,13 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
             foreach ( $aVariants as $oSimpleVariant ) {
                 $oVariant = oxNew( 'oxarticle' );
                 $oVariant->load( $oSimpleVariant->getId() );
-                $oVariantTPrice = $oVariant->getTPrice();
+                $dTPrice = $oVariant->oxarticles__oxtprice->value;
+                $oVariantTPrice = oxNew( 'oxprice' );
+                $oVariantTPrice->setBruttoPriceMode();
+                $oVariantTPrice->setPrice( $dTPrice );
+                
                 if ( $oVariantTPrice ) {
                     $dVariantTPrice = $oVariantTPrice->getBruttoPrice();
-
                     if ( $dVariantTPrice > $dMaxTPrice ) {
                         $dMaxTPrice = $dVariantTPrice;
                         $oReturn = $oVariantTPrice;
