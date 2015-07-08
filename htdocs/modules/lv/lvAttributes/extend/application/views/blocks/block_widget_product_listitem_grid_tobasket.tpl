@@ -8,7 +8,7 @@
             <a href="[{$oAffiliateProduct->oxarticles__oxexturl->rawValue}]" target="_blank" style="text-decoration:none;">
                 [{if $oAffiliateProduct->getTPrice()}]
                     <span>
-                        [{oxmultilang ident="LV_OLD_PRICE"}] [{if method_exists($oAffiliateProduct,'lvGetMostExpansiveTPrice')}]<s>[{oxprice price=$oAffiliateProduct->lvGetMostExpansiveTPrice() currency=$currency}]</s>[{else}]<s>[{oxprice price=$oAffiliateProduct->getTPrice() currency=$currency}]</s>[{/if}]
+                        [{oxmultilang ident="LV_OLD_PRICE"}] [{if method_exists($product,'lvGetMostExpansiveTPrice')}]<s>[{oxprice price=$product->lvGetMostExpansiveTPrice() currency=$currency}]</s>[{else}]<s>[{oxprice price=$oAffiliateProduct->getTPrice() currency=$currency}]</s>[{/if}]
                     </span>
                 [{/if}]
                 <br>
