@@ -38,27 +38,27 @@ class lvaffiliate_reset_saved extends oxBase {
      * DB-Object
      * @var object
      */
-    protected $_oDb = null;
+    protected $_oLvDb = null;
     
     /**
      * Config object
      * @var object
      */
-    protected $_oConfig = null;
+    protected $_oLvConfig = null;
     
     
     /**
      * Where it all begins...
      */
     public function start() { 
-        $this->_oDb     = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
-        $this->_oConfig = $this->getConfig();
+        $this->_oLvDb       = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
+        $this->_oLvConfig   = $this->getConfig();
         
         $sQuery = "UPDATE oxarticles SET LVSAVED=0";
-        $this->_oDb->Execute( $sQuery );
+        $this->_oLvDb->Execute( $sQuery );
         
         $sQuery = "SELECT OXID, OXVARMINPRICE FROM oxarticles WHERE OXPARENTID=''";
-        $oRs = $this->_oDb->execute( $sQuery );
+        $oRs = $this->_oLvDb->Execute( $sQuery );
         
         if ( $oRs != false && $oRs->recordCount() > 0 ) {
             while( !$oRs->EOF ) {
@@ -83,12 +83,12 @@ class lvaffiliate_reset_saved extends oxBase {
     protected function _lvSetSaveAmount( $sOxid, $dVarMinPrice ) {
         $sQuery = "SELECT MAX(OXTPRICE) FROM oxarticles WHERE OXPARENTID='".$sOxid."'";
         
-        $dMaxTPrice = $this->_oDb->GetOne( $sQuery );
+        $dMaxTPrice = $this->_oLvDb->GetOne( $sQuery );
         
         if ( $dMaxTPrice > 0 && $dVarMinPrice > 0 && $dMaxTPrice > $dVarMinPrice ) {
             $dSaved = $dMaxTPrice-$dVarMinPrice;
             $sQuery = "UPDATE oxarticles SET LVSAVED='".(string)$dSaved."' WHERE OXID='".$sOxid."' LIMIT 1";
-            $this->_oDb->Execute( $sQuery );
+            $this->_oLvDb->Execute( $sQuery );
         }
     }
     
