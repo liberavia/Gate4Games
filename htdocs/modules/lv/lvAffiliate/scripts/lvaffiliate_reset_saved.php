@@ -65,7 +65,7 @@ class lvaffiliate_reset_saved extends oxBase {
                 $sOxid          = $oRs->fields['OXID'];
                 $dVarMinPrice   = (double)$oRs->fields['OXVARMINPRICE'];
                 if ( $sOxid ) {
-                    $this->_lvSetSaveAmount( $sOxid, $dVarminPrice );
+                    $this->_lvSetSaveAmount( $sOxid, $dVarMinPrice );
                 }
                 $oRs->moveNext();
             }
