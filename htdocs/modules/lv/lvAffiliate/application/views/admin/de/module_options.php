@@ -27,11 +27,13 @@ $aLang = array(
     'charset'                                           => 'UTF-8',
     // group assignment
     'SHOP_MODULE_GROUP_lvaffiliateassignment'           => 'Zuordnungen',
+    'SHOP_MODULE_sLvAffiliateMainCategory'              => 'Hauptkategorie/Obergeordnete Kategorie',
     'SHOP_MODULE_aLvField2MatchManufacturer'            => 'Werte des Datenarrays Hersteller zuordnen. Wird angelegt, wenn es keinen Treffer gibt.',
     'SHOP_MODULE_aLvField2MatchArticle'                 => 'Zuordnungsreihenfolge über welche versucht wird einen existierenden Artikel zu finden.',
     'SHOP_MODULE_aLvField2DirectTable'                  => 'Direkte Tabellenzuordnungen, sobald die ID des Artikels bekannt ist.',
     'SHOP_MODULE_aLvField2CategoryAssignment'           => 'Direkte Zuordnung zur Kategorie, sobald die ID des Artikels bekannt ist.',
     'SHOP_MODULE_aLvField2Attribute'                    => 'Werte des Datenarrays die als Attributswerte zugeordnet werden. Erfolgt nur, wenn ID des Artikels ermittelt wurde.',
+    'SHOP_MODULE_aLvCatId2Attr2CatId'                   => 'Produkte einer Kategorie in Abhängigkeit von einem oder mehreren Attributen anderen Katregorien zuordnen',
     // group debug
     'SHOP_MODULE_GROUP_lvaffiliate_debug'               => 'Logs and Debugging',
     'SHOP_MODULE_blLvAffiliateLogActive'                => 'Aktivitäten in Log protokollieren (lvaffiliate_import.log)',
@@ -46,5 +48,8 @@ $aLang = array(
     // group facebook
     'SHOP_MODULE_GROUP_lvaffiliate_facebook'            => 'Facebook',
     'SHOP_MODULE_sLvFbHomePage'                         => 'Link zur Facebook Homepage des Affiliate-Auftritts',
+    
+    // help
+    'HELP_SHOP_MODULE_aLvCatId2Attr2CatId'              => '<p>Links steht die KategorieId der Produktquelle. Rechts steht eine Liste von zuzuordnenden Attributen und Kategorien, welche durch ein Pipe (|) getrennt werden.</p> <p>Wenn die Zuordnung ohne Attributsfilterung erfolgen soll, so wird statt der AttributId das Schlüsselwort <b>LVNOATTR</b> verwendet</p><b>BEISPIELZEILE</b><br>QuellkategorieId => AttributsId_1#AttributsId_2:ZielkategorieId_1|LVNOATTR:ZielkategorieId_2|AttributsId_3:ZielkategorieId_3',
 );
 

@@ -27,11 +27,13 @@ $aLang = array(
     'charset'                                           => 'UTF-8',
     // group assignment
     'SHOP_MODULE_GROUP_lvaffiliateassignment'           => 'Assignments',
+    'SHOP_MODULE_sLvAffiliateMainCategory'              => 'Main Category/Root Category',
     'SHOP_MODULE_aLvField2MatchManufacturer'            => 'Assign values of data array to manufacturers. Will be created if there is no match.',
     'SHOP_MODULE_aLvField2MatchArticle'                 => 'Assignment ordering which is for trying to match an existing article.',
     'SHOP_MODULE_aLvField2DirectTable'                  => 'Direct value-table assignments if ID of article is available.',
     'SHOP_MODULE_aLvField2CategoryAssignment'           => 'Direct assignment to category if ID of article is available.',
     'SHOP_MODULE_aLvField2Attribute'                    => 'Values of data array that will be assigned to shop attributes. Wil only be done if ID of article is known.',
+    'SHOP_MODULE_aLvCatId2Attr2CatId'                   => 'Assign categories in condition of one ore more attributes to other category-ids',
     // group debug
     'SHOP_MODULE_GROUP_lvaffiliate_debug'               => 'Logs and Debugging',
     'SHOP_MODULE_blLvAffiliateLogActive'                => 'Log activity in logfile (lvaffiliate_import.log)',
@@ -46,5 +48,9 @@ $aLang = array(
     // group facebook
     'SHOP_MODULE_GROUP_lvaffiliate_facebook'            => 'Facebook',
     'SHOP_MODULE_sLvFbHomePage'                         => 'Link to facebook homepage of affiliate shop',
+    
+    // help
+    'HELP_SHOP_MODULE_aLvCatId2Attr2CatId'              => 'yet to come',
+    
 );
 

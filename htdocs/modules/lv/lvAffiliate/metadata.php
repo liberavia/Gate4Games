@@ -81,12 +81,13 @@ $aModule = array(
     ),
     'settings' => array(
         // group assignments
+        array( 'group' => 'lvaffiliateassignment',              'name' => 'sLvAffiliateMainCategory',               'type' => 'str',        'value' => '' ),
         array( 
             'group' => 'lvaffiliateassignment',      
             'name' => 'aLvField2MatchManufacturer',         
             'type' => 'aarr',  
             'value' => array( 
-                'MANUFACTURER'              => 'oxmanufacturers|OXTITLE', 
+                'MANUFACTURER'                  => 'oxmanufacturers|OXTITLE', 
             ) 
         ),
         array( 
@@ -94,8 +95,8 @@ $aModule = array(
             'name' => 'aLvField2MatchArticle',         
             'type' => 'aarr',  
             'value' => array( 
-                'ARTNUM'                    => 'OXARTNUM|child',
-                'TITLE'                     => 'OXTITLE|parent', 
+                'ARTNUM'                        => 'OXARTNUM|child',
+                'TITLE'                         => 'OXTITLE|parent', 
             ) 
         ),
         array( 
@@ -103,22 +104,22 @@ $aModule = array(
             'name' => 'aLvField2DirectTable',         
             'type' => 'aarr',  
             'value' => array( 
-                'ARTNUM'                    => 'oxarticles|OXARTNUM', 
-                'EXTURL'                    => 'oxarticles|OXEXTURL', 
-                'COVERIMAGE'                => 'oxarticles|OXPIC1',
-                'PIC1'                      => 'oxarticles|OXPIC2',
-                'PIC2'                      => 'oxarticles|OXPIC3',
-                'PIC3'                      => 'oxarticles|OXPIC4',
-                'PIC4'                      => 'oxarticles|OXPIC5',
-                'PIC5'                      => 'oxarticles|OXPIC6',
-                'PIC6'                      => 'oxarticles|OXPIC7',
-                'PIC7'                      => 'oxarticles|OXPIC8',
-                'PIC8'                      => 'oxarticles|OXPIC9',
-                'PIC9'                      => 'oxarticles|OXPIC10',
-                'PIC10'                     => 'oxarticles|OXPIC11',
-                'PIC11'                     => 'oxarticles|OXPIC12',
-                'PRICE'                     => 'oxarticles|OXPRICE',
-                'TPRICE'                    => 'oxarticles|OXTPRICE',
+                'ARTNUM'                            => 'oxarticles|OXARTNUM', 
+                'EXTURL'                            => 'oxarticles|OXEXTURL', 
+                'COVERIMAGE'                        => 'oxarticles|OXPIC1',
+                'PIC1'                              => 'oxarticles|OXPIC2',
+                'PIC2'                              => 'oxarticles|OXPIC3',
+                'PIC3'                              => 'oxarticles|OXPIC4',
+                'PIC4'                              => 'oxarticles|OXPIC5',
+                'PIC5'                              => 'oxarticles|OXPIC6',
+                'PIC6'                              => 'oxarticles|OXPIC7',
+                'PIC7'                              => 'oxarticles|OXPIC8',
+                'PIC8'                              => 'oxarticles|OXPIC9',
+                'PIC9'                              => 'oxarticles|OXPIC10',
+                'PIC10'                             => 'oxarticles|OXPIC11',
+                'PIC11'                             => 'oxarticles|OXPIC12',
+                'PRICE'                             => 'oxarticles|OXPRICE',
+                'TPRICE'                            => 'oxarticles|OXTPRICE',
             ) 
         ),
         array( 
@@ -126,8 +127,8 @@ $aModule = array(
             'name' => 'aLvField2CategoryAssignment',         
             'type' => 'aarr',  
             'value' => array( 
-                'CATEGORYID'                => 'oxobject2category|OXCATNID',
-                'CATEGORYID_SALE'           => 'oxobject2category|OXCATNID',
+                'CATEGORYID'                        => 'oxobject2category|OXCATNID',
+                'CATEGORYID_SALE'                   => 'oxobject2category|OXCATNID',
             ) 
         ),
         array( 
@@ -135,20 +136,28 @@ $aModule = array(
             'name' => 'aLvField2Attribute',         
             'type' => 'aarr',  
             'value' => array( 
-                'GENRE'                     => 'GameGenre', 
-                'GAMETYPE'                  => 'GameType', 
-                'DRM'                       => 'DRM',
-                'COMPATWIN'                 => 'CompatibilityTypeWin', 
-                'COMPATLIN'                 => 'CompatibilityTypeLin',
-                'COMPATMAC'                 => 'CompatibilityTypeMac',
-                'COMPATWINE'                => 'CompatibilityTypeWine',
-                'COMPATPOL'                 => 'CompatibilityTypePOL',
-                'LANGUAGEINFO|DUBBED'       => 'GameLanguageAudio',
-                'LANGUAGEINFO|INTERFACE'    => 'GameLanguageInterface',
-                'LANGUAGEINFO|SUBTITLE'     => 'GameLanguageSubtitles',
-                'USK'                       => 'RecommendedAgeUsk',
-                'PEGI'                      => 'RecommendedAgePegi',
-                'RELEASE'                   => 'ReleaseDate',
+                'GENRE'                             => 'GameGenre', 
+                'GAMETYPE'                          => 'GameType', 
+                'DRM'                               => 'DRM',
+                'COMPATWIN'                         => 'CompatibilityTypeWin', 
+                'COMPATLIN'                         => 'CompatibilityTypeLin',
+                'COMPATMAC'                         => 'CompatibilityTypeMac',
+                'COMPATWINE'                        => 'CompatibilityTypeWine',
+                'COMPATPOL'                         => 'CompatibilityTypePOL',
+                'LANGUAGEINFO|DUBBED'               => 'GameLanguageAudio',
+                'LANGUAGEINFO|INTERFACE'            => 'GameLanguageInterface',
+                'LANGUAGEINFO|SUBTITLE'             => 'GameLanguageSubtitles',
+                'USK'                               => 'RecommendedAgeUsk',
+                'PEGI'                              => 'RecommendedAgePegi',
+                'RELEASE'                           => 'ReleaseDate',
+            ) 
+        ),
+        array( 
+            'group' => 'lvaffiliateassignment',      
+            'name' => 'aLvCatId2Attr2CatId',         
+            'type' => 'aarr',  
+            'value' => array( 
+                '41625027aee7153cabcb4d7b9120c0d9'  => 'LVNOATTR:fadcb6dd70b9f6248efa425bd159684e|CompatibilityTypeWine#CompatibilityTypePOL:8bc5e347ed09f9c8004fe39784368388|CompatibilityTypeLin:112d57e64d38a45af1dbc560ac797af0|CompatibilityTypeMac:aac464ccbb8aae00f4fafcc9bbc8cafa', 
             ) 
         ),
         // group debug
