@@ -31,6 +31,7 @@ $aLang = array(
     'LV_TOP_SALE'                                       => 'Top Angebote',
     'LV_JUST_ARRIVED'                                   => 'Zuletzt angekommen',
     'LVSALESRANK'                                       => 'Beliebtheit',
+    'LVSAVED'                                           => 'Ersparnis',
     'LV_OLD_PRICE'                                      => 'statt',
     'LVAFFILIATE_GO_DIRECTLY_TO_BEST_OFFER'             => 'Bestes Angebot',
     'LV_SEARCH_IN_CURRENTLY'                            => 'Finde Dein Spiel aus aktuell',
