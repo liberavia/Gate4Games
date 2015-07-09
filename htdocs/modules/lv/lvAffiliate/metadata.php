@@ -157,7 +157,7 @@ $aModule = array(
             'name' => 'aLvCatId2Attr2CatId',         
             'type' => 'aarr',  
             'value' => array( 
-                '41625027aee7153cabcb4d7b9120c0d9'  => 'LVNOATTR:fadcb6dd70b9f6248efa425bd159684e|CompatibilityTypeWine#CompatibilityTypePOL:8bc5e347ed09f9c8004fe39784368388|CompatibilityTypeLin:112d57e64d38a45af1dbc560ac797af0|CompatibilityTypeMac:aac464ccbb8aae00f4fafcc9bbc8cafa', 
+                '41625027aee7153cabcb4d7b9120c0d9'  => 'LVISSALE:fadcb6dd70b9f6248efa425bd159684e|CompatibilityTypeWine#CompatibilityTypePOL:8bc5e347ed09f9c8004fe39784368388|CompatibilityTypeLin:112d57e64d38a45af1dbc560ac797af0|CompatibilityTypeMac:aac464ccbb8aae00f4fafcc9bbc8cafa', 
             ) 
         ),
         // group debug
