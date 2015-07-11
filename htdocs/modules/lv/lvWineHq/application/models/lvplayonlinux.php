@@ -209,7 +209,6 @@ class lvplayonlinux extends oxBase {
                 )
             ";
         }
-        
         $this->_oLvDb->Execute( $sQuery );
     }
     
