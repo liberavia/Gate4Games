@@ -26,11 +26,14 @@ $sLangName = 'Deutsch';
 $aLang = array(
     'charset'                                           => 'UTF-8',
     // groups
-    'SHOP_MODULE_GROUP_lvwinehqmain'                    => 'Einstellungen',
+    'SHOP_MODULE_GROUP_lvwinehqmain'                    => 'WineHQ-Einstellungen',
+    'SHOP_MODULE_GROUP_lvplayonlinux'                   => 'PlayOnLinux-Einstellungen',
     // settings
     'SHOP_MODULE_sLvWineHqListRequestBase'              => 'Basisadresse zur Listenabfrage bei winehq.org.',
     'SHOP_MODULE_aLvWineHqRatings'                      => 'Abfragestati die abgefragt werden sollen.',
     'SHOP_MODULE_sLvWineHqDetailsLinkBase'              => 'Basisadresse zur Detailabfrage.',
     'SHOP_MODULE_sLvWineRatingAttribute'                => 'AttributsID welchem das Ranking zugeordnet werden soll',
+    'SHOP_MODULE_sLvPOLScrapeLink'                      => 'Scrape-URL für unterstützte Spiele',
+    'SHOP_MODULE_sLvPOLRatingAttribute'                 => 'Attribut welches zugewiesen wird',
 );
 

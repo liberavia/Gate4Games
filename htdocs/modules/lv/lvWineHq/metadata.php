@@ -43,6 +43,7 @@ $aModule = array(
     ),
     'files' => array(
         'lvwinehq'                      => 'lv/lvWineHq/application/models/lvwinehq.php',
+        'lvplayonlinux'                 => 'lv/lvWineHq/application/models/lvplayonlinux.php',
     ),
     'events'       => array(
     ),
@@ -63,7 +64,9 @@ $aModule = array(
             ), 
         ),
         array( 'group' => 'lvwinehqmain',       'name' => 'sLvWineHqDetailsLinkBase',               'type' => 'str',        'value' => 'https://appdb.winehq.org/objectManager.php?sClass=application&iId=' ),
-        array( 'group' => 'lvwinehqmain',       'name' => 'sLvWineRatingAttribute',                 'type' => 'str',        'value' => 'CompatibilityWine' ),
+        array( 'group' => 'lvwinehqmain',       'name' => 'sLvWineRatingAttribute',                 'type' => 'str',        'value' => 'CompatibilityTypeWine' ),
+        array( 'group' => 'lvplayonlinux',      'name' => 'sLvPOLScrapeLink',                       'type' => 'str',        'value' => 'https://www.playonlinux.com/de/supported_apps-1-0.html' ),
+        array( 'group' => 'lvplayonlinux',      'name' => 'sLvPOLRatingAttribute',                  'type' => 'str',        'value' => 'CompatibilityTypePOL' ),
     )
 );
  
