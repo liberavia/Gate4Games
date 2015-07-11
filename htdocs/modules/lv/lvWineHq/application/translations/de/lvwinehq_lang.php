@@ -21,19 +21,10 @@
 // RESOURCE IDENTIFIER = STRING
 // -------------------------------
 
-$sLangName = 'English';
+$sLangName = 'Deutsch';
 
 $aLang = array(
     'charset'                                           => 'UTF-8',
-    // groups
-    'SHOP_MODULE_GROUP_lvwinehqmain'                    => 'Settings',
-    // settings
-    'SHOP_MODULE_sLvWineHqListRequestBase'              => 'Base urls requesting lists at winehq.org.',
-    'SHOP_MODULE_aLvWineHqRatings'                      => 'Compatibilityratings that shall be requested.',
-    'SHOP_MODULE_sLvWineHqDetailsLinkBase'              => 'Base url for detail request.',
-    'SHOP_MODULE_sLvWineRatingAttribute'                => 'AttributeID which ranking shall be assigned to.',
-    'SHOP_MODULE_sLvPOLScrapeLink'                      => 'Scrape-URL for supported games',
-    'SHOP_MODULE_sLvPOLRatingAttribute'                 => 'Attribut which will be assigned',
-    'SHOP_MODULE_sLvPOLInstallLinkBase'                 => 'Baseurl for Install-Button',
+    'LVPOL_INSTALL_PROGRAM'                             => 'Dieses Programm installieren',
 );
 

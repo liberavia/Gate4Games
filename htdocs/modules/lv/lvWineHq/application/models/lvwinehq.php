@@ -228,9 +228,11 @@ class lvwinehq extends oxBase {
     protected function _lvGetHtmlWineHqDetailsLink( $sAppId, $sTitle ) {
         $sLvWineHqDetailsLinkBase = $this->_oLvConfig->getConfigParam( 'sLvWineHqDetailsLinkBase' );
         
-        $sHtmlLink  = '<a href="'.$sLvWineHqDetailsLinkBase.$sAppId.'" target="_blank">';
-        $sHtmlLink .= 'WineHQ: '.$sTitle;
-        $sHtmlLink .= '</a>';
+        $sHtmlLink  = '<div class="lvWineHqDetailsBox">';
+        $sHtmlLink .= '     <a class="lvWineHqDetailsLink" href="'.$sLvWineHqDetailsLinkBase.$sAppId.'" target="_blank">';
+        $sHtmlLink .= '         WineHQ: '.$sTitle;
+        $sHtmlLink .= '     </a>';
+        $sHtmlLink .= '</div>';
         
         return $sHtmlLink;
     }

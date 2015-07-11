@@ -50,6 +50,7 @@ $aModule = array(
     'templates' => array(
     ),
     'blocks' => array(
+        array( 'template' => 'layout/base.tpl',                             'block'=>'base_style',                                  'file'=>'extend/application/views/blocks/block_base_style.tpl' ),
     ),
     'settings' => array(
         array( 'group' => 'lvwinehqmain',       'name' => 'sLvWineHqListRequestBase',               'type' => 'str',       'value' => 'https://appdb.winehq.org/objectManager.php?sappCategoryData0=2&iappCategoryOp0=11&iItemsPerPage=200&sClass=application&iappVersion-ratingOp0=5&sappVersion-ratingData0=' ),
@@ -66,7 +67,8 @@ $aModule = array(
         array( 'group' => 'lvwinehqmain',       'name' => 'sLvWineHqDetailsLinkBase',               'type' => 'str',        'value' => 'https://appdb.winehq.org/objectManager.php?sClass=application&iId=' ),
         array( 'group' => 'lvwinehqmain',       'name' => 'sLvWineRatingAttribute',                 'type' => 'str',        'value' => 'CompatibilityTypeWine' ),
         array( 'group' => 'lvplayonlinux',      'name' => 'sLvPOLScrapeLink',                       'type' => 'str',        'value' => 'https://www.playonlinux.com/de/supported_apps-1-0.html' ),
-        array( 'group' => 'lvplayonlinux',      'name' => 'sLvPOLRatingAttribute',                  'type' => 'str',        'value' => 'CompatibilityTypePOL' ),
+        array( 'group' => 'lvplayonlinux',      'name' => 'sLvPOLAttribute',                        'type' => 'str',        'value' => 'CompatibilityTypePOL' ),
+        array( 'group' => 'lvplayonlinux',      'name' => 'sLvPOLInstallLinkBase',                  'type' => 'str',        'value' => 'playonlinux://www.playonlinux.com/repository/download.php?id=' ),
     )
 );
  

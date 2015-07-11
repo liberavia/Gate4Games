@@ -118,7 +118,7 @@ class lvaffiliate_tools extends oxBase {
                 $mResponse  = $sResponse;
         }
         
-        return $mResonse;
+        return $mResponse;
     }
     
     /**

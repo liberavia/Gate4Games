@@ -54,6 +54,14 @@ class lvplayonlinux extends oxBase {
      */
     protected $_oAffiliateTools = null;
     
+    /**
+     * Toggle yes by lang
+     * @var type 
+     */
+    protected $_aLvToggleAttributeYesByLangAbbr = array(
+        'de'    => 'Ja',
+        'en'    => 'Yes',
+    );
     
     /**
      * Initiate needed objects and values
@@ -95,9 +103,10 @@ class lvplayonlinux extends oxBase {
     public function lvFillLists() {
         $sLvPOLScrapeLink           = $this->_oLvConfig->getConfigParam( 'sLvPOLScrapeLink' );
         $sResponse                  = $this->_lvGetRequestResult( $sLvPOLScrapeLink );
+        
         if ( $sResponse ) {
             $aReturnApps = $this->_lvGetScrapedResponse( $sResponse );
-            // $this->_lvFillScrapedAppsInDb( $aReturnApps, $sRating );
+            $this->_lvFillScrapedAppsInDb( $aReturnApps );
         }
     }
     
@@ -109,7 +118,7 @@ class lvplayonlinux extends oxBase {
      * @return void
      */
     public function lvUpdateProductAttributes() {
-        $sQuery = "SELECT OXID, LVAPPID, LVTITLE, LVRATING FROM ".$this->_sLvWineHqTable;
+        $sQuery = "SELECT OXID, LVAPPID, LVTITLE FROM ".$this->_sLvPOLTable;
 
         $oRs = $this->_oLvDb->Execute( $sQuery );
         
@@ -118,12 +127,11 @@ class lvplayonlinux extends oxBase {
                 $sOxid      = $oRs->fields['OXID'];
                 $sLvAppId   = $oRs->fields['LVAPPID'];
                 $sLvTitle   = $oRs->fields['LVTITLE'];
-                $sLvRating  = $oRs->fields['LVRATING'];
                 
                 $aArticleIds = $this->_lvGetArticleIdsByName( $sLvTitle );
                 if ( count( $aArticleIds ) > 0 ) {
                     foreach ( $aArticleIds as $sArticleId ) {
-                        $this->_lvAssignRating( $sArticleId, $sLvAppId, $sLvRating, $sLvTitle );
+                        $this->_lvAssignPOL( $sArticleId, $sLvAppId, $sLvTitle );
                     }
                 }
                 
@@ -139,24 +147,24 @@ class lvplayonlinux extends oxBase {
      * 
      * @param string $sArticleId
      * @param string $sAppId
-     * @param string $sRating
      * @param string $sTitle
      * @return void
      */
-    protected function _lvAssignRating( $sArticleId, $sAppId, $sRating, $sTitle ) {
-        $sLvWineRatingAttribute = $this->_oLvConfig->getConfigParam( 'sLvWineRatingAttribute' );
-        $sAssignmentId          = $this->_lvGetExistingAssignmentId( $sArticleId, $sLvWineRatingAttribute );
-        $sHtmlWineHqDetailsLink = $this->_lvGetHtmlWineHqDetailsLink( $sAppId, $sTitle );
+    protected function _lvAssignPOL( $sArticleId, $sAppId, $sTitle ) {
+        $sLvPOLAttribute        = $this->_oLvConfig->getConfig( 'sLvPOLAttribute' );
+        $sHtmlPOLDetailsLink    = $this->_lvGetHtmlPOLDetailsLink( $sAppId, $sTitle );
+        $sAssignmentId          = $this->_lvGetExistingAssignmentId( $sArticleId, $sLvPOLAttribute );        
         
         if ( $sAssignmentId ) {
             $sQuery = "
                 UPDATE oxobject2attribute
                 SET 
-                    OXVALUE='".$sRating."', 
-                    LVATTRDESC=".$this->_oLvDb->quote( $sHtmlWineHqDetailsLink ).", 
-                    LVATTRDESC_1=".$this->_oLvDb->quote( $sHtmlWineHqDetailsLink ).", 
-                    LVATTRDESC_2=".$this->_oLvDb->quote( $sHtmlWineHqDetailsLink ).", 
-                    LVATTRDESC_3=".$this->_oLvDb->quote( $sHtmlWineHqDetailsLink )."
+                    OXVALUE='".$this->_aLvToggleAttributeYesByLangAbbr['de']."', 
+                    OXVALUE_1='".$this->_aLvToggleAttributeYesByLangAbbr['en']."', 
+                    LVATTRDESC=".$this->_oLvDb->quote( $sHtmlPOLDetailsLink ).", 
+                    LVATTRDESC_1=".$this->_oLvDb->quote( $sHtmlPOLDetailsLink ).", 
+                    LVATTRDESC_2=".$this->_oLvDb->quote( $sHtmlPOLDetailsLink ).", 
+                    LVATTRDESC_3=".$this->_oLvDb->quote( $sHtmlPOLDetailsLink )."
                 WHERE 
                     OXID='".$sAssignmentId."'
                 LIMIT 1
@@ -187,17 +195,17 @@ class lvplayonlinux extends oxBase {
                 (
                     '".$sNewId."',
                     '".$sArticleId."',
-                    '".$sLvWineRatingAttribute."',
-                    '".$sRating."',
+                    '".$sLvPOLAttribute."',
+                    '".$this->_aLvToggleAttributeYesByLangAbbr['de']."',
                     '0',
-                    '".$sRating."',
-                    '".$sRating."',
-                    '".$sRating."',
+                    '".$this->_aLvToggleAttributeYesByLangAbbr['en']."',
+                    '".$this->_aLvToggleAttributeYesByLangAbbr['en']."',
+                    '".$this->_aLvToggleAttributeYesByLangAbbr['en']."',
                     NOW(),
-                    ".$this->_oLvDb->quote( $sHtmlWineHqDetailsLink ).",
-                    ".$this->_oLvDb->quote( $sHtmlWineHqDetailsLink ).",
-                    ".$this->_oLvDb->quote( $sHtmlWineHqDetailsLink ).",
-                    ".$this->_oLvDb->quote( $sHtmlWineHqDetailsLink )."
+                    ".$this->_oLvDb->quote( $sHtmlPOLDetailsLink ).",
+                    ".$this->_oLvDb->quote( $sHtmlPOLDetailsLink ).",
+                    ".$this->_oLvDb->quote( $sHtmlPOLDetailsLink ).",
+                    ".$this->_oLvDb->quote( $sHtmlPOLDetailsLink )."
                 )
             ";
         }
@@ -212,12 +220,21 @@ class lvplayonlinux extends oxBase {
      * @param string $sAppId
      * @return string
      */
-    protected function _lvGetHtmlWineHqDetailsLink( $sAppId, $sTitle ) {
-        $sLvWineHqDetailsLinkBase = $this->_oLvConfig->getConfigParam( 'sLvWineHqDetailsLinkBase' );
+    protected function _lvGetHtmlPOLDetailsLink( $sAppId, $sTitle ) {
+        $sPolInstallLinkBase    = $this->_oLvConfig->getConfig( 'sLvPOLInstallLinkBase' );
+        $sInstallText           = oxRegistry::getLang()->translateString( 'LVPOL_INSTALL_PROGRAM' );
         
-        $sHtmlLink  = '<a href="'.$sLvWineHqDetailsLinkBase.$sAppId.'" target="_blank">';
-        $sHtmlLink .= 'WineHQ: '.$sTitle;
-        $sHtmlLink .= '</a>';
+        $sHtmlLink  = '<div class="lvPolInstallBox">';
+        $sHtmlLink .= '     <a href="'.$sPolInstallLinkBase.$sAppId.'" class="lvPolInstallLink">';
+        $sHtmlLink .= '         <img src="https://www.playonlinux.com/images/logos/logo48.png" alt="logo"/>'.$sInstallText;
+        $sHtmlLink .= '     </a>';
+        $sHtmlLink .= '</div>';
+        $sHtmlLink .= '<div class="lvPolDetailsLinkBox">';
+        $sHtmlLink .= '     <a class="lvPolDetailsLink" href="https://www.playonlinux.com/de/app-'.$sAppId.'-G4G.html" target="_blank">';
+        $sHtmlLink .= '         PlayOnLinux: '.$sTitle;
+        $sHtmlLink .= '     </a>';
+        $sHtmlLink .= '</div>';
+        
         
         return $sHtmlLink;
     }
@@ -276,27 +293,25 @@ class lvplayonlinux extends oxBase {
      * @param array $aReturnApps
      * @param string $sRating
      */
-    protected function _lvFillScrapedAppsInDb( $aApps, $sRating ) {
+    protected function _lvFillScrapedAppsInDb( $aApps ) {
         foreach ( $aApps as $aApp ) {
             $sAppId = $aApp['id'];
             $sTitle = $aApp['title'];
             $sOxid  = $this->_lvGetExistingOxidByAppId( $sAppId );
             
             if ( $sOxid ) {
-                $sQuery = "UPDATE ".$this->_sLvWineHqTable." SET LVTITLE=".$this->_oLvDb->quote( $sTitle ).", LVRATING='".$sRating."', LVLASTUPDATE=NOW() WHERE OXID='".$sOxid."' LIMIT 1";
+                $sQuery = "UPDATE ".$this->_sLvPOLTable." SET LVTITLE=".$this->_oLvDb->quote( $sTitle ).", LVLASTUPDATE=NOW() WHERE OXID='".$sOxid."' LIMIT 1";
             }
             else {
                 $oUtilsObject   = oxRegistry::get( 'oxUtilsObject' );
                 $sNewId         = $oUtilsObject->generateUId();
                 
                 $sQuery = "
-                    INSERT INTO ".$this->_sLvWineHqTable."
+                    INSERT INTO ".$this->_sLvPOLTable."
                     (
                         OXID,
                         LVAPPID,
                         LVTITLE,
-                        LVRATING,
-                        LVWINEVERSION,
                         LVLASTUPDATE
                     )
                     VALUES
@@ -304,8 +319,6 @@ class lvplayonlinux extends oxBase {
                         '".$sNewId."',
                         '".$sAppId."',
                         ".$this->_oLvDb->quote( $sTitle ).",
-                        '".$sRating."',
-                        '',
                         NOW()
                     )
                 ";
@@ -324,7 +337,7 @@ class lvplayonlinux extends oxBase {
      * @return mixed string/bool
      */
     protected function _lvGetExistingOxidByAppId( $sAppId ) {
-        $sQuery = "SELECT OXID FROM ".$this->_sLvWineHqTable." WHERE LVAPPID='".$sAppId."' LIMIT 1";
+        $sQuery = "SELECT OXID FROM ".$this->_sLvPOLTable." WHERE LVAPPID='".$sAppId."' LIMIT 1";
         $mOxid  = $this->_oLvDb->GetOne( $sQuery );
 
         return $mOxid;
@@ -337,43 +350,22 @@ class lvplayonlinux extends oxBase {
      * @return array
      */
     protected function _lvGetScrapedResponse( $sHtml ) {
-       $aReturn = $aGameInfo = array();
+       $aReturn = $aGameInfos = $aIdsAndTitles = array();
        
-       preg_match_all( "/<a href='https://www.playonlinux.com/de/app-([0-9])-.*?''><\/a>/", $sHtml, $aGameInfo );
+       preg_match_all( "/<a href='https:\/\/www.playonlinux.com\/de\/app-([0-9]*)-.*?'>(.*)<\/a>/", $sHtml, $aIdsAndTitles );
        
-print_r( $aGameInfo );       
-die();
+       $aIds    = $aIdsAndTitles[1];
+       $aTitles = $aIdsAndTitles[2];
+       
+       foreach ( $aIds as $iIndex=>$sId ) {
+           $sId     = trim( $sId );
+           $sTitle  = trim($aTitles[$iIndex]);
+           
+           $aEntry = array( 'id'=>$sId, 'title'=>$sTitle );
+           $aReturn[] = $aEntry;
+       }
+       
        return $aReturn;
-        
-        
-//        $aReturn = $aGameTableRows0 = $aGameTableRows1 = array();
-//        
-//        preg_match_all( '/<tr class="color0".*?<\/tr>/', $sHtml, $aGameTableRows0 );
-//        preg_match_all( '/<tr class="color1".*?<\/tr>/', $sHtml, $aGameTableRows1 );
-//
-//        $aGameTableRows = array_merge( $aGameTableRows0[0], $aGameTableRows1[0] );
-//        
-//        // parse game table rows 0
-//        foreach ( $aGameTableRows as $sCurrentHtmlTableRow ) {
-//            preg_match_all( '/<td.*?<\/td>/', $sCurrentHtmlTableRow, $aCurrentTableData );
-//            
-//            // first get the id
-//            $sAppId = str_replace( "<td>", "", $aCurrentTableData[0][1] );
-//            $sAppId = trim( str_replace( "</td>", "", $sAppId ) );
-//            
-//            // next fetch the title
-//            preg_match_all( '/<a.*>(.+)<\/a>/', $aCurrentTableData[0][0], $aTitleData );
-//            $sAppTitle = trim( $aTitleData[1][0] );
-//            
-//            $aFinalRowData = array(
-//                'id'=>$sAppId,
-//                'title'=>$sAppTitle,
-//            );
-//            
-//            $aReturn[] = $aFinalRowData;
-//        }
-//    
-//        return $aReturn;
     }
     
     
@@ -384,7 +376,8 @@ die();
      * @return array
      */
     protected function _lvGetRequestResult( $sRequestUrl ) {
-        return $this->_oAffiliateTools->lvGetRestRequestResult( true, $sRequestUrl, 'RAW'  );
+        $sResponse = $this->_oAffiliateTools->lvGetRestRequestResult( true, $sRequestUrl, 'RAW'  );
+        return $sResponse;
     }
     
 }
