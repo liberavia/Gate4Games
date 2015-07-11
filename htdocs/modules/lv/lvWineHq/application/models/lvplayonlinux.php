@@ -151,7 +151,7 @@ class lvplayonlinux extends oxBase {
      * @return void
      */
     protected function _lvAssignPOL( $sArticleId, $sAppId, $sTitle ) {
-        $sLvPOLAttribute        = $this->_oLvConfig->getConfig( 'sLvPOLAttribute' );
+        $sLvPOLAttribute        = $this->_oLvConfig->getConfigParam( 'sLvPOLAttribute' );
         $sHtmlPOLDetailsLink    = $this->_lvGetHtmlPOLDetailsLink( $sAppId, $sTitle );
         $sAssignmentId          = $this->_lvGetExistingAssignmentId( $sArticleId, $sLvPOLAttribute );        
         
@@ -221,7 +221,7 @@ class lvplayonlinux extends oxBase {
      * @return string
      */
     protected function _lvGetHtmlPOLDetailsLink( $sAppId, $sTitle ) {
-        $sPolInstallLinkBase    = $this->_oLvConfig->getConfig( 'sLvPOLInstallLinkBase' );
+        $sPolInstallLinkBase    = $this->_oLvConfig->getConfigParam( 'sLvPOLInstallLinkBase' );
         $sInstallText           = oxRegistry::getLang()->translateString( 'LVPOL_INSTALL_PROGRAM' );
         
         $sHtmlLink  = '<div class="lvPolInstallBox">';
