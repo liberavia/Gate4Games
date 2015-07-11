@@ -33,7 +33,7 @@ $aLang = array(
     'SHOP_MODULE_sLvWineHqDetailsLinkBase'              => 'Base url for detail request.',
     'SHOP_MODULE_sLvWineRatingAttribute'                => 'AttributeID which ranking shall be assigned to.',
     'SHOP_MODULE_sLvPOLScrapeLink'                      => 'Scrape-URL for supported games',
-    'SHOP_MODULE_sLvPOLRatingAttribute'                 => 'Attribut which will be assigned',
+    'SHOP_MODULE_sLvPOLAttribute'                       => 'Attribut which will be assigned',
     'SHOP_MODULE_sLvPOLInstallLinkBase'                 => 'Baseurl for Install-Button',
 );
 
