@@ -38,7 +38,7 @@ class lvplayonlinux_update extends oxBase {
         $oLvPlayOnLinux = oxNew( 'lvplayonlinux' );
         
         if ( is_object( $oLvPlayOnLinux ) && method_exists( $oLvPlayOnLinux, 'lvFillLists' ) ) {
-            $oLvWineHq->lvFillLists();
+            $oLvPlayOnLinux->lvFillLists();
             // $oLvWineHq->lvUpdateProductAttributes();
         }
     }
