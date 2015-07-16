@@ -30,6 +30,7 @@ $aLang = array(
     'SHOP_MODULE_GROUP_lvuskdebug'                      => 'Logging und Loglevel',
     // settings
     'SHOP_MODULE_sLvUskRequestBase'                     => 'Basisadresse zur Abfrage.',
+    'SHOP_MODULE_sLvUskAttributeId'                     => 'AttributsId für USK-Alter',
     'SHOP_MODULE_blLvUskLogActive'                      => 'Log Aktiv',
     'SHOP_MODULE_sLvUskLogLevel'                        => 'Log-Level (1=Fehler,2=Fehler+Warnungen,3=Alle Aktivitäten, 4=Alle Aktivitäten+Debug-Ausgaben)',
 );

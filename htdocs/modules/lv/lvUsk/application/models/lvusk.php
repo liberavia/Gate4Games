@@ -48,6 +48,13 @@ class lvusk extends oxBase {
      * @var object
      */
     protected $_oAffiliateTools = null;
+    
+    /**
+     * Assigning attribute id
+     * @var string
+     */
+    protected $_sAttributeId = '';
+    
 
     /**
      * POST Values that need to be present on search request at USK
@@ -76,11 +83,40 @@ class lvusk extends oxBase {
         $this->_oLvConfig       = $this->getConfig();
         $this->_oLvDb           = oxDb::getDb( MODE_FETCH_ASSOC );
         $this->_oAffiliateTools = oxNew( 'lvaffiliate_tools' );
-        
-        $blLogActive    = (bool)$this->_oLvConfig->getConfigParam( 'blLvUskLogActive' );
-        $iLvUskLogLevel = (int)$this->_oLvConfig->getConfigParam( 'sLvUskLogLevel' );
+        $this->_sAttributeId    = $this->_oLvConfig->getConfigParam( 'sLvUskAttributeId' );
+        $blLogActive            = (bool)$this->_oLvConfig->getConfigParam( 'blLvUskLogActive' );
+        $iLvUskLogLevel         = (int)$this->_oLvConfig->getConfigParam( 'sLvUskLogLevel' );
         
         $this->_oAffiliateTools->lvSetLogInformation( $blLogActive, $this->_sLogFile, $iLvUskLogLevel );
+    }
+    
+    
+    /**
+     * Start complete import of all articles that have no existing age usk assignment
+     * 
+     * @param void
+     * @return void
+     */
+    public function lvImport() {
+        $sQuery = "SELECT oa.OXID, oa.OXTITLE FROM oxarticles oa LEFT JOIN oxobject2attribute o2a ON ( oa.OXID=o2a.OXOBJECTID AND o2a.OXATTRID='".$this->_sAttributeId."' ) WHERE oa.OXPARENTID!='' AND o2a.OXVALUE IS NULL";
+        
+        $oRs = $this->_oLvDb->Execute( $sQuery );
+        
+        if ( $oRs != false && $oRs->recordCount() > 0 ) {
+            while ( !$oRs->EOF ) {
+                $sOxid      = $oRs->fields['OXID'];
+                $sTitle     = $oRs->fields['OXTITLE'];
+                
+                if ( $sTitle ) {
+                    $iRecommendedAge = $this->lvRequestAgeForTitle( $sTitle );
+                    if ( $iRecommendedAge ) {
+                        $this->_lvAssignAttribute( $sOxid, (string)$iRecommendedAge );
+                    }
+                }
+                
+                $oRs->moveNext();
+            }
+        }
     }
 
 
@@ -102,6 +138,46 @@ class lvusk extends oxBase {
                 $mUskAge = $this->_lvFetchUskAgeFromFirstMatch( $sResponse );
             }
         }
+    }
+    
+    
+    /**
+     * Sets age param
+     * 
+     * @param string $sOxid
+     * @param string $sValue
+     * @return void
+     */
+    protected function _lvAssignAttribute( $sOxid, $sValue ) {
+        $oUtilsObject           = oxRegistry::get( 'oxUtilsObject' );
+        $sNewId                 = $oUtilsObject->generateUId();
+
+        $sQuery = "
+            INSERT INTO oxobject2attribute
+            (
+                OXID,
+                OXOBJECTID,
+                OXATTRID,
+                OXPOS,
+                OXVALUE,
+                OXVALUE_1,
+                OXVALUE_2,
+                OXVALUE_3
+            )
+            VALUES
+            (
+                '".$sNewId."',
+                '".$sOxid."',
+                '".$this->_sAttributeId."',
+                '9999',
+                '".$sValue."',
+                '".$sValue."',
+                '".$sValue."',
+                '".$sValue."'
+            )
+        ";
+
+        $this->_oLvDb->Execute( $sQuery );
     }
     
     

@@ -52,6 +52,7 @@ $aModule = array(
     ),
     'settings' => array(
         array( 'group' => 'lvuskmain',          'name' => 'sLvUskRequestBase',          'type' => 'str',        'value' => 'http://www.usk.de/titelsuche/titelsuche/' ),
+        array( 'group' => 'lvuskmain',          'name' => 'sLvUskAttributeId',          'type' => 'str',        'value' => 'RecommendedAgeUsk' ),
         array( 'group' => 'lvuskdebug',         'name' => 'blLvUskLogActive',           'type' => 'bool',       'value' => false ),
         array( 'group' => 'lvuskdebug',         'name' => 'sLvUskLogLevel',             'type' => 'str',        'value' => '1' ),
     )
