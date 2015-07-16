@@ -79,6 +79,7 @@ class lvaffiliate_tools extends oxBase {
     /**
      * Performs a REST Request by given request url and returns demanded type of response 
      * 
+     * @param bool   $blLogActive   
      * @param string $sRequestUrl
      * @param string $sResponseType (XML|JSON|PLAIN=>Default)
      * @return mixed
@@ -120,6 +121,57 @@ class lvaffiliate_tools extends oxBase {
         
         return $mResponse;
     }
+    
+    
+    /**
+     * Method returns direct output of a simulated form request
+     * 
+     * @param bool $blLogActive
+     * @param string $sRequestUrl
+     * @param array $aData
+     * @return mixed string/null
+     */
+    public function lvGetPostResult( $blLogActive, $sRequestUrl, $aData ) {
+        $this->_blLogActive = $blLogActive;
+        
+        // prepare post string
+        $sFieldsString = "";
+        foreach ( $aData as $sKey=>$sValue ) {
+            $sFieldsString .= $sKey."=".urlencode( $sValue )."&";
+        }
+        $sFieldsString = rtrim( $sFieldsString, "&" );
+
+        $resCurl = curl_init();
+        // configuration
+        curl_setopt_array( 
+            $resCurl, 
+            array(
+                CURLOPT_RETURNTRANSFER => 1,
+                CURLOPT_URL => $sRequestUrl,
+                CURLOPT_POST => count( $aData ),
+                CURLOPT_POSTFIELDS => $sFieldsString,
+            )
+        );
+        
+        $sResponse = false;
+        try {
+            $sResponse = curl_exec( $resCurl );
+        } 
+        catch ( Exception $e ) {
+            $this->lvLog( 'ERROR: POST Requesting url '.$sRequestUrl.' with form data '.print_r( $aData, true ).' ended up with the following error:'.$e->getMessage(), 1 );
+        }
+        curl_close( $resCurl );
+        
+        // format request
+        $mResponse = null;
+        
+        if ( $sResponse ) {
+            $mResponse = $sResponse;
+        }
+        
+        return $mResponse;
+    }
+    
     
     /**
      * Guesses from title if the download is an addon
