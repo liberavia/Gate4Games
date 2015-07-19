@@ -127,7 +127,6 @@ class lvgamesplanet extends oxBase {
         }
         
         $sRequestUrl = $aFeeds[$sLangAbbr];
-        
         $oResponse = $this->_oAffiliateTools->lvGetRestRequestResult( $this->_blLogActive, $sRequestUrl, 'XML' );
 
         $aResult = array();

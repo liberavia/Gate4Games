@@ -104,13 +104,13 @@ class lvaffiliate_tools extends oxBase {
             $this->lvLog( 'ERROR: Requesting url '.$sRequestUrl.'ended up with the following error:'.$e->getMessage(), 1 );
         }
         curl_close( $resCurl );
-        
+
         // format request
         $mResponse = null;
         
         switch ( $sResponseType ) {
             case 'XML':
-                $mResonse   = new SimpleXMLElement( $sResponse );
+                $mResponse   = new SimpleXMLElement( $sResponse );
                 break;
             case 'JSON':
                 $mResponse  = json_decode( $sResponse, true );

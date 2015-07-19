@@ -244,7 +244,6 @@ class lvyoutube extends oxBase {
             
             // search title
             // first quote title so it will be surely found
-            $sTitle = '"'.$sTitle.'"';
             if ( $sLvApiRequestPrefix && $sLvApiRequestPrefix != '' ) {
                 $sLvApiRequestPrefix = trim( $sLvApiRequestPrefix );
                 $sTitle = $sLvApiRequestPrefix." ".$sTitle;
