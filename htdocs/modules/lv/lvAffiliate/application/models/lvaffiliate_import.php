@@ -294,7 +294,7 @@ class lvaffiliate_import extends oxBase {
         $oDb            = oxDb::getDb( MODE_FETCH_ASSOC );
         $sTargetTable   = getViewName( 'oxobject2attribute' );
         
-        $sQuery = "SELECT OXID FROM ".$sTargetTable." WHERE OXATTRID='".$sTargetCategoryId."' AND OXOBJECTID='".$this->_sLvCurrentArticleId."' LIMIT 1";
+        $sQuery = "SELECT OXID FROM ".$sTargetTable." WHERE OXATTRID='".$sTargetAttributeId."' AND OXOBJECTID='".$this->_sLvCurrentArticleId."' LIMIT 1";
         $sOxid  = $oDb->GetOne( $sQuery );
         
         $mReturn = false;
