@@ -36,7 +36,6 @@ class lvyoutube_reviews extends lvyoutube_reviews_parent {
     public function lvAddVideoReviewForProduct( $sOxid ) {
         $sRequestUrl    = $this->_lvGetRequestUrl( $sOxid, 'productreview' );
         $aResult        = $this->_lvGetRequestResult( $sRequestUrl );
-        
         if ( count( $aResult ) > 0 ) {
             foreach ( $aResult['items'] as $aVideoInfo ) {
                 $sVideoId       = (string)$aVideoInfo['id']['videoId'];
@@ -95,7 +94,6 @@ class lvyoutube_reviews extends lvyoutube_reviews_parent {
 
                 // search title
                 // first quote title so it will be surely found
-                $sTitle = '"'.$sTitle.'"';
                 if ( $sLvApiRequestPrefix && $sLvApiRequestPrefix != '' ) {
                     $sLvApiRequestPrefix = trim( $sLvApiRequestPrefix );
                     $sTitle = $sLvApiRequestPrefix." ".$sTitle;

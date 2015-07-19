@@ -88,7 +88,7 @@ class lvaffiliate_assign_categories extends oxBase {
      */
     public function start() {
         if ( $this->_sMainCategory ) {
-            // $this->_lvProcessMainCategory();
+            $this->_lvProcessMainCategory();
         }
         
         if ( is_array( $this->_aCatId2Attr2CatId ) &&  count( $this->_aCatId2Attr2CatId ) > 0 ) {
