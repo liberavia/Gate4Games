@@ -68,7 +68,7 @@ class lvusk extends oxBase {
         "tx_uskdb_list[search][genre]" => "",
         "tx_uskdb_list[search][platform]"=>"6", // PC
         "tx_uskdb_list[search][publisher]"=>"",
-        "tx_uskdb_list[__hmac]"=>"a:4:{s:13:&quot;paginatorData&quot;;a:1:{s:4:&quot;page&quot;;i:1;}s:6:&quot;search&quot;;a:5:{s:11:&quot;ratingBound&quot;;i:1;s:5:&quot;title&quot;;i:1;s:9:&quot;publisher&quot;;i:1;s:5:&quot;genre&quot;;i:1;s:8:&quot;platform&quot;;i:1;}s:6:&quot;action&quot;;i:1;s:10:&quot;controller&quot;;i:1;}43ff359b7474ad5734ff84c7ac51c7189f75b340",
+        "tx_uskdb_list[__hmac]"=> "",
         "tx_uskdb_list[search][title]"=>"",
     ); 
     
@@ -103,6 +103,7 @@ class lvusk extends oxBase {
         $oRs = $this->_oLvDb->Execute( $sQuery );
         
         if ( $oRs != false && $oRs->recordCount() > 0 ) {
+            $this->_aLvUskPostValuesTemplate['tx_uskdb_list[__hmac]'] = 'a:4:{s:13:"paginatorData";a:1:{s:4:"page";i:1;}s:6:"search";a:5:{s:11:"ratingBound";i:1;s:5:"title";i:1;s:9:"publisher";i:1;s:5:"genre";i:1;s:8:"platform";i:1;}s:6:"action";i:1;s:10:"controller";i:1;}43ff359b7474ad5734ff84c7ac51c7189f75b340';
             while ( !$oRs->EOF ) {
                 $sOxid      = $oRs->fields['OXID'];
                 $sTitle     = $oRs->fields['OXTITLE'];
@@ -131,13 +132,15 @@ class lvusk extends oxBase {
         $sRequestUrl = $this->_oLvConfig->getConfigParam( 'sLvUskRequestBase' );
         if ( $sTitle && $sRequestUrl ) {
             $blLogActive = $this->_oLvConfig->getConfigParam( 'blLvUskLogActive' );
-            $sTitle = urlencode( trim($sTitle) );
+            $sTitle = trim( $sTitle );
             $this->_aLvUskPostValuesTemplate['tx_uskdb_list[search][title]'] = $sTitle;
             $sResponse = $this->_oAffiliateTools->lvGetPostResult( $blLogActive, $sRequestUrl, $this->_aLvUskPostValuesTemplate );
             if ( $sResponse ) {
                 $mUskAge = $this->_lvFetchUskAgeFromFirstMatch( $sResponse );
             }
         }
+
+        return $mUskAge;
     }
     
     
@@ -176,7 +179,6 @@ class lvusk extends oxBase {
                 '".$sValue."'
             )
         ";
-
         $this->_oLvDb->Execute( $sQuery );
     }
     

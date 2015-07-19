@@ -42,7 +42,7 @@ $aModule = array(
     'extend'       => array(
     ),
     'files' => array(
-        'lvpegi'                        => 'lv/lvUsk/application/models/lvusk.php',
+        'lvusk'                        => 'lv/lvUsk/application/models/lvusk.php',
     ),
     'events'       => array(
     ),

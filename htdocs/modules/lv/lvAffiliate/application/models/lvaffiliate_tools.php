@@ -137,10 +137,10 @@ class lvaffiliate_tools extends oxBase {
         // prepare post string
         $sFieldsString = "";
         foreach ( $aData as $sKey=>$sValue ) {
-            $sFieldsString .= $sKey."=".urlencode( $sValue )."&";
+            $sFieldsString .= urlencode( $sKey )."=".urlencode( $sValue )."&";
         }
         $sFieldsString = rtrim( $sFieldsString, "&" );
-
+        
         $resCurl = curl_init();
         // configuration
         curl_setopt_array( 
