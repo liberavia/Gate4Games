@@ -782,3 +782,8 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
     color: #5d005d;
     padding-bottom: 2px;
 }
+
+.agb a, .cmsContent p a {
+    color: #5d005d;
+    vertical-align: baseline;
+}
