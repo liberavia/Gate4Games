@@ -32,9 +32,11 @@ class lvaffiliate_content_main extends lvaffiliate_content_main_parent {
      * @return object Feedback message
      */
     public function lvUploadPicture() {
+        $oConfig    = $this->getConfig();
         $oUtilsFile = oxRegistry::get( 'oxUtilsFile' );
         $oUtilsView = oxRegistry::get("oxUtilsView");
         try {
+            $aMediaFile = $oConfig->getUploadedFile("mediaFile");
             $sMediaUrl = $oUtilsFile->processFile('mediaFile', 'out/media/');
             $oUtilsView->addErrorToDisplay( $sMediaUrl );
         } 
