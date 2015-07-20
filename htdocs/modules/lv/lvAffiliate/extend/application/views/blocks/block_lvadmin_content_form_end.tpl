@@ -6,7 +6,7 @@
         </td>
         <td class="edittext">
             <form name="myedit2" enctype="multipart/form-data" action="[{$oViewConf->getSelfLink()}]" method="POST">
-                <input type="hidden" name="MAX_FILE_SIZE" value="4000" />
+                <input type="hidden" name="MAX_FILE_SIZE" value="4000000" />
                 [{$oViewConf->getHiddenSid()}]
                 <input type="hidden" name="cl" value="content_main">
                 <input type="hidden" name="fnc" value="lvUploadPicture">
