@@ -79,7 +79,7 @@ $aModule = array(
         array( 'template' => 'page/details/inc/productmain.tpl',            'block'=>'details_productmain_price',                   'file'=>'extend/application/views/blocks/block_details_productmain_price.tpl' ),
         array( 'template' => 'widget/header/search.tpl',                    'block'=>'header_search_field',                         'file'=>'extend/application/views/blocks/block_header_search_field.tpl' ),
         array( 'template' => 'content_main.tpl',                            'block'=>'admin_content_main_form',                     'file'=>'extend/application/views/blocks/block_admin_content_main_form.tpl' ),
-        array( 'template' => 'content_main.tpl',                            'block'=>'admin_content_main_editor',                   'file'=>'extend/application/views/blocks/block_admin_admin_content_main_editor.tpl' ),
+        array( 'template' => 'content_main.tpl',                            'block'=>'lvadmin_content_form_end',                    'file'=>'extend/application/views/blocks/block_lvadmin_content_form_end.tpl' ),
     ),
     'settings' => array(
         // group assignments

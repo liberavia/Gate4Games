@@ -200,6 +200,8 @@ function ShowMenueFields( iVal)
           </tr>
      </table>
     </form>
+    [{block name="lvadmin_content_form_end"}]
+    [{/block}]
 
 [{include file="bottomnaviitem.tpl"}]
 [{include file="bottomitem.tpl"}]
