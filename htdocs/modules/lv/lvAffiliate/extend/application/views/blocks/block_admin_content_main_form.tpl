@@ -19,6 +19,7 @@
             <input type="hidden" name="cl" value="content_main">
             <input type="hidden" name="fnc" value="lvUploadPicture">
             <input type="file" name="mediaFile">
+            <input type="submit" value="[{oxmultilang ident="LVAFFILIATE_START_UPLOAD"}]">
         </form>
     </td>
 </tr>

@@ -32,5 +32,6 @@ $aLang = array(
     'LV_TOP_MANUFACTURER'                               => 'Top Hersteller (Wird im Slider auf der Startseite angezeigt)',
     'LVAFFILIATE_PARENT_IDENT'                          => 'Übergeordneter Ident (Für Menüanzeige)',
     'LVAFFILIATE_MEDIA_UPLOAD'                          => 'Mediendatei hochladen',
+    'LVAFFILIATE_START_UPLOAD'                          => 'Hochladen',
 );
 
