@@ -38,7 +38,7 @@ class lvaffiliate_content_main extends lvaffiliate_content_main_parent {
         try {
             $aMediaFile = $oConfig->getUploadedFile("mediaFile");
             $sMediaUrl = $oUtilsFile->processFile('mediaFile', 'out/media/');
-            $oUtilsView->addErrorToDisplay( $sMediaUrl );
+            $oUtilsView->addErrorToDisplay( $oConfig->getShopUrl()."/out/media/".$sMediaUrl );
         } 
         catch ( Exception $e ) {
             return $oUtilsView->addErrorToDisplay($e->getMessage());
