@@ -31,5 +31,6 @@ $aLang = array(
     'LV_VENDOR_LANGABBR'                                => 'Assigned lang abbreviations (seperated by comma)',
     'LV_TOP_MANUFACTURER'                               => 'Top Manufacturer (will be shown in slider on startpage)',
     'LVAFFILIATE_PARENT_IDENT'                          => 'Parent ident (For content menus)',
+    'LVAFFILIATE_MEDIA_UPLOAD'                          => 'Upload media file',
 );
 

@@ -46,6 +46,7 @@ $aModule = array(
         'oxwarticledetails'                         => 'lv/lvAffiliate/extend/application/components/widgets/lvaffiliate_oxwarticledetails',
         // controllers admin
         'vendor_main'                               => 'lv/lvAffiliate/extend/application/controllers/admin/lvaffiliate_vendor_main',
+        'content_main'                              => 'lv/lvAffiliate/extend/application/controllers/admin/lvaffiliate_content_main',
         // controllers
         'start'                                     => 'lv/lvAffiliate/extend/application/controllers/lvaffiliate_start',
         'account'                                   => 'lv/lvAffiliate/extend/application/controllers/lvaffiliate_account',
