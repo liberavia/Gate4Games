@@ -789,7 +789,7 @@ $aLang = array(
 'COD_CHARGE'                                                  => 'Nachnahmegebühr',
 'REGISTERED_YOUR_ORDER'                                       => 'Ihre Bestellung ist unter der Nummer %s bei uns registriert.',
 'THANK_YOU_FOR_ORDER'                                         => 'Vielen Dank für Ihre Bestellung im',
-'PRICE_ALERT_THANK_YOU_MESSAGE'                               => 'Deine Preisalarm ist gespeichert. Du bekommst eine Nachricht von uns, sobald der Preis unter %s %s fällt.',
+'PRICE_ALERT_THANK_YOU_MESSAGE'                               => 'Dein Preisalarm ist  auf %s gespeichert. Du bekommst eine Nachricht von uns, sobald der Preis unter %s %s fällt.',
 'THANK_YOU_MESSAGE'                                           => 'Vielen Dank für Ihre Nachricht an %s.',
 
 'ALL_BRANDS'                                                  => 'Alle Publisher',
