@@ -792,7 +792,7 @@ $aLang = array(
 'PRICE_ALERT_THANK_YOU_MESSAGE'                               => 'Dein Preisalarm ist  auf %s gespeichert. Du bekommst eine Nachricht von uns, sobald der Preis unter %s %s fällt.',
 'THANK_YOU_MESSAGE'                                           => 'Vielen Dank für Ihre Nachricht an %s.',
 
-'ALL_BRANDS'                                                  => 'Alle Publisher',
+'ALL_BRANDS'                                                  => 'Publisher',
 'BY_BRAND'                                                    => 'Nach Publisher',
 'BY_MANUFACTURER'                                             => 'Nach Publisher',
 'BY_VENDOR'                                                   => 'Nach Partner',
