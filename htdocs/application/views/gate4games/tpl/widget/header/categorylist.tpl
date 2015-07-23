@@ -41,6 +41,21 @@
         [{/if}]
       [{/if}]
     [{/foreach}]
+    [{assign var="manufacturers" value=$oView->getManufacturerlist()}]
+    [{if $manufacturers|count}]
+        [{assign var="rootManufacturer" value=$oView->getRootManufacturer()}]
+        <li>
+            <a href="[{$rootManufacturer->getLink()}]">[{oxmultilang ident="ALL_BRANDS"}]</a>
+            <ul>
+                [{foreach from=$manufacturers item=_mnf name=manufacturers}]
+                    [{if $_mnf->oxmanufacturers__lvtopmanufacturer->value == '1'}]
+                        <li><a href="[{$_mnf->getLink()}]">[{$_mnf->oxmanufacturers__oxtitle->value}]</a></li>
+                    [{/if}]
+                [{/foreach}]    
+            </ul>
+        </li>
+    [{/if}]
+
     [{foreach from=$oxcmp_categories item=ocat key=catkey name=root}]
         [{foreach from=$ocat->getContentCats() item=oTopCont name=MoreTopCms}]
             [{assign var="iCatCnt" value=$iCatCnt+1 }]
