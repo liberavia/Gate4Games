@@ -83,9 +83,9 @@ class lvaffiliate_oxpricealarm extends lvaffiliate_oxpricealarm_parent {
         if ($rs != false && $rs->recordCount() > 0) {
             while (!$rs->EOF) {
                 $oArticle = oxNew("oxarticle");
-                $oArticle->load($rs->fields['oxid']);
+                $oArticle->load($rs->fields['oxartid']);
                 
-                if ( $oArticle->oxarticles__oxparentid == '' ) {
+                if ( $oArticle->oxarticles__oxparentid->value == '' ) {
                     $dArticlePrice = $oArticle->getVarMinPrice()->getBruttoPrice();
                 }
                 else {
