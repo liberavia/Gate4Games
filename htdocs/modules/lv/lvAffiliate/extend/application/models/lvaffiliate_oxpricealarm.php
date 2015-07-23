@@ -66,9 +66,11 @@ class lvaffiliate_oxpricealarm extends lvaffiliate_oxpricealarm_parent {
         $myConfig   = $this->getConfig();
         $oDB        = oxDb::getDb(oxDb::FETCH_MODE_ASSOC);
 
-        $sSelect = "select oxpricealarm.oxid, oxpricealarm.oxemail, oxpricealarm.oxartid, oxpricealarm.oxprice " .
-                   "from oxpricealarm, oxarticles where oxarticles.oxid = oxpricealarm.oxartid " .
-                   "and oxpricealarm.oxsended = '0000-00-00 00:00:00'";
+        $sSelect = "
+            select oxpricealarm.oxid, oxpricealarm.oxemail, oxpricealarm.oxartid, oxpricealarm.oxprice
+            from oxpricealarm, oxarticles where oxarticles.oxid = oxpricealarm.oxartid 
+            and oxpricealarm.oxsended = '0000-00-00 00:00:00'
+        ";
         
         if ( $iStart === false && is_numeric( $iStart ) ) {
             $rs = $oDB->SelectLimit($sSelect, $myConfig->getConfigParam('iCntofMails'), $iStart);
@@ -82,7 +84,15 @@ class lvaffiliate_oxpricealarm extends lvaffiliate_oxpricealarm_parent {
             while (!$rs->EOF) {
                 $oArticle = oxNew("oxarticle");
                 $oArticle->load($rs->fields['oxid']);
-                if ($oArticle->getPrice()->getBruttoPrice() <= $rs->fields['oxprice']) {
+                
+                if ( $oArticle->oxarticles__oxparentid == '' ) {
+                    $dArticlePrice = $oArticle->getVarMinPrice()->getBruttoPrice();
+                }
+                else {
+                    $dArticlePrice = $oArticle->getPrice()->getBruttoPrice();
+                }
+                
+                if ( $dArticlePrice <= $rs->fields['oxprice'] ) {
                     $this->lvSendMail(
                         $rs->fields['oxemail'],
                         $rs->fields['oxartid'],
