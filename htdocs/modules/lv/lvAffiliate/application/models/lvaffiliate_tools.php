@@ -296,5 +296,41 @@ class lvaffiliate_tools extends oxBase {
         return $mReturn;
     }
     
+
+    /**
+     * Method checks if data fulfills minimum
+     * 
+     * @param type $aCurrentArticle
+     * @return bool
+     */
+    public function lvValidateData( $aCurrentArticle ) {
+        $blDataIsValid = true;
+        
+        if ( !isset( $aCurrentArticle['TITLE'] ) || trim( $aCurrentArticle['TITLE'] )  == '' ) {
+            $blDataIsValid = false;
+        }
+        if ( !isset( $aCurrentArticle['ARTNUM'] ) || trim( $aCurrentArticle['ARTNUM'] )  == '' ) {
+            $blDataIsValid = false;
+        }
+        
+        return $blDataIsValid;
+    }
+    
+
+    /**
+     * Loads category mapping from CSV and puts it into an array attribute
+     * 
+     * @param void
+     * @return void
+     */
+    public function lvGetCategoryMapping( $sMappingFilePath ) {
+        if ( file_exists( $sMappingFilePath ) ) {
+            $resMappingFile = fopen( $sMappingFilePath, "r" );
+            while ( ( $aData = fgetcsv( $resMappingFile, 1000, ";" ) ) !== false ) {
+                $sForeignCategory = $aData[0];
+                $this->_aCategoryMapping[$sForeignCategory]['category'] = $aData[1];
+            }                        
+        }
+    }
     
 }
