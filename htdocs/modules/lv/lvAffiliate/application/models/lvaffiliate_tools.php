@@ -324,13 +324,16 @@ class lvaffiliate_tools extends oxBase {
      * @return void
      */
     public function lvGetCategoryMapping( $sMappingFilePath ) {
+        $aCategoryMapping = false;
         if ( file_exists( $sMappingFilePath ) ) {
             $resMappingFile = fopen( $sMappingFilePath, "r" );
             while ( ( $aData = fgetcsv( $resMappingFile, 1000, ";" ) ) !== false ) {
                 $sForeignCategory = $aData[0];
-                $this->_aCategoryMapping[$sForeignCategory]['category'] = $aData[1];
+                $aCategoryMapping[$sForeignCategory]['category'] = $aData[1];
             }                        
         }
+        
+        return $aCategoryMapping;
     }
     
 }

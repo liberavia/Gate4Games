@@ -407,7 +407,12 @@ class lvaffiliate_import extends oxBase {
                 $sValueToMatch = $this->_oAffiliateTools->lvGetNormalizedName( $sValueToMatch );
             }
             
-            $sQuery     = "SELECT OXID, OXPARENTID FROM oxarticles WHERE ".$sConfigDbField."='".mysql_real_escape_string( $sValueToMatch )."' LIMIT 1";
+            $sQueryAdd = "";
+            if ( $sConfigFamily == 'parent' ) {
+                $sQueryAdd = " AND OXPARENTID='' ";
+            }
+            
+            $sQuery     = "SELECT OXID, OXPARENTID FROM oxarticles WHERE ".$sConfigDbField."='".mysql_real_escape_string( $sValueToMatch )."' ".$sQueryAdd." LIMIT 1";
             $aResult    = $oDb->GetRow( $sQuery );
             
             $blCreateComplete = true;

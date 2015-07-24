@@ -170,18 +170,22 @@ class lvgog extends oxBase {
         if ( isset( $oResponse->products->product ) ) {
             foreach ( $oResponse->products->product as $oProduct ) {
                 $sId                                        = (string)$oProduct->id;
-                $aArticleData[$sId]['ARTNUM']               = $sId;
-                $sTitle                                     = trim( (string)$oProduct->title );
-                $aArticleData[$sId]['TITLE']                = $sTitle;
+                $sCategory                                  = trim( (string)$oProduct->gener_1 );
                 $dPriceRaw                                  = (double)$oProduct->price_raw;
                 $dPrice                                     = $dPriceRaw/100;
                 $dDiscountRaw                               = (double)$oProduct->discount_raw;
                 $dDiscount                                  = $dDiscountRaw/100;
+                $sTitle                                     = trim( (string)$oProduct->title );
+                $sTitle                                     = $this->_lvGogNormalizeTitle( $sTitle );
+                
+                if ( $sCategory == '1' ) continue;
+                
+                $aArticleData[$sId]['ARTNUM']               = $sId;
+                $aArticleData[$sId]['TITLE']                = $sTitle;
                 $aArticleData[$sId]['PRICE']                = $dPrice;
                 $aArticleData[$sId]['TPRICE']               = $dPrice+$dDiscount;
                 $aArticleData[$sId]['EXTURL']               = $this->_lvGetPartnerLink( $oProduct->link );
                 $aArticleData[$sId]['MANUFACTURER']         = trim( (string)$oProduct->publisher );
-                $sCategory                                  = trim( (string)$oProduct->gener_1 );
                 $aArticleData[$sId]['GENRE']                = $sCategory;
                 $aArticleData[$sId]['CATEGORYID']           = array( ( isset( $this->_aCategoryMapping[$sCategory]['category'] ) ) ? $this->_aCategoryMapping[$sCategory]['category'] : $this->_sDefaultCategoryId );
                 $aArticleData[$sId]['RELEASE']              = (string)$oProduct->original_release_date;
@@ -202,17 +206,17 @@ class lvgog extends oxBase {
                 }
                 
                 // platform
-                $sWin       = (string)$oProduct->windows_compatible;
-                $sMac       = (string)$oProduct->mac_compatible;
-                $sLin       = (string)$oProduct->linux_compatible;
+                $sWin      = trim( $oProduct->windows_compatible );
+                $sMac      = trim( $oProduct->mac_compatible );
+                $sLin      = trim( $oProduct->linux_compatible );
                 
-                if ( $sWin == 'true' ) {
+                if ( $sWin == '1' ) {
                     $aArticleData[$sId]['COMPATIBILITY']['WIN'] = $this->_aLvToggleAttributeYesByLangAbbr[$sLangAbbr];
                 }
-                if ( $sMac == 'true' ) {
+                if ( $sMac == '1' ) {
                     $aArticleData[$sId]['COMPATIBILITY']['MAC'] = $this->_aLvToggleAttributeYesByLangAbbr[$sLangAbbr];
                 }
-                if ( $sLin == 'true' ) {
+                if ( $sLin == '1' ) {
                     $aArticleData[$sId]['COMPATIBILITY']['LIN'] = $this->_aLvToggleAttributeYesByLangAbbr[$sLangAbbr];
                 }
 
@@ -231,6 +235,21 @@ class lvgog extends oxBase {
         return $aArticleData;
     }
     
+    
+    /**
+     * Changes GOG.com specific title handling into common used handling
+     * 
+     * @param string $sTitle
+     * @return string
+     */
+    protected function _lvGogNormalizeTitle( $sTitle ) {
+        if (strpos( $sTitle, ', The' ) !== false ) {
+            $sTitle = str_ireplace( ", The", "", $sTitle );
+            $sTitle = "The ".$sTitle;
+        }
+        
+        return $sTitle;
+    }
     
     
     /**

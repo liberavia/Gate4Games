@@ -36,9 +36,9 @@ class lvgog_import extends oxBase {
     public function start() {
         $oConfig                = $this->getConfig();
         $oLvGog                 = oxNew( 'lvgog' );
-        $sVendorId              = $oLvGp->lvGetVendorId( 'de' );
+        $sVendorId              = $oLvGog->lvGetVendorId( 'de' );
         $oAffiliateImport       = oxNew( 'lvaffiliate_import' );
-
+        
         $oAffiliateImport->lvSetVendorId( $sVendorId );
         
         while ( $aArticleData = $oLvGog->lvGetNextImportData( 'de' ) ) {
