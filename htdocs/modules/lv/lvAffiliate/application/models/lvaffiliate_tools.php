@@ -84,7 +84,7 @@ class lvaffiliate_tools extends oxBase {
      * @param string $sResponseType (XML|JSON|PLAIN=>Default)
      * @return mixed
      */
-    public function lvGetRestRequestResult( $blLogActive, $sRequestUrl, $sResponseType='XML' ) {
+    public function lvGetRestRequestResult( $blLogActive, $sRequestUrl, $sResponseType='XML', $sCsvLineEnd = "\n", $sCsvDelimiter = ';', $sCsvEnclosure = '"' ) {
         $this->_blLogActive = $blLogActive;
         $resCurl = curl_init();
         // configuration
@@ -115,11 +115,45 @@ class lvaffiliate_tools extends oxBase {
             case 'JSON':
                 $mResponse  = json_decode( $sResponse, true );
                 break;
+            case 'CSV':
+                $mResponse  = $this->_lvReturnCsvAsArray( $sResponse, $sCsvLineEnd, $sCsvDelimiter, $sCsvEnclosure );
+                break;
             default:
                 $mResponse  = $sResponse;
         }
         
         return $mResponse;
+    }
+    
+    
+    /**
+     * Returns an array of CSV file 
+     * 
+     * @param string $sResponse
+     * @return array
+     */
+    protected function _lvReturnCsvAsArray( $sResponse, $sCsvLineEnd, $sCsvDelimiter, $sCsvEnclosure ) {
+        $aReturn = array();
+        
+        if ( $sResponse ) {
+            $aLines = str_getcsv( $sResponse, $sCsvLineEnd ); 
+            $iLinesParsed = 0;
+            foreach ( $aLines as $sCsvLine ) {
+                if ( $iLinesParsed == 0 ) {
+                    $iLinesParsed++;
+                    continue;
+                }
+                
+                $aLine = str_getcsv( $sCsvLine, $sCsvDelimiter, $sCsvEnclosure );
+                
+                if (is_array( $aLine ) && count( $aLine ) > 0 ) {
+                    $aReturn[] = $aLine;
+                }
+                $iLinesParsed++;
+            }
+        }
+          
+        return $aReturn;
     }
     
     

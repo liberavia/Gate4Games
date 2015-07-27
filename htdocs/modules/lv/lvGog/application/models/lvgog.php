@@ -176,7 +176,7 @@ class lvgog extends oxBase {
                 $dDiscountRaw                               = (double)$oProduct->discount_raw;
                 $dDiscount                                  = $dDiscountRaw/100;
                 $sTitle                                     = trim( (string)$oProduct->title );
-                $sTitle                                     = $this->_lvGogNormalizeTitle( $sTitle );
+                $sTitle                                     = $this->_oAffiliateTools->lvGetNormalizedName( $this->_lvGogNormalizeTitle( $sTitle ) );
                 
                 if ( $sCategory == '1' ) continue;
                 
