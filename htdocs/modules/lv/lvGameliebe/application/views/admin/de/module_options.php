@@ -31,7 +31,7 @@ $aLang = array(
     // settings
     'SHOP_MODULE_sLvGlPartnerId'                        => 'Gameliebe Partner ID (inkl. Hashtag)',
     'SHOP_MODULE_aLvGlVendorId'                         => 'Zuordnung Sprache zu Lieferanten ID',
-    'SHOP_MODULE_aLvGlCSVStdFeeds'                      => 'Zuordnung Sprache zu Standard-Feeds',
+    'SHOP_MODULE_aLvGlCsvFeeds'                         => 'Zuordnung Sprache zu Standard-Feeds',
     'SHOP_MODULE_sLvGlDefaultCategoryId'                => 'Fallback Kategorie ID',
     // group debug
     'SHOP_MODULE_blLvGlLogActive'                       => 'Aktivitäten in Log protokollieren (lvgl.log)',

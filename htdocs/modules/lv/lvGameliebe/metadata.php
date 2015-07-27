@@ -63,7 +63,7 @@ $aModule = array(
             'name' => 'aLvGlCsvFeeds',
             'type' => 'aarr',
             'value' => array(
-                'de' => 'http://www.gog.com/games/feed?format=xml&country=DE&currency=EUR',
+                'de' => 'http://www.gameliebe.com/media/pveplus/Gameliebe_Affil_Export.csv',
             ),
         ),
         array( 'group' => 'lvglmain',                  'name' => 'sLvGlDefaultCategoryId',        'type' => 'str',        'value' => '' ),
