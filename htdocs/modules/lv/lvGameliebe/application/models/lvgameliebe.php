@@ -114,8 +114,8 @@ class lvgameliebe extends oxBase {
         $this->_blLogActive         = (bool)$this->_oLvConf->getConfigParam( 'blLvGlLogActive' );
         $this->_aVendorId           = $this->_oLvConf->getConfigParam( 'aLvGlVendorId' );
         $this->_iMaxPages           = (int)$this->_oLvConf->getConfigParam( 'sLvGlMaxPages' );
-        $this->_aFeeds              = $this->_oLvConf->getConfigParam( 'aLvGlCsvStdFeeds' );
-        $this->_sPartnerId          = $this->_oLvConf->getConfigParam( 'sLvGLPartnerId' );
+        $this->_aFeeds              = $this->_oLvConf->getConfigParam( 'aLvGlCsvFeeds' );
+        $this->_sPartnerId          = $this->_oLvConf->getConfigParam( 'sLvGlPartnerId' );
         $this->_sDefaultCategoryId  = $this->_oLvConf->getConfigParam( 'sLvGlDefaultCategoryId' );
         
         $this->_oAffiliateTools->lvSetLogInformation( $this->_blLogActive, $this->_sLogFile, $this->_iLogLevel );
@@ -144,7 +144,7 @@ class lvgameliebe extends oxBase {
         $sRequestUrl  = $this->_aFeeds[$sLangAbbr];
         
         $aResponse = $this->_oAffiliateTools->lvGetRestRequestResult( $this->_blLogActive, $sRequestUrl, 'CSV' );
-
+        
         $mResult = false;
         if ( $aResponse ) {
             $mResult = $this->_lvParseRequest( $aResponse, $sLangAbbr );

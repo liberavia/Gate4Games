@@ -31,8 +31,8 @@ $aModule = array(
     'id'           => 'lvGameliebe',
     'title'        => 'Partner: Gameliebe',
     'description'  => array(
-        'de' => 'Partnermodul für gog.com',
-        'en' => 'Partnermodule for gog.com',
+        'de' => 'Partnermodul für gameliebe.com',
+        'en' => 'Partnermodule for gameliebe.com',
     ),
     'thumbnail'    => '',
     'version'      => '1.0.0',
@@ -42,7 +42,7 @@ $aModule = array(
     'extend'       => array(
     ),
     'files' => array(
-        'lvgog'             => 'lv/lvGameliebe/application/models/lvgog.php',
+        'lvgameliebe'             => 'lv/lvGameliebe/application/models/lvgameliebe.php',
     ),
     'events'       => array(
     ),

@@ -42,7 +42,7 @@ class lvgl_import extends oxBase {
         $oAffiliateImport->lvSetVendorId( $sVendorId );
         
         $aArticleData = $oLvGl->lvGetImportData( 'de' ) ;
-        
+
         foreach ( $aArticleData as $aArticle ) {
             $oAffiliateImport->lvAddArticle( $aArticle, 'de' );
         }
