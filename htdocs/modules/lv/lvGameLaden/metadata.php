@@ -51,9 +51,9 @@ $aModule = array(
     'blocks' => array(
     ),
     'settings' => array(
-        array( 'group' => 'lvgalamain',                 'name' => 'sLvGalaPartnerId',                'type' => 'str',        'value' => '' ),
+        array( 'group' => 'lvgalamain',                 'name' => 'sLvGaLaPartnerId',                'type' => 'str',        'value' => '' ),
         array( 
-            'group' => 'lvglmain',
+            'group' => 'lvgalamain',
             'name' => 'aLvGlVendorId',
             'type' => 'aarr',
             'value' => array(),
