@@ -38,7 +38,7 @@ class lvgala_import extends oxBase {
         $oLvGaLa                = oxNew( 'lvgameladen' );
         $sVendorId              = $oLvGaLa->lvGetVendorId( 'de' );
         $oAffiliateImport       = oxNew( 'lvaffiliate_import' );
-        
+
         $oAffiliateImport->lvSetVendorId( $sVendorId );
         
         $aArticleData = $oLvGaLa->lvGetImportData( 'de' ) ;

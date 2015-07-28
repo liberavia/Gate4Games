@@ -99,6 +99,14 @@ class lvgameladen extends oxBase {
      * @var string
      */
     protected $_sDefaultCategoryId = null;
+    
+    /**
+     * Contains a list of strings that should not be in title
+     * @var array
+     */
+    protected $_aForbiddenStrings = array(
+        'G Data',
+    );
 
 
 
@@ -142,7 +150,7 @@ class lvgameladen extends oxBase {
         
         $sRequestUrl  = $this->_aFeeds[$sLangAbbr];
         
-        $aResponse = $this->_oAffiliateTools->lvGetRestRequestResult( $this->_blLogActive, $sRequestUrl, 'CSV' );
+        $aResponse = $this->_oAffiliateTools->lvGetRestRequestResult( $this->_blLogActive, $sRequestUrl, 'CSV', "\n", "\t", "" );
         
         $mResult = false;
         if ( $aResponse ) {
@@ -167,7 +175,8 @@ class lvgameladen extends oxBase {
             $sId                                        = trim( (string)$aArticle[0] );
             $dPrice                                     = (double)$aArticle[2];
             $sOrigTitle                                 = trim( $aArticle[1] );
-            $sTitle                                     = $this->_oAffiliateTools->lvGetNormalizedName( $sOrigTitle );
+            $sTitle                                     = trim( str_replace( "(PC)", "", $sOrigTitle ) );
+            $sTitle                                     = $this->_oAffiliateTools->lvGetNormalizedName( $sTitle );
             
             $aArticleData[$sId]['ARTNUM']               = $sId;
             $aArticleData[$sId]['TITLE']                = $sTitle;
@@ -196,6 +205,11 @@ class lvgameladen extends oxBase {
             if ( strpos( $sOrigTitle, '(PC)' ) === false ) {
                 $blValidData = false;
             }
+            
+            // check for forbidden strings in title
+            if ( $blValidData ) {
+                $blValidData = $this->_lvCheckForForbiddenStrings( $sTitle );
+            }
 
             if ( !$blValidData ) {
                 unset( $aArticleData[$sId] );
@@ -209,6 +223,23 @@ class lvgameladen extends oxBase {
         return $aArticleData;
     }
     
+    
+    /**
+     * Check for strings in title that indicate inappropriate product
+     * 
+     * @param string $sTitle
+     * @return bool
+     */
+    protected function _lvCheckForForbiddenStrings( $sTitle ) {
+        $blValidArticle = true;
+        foreach ( $this->_aForbiddenStrings as $sForbiddenString ) {
+            if ( strpos( $sTitle, $sForbiddenString ) !== false ) {
+                $blValidArticle = false;
+            }
+        }
+        
+        return $blValidArticle;
+    }    
     
     /**
      * Creates partnerlink including partner id and returns it

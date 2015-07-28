@@ -42,7 +42,7 @@ $aModule = array(
     'extend'       => array(
     ),
     'files' => array(
-        'lvgameladen'               => 'lv/lvGameladen/application/models/lvgameladen.php',
+        'lvgameladen'               => 'lv/lvGameLaden/application/models/lvgameladen.php',
     ),
     'events'       => array(
     ),
@@ -54,7 +54,7 @@ $aModule = array(
         array( 'group' => 'lvgalamain',                 'name' => 'sLvGaLaPartnerId',                'type' => 'str',        'value' => '' ),
         array( 
             'group' => 'lvgalamain',
-            'name' => 'aLvGlVendorId',
+            'name' => 'aLvGaLaVendorId',
             'type' => 'aarr',
             'value' => array(),
         ),
