@@ -387,10 +387,11 @@ label.innerLabel {
     -moz-border-top-colors: none;
     border-color: -moz-use-text-color #5D005D #5D005D;
     border-image: none;
-    border-style: none solid solid;
-    border-width: medium 2px 2px;
+    border-style: none;
+    border-width: 0px;
     margin: -2px 0 0;
-    text-shadow: 0 1px 1px #fff;
+    text-shadow: 0 0px 1px #fff;
+    background: none;
 }
 
 
@@ -786,4 +787,9 @@ html, body, div, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, 
 .agb a, .cmsContent p a {
     color: #5d005d;
     vertical-align: baseline;
+}
+
+.subcatList h3 a {
+    color: #fff;
+    font-size: 10px;
 }

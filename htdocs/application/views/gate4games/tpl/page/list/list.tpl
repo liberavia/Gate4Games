@@ -35,8 +35,7 @@
         [{if $listType!='tag' && $actCategory && $actCategory->getShortDescription() }]
             <div class="categoryTopDescription" id="catDesc">[{$actCategory->getShortDescription()}]</div>
         [{/if}]
-
-[{*        [{if $oView->hasVisibleSubCats()}]
+        [{if $oView->hasVisibleSubCats() && $oViewConf->getTopActiveClassName() == 'manufacturerlist'}]
             [{assign var="iSubCategoriesCount" value=0}]
             [{oxscript include="js/widgets/oxequalizer.js" priority=10 }]
             [{oxscript add="$(function(){oxEqualizer.equalHeight($( '.subcatList li .content' ));});"}]
@@ -54,7 +53,7 @@
                             </div>
                         [{/foreach}]
                     [{/if}]
-                    [{if $iSubCategoriesCount%4 == 0}]
+                    [{if $iSubCategoriesCount%5 == 0}]
                     </li><li>
                     [{/if}]
                     [{if $category->getIsVisible()}]
@@ -103,7 +102,7 @@
                                 [{/if}]
                             </div>
                     [{/if}]
-                [{if $iSubCategoriesCount%4 == 0}]
+                [{if $iSubCategoriesCount%5 == 0}]
                 </li>
                 <li>
                 [{/if}]
@@ -111,7 +110,6 @@
             </li>
             </ul>
         [{/if}]
-*}]
     [{/block}]
 
     [{block name="page_list_listbody"}]
