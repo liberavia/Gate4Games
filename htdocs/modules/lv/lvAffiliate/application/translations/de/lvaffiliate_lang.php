@@ -49,5 +49,6 @@ $aLang = array(
     'LV_EMAIL_PRICEALARM_CUSTOMER_CLICKHERE2'           => 'klicke bitte hier',
     'LV_EMAIL_PRICEALARM_CUSTOMER_TEAM1'                => 'Danke, dass du unseren Preisalarm verwendet hast. Dein',
     'LV_EMAIL_PRICEALARM_CUSTOMER_TEAM2'                => 'Team',
+    'LV_ALL_BRANDS'                                     => 'Alle Publisher',
 );
 

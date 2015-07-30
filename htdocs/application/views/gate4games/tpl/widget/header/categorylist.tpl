@@ -52,6 +52,7 @@
                         <li><a href="[{$_mnf->getLink()}]">[{$_mnf->oxmanufacturers__oxtitle->value}]</a></li>
                     [{/if}]
                 [{/foreach}]    
+                <li><a href="[{$rootManufacturer->getLink()}]">[{oxmultilang ident="LV_ALL_BRANDS"}]...</a></li>
             </ul>
         </li>
     [{/if}]
