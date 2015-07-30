@@ -153,7 +153,6 @@ class lvgameladen extends oxBase {
      * @return mixed bool/array
      */
     public function lvGetImportData( $sLangAbbr ) {
-        
         $sRequestUrl  = $this->_aFeeds[$sLangAbbr];
         
         $aResponse = $this->_oAffiliateTools->lvGetRestRequestResult( $this->_blLogActive, $sRequestUrl, 'CSV', "\n", "\t", "" );
@@ -161,7 +160,6 @@ class lvgameladen extends oxBase {
         $mResult = false;
         if ( $aResponse ) {
             $mResult = $this->_lvParseRequest( $aResponse, $sLangAbbr );
-            $this->_lvCheckAndUpdatePicturesByScraping( $aResponse );
         }
         
         return $mResult;
@@ -190,7 +188,7 @@ class lvgameladen extends oxBase {
                     $sExtPicUrl = $this->_lvFetchPicUrlByTargetLink( $sUrl );
                     
                     if ( $sExtPicUrl ) {
-                        $sUpdateQuery = "UPDATE oxarticles SET OXPIC1='".$sExtPicUrl."' WHERE OXID='".$sOxid."' LIMIT 1";
+                        $sUpdateQuery = "UPDATE oxarticles SET OXPIC1=".$this->_oLvDb->quote( $sExtPicUrl )." WHERE OXID='".$sOxid."' LIMIT 1";
                         $this->_oLvDb->Execute( $sUpdateQuery );
                     }
                     
@@ -210,7 +208,6 @@ class lvgameladen extends oxBase {
     protected function _lvFetchPicUrlByTargetLink( $sUrl ) {
         $sPicUrl = '';
         $sRequestUrl = $this->_lvRemovePartnerIdFromLink( $sUrl );
-        
         $sResult = $this->_oAffiliateTools->lvGetRestRequestResult( $this->_blLogActive, $sRequestUrl, 'RAW' );
         
         if ( $sResult ) {
@@ -230,11 +227,10 @@ class lvgameladen extends oxBase {
     protected function _lvParseRequestForImage( $sHtml ) {
         $sPicResult = '';
         preg_match_all( "/<img id=\"image\" src=\"(.*)\" alt=.?/", $sHtml, $aPicResult );
-        
-        if ( isset( $aPicResult[1] ) && $aPicResult[1] != '' ) {
-            $sPicResult = $aPicResult[1];
+        if ( isset( $aPicResult[1][0] ) && $aPicResult[1][0] != '' ) {
+            $sPicResult = $aPicResult[1][0];
         }
-        
+
         return $sPicResult;
     }
 
