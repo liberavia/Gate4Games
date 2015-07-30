@@ -107,7 +107,12 @@ class lvgameladen extends oxBase {
     protected $_aForbiddenStrings = array(
         'G Data',
     );
-
+    
+    /**
+     * Database object
+     * @var object
+     */
+    protected $_oLvDb = null;
 
 
     /**
@@ -118,6 +123,7 @@ class lvgameladen extends oxBase {
         
         $this->_oAffiliateTools     = oxNew( 'lvaffiliate_tools' );
         $this->_oLvConf             = $this->getConfig();
+        $this->_oLvDb               = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
         $this->_iLogLevel           = (int)$this->_oLvConf->getConfigParam( 'sLvGaLaLogLevel' );
         $this->_blLogActive         = (bool)$this->_oLvConf->getConfigParam( 'blLvGaLaLogActive' );
         $this->_aVendorId           = $this->_oLvConf->getConfigParam( 'aLvGaLaVendorId' );
@@ -155,12 +161,84 @@ class lvgameladen extends oxBase {
         $mResult = false;
         if ( $aResponse ) {
             $mResult = $this->_lvParseRequest( $aResponse, $sLangAbbr );
+            $this->_lvCheckAndUpdatePicturesByScraping( $aResponse );
         }
         
         return $mResult;
     }
     
+    /**
+     * Due GameLaden does not deliver pics in their feed we will need them to fetch from their detailspage
+     * 
+     * @param array $aResponse
+     * @return void
+     */
+    public function lvCheckAndUpdatePicturesByScraping( $sLangAbbr ) {
+        $sVendorId = $this->lvGetVendorId( $sLangAbbr );
+        
+        if ( $sVendorId ) {
+            $sArticlesView = getViewName( 'oxarticles' );
+            $sQuery = "SELECT OXID,OXEXTURL FROM ".$sArticlesView." WHERE OXVENDORID='".$sVendorId."' AND OXPIC1 = ''";
+            
+            $oRs = $this->_oLvDb->Execute( $sQuery );
+            
+            if ( $oRs != false && $oRs->recordCount() > 0 ) {
+                while ( !$oRs->EOF ) {
+                    $sOxid  = $oRs->fields['OXID'];
+                    $sUrl  = $oRs->fields['OXEXTURL'];
+                    
+                    $sExtPicUrl = $this->_lvFetchPicUrlByTargetLink( $sUrl );
+                    
+                    if ( $sExtPicUrl ) {
+                        $sUpdateQuery = "UPDATE oxarticles SET OXPIC1='".$sExtPicUrl."' WHERE OXID='".$sOxid."' LIMIT 1";
+                        $this->_oLvDb->Execute( $sUpdateQuery );
+                    }
+                    
+                    $oRs->moveNext();
+                }
+            }
+        }
+    }
     
+    
+    /**
+     * Returns pic url fetched from details-page
+     * 
+     * @param string $sUrl
+     * @return string
+     */
+    protected function _lvFetchPicUrlByTargetLink( $sUrl ) {
+        $sPicUrl = '';
+        $sRequestUrl = $this->_lvRemovePartnerIdFromLink( $sUrl );
+        
+        $sResult = $this->_oAffiliateTools->lvGetRestRequestResult( $this->_blLogActive, $sRequestUrl, 'RAW' );
+        
+        if ( $sResult ) {
+            $sPicUrl = $this->_lvParseRequestForImage( $sResult );
+        }
+        
+        return $sPicUrl;
+    }
+    
+    
+    /**
+     * Scrapes the packshot from details page html
+     * 
+     * @param string $sHtml
+     * @return string
+     */
+    protected function _lvParseRequestForImage( $sHtml ) {
+        $sPicResult = '';
+        preg_match_all( "/<img id=\"image\" src=\"(.*)\" alt=.?/", $sHtml, $aPicResult );
+        
+        if ( isset( $aPicResult[1] ) && $aPicResult[1] != '' ) {
+            $sPicResult = $aPicResult[1];
+        }
+        
+        return $sPicResult;
+    }
+
+
     /**
      * Parses a prepared CSV-Response to import ready data array
      * 
@@ -258,6 +336,25 @@ class lvgameladen extends oxBase {
         }
         
         return $sPartnerLink;
+    }
+    
+
+    /**
+     * Removes partner id from link
+     * 
+     * @param string $sUrl
+     * @return string
+     */
+    protected function _lvRemovePartnerIdFromLink( $sUrl ) {
+        $aRemovals = array();
+        $aRemovals[] = "?a_aid=".$this->_sPartnerId;
+        $aRemovals[] = "&a_aid=".$this->_sPartnerId;
+        
+        foreach ( $aRemovals as $sRemoval ) {
+            $sUrl = str_replace( $sRemoval, "", $sUrl );
+        }
+        
+        return $sUrl;
     }
     
     

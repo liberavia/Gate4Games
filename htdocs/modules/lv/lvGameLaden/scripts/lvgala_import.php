@@ -46,6 +46,9 @@ class lvgala_import extends oxBase {
         foreach ( $aArticleData as $aArticle ) {
             $oAffiliateImport->lvAddArticle( $aArticle, 'de' );
         }
+        
+        // due we don't get images fetch them from details page
+        $oLvGaLa->lvCheckAndUpdatePicturesByScraping( 'de' );       
     }
     
 }

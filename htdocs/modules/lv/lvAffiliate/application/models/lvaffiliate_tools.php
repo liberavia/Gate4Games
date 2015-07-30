@@ -118,6 +118,9 @@ class lvaffiliate_tools extends oxBase {
             case 'CSV':
                 $mResponse  = $this->_lvReturnCsvAsArray( $sResponse, $sCsvLineEnd, $sCsvDelimiter, $sCsvEnclosure );
                 break;
+            case 'RAW':
+                $mResponse  = $sResponse;
+                break;
             default:
                 $mResponse  = $sResponse;
         }
