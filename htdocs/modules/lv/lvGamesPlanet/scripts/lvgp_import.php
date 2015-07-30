@@ -40,6 +40,7 @@ class lvgp_import extends oxBase {
         $oAffiliateImport       = oxNew( 'lvaffiliate_import' );
 
         $oAffiliateImport->lvSetVendorId( $sVendorId );
+        $oAffiliateImport->lvResetSalesRank();
         $aArticleData = $oLvGp->lvGetImportData( 'de', 'std' );
 
         foreach ( $aArticleData as $aArticle ) {

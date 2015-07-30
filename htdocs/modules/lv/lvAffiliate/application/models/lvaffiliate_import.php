@@ -224,6 +224,22 @@ class lvaffiliate_import extends oxBase {
     
     
     /**
+     * Cleans all sale rankings of given vendor to be able to recalculate them
+     * It's mandatory that vendorid has been set before
+     * 
+     * @param void
+     * @return void
+     */
+    public function lvResetSalesRank() {
+        if ( $this->_sLvVendorId != '' ) {
+            $oDb            = oxDb::getDb( MODE_FETCH_ASSOC );
+
+            $sQuery = "UPDATE oxarticles SET LVSALESRANK='999999' WHERE OXVENDORID='".$this->_sLvVendorId."'";
+            $oDb->Execute( $sQuery );
+        }
+    }
+
+    /**
      * Sets sales rank by artnum
      * 
      * @param type $sArtNum

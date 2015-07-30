@@ -60,6 +60,7 @@ class lvamzpn_import_catalog extends oxBase {
             $iMaxPriceRangeIndex            = count( $aPriceRanges )-1;
             
             $oAffiliateImport->lvSetVendorId( $aVendorIds[$sLangAbbr] );
+            $oAffiliateImport->lvResetSalesRank();
             
             // now that we know max indexes we can iterate through them
             for( $iBrowseNodeIndex=0; $iBrowseNodeIndex <= $iMaxBrowseNodeIndex; $iBrowseNodeIndex++ ) {
