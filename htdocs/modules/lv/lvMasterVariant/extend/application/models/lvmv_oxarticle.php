@@ -243,11 +243,11 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
             
             foreach ( $oCurrentAttributeList as $sKey=>$oAttribute ) {
                 $sTitleHash = md5( $oAttribute->oxattribute__oxtitle->value );
-                
+                $sValueHash = md5( $oAttribute->oxattribute__oxvalue->value );
                 // check if key with title hash already exists. merge value if true, add new if false
                 if ( isset( $aSummedAttributes[$sTitleHash] ) ) {
                     if ( $oAttribute->oxattribute__oxvalue->value != $aSummedAttributes[$sTitleHash]['value'] ) {
-                        $aSummedAttributes[$sTitleHash]['value'] .= ', '.$oAttribute->oxattribute__oxvalue->value;
+                        $aSummedAttributes[$sTitleHash]['values'][$sValueHash] = $oAttribute->oxattribute__oxvalue->value;
                         if ( $sVendorName ) {
                             // $aSummedAttributes[$sTitleHash]['vendors'][] .= " (". $sVendorName.")";
                         }
@@ -255,30 +255,43 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
                 }
                 else {
                     $aSummedAttributes[$sTitleHash]['title'] = $oAttribute->oxattribute__oxtitle->value;
-                    $aSummedAttributes[$sTitleHash]['value'] = $oAttribute->oxattribute__oxvalue->value;
+                    $aSummedAttributes[$sTitleHash]['values'][$sValueHash] = $oAttribute->oxattribute__oxvalue->value;
                     if ( $sVendorName ) {
                         // $aSummedAttributes[$sTitleHash]['value'] .= " (". $sVendorName.")";
                     }
                 }
                 
                 if (  $sVendorName ) {
-                    $aSummedAttributes[$sTitleHash]['vendors'][] = $sVendorName;
+                    $aSummedAttributes[$sTitleHash]['vendors'][$sValueHash][] = $sVendorName;
                 }
             }
         }
         
         foreach ( $aSummedAttributes as $sTitleHash=>$aSummedAttribute ) {
-            $sVendorList  = " (";
-            $iIndex = 0;
-            foreach ( $aSummedAttribute['vendors'] as $sVendorAssigned ) {
-                if ( $iIndex > 0 ) {
-                    $sVendorList .= ", ";
+            foreach ( $aSummedAttribute['vendors'] as $sValueHash=>$aVendorsAssigned ) {
+                $sVendorList  = " (";
+                $iIndex = 0;
+                foreach ( $aVendorsAssigned as $sVendorAssigned ) {
+                    if ( $iIndex > 0 ) {
+                        $sVendorList .= ", ";
+                    }
+                    $sVendorList .= $sVendorAssigned;
+                    $iIndex++;
                 }
-                $sVendorList .= $sVendorAssigned;
+                $sVendorList .= ")";
+                $aSummedAttributes[$sTitleHash]['vendors'][$sValueHash] = $sVendorList;
             }
-            $sVendorList .= ")";
-            
-            $aSummedAttributes[$sTitleHash]['vendors'] = $sVendorList;
+        }
+        
+        foreach ( $aSummedAttributes as $sTitleHash=>$aSummedAttribute ) {
+            foreach ( $aSummedAttribute['values'] as $sValueHash=>$sValueAssigned ) {
+                $aSummedAttributes[$sTitleHash]['values2vendors'][$sValueHash] = $sValueAssigned." ".$aSummedAttributes[$sTitleHash]['vendors'][$sValueHash];
+            }
+        }
+        
+        $iIndex = 0;
+        foreach ( $aSummedAttributes as $sTitleHash=>$aSummedAttribute ) {
+            $aSummedAttributes[$sTitleHash]['value'] = implode( ", ", $aSummedAttributes[$sTitleHash]['values2vendors'] );
         }
         
         return $aSummedAttributes;
