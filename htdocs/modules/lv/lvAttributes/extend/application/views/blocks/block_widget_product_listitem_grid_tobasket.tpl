@@ -6,7 +6,7 @@
             [{assign var="oAffiliateProduct" value=$aAffiliateDetails.product}]
             [{assign var="oAffiliateVendor" value=$aAffiliateDetails.vendor}]
             <a href="[{$oAffiliateProduct->oxarticles__oxexturl->rawValue}]" target="_blank" style="text-decoration:none;">
-                [{if $oAffiliateProduct->getTPrice()}]
+                [{if ( method_exists($product,'lvGetMostExpansiveTPrice') && $product->lvGetMostExpansiveTPrice() ) || $oAffiliateProduct->getTPrice()}]
                     <span>
                         [{oxmultilang ident="LV_OLD_PRICE"}] [{if method_exists($product,'lvGetMostExpansiveTPrice')}]<s>[{oxprice price=$product->lvGetMostExpansiveTPrice() currency=$currency}]</s>[{else}]<s>[{oxprice price=$oAffiliateProduct->getTPrice() currency=$currency}]</s>[{/if}]
                     </span>

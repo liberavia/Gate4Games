@@ -175,6 +175,43 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
     
     
     /**
+     * Public getter delivers highest tprice of all variants
+     * 
+     * @param void
+     * @return object
+     */
+    public function lvGetMostExpansiveTPrice() {
+        $dMaxTPrice     = 0;
+        $oReturn        = false;
+        $aVariants      = $this->getVariants();
+        
+        if ( count( $aVariants ) > 0 ) {
+            foreach ( $aVariants as $oSimpleVariant ) {
+                $oVariant = oxNew( 'oxarticle' );
+                $oVariant->load( $oSimpleVariant->getId() );
+                $dTPrice = $oVariant->oxarticles__oxtprice->value;
+                $oVariantTPrice = oxNew( 'oxprice' );
+                $oVariantTPrice->setBruttoPriceMode();
+                $oVariantTPrice->setPrice( $dTPrice );
+                
+                if ( $oVariantTPrice ) {
+                    $dVariantTPrice = $oVariantTPrice->getBruttoPrice();
+                    if ( $dVariantTPrice > $dMaxTPrice ) {
+                        $dMaxTPrice = $dVariantTPrice;
+                        $oReturn = $oVariantTPrice;
+                    }
+                }
+            }
+        }
+        else {
+            $oReturn = $this->getTPrice();
+        }
+        
+        return $oReturn;
+    }
+    
+    
+    /**
      * Method delivers sum of all attributes of all variants of selected language
      * 
      * @param void
@@ -198,6 +235,9 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
         foreach ( $aVariants as $oVariant ) {
             if ( $oVariant->oxarticles__lvlangabbr->value != $sLangAbbr ) continue; 
             
+            // get vendor name to define source of certain attribute
+            $sVendorName = $this->_lvGetVendorNameById( $oVariant->oxarticles__oxvendorid->value );
+            
             $oCurrentAttributeList = oxNew( 'oxattributelist' );
             $oCurrentAttributeList->loadAttributes( $oVariant->getId(), $oParentProduct->getId() );
             
@@ -208,18 +248,42 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
                 if ( isset( $aSummedAttributes[$sTitleHash] ) ) {
                     if ( $oAttribute->oxattribute__oxvalue->value != $aSummedAttributes[$sTitleHash]['value'] ) {
                         $aSummedAttributes[$sTitleHash]['value'] .= ', '.$oAttribute->oxattribute__oxvalue->value;
+                        if ( $sVendorName ) {
+                            $aSummedAttributes[$sTitleHash]['value'] .= "(". $sVendorName.")";
+                        }
                     }
                 }
                 else {
                     $aSummedAttributes[$sTitleHash]['title'] = $oAttribute->oxattribute__oxtitle->value;
                     $aSummedAttributes[$sTitleHash]['value'] = $oAttribute->oxattribute__oxvalue->value;
+                    if ( $sVendorName ) {
+                        $aSummedAttributes[$sTitleHash]['value'] .= "(". $sVendorName.")";
+                    }
                 }
             }
         }
         
+        
         return $aSummedAttributes;
     } 
     
+    
+    /**
+     * Returns vendor name for id
+     * 
+     * @param type $sVendorId
+     * @return string 
+     */
+    protected function _lvGetVendorNameById( $sVendorId ) {
+        $sVendorName = '';
+        if ( $sVendorId ) {
+            $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
+            $sQuery = "SELECT OXTITLE FROM oxvendor WHERE OXID='".$sVendorId."' LIMIT 1";
+            $sVendorName = $oDb->Getone( $sQuery );
+        }
+        
+        return $sVendorName;
+    }
 
     
     /**
@@ -291,43 +355,6 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
         }
         
         return $mReturn;
-    }
-    
-    
-    /**
-     * Public getter delivers highest tprice of all variants
-     * 
-     * @param void
-     * @return object
-     */
-    public function lvGetMostExpansiveTPrice() {
-        $dMaxTPrice     = 0;
-        $oReturn        = false;
-        $aVariants      = $this->getVariants();
-        
-        if ( count( $aVariants ) > 0 ) {
-            foreach ( $aVariants as $oSimpleVariant ) {
-                $oVariant = oxNew( 'oxarticle' );
-                $oVariant->load( $oSimpleVariant->getId() );
-                $dTPrice = $oVariant->oxarticles__oxtprice->value;
-                $oVariantTPrice = oxNew( 'oxprice' );
-                $oVariantTPrice->setBruttoPriceMode();
-                $oVariantTPrice->setPrice( $dTPrice );
-                
-                if ( $oVariantTPrice ) {
-                    $dVariantTPrice = $oVariantTPrice->getBruttoPrice();
-                    if ( $dVariantTPrice > $dMaxTPrice ) {
-                        $dMaxTPrice = $dVariantTPrice;
-                        $oReturn = $oVariantTPrice;
-                    }
-                }
-            }
-        }
-        else {
-            $oReturn = $this->getTPrice();
-        }
-        
-        return $oReturn;
     }
     
 }
