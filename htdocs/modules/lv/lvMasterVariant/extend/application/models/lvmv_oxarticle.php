@@ -249,7 +249,7 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
                     if ( $oAttribute->oxattribute__oxvalue->value != $aSummedAttributes[$sTitleHash]['value'] ) {
                         $aSummedAttributes[$sTitleHash]['value'] .= ', '.$oAttribute->oxattribute__oxvalue->value;
                         if ( $sVendorName ) {
-                            $aSummedAttributes[$sTitleHash]['value'] .= "(". $sVendorName.")";
+                            // $aSummedAttributes[$sTitleHash]['vendors'][] .= " (". $sVendorName.")";
                         }
                     }
                 }
@@ -257,12 +257,29 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
                     $aSummedAttributes[$sTitleHash]['title'] = $oAttribute->oxattribute__oxtitle->value;
                     $aSummedAttributes[$sTitleHash]['value'] = $oAttribute->oxattribute__oxvalue->value;
                     if ( $sVendorName ) {
-                        $aSummedAttributes[$sTitleHash]['value'] .= "(". $sVendorName.")";
+                        // $aSummedAttributes[$sTitleHash]['value'] .= " (". $sVendorName.")";
                     }
+                }
+                
+                if (  $sVendorName ) {
+                    $aSummedAttributes[$sTitleHash]['vendors'][] = $sVendorName;
                 }
             }
         }
         
+        foreach ( $aSummedAttributes as $sTitleHash=>$aSummedAttribute ) {
+            $sVendorList  = " (";
+            $iIndex = 0;
+            foreach ( $aSummedAttribute['vendors'] as $sVendorAssigned ) {
+                if ( $iIndex > 0 ) {
+                    $sVendorList .= ", ";
+                }
+                $sVendorList .= $sVendorAssigned;
+            }
+            $sVendorList .= ")";
+            
+            $aSummedAttributes[$sTitleHash]['vendors'] = $sVendorList;
+        }
         
         return $aSummedAttributes;
     } 
