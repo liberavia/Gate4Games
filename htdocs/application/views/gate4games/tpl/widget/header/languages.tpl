@@ -1,3 +1,4 @@
+[{*
 [{oxscript include="js/widgets/oxflyoutbox.js" priority=10 }]
 [{oxscript add="$( '#languageTrigger' ).oxFlyOutBox();"}]
 [{if $oView->isLanguageLoaded()}]
@@ -25,3 +26,4 @@
 </div>
 [{/if}]
 [{oxscript widget=$oView->getClassName()}]
+*}]
