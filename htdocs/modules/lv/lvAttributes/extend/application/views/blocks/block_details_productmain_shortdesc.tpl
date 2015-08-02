@@ -1,4 +1,4 @@
-<div style="float:right;height:198px;width:250px;position: absolute;right:0px;bottom:80px;">
+<div style="float:right;height:198px;width:250px;position: absolute;right:0px;bottom:95px;">
     <div style="text-align: right;">
         [{foreach from=$oView->lvGetAgeIcons() item="aAge"}]
             <span><img src="[{$aAge.url}]" title="[{$aAge.title}]"></span>
