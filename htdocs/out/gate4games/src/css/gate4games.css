@@ -277,7 +277,7 @@ a.sliderHover {
 div.searchBox {
     position: absolute;
     right: 30px;
-    top: 62px;
+    top: 55px;
 }
 
 div.searchBox input.textbox {
@@ -285,7 +285,7 @@ div.searchBox input.textbox {
     float: left;
     margin: 0px 0px 0 0;
     padding-left: 4px;
-    width: 500px;
+    width: 555px;
 /*    border-radius: 6px 0 0 6px;*/
     border: 1px solid #5d005d;
     font-weight: bold;
