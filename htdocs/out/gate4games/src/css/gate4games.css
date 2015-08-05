@@ -285,7 +285,7 @@ div.searchBox input.textbox {
     float: left;
     margin: 0px 0px 0 0;
     padding-left: 4px;
-    width: 555px;
+    width: 520px;
 /*    border-radius: 6px 0 0 6px;*/
     border: 1px solid #5d005d;
     font-weight: bold;
@@ -321,7 +321,7 @@ div.searchBox input.textbox:focus {
     float: left;
     margin: 0px 0px 0 0;
     padding-left: 4px;
-    width: 500px;
+    width: 520px;
 /*    box-shadow: 0 0 15px 2px #5d005d;*/
 }
 
