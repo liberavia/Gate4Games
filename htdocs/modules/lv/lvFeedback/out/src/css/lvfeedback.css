@@ -55,9 +55,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     background: #fff;
     border: solid 2px;
     border-color: #5d005d;    
+    display: none;
 }
 
 .lvFadeIn {
+    display: block;
     -webkit-transition: 500ms opacity ease;
        -moz-transition: 500ms opacity ease;
         -ms-transition: 500ms opacity ease;
@@ -76,6 +78,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             transition: 500ms opacity ease;
 
     opacity: 0;
+    display: none;
 }
 
 .lvButtonClose {

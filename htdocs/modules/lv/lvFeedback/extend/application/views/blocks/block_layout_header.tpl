@@ -5,7 +5,7 @@
     <span id="lvButtonCloseIdent" class="lvButtonClose">X</span>
     <form action="[{$oViewConf->getSelfActionLink()}]" method="post" id="lvFeedbackForm">
         [{$oViewConf->getHiddenSid()}]
-        <input type="hidden" name="fnc" value="savereview">
+        <input type="hidden" name="fnc" value="lvTriggerSendFeedback">
         <input type="hidden" name="cl" value="lvsendfeedback">
         <input type="hidden" name="currentpage" value="[{$smarty.server.HTTP_HOST}][{$smarty.server.REQUEST_URI}]">
         <table id="lvFeedbackTable">
@@ -58,3 +58,13 @@
     </form>
 </div>
 [{$smarty.block.parent}]
+[{*handle feedback on submitted form 1= success, 2= captcha, 3 = empty message 4= mail error*}]
+[{if $smarty.get.lvFeedbackReturnMessage == '1'}]
+    <div class="status success corners">[{oxmultilang ident="LVFEEDBACK_MAIL_SENDED"}]</div>
+[{elseif $smarty.get.lvFeedbackReturnMessage == '2'}]
+    <div class="status error corners">[{oxmultilang ident="LVFEEDBACK_MAIL_ERROR_CAPTCHA"}]</div>
+[{elseif $smarty.get.lvFeedbackReturnMessage == '3'}]
+    <div class="status error corners">[{oxmultilang ident="LVFEEDBACK_MAIL_ERROR_NO_MESSAGE"}]</div>
+[{elseif $smarty.get.lvFeedbackReturnMessage == '4'}]
+    <div class="status error corners">[{oxmultilang ident="LVFEEDBACK_MAIL_ERROR_SEND"}]</div>
+[{/if}]

@@ -24,5 +24,27 @@
  * @author André Gregor-Herrmann
  */
 class lvfeedback_oxemail extends lvfeedback_oxemail_parent {
-    //put your code here
+    
+    /**
+     * Sends feedback mail and returns success
+     * 
+     * @param type $aParams
+     * @return bool
+     */
+    public function lvSendFeedbackMail( $aParams, $sFeedbackPage ) {
+        $oShop      = $this->_getShop();
+        $oConfig    = $this->getConfig();
+        $sTo        = $oConfig->getConfigParam( 'sLvFeedbackEmail' );
+        
+        $sSubject = "User Feedback from ".$oShop->oxshops__oxname->getRawValue()."!";
+        
+        $sMessage  = "";
+        $sMessage .= "\nE-Mail: ".(string)$aParams['email']."\nName: ".(string)$aParams['name']."\nVisited page: ".$sFeedbackPage;
+        $sMessage .= "\n\nMessage:\n".(string)$aParams['message'];
+        
+        $blReturn = $this->sendEmail( $sTo, $sSubject, $sMessage );
+        
+        return (bool)$blReturn;
+    }
+    
 }

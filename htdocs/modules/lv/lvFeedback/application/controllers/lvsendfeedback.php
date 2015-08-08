@@ -31,9 +31,49 @@ class lvsendfeedback extends oxUBase {
      * @param void
      * @rerturn void
      */
-    public function lvSendFeedback() {
-        $blLvReCaptchaValidated = $this->_lvValidateReCaptchaResponse();
+    public function lvTriggerSendFeedback() {
+        $oConfig                    = $this->getConfig();
+        $blLvReCaptchaValidated     = $this->_lvValidateReCaptchaResponse();
+        $aParams                    = $oConfig->getRequestParameter( 'editval' );
+        $sReturnPage                = $oConfig->getRequestParameter( 'currentpage' );
+        
+        if ( $blLvReCaptchaValidated === true ) {
+            $this->_lvSendMessage( $aParams, $sReturnPage );
+        }
+        else {
+            // send user right back with message, that he didn't pass the captcha
+            $this->_lvSendUserBack( $sReturnPage, 2 );
+        }
     }
+    
+    
+    /**
+     * Sends feedback mail to defined address
+     * 
+     * @param type $aParams
+     * @param type $sReturnPage
+     * @return void
+     */
+    protected function _lvSendMessage( $aParams, $sReturnPage ) {
+        
+        if ( isset( $aParams['message'] ) && is_string( $aParams['message'] ) && $aParams['message'] != '' ) {
+            $oEmail = oxNew( 'oxemail' );
+            $blSuccess = $oEmail->lvSendFeedbackMail( $aParams, $sReturnPage );
+            if ( $blSuccess ) {
+                // send user back with success message
+                $this->_lvSendUserBack( $sReturnPage, 1 );
+            }
+            else {
+                // tell user, that there were problems sending mail
+                $this->_lvSendUserBack( $sReturnPage, 4 );
+            }
+        }
+        else {
+            // send user right back with message, that there is no message
+            $this->_lvSendUserBack( $sReturnPage, 3 );
+        }
+    }
+    
     
     
     /**
@@ -42,8 +82,17 @@ class lvsendfeedback extends oxUBase {
      * @param int $iReturnMessage
      * @return void
      */
-    protected function _lvSendUserBack( $iReturnMessage ) {
+    protected function _lvSendUserBack( $sReturnUrl, $iReturnMessage ) {
+        $oUtils = oxRegistry::getUtils();
         
+        if (strpos( $sReturnUrl, '?' ) === false ) {
+            $sReturnUrl .= '?lvFeedbackReturnMessage='.(string)$iReturnMessage;
+        }
+        else {
+            $sReturnUrl .= '&lvFeedbackReturnMessage='.(string)$iReturnMessage;
+        }
+        
+        $oUtils->redirect( $sReturnUrl, false );
     }
     
     /**
