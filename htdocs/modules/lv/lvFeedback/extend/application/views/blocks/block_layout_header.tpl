@@ -37,7 +37,7 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <textarea name="editval[message]" cols="60" rows="10">value="[{$smarty.get.lvFeedbackMessage}]"</textarea>
+                    <textarea name="editval[message]" cols="60" rows="10">[{$smarty.get.lvFeedbackMessage}]</textarea>
                 </td>
             </tr>
             [{if $oViewConf->lvFeedbackRecaptchaActive()}]
