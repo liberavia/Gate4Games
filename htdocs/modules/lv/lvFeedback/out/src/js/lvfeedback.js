@@ -16,3 +16,17 @@
  */
 
 
+$( document ).ready(function() {
+    $('#lvFeedbackButtonIdent').click(function() {
+        if ( $('#lvFeedbackFormIdent').hasClass( 'lvFadeIn' ) ) {
+            $('#lvFeedbackFormIdent').addClass( 'lvFadeOut' );
+            $('#lvFeedbackFormIdent').removeClass( 'lvFadeIn' );
+        }
+        else {
+            if ( $('#lvFeedbackFormIdent').hasClass( 'lvFadeOut' ) ) {
+                $('#lvFeedbackFormIdent').removeClass( 'lvFadeOut' );
+            }
+            $('#lvFeedbackFormIdent').addClass( 'lvFadeIn' );
+        }
+    });
+});

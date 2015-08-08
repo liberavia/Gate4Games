@@ -1,13 +1,18 @@
-<div class="lvFeedbackButtonContainer">
+<div id="lvFeedbackButtonIdent" class="lvFeedbackButtonContainer">
     <img src="[{$oViewConf->lvGetFeedbackButtonImg()}]">
 </div>
-<div class="lvFeedbackFormContainer">
+<div id="lvFeedbackFormIdent" class="lvFeedbackFormContainer">
     <form action="[{$oViewConf->getSelfActionLink()}]" method="post" id="lvFeedbackForm">
         [{$oViewConf->getHiddenSid()}]
         <input type="hidden" name="fnc" value="savereview">
         <input type="hidden" name="cl" value="lvsendfeedback">
         <input type="hidden" name="currentpage" value="[{$smarty.server.HTTP_HOST}][{$smarty.server.REQUEST_URI}]">
         <table id="lvFeedbackTable">
+            <tr>
+                <td colspan="2">
+                    <h3>[{oxmultilang ident="LVFEEDBACK_FORM_GREETER"}]</h3>
+                </td>
+            </tr>
             <tr>
                 <td>
                     [{oxmultilang ident="LVFEEDBACK_FORM_EMAIL"}]:
@@ -31,7 +36,7 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <textarea name="editval[message]" cols="80" rows="10"></textarea>
+                    <textarea name="editval[message]" cols="60" rows="10"></textarea>
                 </td>
             </tr>
             [{if $oViewConf->lvFeedbackRecaptchaActive()}]

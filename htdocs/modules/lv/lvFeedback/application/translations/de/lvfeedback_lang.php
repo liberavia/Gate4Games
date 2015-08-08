@@ -25,6 +25,7 @@ $sLangName = 'Deutsch';
 
 $aLang = array(
     'charset'                                           => 'UTF-8',
+    'LVFEEDBACK_FORM_GREETER'                           => 'Sag uns Deine Meinung :-)',
     'LVFEEDBACK_FORM_EMAIL'                             => 'Deine E-Mail (Optional)',
     'LVFEEDBACK_FORM_NAME'                              => 'Dein Name (Optional)',
     'LVFEEDBACK_FORM_MESSAGE'                           => 'Deine Nachricht an uns',

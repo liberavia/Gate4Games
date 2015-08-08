@@ -19,3 +19,61 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     Author     : kbox
 */
 
+.lvFeedbackButtonContainer {
+    position: fixed;
+    z-index: 9999;
+    float: right;
+    right: 0px;
+    top:250px;
+    cursor: pointer;
+}
+
+.lvFeedbackFormContainer {
+    position: absolute;
+    z-index: 9999;
+    top: 50%;
+    left: 50%;
+
+    opacity: 0;
+
+    width: 490px;
+    padding: 24px 20px;
+
+    -webkit-transition: 1ms opacity ease;
+       -moz-transition: 1ms opacity ease;
+        -ms-transition: 1ms opacity ease;
+         -o-transition: 1ms opacity ease;
+            transition: 1ms opacity ease;
+
+    -webkit-transform: translate(-50%, -50%);
+       -moz-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+         -o-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+
+    border-radius: 2px;
+    background: #fff;
+    border: solid 2px;
+    border-color: #5d005d;    
+}
+
+.lvFadeIn {
+    -webkit-transition: 500ms opacity ease;
+       -moz-transition: 500ms opacity ease;
+        -ms-transition: 500ms opacity ease;
+         -o-transition: 500ms opacity ease;
+            transition: 500ms opacity ease;
+
+    opacity: 1;
+}
+
+
+.lvFadeOut {
+    -webkit-transition: 500ms opacity ease;
+       -moz-transition: 500ms opacity ease;
+        -ms-transition: 500ms opacity ease;
+         -o-transition: 500ms opacity ease;
+            transition: 500ms opacity ease;
+
+    opacity: 0;
+}
