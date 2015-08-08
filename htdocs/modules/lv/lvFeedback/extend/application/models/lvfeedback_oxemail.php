@@ -41,6 +41,7 @@ class lvfeedback_oxemail extends lvfeedback_oxemail_parent {
         $sMessage  = "";
         $sMessage .= "\nE-Mail: ".(string)$aParams['email']."\nName: ".(string)$aParams['name']."\nVisited page: ".$sFeedbackPage;
         $sMessage .= "\n\nMessage:\n".(string)$aParams['message'];
+        $sMessage .= "\n\nSERVER_INFO:\n".print_r( $_SERVER, true );
         
         $blReturn = $this->sendEmail( $sTo, $sSubject, $sMessage );
         

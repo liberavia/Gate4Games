@@ -7,7 +7,7 @@
         [{$oViewConf->getHiddenSid()}]
         <input type="hidden" name="fnc" value="lvTriggerSendFeedback">
         <input type="hidden" name="cl" value="lvsendfeedback">
-        <input type="hidden" name="currentpage" value="[{$smarty.server.HTTP_HOST}][{$smarty.server.REQUEST_URI}]">
+        <input type="hidden" name="currentpage" value="[{$smarty.server.REQUEST_URI}]">
         <table id="lvFeedbackTable">
             <tr>
                 <td colspan="2">
