@@ -89,7 +89,7 @@ class lvfeedback_oxviewconfig extends lvfeedback_oxviewconfig_parent {
         $oConfig = $this->getConfig();
         
         $sShopUrl   = $oConfig->getShopUrl();
-        $sPath      = "modules/lv/lvFeedback/out/img/Feedeback.png";
+        $sPath      = "modules/lv/lvFeedback/out/img/Feedback.png";
         $sImgUrl    = $sShopUrl.$sPath;
         
         return $sImgUrl;
