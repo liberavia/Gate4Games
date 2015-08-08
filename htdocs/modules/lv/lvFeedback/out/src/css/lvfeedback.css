@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 .lvFeedbackFormContainer {
-    position: absolute;
+    position: fixed;
     z-index: 9999;
     top: 50%;
     left: 50%;
@@ -76,4 +76,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             transition: 500ms opacity ease;
 
     opacity: 0;
+}
+
+.lvButtonClose {
+    color: #5d005d;
+    font-size: 30px;
+    text-decoration: none;
+    position: absolute; right: 5px; top: 10px;
+    cursor: pointer;
+}
+
+.lvButtonClose:hover {
+    color: #C800C8;
 }

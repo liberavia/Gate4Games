@@ -2,6 +2,7 @@
     <img src="[{$oViewConf->lvGetFeedbackButtonImg()}]">
 </div>
 <div id="lvFeedbackFormIdent" class="lvFeedbackFormContainer">
+    <span id="lvButtonCloseIdent" class="lvButtonClose">X</span>
     <form action="[{$oViewConf->getSelfActionLink()}]" method="post" id="lvFeedbackForm">
         [{$oViewConf->getHiddenSid()}]
         <input type="hidden" name="fnc" value="savereview">

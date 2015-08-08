@@ -29,4 +29,9 @@ $( document ).ready(function() {
             $('#lvFeedbackFormIdent').addClass( 'lvFadeIn' );
         }
     });
+    
+    $('#lvButtonCloseIdent').click(function() {
+        $('#lvFeedbackFormIdent').addClass( 'lvFadeOut' );
+        $('#lvFeedbackFormIdent').removeClass( 'lvFadeIn' );
+    });
 });
