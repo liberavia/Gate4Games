@@ -19,7 +19,7 @@
                     [{oxmultilang ident="LVFEEDBACK_FORM_EMAIL"}]:
                 </td>
                 <td>
-                    <input type="text" name="editval[email]" value="[{$smarty.get.lvFeedbackEmail|unescape:"htmlall"}]">
+                    <input type="text" name="editval[email]" value="[{$smarty.get.lvFeedbackEmail}]">
                 </td>
             </tr>
             <tr>
@@ -27,7 +27,7 @@
                     [{oxmultilang ident="LVFEEDBACK_FORM_NAME"}]:
                 </td>
                 <td>
-                    <input type="text" name="editval[name]" value="[{$smarty.get.lvFeedbackName|unescape:"htmlall"}]">
+                    <input type="text" name="editval[name]" value="[{$smarty.get.lvFeedbackName}]">
                 </td>
             </tr>
             <tr>
@@ -37,7 +37,7 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <textarea name="editval[message]" cols="60" rows="10">value="[{$smarty.get.lvFeedbackMessage|unescape:"htmlall"}]"</textarea>
+                    <textarea name="editval[message]" cols="60" rows="10">value="[{$smarty.get.lvFeedbackMessage}]"</textarea>
                 </td>
             </tr>
             [{if $oViewConf->lvFeedbackRecaptchaActive()}]
