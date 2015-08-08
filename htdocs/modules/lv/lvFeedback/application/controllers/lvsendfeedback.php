@@ -33,16 +33,23 @@ class lvsendfeedback extends oxUBase {
      */
     public function lvTriggerSendFeedback() {
         $oConfig                    = $this->getConfig();
-        $blLvReCaptchaValidated     = $this->_lvValidateReCaptchaResponse();
         $aParams                    = $oConfig->getRequestParameter( 'editval' );
         $sReturnPage                = $oConfig->getRequestParameter( 'currentpage' );
+        $blUseReCaptcha             = (bool)$oConfig->getConfigParam( 'blLvFeedbackUseCaptcha' );
+
+        if ( $blUseReCaptcha ) {
+            $blLvReCaptchaValidated = $this->_lvValidateReCaptchaResponse();
+        }
+        else {
+            $blLvReCaptchaValidated = true;
+        }
         
         if ( $blLvReCaptchaValidated === true ) {
             $this->_lvSendMessage( $aParams, $sReturnPage );
         }
         else {
             // send user right back with message, that he didn't pass the captcha
-            $this->_lvSendUserBack( $sReturnPage, 2 );
+            $this->_lvSendUserBack( $sReturnPage, 2, $aParams );
         }
     }
     
@@ -65,12 +72,12 @@ class lvsendfeedback extends oxUBase {
             }
             else {
                 // tell user, that there were problems sending mail
-                $this->_lvSendUserBack( $sReturnPage, 4 );
+                $this->_lvSendUserBack( $sReturnPage, 4, $aParams );
             }
         }
         else {
             // send user right back with message, that there is no message
-            $this->_lvSendUserBack( $sReturnPage, 3 );
+            $this->_lvSendUserBack( $sReturnPage, 3, $aParams );
         }
     }
     
@@ -82,7 +89,7 @@ class lvsendfeedback extends oxUBase {
      * @param int $iReturnMessage
      * @return void
      */
-    protected function _lvSendUserBack( $sReturnUrl, $iReturnMessage ) {
+    protected function _lvSendUserBack( $sReturnUrl, $iReturnMessage, $aParams = null ) {
         $oUtils = oxRegistry::getUtils();
         
         if (strpos( $sReturnUrl, '?' ) === false ) {
@@ -90,6 +97,18 @@ class lvsendfeedback extends oxUBase {
         }
         else {
             $sReturnUrl .= '&lvFeedbackReturnMessage='.(string)$iReturnMessage;
+        }
+        
+        if ( is_array( $aParams ) ) {
+            if ( $aParams['email'] != '' ) {
+                $sReturnUrl .= '&lvFeedbackEmail='.urlencode($aParams['email']);
+            }
+            if ( $aParams['name'] != '' ) {
+                $sReturnUrl .= '&lvFeedbackName='.urlencode($aParams['name']);
+            }
+            if ( $aParams['message'] != '' ) {
+                $sReturnUrl .= '&lvFeedbackMessage='.urlencode($aParams['message']);
+            }
         }
         
         $oUtils->redirect( $sReturnUrl, false );
