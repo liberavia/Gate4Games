@@ -56,6 +56,7 @@ $aModule = array(
         array( 'template' => 'layout/base.tpl',         'block'=>'base_style',                                  'file'=>'extend/application/views/blocks/block_base_style.tpl' ),
         array( 'template' => 'layout/base.tpl',         'block'=>'base_js',                                     'file'=>'extend/application/views/blocks/block_base_js.tpl' ),
         array( 'template' => 'layout/page.tpl',         'block'=>'layout_header',                               'file'=>'extend/application/views/blocks/block_layout_header.tpl' ),
+        array( 'template' => 'layout/page.tpl',         'block'=>'layout_breadcrumb',                           'file'=>'extend/application/views/blocks/block_layout_breadcrumb.tpl' ),
     ),
     'settings' => array(
         // group email
