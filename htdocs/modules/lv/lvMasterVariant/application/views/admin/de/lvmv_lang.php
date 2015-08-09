@@ -26,5 +26,6 @@ $sLangName = 'Deutsch';
 $aLang = array(
     'charset'                                           => 'UTF-8',
     'LVMV_MASTERVARIANT'                                => 'Hauptvariante',
+    'LVMV_LANGABBR'                                     => 'Sprachkürzel',
 );
 

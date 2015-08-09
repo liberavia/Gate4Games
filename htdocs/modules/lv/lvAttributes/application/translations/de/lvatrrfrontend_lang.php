@@ -50,5 +50,6 @@ $aLang = array(
     'LV_ATTR_AVAILABLE_FOR_BEST'                        => 'Top Angebot für: ',
     'LV_ATTR_AVAILABLE_FOR_SUM'                         => 'Verfügbar für: ',
     'LV_ATTR_COMPATIBILITY_AVAILABLE'                   => 'Plattform verfügbar bei anderen Partnern. Klicke auf Details!',
+    'LVATTR_SYSREQ_NOTYETKNOWN'                         => 'Informationen liegen derzeit noch nicht vor.',
 );
 

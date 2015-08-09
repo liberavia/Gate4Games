@@ -114,7 +114,18 @@ class lvattr_oxarticle extends lvattr_oxarticle_parent {
         foreach ( $aVariants as $oVariant ) {
             $oFullArticle = oxNew( 'oxarticle' );
             $oFullArticle->load( $oVariant->getId() );
-            $aSumCompatibilityInformation = array_merge( $aSumCompatibilityInformation, $oFullArticle->lvGetCompatibilityInformation() );
+            $aCurrentCompatibilityInformation = $oFullArticle->lvGetCompatibilityInformation();
+            
+            foreach ( $aCurrentCompatibilityInformation as $sCompatibilityPlatform=>$aPlatformCompatibilityInformation ) {
+                foreach ( $aPlatformCompatibilityInformation as $sKey=>$sValue ) {
+                    if ( isset( $aSumCompatibilityInformation[$sCompatibilityPlatform][$sKey] ) && $sKey == 'description' ) {
+                        $aSumCompatibilityInformation[$sCompatibilityPlatform][$sKey] .= $sValue;
+                    }
+                    else {
+                        $aSumCompatibilityInformation[$sCompatibilityPlatform][$sKey] = $sValue;
+                    }
+                }
+            }
         }
         
         return $aSumCompatibilityInformation;

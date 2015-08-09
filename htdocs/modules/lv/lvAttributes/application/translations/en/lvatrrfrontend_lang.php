@@ -50,5 +50,6 @@ $aLang = array(
     'LV_ATTR_AVAILABLE_FOR_BEST'                        => 'Best offer compatible with:',
     'LV_ATTR_AVAILABLE_FOR_SUM'                         => 'Available compatibility:',
     'LV_ATTR_COMPATIBILITY_AVAILABLE'                   => 'Platform available at different parter. Click on Details!',
+    'LVATTR_SYSREQ_NOTYETKNOWN'                         => 'Information not yet available.',
 );
 

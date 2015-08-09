@@ -161,8 +161,9 @@ class lvgamesplanet extends oxBase {
             LEFT JOIN oxarticles oa ON (o2a.OXOBJECTID=oa.OXID) 
             WHERE o2a.OXATTRID IN ( 'CompatibilityTypeWin', 'CompatibilityTypeMac', 'CompatibilityTypeLin' ) 
             AND oa.OXVENDORID='".$this->lvGetVendorId( $sLangAbbr )."' 
+            AND o2a.LVATTRDESC =''    
+            AND oa.OXACTIVE='1'
         ";
-        
         $oRs = $this->_oLvDb->Execute( $sQuery );
         
         if ( $oRs != false && $oRs->recordCount() > 0 ) {
@@ -172,7 +173,7 @@ class lvgamesplanet extends oxBase {
                 $sDetailsUrl    = $oRs->fields['OXEXTURL'];
                 
                 $sSysRequirements = $this->_lvFetchSysRequirementsFromDetails( $sDetailsUrl, $sAttributeId );
-                
+
                 if ( $sSysRequirements ) {
                     $this->_lvUpdateSysRequirements( $sOxid, $sSysRequirements );
                 }
@@ -201,7 +202,7 @@ class lvgamesplanet extends oxBase {
             WHERE
                 OXID='".$sOxid."'
         ";
-        
+
         $this->_oLvDb->Execute( $sQuery );
     }
     
@@ -215,7 +216,8 @@ class lvgamesplanet extends oxBase {
     protected function _lvFetchSysRequirementsFromDetails( $sUrl, $sAttributeId ) {
         $sSysRequirements = '';
         $sRequestUrl = $this->_lvRemovePartnerIdFromLink( $sUrl );
-        $sResult = $this->_oAffiliateTools->lvGetRestRequestResult( $this->_blLogActive, $sRequestUrl, 'RAW' );
+        
+        $sResult = utf8_encode( file_get_contents( $sRequestUrl ) );
         
         if ( $sResult ) {
             $sSysRequirements = $this->_lvParseRequestForSysRequirements( $sResult, $sAttributeId );
@@ -236,10 +238,10 @@ class lvgamesplanet extends oxBase {
         $sSysRequirements = '';
         
         $oDom = new DOMDocument();
-        $oDom->loadHTML( $sHtml );
+        @$oDom->loadHTML( $sHtml );
         
         // fetch  sysrequirements part
-        $oSysReq = $dom->getElementById( 'sysreqs' );
+        $oSysReq = $oDom->getElementById( 'sysreqs' );
         
         // get all data
         $aSysReqDataNodes = $oSysReq->getElementsByTagName( 'table' );
@@ -267,9 +269,11 @@ class lvgamesplanet extends oxBase {
         }
         
         $iSearchIndex = null;
-        foreach ( $aHeadlines as $iIndex=>$sContent ) {
-            if ( strpos( $sContent, $sNeedle) !== false ) {
-                $iSearchIndex = $iIndex;
+        if ( is_array( $aHeadlines ) && count( $aHeadlines ) > 0 ) {
+            foreach ( $aHeadlines as $iIndex=>$sContent ) {
+                if ( strpos( $sContent, $sNeedle) !== false ) {
+                    $iSearchIndex = $iIndex;
+                }
             }
         }
         
@@ -289,8 +293,8 @@ class lvgamesplanet extends oxBase {
      */
     protected function _lvRemovePartnerIdFromLink( $sUrl ) {
         $aRemovals = array();
-        $aRemovals[] = "?ref=".$this->_sPartnerId;
-        $aRemovals[] = "&ref=".$this->_sPartnerId;
+        $aRemovals[] = "?ref=gate4games";
+        $aRemovals[] = "&ref=gate4games";
         
         foreach ( $aRemovals as $sRemoval ) {
             $sUrl = str_replace( $sRemoval, "", $sUrl );
