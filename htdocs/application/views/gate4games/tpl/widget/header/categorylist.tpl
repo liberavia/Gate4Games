@@ -64,7 +64,7 @@
                 <li>
                     [{assign var="sLvCurrentLoadId" value=$oTopCont->oxcontents__oxloadid->value}]
                     [{if method_exists( $ocat, 'lvGetSubContentCats' ) && $ocat->lvGetSubContentCats("`$sLvCurrentLoadId`")}]
-                        [{$oTopCont->oxcontents__oxtitle->value}]
+                        <a href="#">[{$oTopCont->oxcontents__oxtitle->value}]</a>
                         <ul>
                             [{foreach from=$ocat->lvGetSubContentCats("`$sLvCurrentLoadId`") item="ocontentsubcat" key=contentsubcatkey name=ContentSubCat}]
                                 <li><a href="[{$ocontentsubcat->getLink()}]">[{$ocontentsubcat->oxcontents__oxtitle->value}]</a></li>
