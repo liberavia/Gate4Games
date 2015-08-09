@@ -56,6 +56,12 @@ class lvgamesplanet extends oxBase {
     protected $_oLvConf = null;
     
     /**
+     * Database object
+     * @var object
+     */
+    protected $_oLvDb = null;
+        
+    /**
      * Mapping of categories
      * @var array
      */
@@ -84,6 +90,7 @@ class lvgamesplanet extends oxBase {
         
         $this->_oAffiliateTools = oxNew( 'lvaffiliate_tools' );
         $this->_oLvConf         = $this->getConfig();
+        $this->_oLvDb           = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
         $this->_iLogLevel       = (int)$this->_oLvConf->getConfigParam( 'sLvGpLogLevel' );
         $this->_blLogActive     = (bool)$this->_oLvConf->getConfigParam( 'blLvGpLogActive' );
         $this->_aVendorId       = $this->_oLvConf->getConfigParam( 'aLvGpVendorId' );
@@ -138,6 +145,161 @@ class lvgamesplanet extends oxBase {
     }
     
     
+    /**
+     * Method takes care of fetching system requirements from details page
+     * 
+     * @param string $sLangAbbr
+     * @return void
+     */
+    public function lvFillSysRequirements( $sLangAbbr ) {
+        $sQuery = "
+            SELECT 
+                o2a.OXID, 
+                o2a.OXATTRID, 
+                oa.OXEXTURL 
+            FROM oxobject2attribute o2a 
+            LEFT JOIN oxarticles oa ON (o2a.OXOBJECTID=oa.OXID) 
+            WHERE o2a.OXATTRID IN ( 'CompatibilityTypeWin', 'CompatibilityTypeMac', 'CompatibilityTypeLin' ) 
+            AND oa.OXVENDORID='".$this->lvGetVendorId( $sLangAbbr )."' 
+        ";
+        
+        $oRs = $this->_oLvDb->Execute( $sQuery );
+        
+        if ( $oRs != false && $oRs->recordCount() > 0 ) {
+            while ( !$oRs->EOF ) {
+                $sOxid          = $oRs->fields['OXID'];
+                $sAttributeId   = $oRs->fields['OXATTRID'];
+                $sDetailsUrl    = $oRs->fields['OXEXTURL'];
+                
+                $sSysRequirements = $this->_lvFetchSysRequirementsFromDetails( $sDetailsUrl, $sAttributeId );
+                
+                if ( $sSysRequirements ) {
+                    $this->_lvUpdateSysRequirements( $sOxid, $sSysRequirements );
+                }
+                
+                $oRs->moveNext();
+            }
+        }
+    }
+    
+    
+    /**
+     * Updating Systemrequirements
+     * 
+     * @param string $sOxid
+     * @param string $sSysRequirements
+     * @return void
+     */
+    protected function _lvUpdateSysRequirements( $sOxid, $sSysRequirements ) {
+        $sSysRequirements = $this->_oLvDb->quote( $sSysRequirements );
+        $sQuery = "
+            UPDATE oxobject2attribute SET 
+                LVATTRDESC      = ".$sSysRequirements.",
+                LVATTRDESC_1    = ".$sSysRequirements.",
+                LVATTRDESC_2    = ".$sSysRequirements.",
+                LVATTRDESC_3    = ".$sSysRequirements."
+            WHERE
+                OXID='".$sOxid."'
+        ";
+        
+        $this->_oLvDb->Execute( $sQuery );
+    }
+    
+    
+    /**
+     * 
+     * @param string $sDetailsUrl
+     * @param string $sAttributeId
+     * @return string
+     */
+    protected function _lvFetchSysRequirementsFromDetails( $sUrl, $sAttributeId ) {
+        $sSysRequirements = '';
+        $sRequestUrl = $this->_lvRemovePartnerIdFromLink( $sUrl );
+        $sResult = $this->_oAffiliateTools->lvGetRestRequestResult( $this->_blLogActive, $sRequestUrl, 'RAW' );
+        
+        if ( $sResult ) {
+            $sSysRequirements = $this->_lvParseRequestForSysRequirements( $sResult, $sAttributeId );
+        }
+        
+        return $sSysRequirements;
+    }
+    
+    
+    /**
+     * Scrapes sysrequirements from details page html
+     * 
+     * @param string $sHtml
+     * @param string $sAttributeId
+     * @return string
+     */
+    protected function _lvParseRequestForSysRequirements( $sHtml, $sAttributeId ) {
+        $sSysRequirements = '';
+        
+        $oDom = new DOMDocument();
+        $oDom->loadHTML( $sHtml );
+        
+        // fetch  sysrequirements part
+        $oSysReq = $dom->getElementById( 'sysreqs' );
+        
+        // get all data
+        $aSysReqDataNodes = $oSysReq->getElementsByTagName( 'table' );
+        $aSysReqHeadNodes = $oSysReq->getElementsByTagName( 'h2' );
+        
+        foreach ( $aSysReqDataNodes as $oNode ) {
+            $aDataTables[] = (string)$oNode->ownerDocument->saveXML($oNode);
+        }
+
+        foreach ( $aSysReqHeadNodes as $oNode ) {
+            $aHeadlines[] = (string)$oNode->ownerDocument->saveXML($oNode);
+        }
+        
+        
+        switch( $sAttributeId ) {
+            case 'CompatibilityTypeWin':
+                $sNeedle = 'Windows';
+                break;
+            case 'CompatibilityTypeMac':
+                $sNeedle = 'Mac OS';
+                break;
+            case 'CompatibilityTypeLin':
+                $sNeedle = 'Linux';
+                break;
+        }
+        
+        $iSearchIndex = null;
+        foreach ( $aHeadlines as $iIndex=>$sContent ) {
+            if ( strpos( $sContent, $sNeedle) !== false ) {
+                $iSearchIndex = $iIndex;
+            }
+        }
+        
+        if ( $iSearchIndex !== null ) {
+            $sSysRequirements = $aDataTables[$iSearchIndex];
+        }
+
+        return $sSysRequirements;
+    }
+    
+    
+    /**
+     * Removes partner id from link
+     * 
+     * @param string $sUrl
+     * @return string
+     */
+    protected function _lvRemovePartnerIdFromLink( $sUrl ) {
+        $aRemovals = array();
+        $aRemovals[] = "?ref=".$this->_sPartnerId;
+        $aRemovals[] = "&ref=".$this->_sPartnerId;
+        
+        foreach ( $aRemovals as $sRemoval ) {
+            $sUrl = str_replace( $sRemoval, "", $sUrl );
+        }
+        
+        return $sUrl;
+    }
+    
+
     /**
      * Parses a simple-XML Result for building a import ready data array
      * 

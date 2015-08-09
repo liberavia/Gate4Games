@@ -55,6 +55,8 @@ class lvgp_import extends oxBase {
             $iPosition++;
         }
         
+        // update system requirements
+        $oLvGp->lvFillSysRequirements( 'de' );
     }
     
 }
