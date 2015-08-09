@@ -1,6 +1,6 @@
 [{foreach from=$oView->lvGetSumCompatibilityInformation() item="aCompatibilty"}]
     <div>
-        <div><img src="[{$aCompatibilty.iconurl}]"> [{$aCompatibilty.targetsys_trans}]:</div>
+        <div><h3><img src="[{$aCompatibilty.iconurl}]"> [{$aCompatibilty.targetsys_trans}]:</h3></div>
         <div>
             [{if $aCompatibilty.description != ''}]
                 [{$aCompatibilty.description}]
