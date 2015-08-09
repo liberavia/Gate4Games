@@ -20,15 +20,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 .lvPolInstallBox{
-    
+    margin:15px;
+    padding:5px;
 }
 
 .lvPolInstallLink{
-    
+    border: solid 2px black;
+    background: #5d005d;
+    color: white;
+    font-size: 15px;
+}
+
+.lvPolInstallLink > img{
+    height:32px;
+    width:32px;
 }
 
 .lvPolDetailsLinkBox {
-    
+    margin:15px;
+    padding:5px;
 }
 
 .lvPolDetailsLink {
@@ -36,7 +46,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 .lvWineHqDetailsBox {
-    
+    margin:15px;
+    padding:5px;
 }
 
 .lvWineHqDetailsLink {
