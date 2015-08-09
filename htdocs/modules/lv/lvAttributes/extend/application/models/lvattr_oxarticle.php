@@ -118,10 +118,7 @@ class lvattr_oxarticle extends lvattr_oxarticle_parent {
             
             foreach ( $aCurrentCompatibilityInformation as $sCompatibilityPlatform=>$aPlatformCompatibilityInformation ) {
                 foreach ( $aPlatformCompatibilityInformation as $sKey=>$sValue ) {
-                    if ( isset( $aSumCompatibilityInformation[$sCompatibilityPlatform][$sKey] ) && $sKey == 'description' ) {
-                        $aSumCompatibilityInformation[$sCompatibilityPlatform][$sKey] .= $sValue;
-                    }
-                    else {
+                    if ( !isset( $aSumCompatibilityInformation[$sCompatibilityPlatform][$sKey] ) || trim( $aSumCompatibilityInformation[$sCompatibilityPlatform][$sKey] ) == '' ) {
                         $aSumCompatibilityInformation[$sCompatibilityPlatform][$sKey] = $sValue;
                     }
                 }
