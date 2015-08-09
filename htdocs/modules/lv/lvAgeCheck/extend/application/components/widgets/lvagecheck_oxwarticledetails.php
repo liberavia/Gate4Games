@@ -46,6 +46,8 @@ class lvagecheck_oxwarticledetails extends lvagecheck_oxwarticledetails_parent {
     public function render() {
         
         $aRecommendedAges = $this->_lvGetRecommendedAges();
+print_r($aRecommendedAges);        
+die();
         $sCheckAgeType = false;
         if ( count( $aRecommendedAges ) > 0 ) {
             $sCheckAgeType = $this->_lvNeedToCheckAge( $aRecommendedAges );
@@ -94,21 +96,24 @@ class lvagecheck_oxwarticledetails extends lvagecheck_oxwarticledetails_parent {
      * @return array
      */
     protected function _lvGetRecommendedAges() {
-        $aAttributes = $this->getAttributes();
-        $aRecommendedAges = array();
+        $aAttributes        = $this->getAttributes();
         
-        $blRecommendedUskExists     = isset( $aAttributes['RecommendedAgeUsk'] );
-        $blRecommendedPegiExists    = isset( $aAttributes['RecommendedAgePegi'] );
+        $aRecommendedAges   = array();
         
-        if ( $blRecommendedUskExists || $blRecommendedPegiExists ) {
-            $oConfig = $this->getConfig();
-            
-            if ( $blRecommendedUskExists ) {
-                $aRecommendedAges[] = $aAttributes['RecommendedAgeUsk']->value;
-            }
-            
-            if ( $blRecommendedPegiExists ) {
-                $aRecommendedAges[] = $aAttributes['RecommendedAgePegi']->value;
+        foreach ( $aAttributes as $sTitleHash=>$oAttribute ) {
+            $blRecommendedUskExists     = $oAttribute->id == 'RecommendedAgeUsk';
+            $blRecommendedPegiExists    = $oAttribute->id == 'RecommendedAgePegi';
+
+            if ( $blRecommendedUskExists || $blRecommendedPegiExists ) {
+                $oConfig = $this->getConfig();
+
+                if ( $blRecommendedUskExists ) {
+                    $aRecommendedAges[] = preg_replace( '/[^0-9]/','', $oAttribute->value );
+                }
+
+                if ( $blRecommendedPegiExists ) {
+                    $aRecommendedAges[] = preg_replace( '/[^0-9]/','', $oAttribute->value );
+                }
             }
         }
         

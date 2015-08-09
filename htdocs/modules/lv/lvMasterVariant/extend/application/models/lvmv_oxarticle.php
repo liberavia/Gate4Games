@@ -242,8 +242,9 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
             $oCurrentAttributeList->loadAttributes( $oVariant->getId(), $oParentProduct->getId() );
             
             foreach ( $oCurrentAttributeList as $sKey=>$oAttribute ) {
-                $sTitleHash = md5( $oAttribute->oxattribute__oxtitle->value );
-                $sValueHash = md5( $oAttribute->oxattribute__oxvalue->value );
+                $sAttributeId   = $oAttribute->oxattribute__oxid->value;
+                $sTitleHash     = md5( $oAttribute->oxattribute__oxtitle->value );
+                $sValueHash     = md5( $oAttribute->oxattribute__oxvalue->value );
                 // check if key with title hash already exists. merge value if true, add new if false
                 if ( isset( $aSummedAttributes[$sTitleHash] ) ) {
                     if ( $oAttribute->oxattribute__oxvalue->value != $aSummedAttributes[$sTitleHash]['value'] ) {
@@ -260,6 +261,9 @@ class lvmv_oxarticle extends lvmv_oxarticle_parent {
                         // $aSummedAttributes[$sTitleHash]['value'] .= " (". $sVendorName.")";
                     }
                 }
+                
+                // set attribute id
+                $aSummedAttributes[$sTitleHash]['id'] = $sAttributeId;
                 
                 if (  $sVendorName ) {
                     $aSummedAttributes[$sTitleHash]['vendors'][$sValueHash][] = $sVendorName;
