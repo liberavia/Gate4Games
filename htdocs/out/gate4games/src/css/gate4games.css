@@ -793,3 +793,9 @@ html, body, div, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, 
     color: #fff;
     font-size: 10px;
 }
+
+.table-flat {
+    border-spacing: 5px;
+    padding: 15px;
+    border-collapse: separate;
+}
