@@ -37,7 +37,7 @@ class lvaffiliate_oxcmp_oxcategories extends lvaffiliate_oxcmp_oxcategories_pare
         $sContentTable  = getViewName( 'oxcontents' );
         $iCurrentLangId = oxRegistry::getLang()->getBaseLanguage();
         
-        $sQuery = "SELECT OXID FROM ".$sContentTable." WHERE LVPARENTLOADID='".$sParentLoadId."'";
+        $sQuery = "SELECT OXID FROM ".$sContentTable." WHERE LVPARENTLOADID='".$sParentLoadId."' AND OXACTIVE='1'";
         
         $oRs = $oDb->execute( $sQuery );
         
