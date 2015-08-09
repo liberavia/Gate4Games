@@ -46,8 +46,7 @@ class lvagecheck_oxwarticledetails extends lvagecheck_oxwarticledetails_parent {
     public function render() {
         
         $aRecommendedAges = $this->_lvGetRecommendedAges();
-print_r($aRecommendedAges);        
-die();
+        
         $sCheckAgeType = false;
         if ( count( $aRecommendedAges ) > 0 ) {
             $sCheckAgeType = $this->_lvNeedToCheckAge( $aRecommendedAges );
@@ -97,7 +96,6 @@ die();
      */
     protected function _lvGetRecommendedAges() {
         $aAttributes        = $this->getAttributes();
-        
         $aRecommendedAges   = array();
         
         foreach ( $aAttributes as $sTitleHash=>$oAttribute ) {

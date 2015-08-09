@@ -54,6 +54,7 @@ class lvmv_oxwarticledetails extends lvmv_oxwarticledetails_parent {
                 $aAttributes[$sKey]         = new stdClass();
                 $aAttributes[$sKey]->title  = $aSummedAttribute['title'];
                 $aAttributes[$sKey]->value  = $aSummedAttribute['value'];
+                $aAttributes[$sKey]->id     = $aSummedAttribute['id'];
             }
         }
         else {
