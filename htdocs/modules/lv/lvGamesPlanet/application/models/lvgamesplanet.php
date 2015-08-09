@@ -217,7 +217,7 @@ class lvgamesplanet extends oxBase {
         $sSysRequirements = '';
         $sRequestUrl = $this->_lvRemovePartnerIdFromLink( $sUrl );
         
-        $sResult = utf8_encode( file_get_contents( $sRequestUrl ) );
+        $sResult = file_get_contents( $sRequestUrl );
         
         if ( $sResult ) {
             $sSysRequirements = $this->_lvParseRequestForSysRequirements( $sResult, $sAttributeId );
