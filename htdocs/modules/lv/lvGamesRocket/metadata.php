@@ -42,7 +42,7 @@ $aModule = array(
     'extend'       => array(
     ),
     'files' => array(
-        'lvgamesrocket'                 => 'lv/lvGamesRocket/application/models/lvgameliebe.php',
+        'lvgamesrocket'                 => 'lv/lvGamesRocket/application/models/lvgamesrocket.php',
     ),
     'events'       => array(
     ),

@@ -23,7 +23,7 @@
  * @author Gate4Games
  * @author André Gregor-Herrmann
  */
-class lvgamesrocket extends lvgamesrocket_parent {
+class lvgamesrocket extends oxBase {
     /**
      * Flag for active log
      * @var int
@@ -135,9 +135,9 @@ class lvgamesrocket extends lvgamesrocket_parent {
     public function lvGetImportData( $sLangAbbr ) {
         
         $sRequestUrl  = $this->_aFeeds[$sLangAbbr]."?k=".$this->_sPartnerId;
-        
-        $aResponse = $this->_oAffiliateTools->lvGetRestRequestResult( $this->_blLogActive, $sRequestUrl, 'CSV' );
-        
+
+        $aResponse = $this->_oAffiliateTools->lvGetRestRequestResult( $this->_blLogActive, $sRequestUrl, 'CSV', $sCsvLineEnd = "\n", $sCsvDelimiter = '|', $sCsvEnclosure = '"' );
+
         $mResult = false;
         if ( $aResponse ) {
             $mResult = $this->_lvParseRequest( $aResponse, $sLangAbbr );
