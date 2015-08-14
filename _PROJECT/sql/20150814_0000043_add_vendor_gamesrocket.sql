@@ -1,0 +1,2 @@
+ INSERT INTO `oxvendor` (`OXID`, `OXSHOPID`, `OXACTIVE`, `OXICON`, `OXTITLE`, `OXSHORTDESC`, `OXTITLE_1`, `OXSHORTDESC_1`, `OXTITLE_2`, `OXSHORTDESC_2`, `OXTITLE_3`, `OXSHORTDESC_3`, `OXSHOWSUFFIX`, `LVMAINVENDOR`, `LVSHORTCUT`, `LVLANGABBR`, `OXTIMESTAMP`) VALUES
+('f25caaea7e61beaaee014421ef44d547', 'oxbaseshop', 1, 'gamesrocket.png', 'Gamesrocket', 'Deutsch', '', '', '', '', '', '', 1, 0, 'GARO', 'de', '2015-08-13 23:59:07');
