@@ -68,7 +68,7 @@ $aModule = array(
         ),
         array( 'group' => 'lvmmoga_main',               'name' => 'sLvMMOGADefaultCategoryId',          'type' => 'str',        'value' => '' ),
         // group debug
-        array( 'group' => 'lmmoga_debug',               'name' => 'blLvMMOGALogActive',                 'type' => 'bool',       'value' => false ),
-        array( 'group' => 'lmmoga_debug',               'name' => 'sLvMMOGALogLevel',                   'type' => 'str',        'value' => '1' ),
+        array( 'group' => 'lvmmoga_debug',               'name' => 'blLvMMOGALogActive',                 'type' => 'bool',       'value' => false ),
+        array( 'group' => 'lvmmoga_debug',               'name' => 'sLvMMOGALogLevel',                   'type' => 'str',        'value' => '1' ),
     )
 );

@@ -91,8 +91,9 @@ class lvaffiliate_tools extends oxBase {
         curl_setopt_array( 
             $resCurl, 
             array(
-                CURLOPT_RETURNTRANSFER => 1,
-                CURLOPT_URL => $sRequestUrl,
+                CURLOPT_RETURNTRANSFER      => 1,
+                CURLOPT_URL                 => $sRequestUrl,
+                CURLOPT_USERAGENT           => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:18.0) Gecko/20100101 Firefox/38.0',
             )
         );
 

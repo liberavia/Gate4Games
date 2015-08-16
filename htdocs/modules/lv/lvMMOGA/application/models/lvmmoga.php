@@ -56,6 +56,12 @@ class lvmmoga extends oxBase {
     protected $_oLvConf = null;
     
     /**
+     * Database object
+     * @var object
+     */
+    protected $_oLvDb = null;
+
+    /**
      * Mapping of categories
      * @var array
      */
@@ -138,6 +144,7 @@ class lvmmoga extends oxBase {
         
         $this->_oAffiliateTools     = oxNew( 'lvaffiliate_tools' );
         $this->_oLvConf             = $this->getConfig();
+        $this->_oLvDb               = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
         $this->_iLogLevel           = (int)$this->_oLvConf->getConfigParam( 'sLvMMOGALogLevel' );
         $this->_blLogActive         = (bool)$this->_oLvConf->getConfigParam( 'blLvMMOGALogActive' );
         $this->_aVendorId           = $this->_oLvConf->getConfigParam( 'aLvMMOGAVendorId' );
@@ -168,11 +175,9 @@ class lvmmoga extends oxBase {
      * @return mixed bool/array
      */
     public function lvGetImportData( $sLangAbbr ) {
-        
-        $sRequestUrl  = $this->_aFeeds[$sLangAbbr];
-        
-        $aResponse = $this->_oAffiliateTools->lvGetRestRequestResult( $this->_blLogActive, $sRequestUrl, 'CSV' );
-        
+        $sRequestUrl = $this->_aFeeds[$sLangAbbr];
+
+        $aResponse      = $this->_oAffiliateTools->lvGetRestRequestResult( $this->_blLogActive, $sRequestUrl, 'CSV' );
         $mResult = false;
         if ( $aResponse ) {
             $mResult = $this->_lvParseRequest( $aResponse, $sLangAbbr );
@@ -229,7 +234,7 @@ class lvmmoga extends oxBase {
         if ( $sResult ) {
             $sPicUrl = $this->_lvParseRequestForImage( $sResult );
         }
-        
+
         return $sPicUrl;
     }
     
@@ -245,6 +250,7 @@ class lvmmoga extends oxBase {
         preg_match_all( "/<div style=\"float:left;width:95px;text-align:center;\"><img src=\"(.*)\" alt=.?/", $sHtml, $aPicResult );
         if ( isset( $aPicResult[1][0] ) && $aPicResult[1][0] != '' ) {
             $sPicResult = $aPicResult[1][0];
+            $sPicResult = "http://www.mmoga.de".$sPicResult;
         }
 
         return $sPicResult;
@@ -291,7 +297,7 @@ class lvmmoga extends oxBase {
             }
             
             // check drm from category row
-            $sDrm = $this->_lvgetDrmFromCategoryType( trim( $aArticle[6] ) );
+            $sDrm = $this->_lvGetDrmFromCategoryType( trim( $aArticle[6] ) );
             if ( $sDrm != '' ) {
                 $sDrm = str_replace( 'MMORPG', 'Online-Account', $sDrm );
                 $aArticleData[$sId]['DRM'] = $sDrm;
@@ -324,19 +330,38 @@ class lvmmoga extends oxBase {
     protected function _lvCategoryTypeAllowed( $sCategoryType ) {
         $blAllowed      = false;
         $aTypes         = explode( "/", $sCategoryType );
-
         if ( count( $aTypes ) == 2 ) {
             $sKeyType       = trim( $aTypes[1] );
             $sPlatformType  = trim( $aTypes[0] );
-            
             if ( $sKeyType == 'Cdkey' ) {
-                if ( in_array( $sPlatformType, $this->_aAllowedPlatformTypes ) ) {
+                if ( array_key_exists( $sPlatformType, $this->_aAllowedPlatformTypes ) ) {
                     $blAllowed = true;
                 }
             }
         }    
-        
+
         return $blAllowed;
+    }
+    
+    
+    /**
+     * Method checks DRM Type by given category type
+     * 
+     * @param string $sCategoryType
+     * @return string
+     */
+    protected function _lvGetDrmFromCategoryType( $sCategoryType ) {
+        $sDrm = '';
+        $aTypes         = explode( "/", $sCategoryType );
+        if ( count( $aTypes ) == 2 ) {
+            $sKeyType       = trim( $aTypes[1] );
+            $sPlatformType  = trim( $aTypes[0] );
+            if ( array_key_exists( $sPlatformType, $this->_aAllowedPlatformTypes ) ) {
+                $sDrm = $this->_aAllowedPlatformTypes[$sPlatformType];
+            }
+        }    
+        
+        return $sDrm;
     }
     
     
