@@ -259,6 +259,9 @@ class lvaffiliate_tools extends oxBase {
         $sNormalizedTitle = $this->lvRoman2Arabic( $sNormalizedTitle );
         $sNormalizedTitle = str_replace( "®", "", $sNormalizedTitle );
         
+        // general cleanup of hidden signs
+        $sNormalizedTitle = preg_replace( '/[\x00-\x1F\x80-\xFF]/', '', $sNormalizedTitle );
+        
         return $sNormalizedTitle;
     }
 

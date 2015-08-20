@@ -62,7 +62,10 @@ class lvattr_oxwarticlebox extends lvattr_oxwarticlebox_parent {
             $oLang                      = oxRegistry::getLang();
             $aBestOfferDetails          = $this->lvGetBestAffiliateDetails();
             $oBestOfferProduct          = $aBestOfferDetails['product'];
-            $aBestOfferCompatibility    = $oBestOfferProduct->lvGetCompatibilityInformation();
+            $aBestOfferCompatibility    = array();
+            if ( $oBestOfferProduct ) {
+                $aBestOfferCompatibility    = $oBestOfferProduct->lvGetCompatibilityInformation();
+            }
             
             foreach ( $aSumCompatibilityInformation as $sAttrId=>$aCompatibility ) {
                 if ( isset( $aBestOfferCompatibility[$sAttrId] )  ) {

@@ -198,7 +198,7 @@ class lvaffiliate_import extends oxBase {
         $aResult = $oDb->GetRow( $sQuery );
         $this->_sLvVendorName   = (string)$aResult['OXTITLE'];
         $this->_blMainVendor    = (bool)$aResult['LVMAINVENDOR'];
-        $this->_lvCheckForReset();
+        $this->_lvCheckForVendorReset();
     }
     
     
@@ -218,16 +218,20 @@ class lvaffiliate_import extends oxBase {
             $oRs = $oDb->Execute( $sQuery );
             
             if ( $oRs != false && $oRs->recordCount() > 0 ) {
+                $oArticle = oxNew( 'oxarticle' );
                 while ( !$oRs->EOF ) {
                     $sOxid = $oRs->fields['OXID'];
-                    $oArticle = oxNew( 'oxarticle' );
-                    if ( $oArticle->load( $sOxid ) ) {
-                        $oArticle->delete();
+                    if ( $sOxid ) {
+                        $oArticle->delete( $sOxid );
                     }
                     
                     $oRs->moveNext();
                 }
             }
+            
+            // collect standalone parents and remove them
+            $sQuery = "DELETE FROM `oxarticles` WHERE OXPARENTID='' AND OXVARCOUNT='0'";
+            $oDb->Execute( $sQuery );
         }
     }
 
@@ -317,16 +321,12 @@ class lvaffiliate_import extends oxBase {
      */
     protected function _lvCheckForVendorReset() {
         $iHourNow = (int)date('H');
-        
         $blResetTimeValid = (
-                $this->_iLvAffiliateResetFromHour !== null &&
-                $this->_iLvAffiliateResetFromTo !== null &&
                 is_numeric( $this->_iLvAffiliateResetFromHour ) && 
                 is_numeric( $this->_iLvAffiliateResetToHour ) && 
                 $iHourNow >= $this->_iLvAffiliateResetFromHour &&
                 $iHourNow <= $this->_iLvAffiliateResetToHour
         );
-        
         if ( $blResetTimeValid && $this->_blLvAffiliateResetActive ) {
             $this->lvResetVendorArticles();
         }

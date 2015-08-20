@@ -85,7 +85,7 @@ class lvaffiliate_oxarticle extends lvaffiliate_oxarticle_parent {
         $oDb = oxDb::getDb();
         
         // oxmediaurls
-        $sDelete = 'delete from oxmediaurls where oxobjectid = ' . $sOXID . ' ';
+        $sDelete = "delete from oxmediaurls where oxobjectid = '" . $sOXID . "'";
         $oDb->execute( $sDelete );
         
         return $resReturn;
