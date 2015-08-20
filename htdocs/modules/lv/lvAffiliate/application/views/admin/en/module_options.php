@@ -35,6 +35,7 @@ $aLang = array(
     'SHOP_MODULE_aLvField2Attribute'                    => 'Values of data array that will be assigned to shop attributes. Wil only be done if ID of article is known.',
     'SHOP_MODULE_aLvCatId2Attr2CatId'                   => 'Assign categories in condition of one ore more attributes to other category-ids',
     // group maintenance
+    'SHOP_MODULE_GROUP_lvaffiliate_maintenance'         => 'Maintenance functions',
     'SHOP_MODULE_blLvAffiliateResetActive'              => 'Activate automatic articlereset',
     'SHOP_MODULE_sLvAffiliateResetFromHour'             => 'Hour of day from which articlereset may be done',
     'SHOP_MODULE_sLvAffiliateResetToHour'               => 'Hour of day to which articlereset may be done',
