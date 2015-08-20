@@ -74,4 +74,21 @@ class lvaffiliate_oxarticle extends lvaffiliate_oxarticle_parent {
         return $sVariantId;
     }
     
+    
+    /**
+     * 
+     * @param type $sOXID
+     */
+    protected function _deleteRecords($sOXID) {
+        $resReturn = parent::_deleteRecords($sOXID);
+        
+        $oDb = oxDb::getDb();
+        
+        // oxmediaurls
+        $sDelete = 'delete from oxmediaurls where oxobjectid = ' . $sOXID . ' ';
+        $oDb->execute( $sDelete );
+        
+        return $resReturn;
+    }
+    
 }

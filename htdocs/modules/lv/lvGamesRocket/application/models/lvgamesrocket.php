@@ -163,11 +163,11 @@ class lvgamesrocket extends oxBase {
             $sId                                        = (string)$aArticle[1];
             $dPrice                                     = (double)str_replace( ",", ".", $aArticle[4] );
             $dTPrice                                    = (double)str_replace( ",", ".", $aArticle[19] );
-            $sTitle                                     = trim( $aArticle[1] );
+            $sTitle                                     = trim( utf8_encode( $aArticle[1] ) );
             $sTitle                                     = $this->_oAffiliateTools->lvGetNormalizedName( $sTitle );
             $sPlattform                                 = trim( $aArticle[20] );
             $sDRM                                       = trim( $aArticle[21] );
-            $sShortDesc                                 = trim( $aArticle[3] );
+            $sShortDesc                                 = trim( utf8_encode( $aArticle[3] ) );
             
             $aArticleData[$sId]['ARTNUM']               = "GAMESROCKET-".$sId;
             $aArticleData[$sId]['TITLE']                = $sTitle;

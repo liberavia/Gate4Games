@@ -94,6 +94,7 @@ class lvaffiliate_tools extends oxBase {
                 CURLOPT_RETURNTRANSFER      => 1,
                 CURLOPT_URL                 => $sRequestUrl,
                 CURLOPT_USERAGENT           => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:18.0) Gecko/20100101 Firefox/38.0',
+                CURLOPT_ENCODING            => "",
             )
         );
 
@@ -256,6 +257,7 @@ class lvaffiliate_tools extends oxBase {
         $sNormalizedTitle = str_replace( "-", "", $sNormalizedTitle );        
         $sNormalizedTitle = str_replace( "  ", " ", $sNormalizedTitle );        
         $sNormalizedTitle = $this->lvRoman2Arabic( $sNormalizedTitle );
+        $sNormalizedTitle = str_replace( "®", "", $sNormalizedTitle );
         
         return $sNormalizedTitle;
     }

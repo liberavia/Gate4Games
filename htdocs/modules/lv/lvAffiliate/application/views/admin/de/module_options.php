@@ -34,6 +34,10 @@ $aLang = array(
     'SHOP_MODULE_aLvField2CategoryAssignment'           => 'Direkte Zuordnung zur Kategorie, sobald die ID des Artikels bekannt ist.',
     'SHOP_MODULE_aLvField2Attribute'                    => 'Werte des Datenarrays die als Attributswerte zugeordnet werden. Erfolgt nur, wenn ID des Artikels ermittelt wurde.',
     'SHOP_MODULE_aLvCatId2Attr2CatId'                   => 'Produkte einer Kategorie in Abhängigkeit von einem oder mehreren Attributen anderen Katregorien zuordnen',
+    // group maintenance
+    'SHOP_MODULE_blLvAffiliateResetActive'              => 'Automatischen Artikelreset aktivieren',
+    'SHOP_MODULE_sLvAffiliateResetFromHour'             => 'Stunde des Tages ab welcher der Artikelreset <b>frühestens</b> erfolgen darf',
+    'SHOP_MODULE_sLvAffiliateResetToHour'               => 'Stunde des Tages ab welcher der Artikelreset <b>spätestens</b> erfolgen darf',
     // group debug
     'SHOP_MODULE_GROUP_lvaffiliate_debug'               => 'Logs and Debugging',
     'SHOP_MODULE_blLvAffiliateLogActive'                => 'Aktivitäten in Log protokollieren (lvaffiliate_import.log)',

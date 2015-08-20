@@ -115,7 +115,25 @@ class lvaffiliate_import extends oxBase {
      * @var array
      */
     protected $_aLvField2Attribute = null;
-
+    
+    /**
+     * Flag that indicates if automatic articlereset should be performed
+     * @var bool
+     */
+    protected $_blLvAffiliateResetActive = false;
+    
+    /**
+     * Hour from which article reset is allowed
+     * @var string
+     */
+    protected $_iLvAffiliateResetFromHour = null;
+        
+    /**
+     * Hour to which article reset is allowed
+     * @var string
+     */
+    protected $_iLvAffiliateResetToHour = null;
+    
     /**
      * Logfile used
      * @var string
@@ -151,10 +169,15 @@ class lvaffiliate_import extends oxBase {
         $this->_aLvField2DirectTable            = $oConfig->getConfigParam( 'aLvField2DirectTable' );
         $this->_aLvField2CategoryAssignment     = $oConfig->getConfigParam( 'aLvField2CategoryAssignment' );
         $this->_aLvField2Attribute              = $oConfig->getConfigParam( 'aLvField2Attribute' );
+        // group maintenance
+        $this->_blLvAffiliateResetActive        = $oConfig->getConfigParam( 'blLvAffiliateResetActive' );
+        $this->_iLvAffiliateResetFromHour       = (int)$oConfig->getConfigParam( 'sLvAffiliateResetFromHour' );
+        $this->_iLvAffiliateResetToHour         = (int)$oConfig->getConfigParam( 'sLvAffiliateResetToHour' );
         // group debug
         $this->_blLvAffiliateLogActive          = (bool)$oConfig->getConfigParam( 'blLvAffiliateLogActive' );
         $this->_iLvAffiliateLogLevel            = (int)$oConfig->getConfigParam( 'sLvAffiliateLogLevel' );
         $this->_oAffiliateTools                 = oxNew( 'lvaffiliate_tools' );
+        
         
         parent::__construct();
     }
@@ -175,6 +198,37 @@ class lvaffiliate_import extends oxBase {
         $aResult = $oDb->GetRow( $sQuery );
         $this->_sLvVendorName   = (string)$aResult['OXTITLE'];
         $this->_blMainVendor    = (bool)$aResult['LVMAINVENDOR'];
+        $this->_lvCheckForReset();
+    }
+    
+    
+    
+    /**
+     * Method deletes all products related to vendor
+     * 
+     * @param void
+     * @return void
+     */
+    public function lvResetVendorArticles() {
+        $oDb    = oxDb::getDb( MODE_FETCH_ASSOC );
+        
+        if ( $this->_sLvVendorId ) {
+            $sQuery = "SELECT OXID FROM oxarticles WHERE OXVENDORID='".$this->_sLvVendorId."'";
+            
+            $oRs = $oDb->Execute( $sQuery );
+            
+            if ( $oRs != false && $oRs->recordCount() > 0 ) {
+                while ( !$oRs->EOF ) {
+                    $sOxid = $oRs->fields['OXID'];
+                    $oArticle = oxNew( 'oxarticle' );
+                    if ( $oArticle->load( $sOxid ) ) {
+                        $oArticle->delete();
+                    }
+                    
+                    $oRs->moveNext();
+                }
+            }
+        }
     }
 
 
@@ -251,6 +305,31 @@ class lvaffiliate_import extends oxBase {
         
         $sQuery = "UPDATE oxarticles SET LVSALESRANK='".(string)$iRank."' WHERE OXARTNUM='".$sArtNum."' LIMIT 1";
         $oDb->Execute( $sQuery );
+    }
+    
+
+    /**
+     * Method checks if current hour is foreseen for vendor article reset and if option is activated
+     * Triggering reset if true
+     * 
+     * @param void
+     * @return void
+     */
+    protected function _lvCheckForVendorReset() {
+        $iHourNow = (int)date('H');
+        
+        $blResetTimeValid = (
+                $this->_iLvAffiliateResetFromHour !== null &&
+                $this->_iLvAffiliateResetFromTo !== null &&
+                is_numeric( $this->_iLvAffiliateResetFromHour ) && 
+                is_numeric( $this->_iLvAffiliateResetToHour ) && 
+                $iHourNow >= $this->_iLvAffiliateResetFromHour &&
+                $iHourNow <= $this->_iLvAffiliateResetToHour
+        );
+        
+        if ( $blResetTimeValid && $this->_blLvAffiliateResetActive ) {
+            $this->lvResetVendorArticles();
+        }
     }
     
     
