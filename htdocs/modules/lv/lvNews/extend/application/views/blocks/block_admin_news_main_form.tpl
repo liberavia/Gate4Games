@@ -13,7 +13,7 @@
     [{oxmultilang ident="LVNEWS_MAIN_TEASERTEXT"}]
     </td>
     <td class="edittext">
-    <textarea cols="40" rows="5" name="editval[oxnews__lvteasertext]" value="[{$edit->oxnews__lvteasertext->value}]" [{$readonly}]>
+        <textarea cols="40" rows="5" name="editval[oxnews__lvteasertext]" [{$readonly}]>[{$edit->oxnews__lvteasertext->value}]</textarea>
     [{oxinputhelp ident="HELP_LVNEWS_MAIN_TEASERTEXT"}]
     </td>
 </tr>

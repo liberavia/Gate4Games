@@ -54,4 +54,14 @@ class lvoxnews extends lvoxnews_parent {
         return $sReturnUrl;
     }
     
+    
+    /**
+     * Returns title of article
+     * 
+     * @param void
+     * @return string
+     */
+    public function lvGetTitle() {
+        return $this->oxnews__oxshortdesc->value;
+    }
 }
