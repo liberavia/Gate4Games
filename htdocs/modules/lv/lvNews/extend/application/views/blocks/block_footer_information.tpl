@@ -1,4 +1,3 @@
-[{$smarty.block.parent}]
 <dl id="footerInformation">
     <dt>[{oxmultilang ident="INFORMATION" }]</dt>
     <dd>

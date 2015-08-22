@@ -3,7 +3,6 @@
     [{oxscript add="$(function(){oxEqualizer.equalHeight($( '#panel dl' ));});"}]
     <div id="footer">
         <div>
-[{*            
                 <div class="bar">
                     [{block name="footer_fblike"}]
                         [{if $oView->isActive('FbLike') && $oViewConf->getFbAppId()}]
@@ -12,6 +11,7 @@
                             </div>
                         [{/if}]
                     [{/block}]
+[{*            
                     [{if $oView->showNewsletter()}]
                         [{include file="widget/footer/newsletter.tpl"}]
                     [{/if}]
@@ -26,8 +26,8 @@
                             [{/oxifcontent}]
                         </div>
                     [{/block}]
-                </div>
 *}]
+                </div>
             [{*oxid_include_widget cl="oxwServiceList" noscript=1 nocookie=1*}]
 
             [{oxid_include_widget cl="oxwInformation" noscript=1 nocookie=1}]
