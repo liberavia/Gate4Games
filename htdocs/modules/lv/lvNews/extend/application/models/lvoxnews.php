@@ -44,12 +44,13 @@ class lvoxnews extends lvoxnews_parent {
      * @return string
      */
     public function lvGetNewsDetailsLink() {
-        $oConfig = $this->getConfig();
-        
-        $sShopUrl = $oConfig->getShopUrl();
-        $sNewsUri = $this->oxnews__lvseourl->getRawValue();
-        
-        $sReturnUrl = $sShopUrl.$sNewsUri;
+        $oConfig            = $this->getConfig();
+        $sOxid              = $this->getId();
+        $sShopUrl           = $oConfig->getShopUrl();
+        $oSeoEncoder        = oxNew( 'oxseoencoder' );
+        $sStdUrl            = "index.php?cl=lvnews_details&lvnewsid=".$sOxid;
+        $sSeoUrlBase        = "News/".$this->oxnews__oxshortdesc->value;
+        $sReturnUrl         = $oSeoEncoder->lvGetDynamicNewsUrl( $sStdUrl, $sSeoUrlBase, $sOxid, $this->_iEditLang );
         
         return $sReturnUrl;
     }

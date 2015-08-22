@@ -8,10 +8,8 @@
     </td>
 </tr>
 <tr>
-    <td class="edittext">
-        [{oxmultilang ident="LVNEWS_MAIN_TEASERTEXT"}]
-    </td>
-    <td class="edittext">
+    <td colspan = "2" class="edittext">
+        [{oxmultilang ident="LVNEWS_MAIN_TEASERTEXT"}]:<br>
         [{$editor}]
         [{oxinputhelp ident="HELP_LVNEWS_MAIN_TEASERTEXT"}]
     </td>

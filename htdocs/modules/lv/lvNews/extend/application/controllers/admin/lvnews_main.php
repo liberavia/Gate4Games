@@ -50,7 +50,9 @@ class lvnews_main extends lvnews_main_parent {
         }
         
         // adding editor component for teasertext
-        $this->_aViewData["editor"] = $this->_generateTextEditor( "100%", 200, $oNews, "oxnews__lvteasertext" );
+        $sEditorHtml                = $this->_generateTextEditor( "100%", 200, $oNews, "oxnews__lvteasertext" );
+        $sEditorHtml                = str_replace( '<textarea' , '<textarea name="editval[oxnews__lvteasertext]"', $sEditorHtml );
+        $this->_aViewData["editor"] = $sEditorHtml;
 
         return $sTemplate;
     }
