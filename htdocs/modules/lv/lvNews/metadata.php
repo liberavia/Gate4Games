@@ -31,8 +31,8 @@ $aModule = array(
     'id'           => 'lvNews',
     'title'        => 'News Module',
     'description'  => array(
-        'de' => 'Newserweiterungen',
-        'en' => 'News extenstions',
+        'de' => 'Newserweiterung',
+        'en' => 'News extenstion',
     ),
     'thumbnail'    => '',
     'version'      => '1.0.0',
@@ -40,8 +40,12 @@ $aModule = array(
     'url'          => 'http://www.gate4games.com',
     'email'        => 'info@gate4games.com',
     'extend'       => array(
+        // controllers->admin
         'news_main'                         => 'lv/lvNews/extend/application/controllers/admin/lvnews_main',
+        // models
         'oxnews'                            => 'lv/lvNews/extend/application/models/lvoxnews',
+        // core
+        'oxseoencoder'                      => 'lv/lvNews/extend/core/lvnews_oxseoencoder',
     ),
     'files' => array(
         // controllers

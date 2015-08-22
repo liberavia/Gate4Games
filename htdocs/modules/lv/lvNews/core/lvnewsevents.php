@@ -56,9 +56,15 @@ class lvnewsevents  {
      * @return void
      */
     public static function addNewsFields() {
-        $oDb = oxDb::getDb();
-        $sQuery = "ALTER TABLE `oxnews` ADD `LVTEASERTEXT` TEXT NOT NULL AFTER `OXLONGDESC_3`, ADD `LVSEOURL` VARCHAR(2048) NOT NULL AFTER `LVTEASERTEXT`";
-        $oDb->Execute( $sQuery );
+        $oDb                = oxDb::getDb();
+        $sTable             = 'oxnews';
+        $aFields            = array( 'LVTEASERTEXT' );
+        $blFieldsExisting   = self::checkFieldsExisting( $sTable, $aFields );
+        
+        if ( !$blFieldsExistsing ) {
+            $sQuery = "ALTER TABLE `oxnews` ADD `LVTEASERTEXT` TEXT NOT NULL AFTER `OXLONGDESC_3`";
+            $oDb->Execute( $sQuery );
+        }
     }
     
     
@@ -69,9 +75,50 @@ class lvnewsevents  {
      * @return void
      */
     public static function removeNewsFields() {
-        $oDb = oxDb::getDb();
-        $sQuery = "ALTER TABLE `oxnews`  DROP `LVTEASERTEXT`,  DROP `LVSEOURL`";
-        $oDb->Execute( $sQuery );
+        $oDb                = oxDb::getDb();
+        $sTable             = 'oxnews';
+        $aFields            = array( 'LVTEASERTEXT' );
+        $blFieldsExisting   = self::checkFieldsExisting( $sTable, $aFields );
+        
+        if ( $blFieldsExistsing ) {
+            $sQuery = "ALTER TABLE `oxnews`  DROP `LVTEASERTEXT`";
+            $oDb->Execute( $sQuery );
+        }
+    }
+    
+
+    /**
+     * Method checks if ALL of the given fields of the given table are existing
+     * 
+     * @param string $sTable
+     * @param array $aFields
+     * @return bool
+     */
+    public static function checkFieldsExisting( $sTable, $aFields ) {
+        $oDb                = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
+        $blFieldsExisting   = true;
+        $aAvailableFields   = array();
+        
+        $sQuery = "SHOW fields FROM ".$sTable;
+        $oRs = $oDb->Execute( $sQuery );
+        
+        if ( $oRs != false && $oRs->recordCount() ) {
+            while ( !$oRs->EOF ) {
+                $sAvailableField = $oRs->fields['Field'];
+                if ( $sAvailableField ) {
+                    $aAvailableFields[] = $sAvailableField;
+                }
+                $oRs->moveNext();
+            }
+        }
+
+        foreach ( $aFields as $sField ) {
+            if ( !in_array( $sField, $aAvailableFields ) ) {
+                $blFieldsExisting = false;
+            }
+        }
+        
+        return $blFieldsExisting;
     }
     
     

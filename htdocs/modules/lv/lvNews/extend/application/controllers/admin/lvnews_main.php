@@ -24,5 +24,39 @@
  * @author André Gregor-Herrmann
  */
 class lvnews_main extends lvnews_main_parent {
-    //put your code here
+    
+    /**
+     * Seo Url
+     * @var string
+     */
+    protected $_sLvSeoUrl = '';
+    
+    
+    public function render() {
+        $sTemplate = parent::render();
+        
+        $sOxid = $this->getEditObjectId();
+        $oNews = oxNew( "oxnews" );
+        
+        if ( $sOxid != "-1" && isset( $sOxid ) ) {
+            // load object
+            $oNews->loadInLang( $this->_iEditLang, $sOxid );
+            
+            // get/generate dynamic seo address for this news article
+            $oSeoEncoder        = oxNew( 'oxseoencoder' );
+            $sStdUrl            = "index.php?cl=lvnews_details&lvnewsid=".$sOxid;
+            $sSeoUrlBase        = "News/".$oNews->oxnews__oxshortdesc->value;
+            $this->_sLvSeoUrl   = $oSeoEncoder->lvGetDynamicNewsUrl( $sStdUrl, $sSeoUrlBase, $sOxid, $this->_iEditLang );
+        }
+        
+        // adding editor component for teasertext
+        $this->_aViewData["editor"] = $this->_generateTextEditor( "100%", 200, $oNews, "oxnews__lvteasertext" );
+
+        return $sTemplate;
+    }
+    
+    public function lvGetSeoUrl() {
+        return $this->_sLvSeoUrl;
+    }
+    
 }
