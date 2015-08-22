@@ -64,6 +64,7 @@ $aModule = array(
     ),
     'blocks' => array(
         array( 'template' => 'news_main.tpl',           'block'=>'admin_news_main_form',            'file'=>'extend/application/views/blocks/block_admin_news_main_form.tpl' ),
+        array( 'template' => 'widget/footer/info.tpl',  'block'=>'footer_information',              'file'=>'extend/application/views/blocks/block_footer_information.tpl' ),
     ),
     'settings' => array(
     )

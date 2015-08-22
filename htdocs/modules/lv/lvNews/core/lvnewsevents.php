@@ -33,6 +33,7 @@ class lvnewsevents  {
     public static function onActivate() {
         // add additional field in oxnews table
         self::addNewsFields();
+        self::addStaticNewsOverviewLinks();
         self::generateViews();
     }
     
@@ -45,6 +46,7 @@ class lvnewsevents  {
     public static function onDeactivate() {
         // add additional field in oxnews table
         self::removeNewsFields();
+        self::removeStaticNewsOverviewLinks();
         self::generateViews();
     }
     
@@ -61,7 +63,7 @@ class lvnewsevents  {
         $aFields            = array( 'LVTEASERTEXT' );
         $blFieldsExisting   = self::checkFieldsExisting( $sTable, $aFields );
         
-        if ( !$blFieldsExistsing ) {
+        if ( !$blFieldsExisting ) {
             $sQuery = "ALTER TABLE `oxnews` ADD `LVTEASERTEXT` TEXT NOT NULL AFTER `OXLONGDESC_3`";
             $oDb->Execute( $sQuery );
         }
@@ -80,7 +82,7 @@ class lvnewsevents  {
         $aFields            = array( 'LVTEASERTEXT' );
         $blFieldsExisting   = self::checkFieldsExisting( $sTable, $aFields );
         
-        if ( $blFieldsExistsing ) {
+        if ( $blFieldsExisting ) {
             $sQuery = "ALTER TABLE `oxnews`  DROP `LVTEASERTEXT`";
             $oDb->Execute( $sQuery );
         }
@@ -102,7 +104,7 @@ class lvnewsevents  {
         $sQuery = "SHOW fields FROM ".$sTable;
         $oRs = $oDb->Execute( $sQuery );
         
-        if ( $oRs != false && $oRs->recordCount() ) {
+        if ( $oRs != false && $oRs->recordCount() > 0 ) {
             while ( !$oRs->EOF ) {
                 $sAvailableField = $oRs->fields['Field'];
                 if ( $sAvailableField ) {
@@ -111,7 +113,6 @@ class lvnewsevents  {
                 $oRs->moveNext();
             }
         }
-
         foreach ( $aFields as $sField ) {
             if ( !in_array( $sField, $aAvailableFields ) ) {
                 $blFieldsExisting = false;
@@ -132,5 +133,46 @@ class lvnewsevents  {
 	$oShop = oxRegistry::get( 'oxshop' );
 	$oShop->generateViews();
     }
+    
+    /**
+     * Adds Overview seolinks for all languages
+     * 
+     * @param void
+     * @return void
+     */
+    public static function addStaticNewsOverviewLinks() {
+        $oLang              = oxRegistry::getLang();
+        $oSeoEncoder        = oxRegistry::get( 'oxseoencoder' );
+        
+        $sOxid              = "lvnewsoverview";
+        $sStdUrl            = "index.php?cl=lvnews_overview";
+        $sSeoUrlBase        = "News";
+        $aLanguageIds       = $oLang->getActiveShopLanguageIds();
+        
+        foreach ( $aLanguageIds as $sLangId ) {
+            $iCurrentLangId = (int)$sLangId;
+            $aReturnUrls[]  = $oSeoEncoder->lvGetDynamicNewsUrl( $sStdUrl, $sSeoUrlBase, $sOxid, $iCurrentLangId );
+        }
+        
+        foreach ( $aReturnUrls as $sReturnUrl ) {
+            echo "Added link: ".$sReturnUrl."<br>";
+        }
+    }
+    
+    
+    /**
+     * Removes formerly created Links
+     * 
+     * @param void
+     * @return void
+     */
+    public static function removeStaticNewsOverviewLinks() {
+        $oDb                = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
+        $sOxid              = "lvnewsoverview";
+        
+        $sQuery = "DELETE FROM oxseo WHERE OXIDENT='".$sOxid."'";
+        $oDb->Execute( $sQuery );
+    }
+
     
 }
