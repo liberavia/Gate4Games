@@ -58,6 +58,72 @@ class lvnews_overview extends oxUBase {
      * @var integer
      */
     protected $_iCntPages = null;
+    
+    
+    /**
+     * Return generic page title
+     * 
+     * @param void
+     * @return void
+     */
+    public function getPageTitle() {
+        $oConfig        = $this->getConfig();
+        $iBaseLanguage  = $oLang->getBaseLanguage();
+        $aPageTitles    = $oConfig->getConfigParam( 'aLvPageTitles' );
+        
+        if ( isset( $aPageTitles[$iBaseLanguage] ) ) {
+            $sPageTitle = $aPageTitles[$iBaseLanguage];
+        }
+        else {
+            $sPageTitle = "News";
+        }
+        
+        return $sPageTitle;
+    }
+    
+    
+    /**
+     * Return generic page meta description
+     * 
+     * @param void
+     * @return void
+     */
+    public function getMetaDescription() {
+        $oConfig        = $this->getConfig();
+        $iBaseLanguage  = $oLang->getBaseLanguage();
+        $aPageMetaDesc  = $oConfig->getConfigParam( 'aLvPageMetaDesc' );
+        
+        if ( isset( $aPageMetaDesc[$iBaseLanguage] ) ) {
+            $sPageMetaDesc = $aPageMetaDesc[$iBaseLanguage];
+        }
+        else {
+            $sPageMetaDesc = "News";
+        }
+        
+        return $sPageMetaDesc;
+    }
+    
+
+    /**
+     * Return generic page meta keywords
+     * 
+     * @param void
+     * @return void
+     */
+    public function getMetaKeywords() {
+        $oConfig        = $this->getConfig();
+        $iBaseLanguage  = $oLang->getBaseLanguage();
+        $aPageMetaKey   = $oConfig->getConfigParam( 'aLvPageMetaKey' );
+        
+        if ( isset( $aPageMetaKey[$iBaseLanguage] ) ) {
+            $sPageMetaKey = $aPageMetaKey[$iBaseLanguage];
+        }
+        else {
+            $sPageMetaKey = "News";
+        }
+        
+        return $sPageMetaKey;
+    }
 
     /**
      * Template variable getter. Returns newslist

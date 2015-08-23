@@ -3,15 +3,8 @@
     [{oxscript add="$(function(){oxEqualizer.equalHeight($( '#panel dl' ));});"}]
     <div id="footer">
         <div>
-                <div class="bar">
-                    [{block name="footer_fblike"}]
-                        [{if $oView->isActive('FbLike') && $oViewConf->getFbAppId()}]
-                            <div class="facebook" id="footerFbLike">
-                                [{include file="widget/facebook/enable.tpl" source="widget/facebook/like.tpl" ident="#footerFbLike" parent="footer"}]
-                            </div>
-                        [{/if}]
-                    [{/block}]
 [{*            
+                <div class="bar">
                     [{if $oView->showNewsletter()}]
                         [{include file="widget/footer/newsletter.tpl"}]
                     [{/if}]
@@ -26,8 +19,8 @@
                             [{/oxifcontent}]
                         </div>
                     [{/block}]
-*}]
                 </div>
+*}]
             [{*oxid_include_widget cl="oxwServiceList" noscript=1 nocookie=1*}]
 
             [{oxid_include_widget cl="oxwInformation" noscript=1 nocookie=1}]
@@ -47,6 +40,22 @@
             [{/oxifcontent}]
         </div>
 *}]        
+        <dl id="footerSocial">
+            <dt>[{oxmultilang ident="LV_SOCIAL" }]</dt>
+            <dd>
+                <ul class="list services">
+                    <li>
+                        [{block name="footer_fblike"}]
+                            [{if $oView->isActive('FbLike') && $oViewConf->getFbAppId()}]
+                                <div class="facebook" id="footerFbLike">
+                                    [{include file="widget/facebook/enable.tpl" source="widget/facebook/like.tpl" ident="#footerFbLike" parent="footer"}]
+                                </div>
+                            [{/if}]
+                        [{/block}]
+                    </li>
+                </ul>
+            </dd>
+        </dl>
     </div>
 [{/block}]
 [{if $oView->isRootCatChanged()}]

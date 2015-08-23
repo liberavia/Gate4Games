@@ -24,6 +24,12 @@
  * @author André Gregor-Herrmann
  */
 class lvnews_details extends oxUBase {
+    
+    /**
+     * Instance of news object
+     * @var object
+     */
+    protected $_oNews = null;
 
     /**
      * Current class login template name.
@@ -34,21 +40,69 @@ class lvnews_details extends oxUBase {
 
 
     /**
+     * Return generic page title
+     * 
+     * @param void
+     * @return void
+     */
+    public function getPageTitle() {
+        $oNews = $this->lvGetNewsArticle();
+        $sHeadline = $oNews->oxnews__oxshortdesc->value;
+        
+        $sPageTitle = $sHeadline;
+        
+        return $sPageTitle;
+    }
+    
+    
+    /**
+     * Return generic page meta description
+     * 
+     * @param void
+     * @return void
+     */
+    public function getMetaDescription() {
+        $oNews = $this->lvGetNewsArticle();
+        $sTeaserText = $oNews->lvGetPlainTeaserText();
+        
+        $sMetaDescription = $sTeaserText;
+        
+        return $sPageTitle;
+    }
+    
+
+    /**
+     * Return generic page meta keywords
+     * 
+     * @param void
+     * @return void
+     */
+    public function getMetaKeywords() {
+        $oNews = $this->lvGetNewsArticle();
+        $sHeadline = $oNews->oxnews__oxshortdesc->value;
+        $aHeadlineParts = explode( " ", $sHeadline );
+        $sKeywords = implode( ",", $aHeadlineParts );
+        
+        return $sKeywords;
+    }
+
+    
+    /**
      * Template variable getter. Returns news
      *
      * @return object
      */
     public function lvGetNewsArticle() {
-        $oConfig = $this->getConfig();
-        $oNews = null;
-        
-        $sNewsId = $oConfig->getRequestParameter( 'lvnewsid' );
-        if ( $sNewsId ) {
-            $oNews = oxNew( 'oxnews' );
-            $oNews->load( $sNewsId );
+        if ( $this->_oNews === null ) {
+            $oConfig = $this->getConfig();
+            $sNewsId = $oConfig->getRequestParameter( 'lvnewsid' );
+            if ( $sNewsId ) {
+                $this->_oNews = oxNew( 'oxnews' );
+                $this->_oNews->load( $sNewsId );
+            }
         }
         
-        return $oNews;
+        return $this->_oNews;
     }
 
 

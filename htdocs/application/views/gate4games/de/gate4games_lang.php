@@ -27,5 +27,6 @@ $aLang = array(
     'charset'                                           => 'UTF-8',
     'LV_COOKIE_NOTE'                                    => 'Diese Seite verwendet Cookies für eine optimale Darstellung. Dabei werden beispielsweise die Session-Informationen oder die Spracheinstellung auf Ihrem Rechner gespeichert. Ohne Cookies ist der Funktionsumfang dieser Seite eingeschränkt.',
     'LV_GAME_GENERAL_DATA'                              => 'Allgemeine Daten',
+    'LV_SOCIAL'                                         => 'Social-Media',
 );
 

@@ -25,8 +25,10 @@ $sLangName = 'English';
 
 $aLang = array(
     'charset'                                           => 'UTF-8',
-    'LV_COOKIE_NOTE'                                    => 'This site uses cookies for best presentation. For this some information like session information or language setting will be stored on your computer. Without cookies the site functionality is limited.',
-    'LV_GAME_GENERAL_DATA'                              => 'General Data',
-    'LV_SOCIAL'                                         => 'Social-Media',
+    // group seo
+    'SHOP_MODULE_GROUP_lvnewsseo'                       => 'SEO-Einstellungen',
+    'SHOP_MODULE_aLvPageTitles'                         => 'Assign LanguageId to Meta-Title for News-Overview',
+    'SHOP_MODULE_aLvPageMetaDesc'                       => 'Assign LanguageId to Meta-Description for News-Overview',
+    'SHOP_MODULE_aLvPageMetaKey'                        => 'Assign LanguageId to Meta-Keywords for News-Overview',
 );
 

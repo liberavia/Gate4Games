@@ -67,6 +67,27 @@ $aModule = array(
         array( 'template' => 'widget/footer/info.tpl',  'block'=>'footer_information',              'file'=>'extend/application/views/blocks/block_footer_information.tpl' ),
     ),
     'settings' => array(
+        array( 
+            'group' => 'lvnewsseo',      
+            'name' => 'aLvPageTitles',       
+            'type' => 'aarr',  
+            'value' => array( 
+            ) 
+        ),
+        array( 
+            'group' => 'lvnewsseo',      
+            'name' => 'aLvPageMetaDesc',
+            'type' => 'aarr',  
+            'value' => array( 
+            ) 
+        ),
+        array( 
+            'group' => 'lvnewsseo',      
+            'name' => 'aLvPageMetaKey',
+            'type' => 'aarr',  
+            'value' => array( 
+            ) 
+        ),
     )
 );
  

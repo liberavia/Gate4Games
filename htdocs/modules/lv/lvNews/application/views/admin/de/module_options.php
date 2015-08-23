@@ -21,12 +21,14 @@
 // RESOURCE IDENTIFIER = STRING
 // -------------------------------
 
-$sLangName = 'English';
+$sLangName = 'Deutsch';
 
 $aLang = array(
     'charset'                                           => 'UTF-8',
-    'LV_COOKIE_NOTE'                                    => 'This site uses cookies for best presentation. For this some information like session information or language setting will be stored on your computer. Without cookies the site functionality is limited.',
-    'LV_GAME_GENERAL_DATA'                              => 'General Data',
-    'LV_SOCIAL'                                         => 'Social-Media',
+    // group seo
+    'SHOP_MODULE_GROUP_lvnewsseo'                       => 'SEO-Einstellungen',
+    'SHOP_MODULE_aLvPageTitles'                         => 'Zuordnung LanguageId zu Meta-Title für News-Übersichtsseite',
+    'SHOP_MODULE_aLvPageMetaDesc'                       => 'Zuordnung LanguageId zu Meta-Description für News-Übersichtsseite',
+    'SHOP_MODULE_aLvPageMetaKey'                        => 'Zuordnung LanguageId zu Meta-Keywords für News-Übersichtsseite',
 );
 

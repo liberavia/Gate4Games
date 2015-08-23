@@ -38,6 +38,20 @@ class lvoxnews extends lvoxnews_parent {
     
     
     /**
+     * Returns news teaser text as plain text
+     * 
+     * @param void
+     * @return string
+     */
+    public function lvGetPlainTeaserText() {
+        $sTeaserText = $this->lvGetTeaserText();
+        $sPlainTeaserText = $this->lvGetPlain( $sTeaserText );
+        
+        return $sPlainTeaserText;
+    }
+    
+    
+    /**
      * Returns details url of 
      * 
      * @param void
@@ -64,4 +78,38 @@ class lvoxnews extends lvoxnews_parent {
     public function lvGetTitle() {
         return $this->oxnews__oxshortdesc->value;
     }
+    
+    
+    /**
+     * Returns plain text for given HTML-Code
+     *
+     * @param string
+     * @return string
+    */
+    public function lvGetPlain( $sHtml ) {
+        $sPlain = strip_tags( $sHtml );
+        $sPlain = str_replace( '&nbsp;', '',$sPlain );
+        $sPlain = html_entity_decode( $sPlain, ENT_QUOTES, "" );
+        $sPlain = str_replace( '&bdquo;', '*', $sPlain );
+        $sPlain = str_replace( '&ldquo;', '*', $sPlain );
+        $sPlain = trim( preg_replace( '/\s+/', ' ', $sPlain ) );
+        $sPattern = "/[^A-Za-z0-9\ ".$this->_lvGetAllowedChars()."\.\!\?\:\/\,\-\&]/";
+        $sPlain = preg_replace( $sPattern, "",  $sPlain );
+        
+        return $sPlain;
+    }
+
+    
+    /**
+     * Returns allowed chars that should not be put directly into code
+     *
+     * @param void
+     * @return string
+     */
+    protected function _lvGetAllowedChars() {
+        $sChars = chr(252).chr(220).chr(228).chr(196).chr(246).chr(214).chr(223);
+        
+        return $sChars;
+    }
+    
 }
