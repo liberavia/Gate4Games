@@ -41,7 +41,7 @@ $aModule = array(
     'email'        => 'info@gate4games.com',
     'extend'       => array(
         // controllers -> admin
-        'oxadmindetails'                    => 'lv/lvCKEditor/extend/application/admin/lvckeditor_oxadmindetails',
+        'oxadmindetails'                    => 'lv/lvCKEditor/extend/application/controllers/admin/lvckeditor_oxadmindetails',
     ),
     'files' => array(
         'lvckeditor'                        => 'lv/lvCKEditor/application/models/lvckeditor.php',
