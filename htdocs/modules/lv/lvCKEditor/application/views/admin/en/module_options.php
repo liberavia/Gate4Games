@@ -26,6 +26,8 @@ $sLangName = 'English';
 $aLang = array(
     'charset'                                           => 'UTF-8',
     'SHOP_MODULE_GROUP_lvckeditor_media'                => 'Media-Browser-Settings',
+    'SHOP_MODULE_GROUP_lvckeditor_editor'               => 'Editor-Settings',
     'SHOP_MODULE_sLvUploadPath'                         => 'Upload Path (From Shop-Root)',           
+    'SHOP_MODULE_aLvCKEditorClasses'                    => 'Admin-Classes where editor shall be used',
 );
 

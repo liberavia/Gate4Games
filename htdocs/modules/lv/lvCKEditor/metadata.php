@@ -40,8 +40,8 @@ $aModule = array(
     'url'          => 'http://www.gate4games.com',
     'email'        => 'info@gate4games.com',
     'extend'       => array(
-        // controllers -> admin
-        'oxadmindetails'                    => 'lv/lvCKEditor/extend/application/controllers/admin/lvckeditor_oxadmindetails',
+        // core
+        'oxviewconfig'                      => 'lv/lvCKEditor/extend/core/lvckeditor_oxviewconfig',
     ),
     'files' => array(
         'lvckeditor'                        => 'lv/lvCKEditor/application/models/lvckeditor.php',
@@ -51,9 +51,23 @@ $aModule = array(
     'templates' => array(
     ),
     'blocks' => array(
+        array( 'template' => 'bottomnaviitem.tpl',  'block' => 'admin_bottomnaviitem',   'file' => '/extend/application/views/blocks/block_admin_bottomnaviitem.tpl'
+        )
     ),
     'settings' => array(
         array( 'group' => 'lvckeditor_media',      'name' => 'sLvUploadPath',         'type' => 'str',        'value' => 'out/media/' ),
+        array( 
+            'group' => 'lvckeditor_editor',      
+            'name' => 'aLvCKEditorClasses',       
+            'type' => 'aarr',  
+            'value' => array(
+                'article_main'=>'oxarticles__oxlongdesc',
+                'category_text'=>'oxcategories__oxlongdesc',
+                'content_main'=>'oxcontents__oxcontent',
+                'newsletter_main'=>'oxnewsletter__oxtemplate',
+                'news_text'=>'oxnews__oxlongdesc',
+            ) 
+        ),
     )
 );
  

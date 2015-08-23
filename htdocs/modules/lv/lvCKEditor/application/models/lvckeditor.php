@@ -55,7 +55,7 @@ class lvckeditor extends oxBase {
      * @param string $sStylesheet
      * @retrurn string
      */
-    public function lvGetCKEditor( $iWidth, $iHeight, $oObject, $sField, $sStylesheet ) {
+    public function lvGetCKEditor( $sField ) {
         // define all settings
         $oConfig                    = $this->getConfig();
         $oSession                   = oxRegistry::getSession();
@@ -90,48 +90,8 @@ class lvckeditor extends oxBase {
             'disabled' => false,
             'uploadDir' => $sMediaUploadDir,
         );
-
-        // build html textarea
-        $sEditObjectValue = $this->_getEditValue( $oObject, $sField );
-
-        if (strpos($iWidth, '%') === false) {
-            $iWidth .= 'px';
-        }
-        if (strpos($iHeight, '%') === false) {
-            $iHeight .= 'px';
-        }
-
-        $sHtml .= "<textarea id='editor_{$sField}' style='width:{$iWidth}; height:{$iHeight};'>{$sEditObjectValue}</textarea>";
         
         return $sHtml;
     }
 
-    
-    /**
-     * Returns string which must be edited by editor
-     *
-     * @param oxbase $oObject object whifh field will be used for editing
-     * @param string $sField  name of editable field
-     *
-     * @return string
-     */
-    protected function _getEditValue($oObject, $sField)
-    {
-        $sEditObjectValue = '';
-        if ($oObject && $sField && isset($oObject->$sField)) {
-
-            if ($oObject->$sField instanceof oxField) {
-                $sEditObjectValue = $oObject->$sField->getRawValue();
-            } else {
-                $sEditObjectValue = $oObject->$sField->value;
-            }
-
-            $sEditObjectValue = $this->_processEditValue($sEditObjectValue);
-            $oObject->$sField = new oxField($sEditObjectValue, oxField::T_RAW);
-        }
-
-        return $sEditObjectValue;
-    }
-    
-    
 }

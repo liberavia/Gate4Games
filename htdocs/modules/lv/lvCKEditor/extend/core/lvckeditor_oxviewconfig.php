@@ -18,24 +18,35 @@
  */
 
 /**
- * Description of lvckeditor_oxadmindetails
+ * Description of lvckeditor_oxviewconfig
  *
  * @author Gate4Games
  * @author André Gregor-Herrmann
  */
-class lvckeditor_oxadmindetails extends lvckeditor_oxadmindetails_parent {
+class lvckeditor_oxviewconfig extends lvckeditor_oxviewconfig_parent {
     
-    protected function _generateTextEditor($iWidth, $iHeight, $oObject, $sField, $sStylesheet = null) {
-        $oLvCKEditor = oxNew( 'lvckeditor' );
+    /**
+     * Method returns html code of CKEditor
+     * 
+     * @param void
+     * @return string
+     */
+    public function lvGetCKEditor() {
+        $oConfig            = $this->getConfig();
+        $sActiveClassName   = $this->getActiveClassName();
+        $aAllowedClasses    = $oConfig->getConfigParam( 'aLvCKEditorClasses' );        
+        $blEnabled          = in_array( $sActiveClassName, array_keys( $aAllowedClasses ) );
         
-        if ( $oLvCKEditor ) {
-            $sEditorHtml = $oLvCKEditor->lvGetCKEditor( $iWidth, $iHeight, $oObject, $sField, $sStylesheet );
+        if ( $blEnabled ) {
+            $oLvCKEditor = oxNew( 'lvckeditor' );
+            $sField = $aAllowedClasses[$sActiveClassName];
+            $sReturn = $oLvCKEditor->lvGetCKEditor( $sField );
         }
         else {
-            $sEditorHtml = parent::_generateTextEditor( $iWidth, $iHeight, $oObject, $sField, $sStylesheet );
+            $sReturn = "";
         }
-
-        return $sEditorHtml;
+        
+        return $sReturn;
     }
+    
 }
-
