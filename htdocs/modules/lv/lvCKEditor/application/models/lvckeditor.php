@@ -79,10 +79,12 @@ class lvckeditor extends oxBase {
         ";
         // set kcfinder to be media browser and upload tool
         $sHtml .= "
-            CKEDITOR.replace( '".$sEditorId."', {
-                filebrowserBrowseUrl: '".$sMediaBrowserBrowse."',
-                filebrowserUploadUrl: '".$sMediaBrowserUpload."'
-            });
+            <script>
+                CKEDITOR.replace( '".$sEditorId."', {
+                    filebrowserBrowseUrl: '".$sMediaBrowserBrowse."',
+                    filebrowserUploadUrl: '".$sMediaBrowserUpload."'
+                });
+            </script>
         ";
         
         // put configuration for kcfinder into session
