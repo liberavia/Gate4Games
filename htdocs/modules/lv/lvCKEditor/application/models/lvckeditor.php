@@ -35,13 +35,13 @@ class lvckeditor extends oxBase {
      * Relative path to ckeditor
      * @var string
      */
-    protected $_sCKEditorPath = 'modules/lv/lvCKEditor/out/src/js/ckeditor.js';
+    protected $_sCKEditorPath = 'modules/lv/lvCKEditor/lib/ckeditor/ckeditor.js';
 
     /**
      * Relative path to ckeditor config
      * @var string
      */
-    protected $_sCKEditorConfigPath = 'modules/lv/lvCKEditor/out/config/config.js';
+    protected $_sCKEditorConfigPath = 'modules/lv/lvCKEditor/lib/ckeditor/config.js';
     
     
     
@@ -65,26 +65,22 @@ class lvckeditor extends oxBase {
         $sEditorConfigUrl           = $sShopUrl.$this->_sCKEditorConfigPath;
         $sUploadPathRel             = $oConfig->getConfigParam( 'sLvUploadPath' );
         $sMediaUploadDir            = getShopBasePath().$sUploadPathRel;
-        $sMediaBrowserBrowse        = getShopBasePath().$this->_sMediaBrowserDirRel."browse.php";
-        $sMediaBrowserUpload        = getShopBasePath().$this->_sMediaBrowserDirRel."upload.php";
+        $sMediaBrowserBrowse        = $sShopUrl.$this->_sMediaBrowserDirRel."browse.php";
+        $sMediaBrowserUpload        = $sShopUrl.$this->_sMediaBrowserDirRel."upload.php";
         
         // include editor
         $sHtml  = "";
         $sHtml .= '<script src="'.$sEditorUrl.'"></script>';
         $sHtml .= '<script src="'.$sEditorConfigUrl.'"></script>';
-        $sHtml  = "
-            <script>
-                CKEDITOR.replace( '".$sEditorId."' );
-            </script>
-        ";
-        // set kcfinder to be media browser and upload tool
         $sHtml .= "
             <script>
-                CKEDITOR.replace( '".$sEditorId."', {
-                    filebrowserBrowseUrl: '".$sMediaBrowserBrowse."',
-                    filebrowserUploadUrl: '".$sMediaBrowserUpload."'
-                });
-            </script>
+                window.onload = function() {
+                    CKEDITOR.replace( '".$sEditorId."', {
+                        filebrowserBrowseUrl: '".$sMediaBrowserBrowse."',
+                        filebrowserUploadUrl: '".$sMediaBrowserUpload."'
+                    });
+                };
+            </script>            
         ";
         
         // put configuration for kcfinder into session
