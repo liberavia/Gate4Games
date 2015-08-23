@@ -105,5 +105,33 @@ class lvckeditor extends oxBase {
         
         return $sHtml;
     }
+
+    
+    /**
+     * Returns string which must be edited by editor
+     *
+     * @param oxbase $oObject object whifh field will be used for editing
+     * @param string $sField  name of editable field
+     *
+     * @return string
+     */
+    protected function _getEditValue($oObject, $sField)
+    {
+        $sEditObjectValue = '';
+        if ($oObject && $sField && isset($oObject->$sField)) {
+
+            if ($oObject->$sField instanceof oxField) {
+                $sEditObjectValue = $oObject->$sField->getRawValue();
+            } else {
+                $sEditObjectValue = $oObject->$sField->value;
+            }
+
+            $sEditObjectValue = $this->_processEditValue($sEditObjectValue);
+            $oObject->$sField = new oxField($sEditObjectValue, oxField::T_RAW);
+        }
+
+        return $sEditObjectValue;
+    }
+    
     
 }
