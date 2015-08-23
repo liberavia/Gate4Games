@@ -68,6 +68,7 @@ class lvnews_overview extends oxUBase {
      */
     public function getPageTitle() {
         $oConfig        = $this->getConfig();
+        $oLang          = oxRegistry::getLang();
         $iBaseLanguage  = $oLang->getBaseLanguage();
         $aPageTitles    = $oConfig->getConfigParam( 'aLvPageTitles' );
         
@@ -90,6 +91,7 @@ class lvnews_overview extends oxUBase {
      */
     public function getMetaDescription() {
         $oConfig        = $this->getConfig();
+        $oLang          = oxRegistry::getLang();
         $iBaseLanguage  = $oLang->getBaseLanguage();
         $aPageMetaDesc  = $oConfig->getConfigParam( 'aLvPageMetaDesc' );
         
@@ -112,6 +114,7 @@ class lvnews_overview extends oxUBase {
      */
     public function getMetaKeywords() {
         $oConfig        = $this->getConfig();
+        $oLang          = oxRegistry::getLang();
         $iBaseLanguage  = $oLang->getBaseLanguage();
         $aPageMetaKey   = $oConfig->getConfigParam( 'aLvPageMetaKey' );
         
