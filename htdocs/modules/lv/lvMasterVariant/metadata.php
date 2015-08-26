@@ -44,6 +44,8 @@ $aModule = array(
         'oxwarticledetails'                     => 'lv/lvMasterVariant/extend/application/components/widgets/lvmv_oxwarticledetails',
         // controllers admin
         'article_main'                          => 'lv/lvMasterVariant/extend/application/controllers/admin/lvmv_article_main',
+        // controllers
+        'details'                               => 'lv/lvMasterVariant/extend/application/controllers/lvmv_details',
         // models
         'oxarticle'                             => 'lv/lvMasterVariant/extend/application/models/lvmv_oxarticle',
     ),
