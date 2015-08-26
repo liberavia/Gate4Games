@@ -13,7 +13,11 @@
         <meta property="og:url" content="[{$oView->getCanonicalUrl()}]">
     [{else}]
         <meta property="og:type" content="website">
-        <meta property="og:image" content="[{$oViewConf->getImageUrl('nopic.png')}]">
+        [{if method_exists($oView, 'lvGetCoverPictureUrl')}]
+            <meta property="og:image" content="[{$oView->lvGetCoverPictureUrl()}]">
+        [{else}]
+            <meta property="og:image" content="[{$oViewConf->getImageUrl('nopic.png')}]">
+        [{/if}]
         <meta property="og:url" content="[{$oViewConf->getCurrentHomeDir()}]">
     [{/if}]
 [{/if}]
