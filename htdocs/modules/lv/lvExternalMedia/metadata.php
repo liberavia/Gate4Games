@@ -49,6 +49,7 @@ $aModule = array(
         'oxarticle'                         => 'lv/lvExternalMedia/extend/application/models/lvextmedia_oxarticle',
         // controllers
         'alist'                             => 'lv/lvExternalMedia/extend/application/controllers/lvextmedia_alist',
+        'details'                           => 'lv/lvExternalMedia/extend/application/controllers/lvextmedia_details',
         // controllers admin
         'article_pictures'                    => 'lv/lvExternalMedia/extend/application/controllers/admin/lvextmedia_article_pictures',
     ),
