@@ -73,6 +73,7 @@ $aModule = array(
     'blocks' => array(
         array( 'template' => 'page/details/inc/fullproductinfo.tpl',        'block'=>'lv_fullproductinfo_details_tabs',             'file'=>'extend/application/views/blocks/block_lv_fullproductinfo_details_tabs.tpl' ),
         array( 'template' => 'layout/base.tpl',                             'block'=>'base_style',                                  'file'=>'extend/application/views/blocks/block_base_style.tpl' ),
+        array( 'template' => 'layout/base.tpl',                             'block'=>'head_meta_open_graph',                        'file'=>'extend/application/views/blocks/block_head_meta_open_graph.tpl' ),
         array( 'template' => 'vendor_main.tpl',                             'block'=>'admin_vendor_main_form',                      'file'=>'extend/application/views/blocks/block_admin_vendor_main_form.tpl' ),
         array( 'template' => 'manufacturer_main.tpl',                       'block'=>'admin_manufacturer_main_form',                'file'=>'extend/application/views/blocks/block_admin_manufacturer_main_form.tpl' ),
         array( 'template' => 'page/shop/start.tpl',                         'block'=>'lv_page_shop_start_offers',                   'file'=>'extend/application/views/blocks/block_lv_page_shop_start_offers.tpl' ),
