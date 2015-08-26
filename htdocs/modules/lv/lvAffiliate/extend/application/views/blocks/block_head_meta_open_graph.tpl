@@ -1,7 +1,11 @@
 [{if $oViewConf->getFbAppId()}]
     <meta property="og:site_name" content="[{$oViewConf->getBaseDir()}]">
     <meta property="fb:app_id" content="[{$oViewConf->getFbAppId()}]">
-    <meta property="og:title" content="[{$oView->getMetaDescription()}]">
+    [{if method_exists($oView, 'lvGetShortDescription') && $oView->lvGetShortDescription() && $oView->lvGetShortDescription() != ''}]
+        <meta property="og:title" content="[{$oView->lvGetShortDescription()}]">
+    [{else}]
+        <meta property="og:title" content="[{$oView->getMetaDescription()}]">
+    [{/if}]
     [{if $oViewConf->getActiveClassName() == 'details'}]
         <meta property="og:type" content="product">
         [{*Depends on activated External Media module*}]
