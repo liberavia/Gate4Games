@@ -55,6 +55,12 @@ class lvaffiliate_fill_toplists extends oxBase {
     protected $_iListLimit = 10;
     
     /**
+     * Extended limit lists 
+     * @var int
+     */
+    protected $_iListLimitExtended = 20;
+
+    /**
      * Start trigger for script
      * 
      * @param void
@@ -127,7 +133,7 @@ class lvaffiliate_fill_toplists extends oxBase {
                     AND OXTPRICE !='0' 
                     AND OXTPRICE !='' 
                     AND OXTPRICE > OXPRICE 
-                ORDER BY LVSAVEDABS DESC LIMIT ".$this->_iListLimit."
+                ORDER BY LVSAVEDABS DESC LIMIT ".$this->_iListLimitExtended."
             ";
             
             $oRs = $this->_oLvDb->Execute( $sQuery );
