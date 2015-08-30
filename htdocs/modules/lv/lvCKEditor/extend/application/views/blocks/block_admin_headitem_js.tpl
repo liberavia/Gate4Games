@@ -41,7 +41,6 @@
   {
       var textVal = null;
       var varElemBody = null;
-      var blUseCKEditior = [{$oViewConf->lvUseCKEditor('text')}];
 
       try {
         if ( WPro.editors[sIdent] != null ) {
