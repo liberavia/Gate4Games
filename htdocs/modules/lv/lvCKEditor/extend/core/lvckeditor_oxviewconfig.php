@@ -32,10 +32,7 @@ class lvckeditor_oxviewconfig extends lvckeditor_oxviewconfig_parent {
      * @return string
      */
     public function lvGetCKEditor() {
-        $oConfig            = $this->getConfig();
-        $sActiveClassName   = $this->getActiveClassName();
-        $aAllowedClasses    = $oConfig->getConfigParam( 'aLvCKEditorClasses' );        
-        $blEnabled          = in_array( $sActiveClassName, array_keys( $aAllowedClasses ) );
+        $blEnabled          = $this->lvUseCKEditor();
         
         if ( $blEnabled ) {
             $oLvCKEditor = oxNew( 'lvckeditor' );
@@ -47,6 +44,34 @@ class lvckeditor_oxviewconfig extends lvckeditor_oxviewconfig_parent {
         }
         
         return $sReturn;
+    }
+    
+    
+    /**
+     * Returns if CKEditor can be used here
+     * 
+     * @param bool $blReturnText
+     * @return bool/string
+     */
+    public function lvUseCKEditor( $blReturnText = false ) {
+        $oConfig            = $this->getConfig();
+        $sActiveClassName   = $this->getActiveClassName();
+        $aAllowedClasses    = $oConfig->getConfigParam( 'aLvCKEditorClasses' );        
+        $blEnabled          = in_array( $sActiveClassName, array_keys( $aAllowedClasses ) );
+        
+        if ( $blReturnText ) {
+            if ( $blEnabled ) {
+                $mReturn = "True";
+            }
+            else {
+                $mReturn = "False";
+            }
+        }
+        else {
+            $mReturn = $blEnabled;
+        }
+        
+        return $mReturn;
     }
     
 }

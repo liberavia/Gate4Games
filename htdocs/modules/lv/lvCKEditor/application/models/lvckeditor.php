@@ -65,11 +65,11 @@ class lvckeditor extends oxBase {
         $sEditorConfigUrl           = $sShopUrl.$this->_sCKEditorConfigPath;
         $sUploadPathRel             = $oConfig->getConfigParam( 'sLvUploadPath' );
         $sMediaUploadDir            = getShopBasePath().$sUploadPathRel;
-        $sMediaBrowserBrowse        = $sShopUrl.$this->_sMediaBrowserDirRel."browse.php";
-        $sMediaBrowserUpload        = $sShopUrl.$this->_sMediaBrowserDirRel."upload.php";
+        $sMediaBrowserBrowse        = $sShopUrl.$this->_sMediaBrowserDirRel."browse.php?opener=ckeditor&type=files";
+        $sMediaBrowserUpload        = $sShopUrl.$this->_sMediaBrowserDirRel."upload.php?opener=ckeditor&type=files";
         
         // include editor
-        $sHtml  = "";
+        $sHtml = "";
         $sHtml .= '<script src="'.$sEditorUrl.'"></script>';
         $sHtml .= '<script src="'.$sEditorConfigUrl.'"></script>';
         $sHtml .= "
@@ -84,12 +84,10 @@ class lvckeditor extends oxBase {
         ";
         
         // put configuration for kcfinder into session
-        $_SESSION['KCFINDER'] = array(
-            'disabled' => false,
-            'uploadDir' => $sMediaUploadDir,
-        );
+        $_SESSION['KCFINDER'] = array();
+        $_SESSION['KCFINDER']['disabled'] = false;
+        $_SESSION['KCFINDER']['uploadURL'] = $sUploadPathRel;
         
         return $sHtml;
     }
-
 }

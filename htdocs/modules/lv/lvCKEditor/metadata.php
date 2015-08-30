@@ -51,8 +51,8 @@ $aModule = array(
     'templates' => array(
     ),
     'blocks' => array(
-        array( 'template' => 'bottomnaviitem.tpl',  'block' => 'admin_bottomnaviitem',   'file' => '/extend/application/views/blocks/block_admin_bottomnaviitem.tpl'
-        )
+        array( 'template' => 'bottomnaviitem.tpl',  'block' => 'admin_bottomnaviitem',  'file' => '/extend/application/views/blocks/block_admin_bottomnaviitem.tpl' ),
+        array( 'template' => 'headitem.tpl',        'block' => 'admin_headitem_js',     'file' => '/extend/application/views/blocks/block_admin_headitem_js.tpl' ),
     ),
     'settings' => array(
         array( 'group' => 'lvckeditor_media',      'name' => 'sLvUploadPath',         'type' => 'str',        'value' => 'out/media/' ),

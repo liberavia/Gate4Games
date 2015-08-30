@@ -12,7 +12,7 @@
   *      @link http://kcfinder.sunhater.com
   */
   
- require_once '../../../config/kcfinder_session_conf.php';
+ require_once __DIR__.'/../../../config/kcfinder_session_conf.php';
 
 spl_autoload_register(function($path) {
     $path = explode("\\", $path);
