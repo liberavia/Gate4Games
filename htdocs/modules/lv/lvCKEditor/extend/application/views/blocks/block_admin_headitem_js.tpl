@@ -43,44 +43,39 @@
       var varElemBody = null;
 
       try {
-        if ( WPro.editors[sIdent] != null ) {
-           WPro.editors[sIdent].prepareSubmission();
-           textVal = cleanupLongDesc( WPro.editors[sIdent].getValue() );
-        }
+            if ( WPro.editors[sIdent] != null ) {
+               WPro.editors[sIdent].prepareSubmission();
+               textVal = cleanupLongDesc( WPro.editors[sIdent].getValue() );
+            }
       } catch(err) {
-        var varEl = document.getElementById(sIdent);
-        if (varEl != null) {
-            textVal = cleanupLongDesc( varEl.value );
-        }
+            var varEl = document.getElementById(sIdent);
+            if (varEl != null) {
+                textVal = cleanupLongDesc( varEl.value );
+            }
       }
 
       if (textVal == null) {
-          var varName = 'editor_'+sIdent;
-          var varEl = document.getElementById(varName);
-          
-        [{if $oViewConf->lvUseCKEditor()}]]
-            if ( varEl.value == null || varEl.value == '' ) {
-                varNameCKE = "cke_" + varName;
-                var varElemCKE          = document.getElementById(varNameCKE);
-                var varElemCKEIframe    = varElemCKE.getElementsByTagName('iframe');
-                varElemBody             = varElemCKEIframe[0].contentDocument.body;
-            }
+            var varName = 'editor_'+sIdent;
+            var varEl = document.getElementById(varName);
+
+            var varNameCKE = "cke_" + varName;
+            var varElemCKE          = document.getElementById(varNameCKE);
+            var varElemCKEIframe    = varElemCKE.getElementsByTagName('iframe');
+            varElemBody             = varElemCKEIframe[0].contentDocument.body;
 
             if ( varElemBody != null ) {
                 textVal = cleanupLongDesc( varElemBody.innerHTML );
             }
-        [{else}]]  
-            if (varEl != null) {
+            else if (varEl != null) {
                 textVal = cleanupLongDesc( varEl.value );
             }
-        [{/if}]]
       }
 
       if (textVal != null) {
-          var oTarget = document.getElementsByName( 'editval['+ sIdent + ']' );
-          if ( oTarget != null && ( oField = oTarget.item( 0 ) ) != null ) {
-              oField.value = textVal;
-          }
+            var oTarget = document.getElementsByName( 'editval['+ sIdent + ']' );
+            if ( oTarget != null && ( oField = oTarget.item( 0 ) ) != null ) {
+                oField.value = textVal;
+            }
       }
   }
 -->

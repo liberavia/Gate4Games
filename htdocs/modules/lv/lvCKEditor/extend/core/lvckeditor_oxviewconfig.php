@@ -32,7 +32,10 @@ class lvckeditor_oxviewconfig extends lvckeditor_oxviewconfig_parent {
      * @return string
      */
     public function lvGetCKEditor() {
-        $blEnabled          = $this->lvUseCKEditor();
+        $oConfig            = $this->getConfig();
+        $sActiveClassName   = $this->getActiveClassName();
+        $aAllowedClasses    = $oConfig->getConfigParam( 'aLvCKEditorClasses' );        
+        $blEnabled          = in_array( $sActiveClassName, array_keys( $aAllowedClasses ) );
         
         if ( $blEnabled ) {
             $oLvCKEditor = oxNew( 'lvckeditor' );
