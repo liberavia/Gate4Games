@@ -115,16 +115,44 @@ class lvyoutube extends oxBase {
      * @return void
      */
     public function lvAddVideoForProduct( $sOxid ) {
-        $sRequestUrl    = $this->_lvGetRequestUrl( $sOxid );
-        $aResult        = $this->_lvGetRequestResult( $sRequestUrl );
+        $aLvApiChannelIds                   = $this->_oLvConfig->getConfigParam( 'aLvApiChannelIds' );
+        $blLvTitleCheck                     = $this->_oLvConfig->getConfigParam( 'blLvTitleCheck' );
         
-        if ( count( $aResult ) > 0 ) {
-            foreach ( $aResult['items'] as $aVideoInfo ) {
-                $sVideoId       = (string)$aVideoInfo['id']['videoId'];
-                $sVideoTitle    = (string)$aVideoInfo['snippet']['title'];
-                
-                if ( $sVideoId != '' ) {
-                    $this->_lvAddVideoUrlToProduct( $sOxid, $sVideoId, $sVideoTitle );
+        // channelid is optional. If empty fill with empty dummy value
+        if ( !$aLvApiChannelIds || count( $aLvApiChannelIds ) ) {
+            $aLvApiChannelIds = array('');
+        }
+        
+        $blMatch = false;
+        foreach ( $aLvApiChannelIds as $sChannelId ) {
+            if ( $blMatch ) continue;
+            
+            $sRequestUrl    = $this->_lvGetRequestUrl( $sOxid, null, $sChannelId );
+            $aResult        = $this->_lvGetRequestResult( $sRequestUrl );
+
+            if ( count( $aResult ) > 0 ) {
+                foreach ( $aResult['items'] as $aVideoInfo ) {
+                    if ( $blMatch ) continue;
+                    $sVideoId       = (string)$aVideoInfo['id']['videoId'];
+                    $sVideoTitle    = (string)$aVideoInfo['snippet']['title'];
+                    $sProductTitle  = $this->_lvGetProductTitle( $sOxid );
+                    
+                    if ( $blLvTitleCheck ) {
+                        if ( strpos( $sVideoTitle, $sProductTitle ) !== false ) {
+                            $blVideoTitleValid = true;
+                        }
+                        else {
+                            $blVideoTitleValid = false;
+                        }
+                    }
+                    else {
+                        $blVideoTitleValid = true;
+                    }
+                    
+                    if ( $sVideoId != '' && $blVideoTitleValid ) {
+                        $this->_lvAddVideoUrlToProduct( $sOxid, $sVideoId, $sVideoTitle );
+                        $blMatch = true;
+                    }
                 }
             }
         }
@@ -180,14 +208,12 @@ class lvyoutube extends oxBase {
     
     
     /**
-     * Returns request url based on article id and config params
+     * Returns youtube cleaned title of a product id
      * 
      * @param string $sOxid
      * @return string
      */
-    protected function _lvGetRequestUrl( $sOxid, $sExtendId=null ) {
-        $sRequestUrl = "";
-        
+    protected function _lvGetProductTitle( $sOxid ) {
         $sQuery = "
             SELECT OXTITLE
             FROM 
@@ -197,7 +223,7 @@ class lvyoutube extends oxBase {
         ";
         
         $sTitle = $this->_oLvDb->GetOne( $sQuery );
-        
+
         if ( !$sTitle ) {
             // try to fetch title from parent
             $sQuery = "
@@ -219,6 +245,28 @@ class lvyoutube extends oxBase {
             $sTitle = $this->_oLvDb->GetOne( $sQuery );
         }
         
+        $aLvTitleRemove = $this->_oLvConfig->getConfigParam( 'aLvTitleRemove' );
+        if ( $aLvTitleRemove && is_array($aLvTitleRemove) && count($aLvTitleRemove) > 0 ) {
+            foreach ( $aLvTitleRemove as $sCurrentRemoval ) {
+                $sTitle = str_replace( $sCurrentRemoval, "", $sTitle );
+            }
+        }
+        
+        return (string)$sTitle;
+    }
+    
+    
+    /**
+     * Returns request url based on article id and config params
+     * 
+     * @param string $sOxid
+     * @return string
+     */
+    protected function _lvGetRequestUrl( $sOxid, $sExtendId=null, $sLvApiChannelId = '' ) {
+        $sRequestUrl = "";
+        
+        $sTitle = $this->_lvGetProductTitle( $sOxid );
+        
         if ( $sTitle ) {
             // get configuration
             $sLvApiKey                          = $this->_oLvConfig->getConfigParam( 'sLvApiKey' );
@@ -229,7 +277,6 @@ class lvyoutube extends oxBase {
             $sLvApiRequestOrder                 = $this->_oLvConfig->getConfigParam( 'sLvApiRequestOrder' );
             $sLvApiRequestPrefix                = $this->_oLvConfig->getConfigParam( 'sLvApiRequestPrefix' );
             $sLvApiRequestSuffix                = $this->_oLvConfig->getConfigParam( 'sLvApiRequestSuffix' );
-            $sLvApiChannelId                    = $this->_oLvConfig->getConfigParam( 'sLvApiChannelId' );
             
             $sRequestUrl     = $sLvApiBaseRequestAddress.$sLvApiRequestAction."?part=".$sLvApiRequestPart;
             if ( $sLvApiRequestMaxResults && $sLvApiRequestMaxResults != '' && is_numeric( $sLvApiRequestMaxResults ) ) {

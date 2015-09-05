@@ -62,7 +62,9 @@ $aModule = array(
         array( 'group' => 'lvyoutubeparams',        'name' => 'sLvApiRequestOrder',             'type' => 'str',        'value' => 'viewCount' ),
         array( 'group' => 'lvyoutubeparams',        'name' => 'sLvApiRequestPrefix',            'type' => 'str',        'value' => '' ),
         array( 'group' => 'lvyoutubeparams',        'name' => 'sLvApiRequestSuffix',            'type' => 'str',        'value' => '' ),
-        array( 'group' => 'lvyoutubeparams',        'name' => 'sLvApiChannelId',                'type' => 'str',        'value' => '' ),
+        array( 'group' => 'lvyoutubeparams',        'name' => 'aLvApiChannelIds',               'type' => 'arr',        'value' => array() ),
+        array( 'group' => 'lvyoutubedebug',         'name' => 'blLvTitleCheck',                 'type' => 'bool',       'value' => true ),
+        array( 'group' => 'lvyoutubeparams',        'name' => 'aLvTitleRemove',                 'type' => 'arr',        'value' => array() ),
         // group debug
         array( 'group' => 'lvyoutubedebug',         'name' => 'blLvYouTubeLogActive',           'type' => 'bool',       'value' => false ),
         array( 'group' => 'lvyoutubedebug',         'name' => 'sLvYouTubeLogLevel',             'type' => 'str',        'value' => '1' ),

@@ -62,7 +62,7 @@ $aModule = array(
         array( 'group' => 'lvyoutubeparams',        'name' => 'sLvApiRequestOrderLep',              'type' => 'str',        'value' => 'relevance' ),
         array( 'group' => 'lvyoutubeparams',        'name' => 'sLvApiRequestPrefixLep',             'type' => 'str',        'value' => '' ),
         array( 'group' => 'lvyoutubeparams',        'name' => 'sLvApiRequestSuffixLep',             'type' => 'str',        'value' => '' ),
-        array( 'group' => 'lvyoutubeparams',        'name' => 'sLvApiChannelIdLep',                 'type' => 'str',        'value' => '' ),
+        array( 'group' => 'lvyoutubeparams',        'name' => 'aLvApiChannelIdsLep',                'type' => 'arr',        'value' => array() ),
     )
 );
  

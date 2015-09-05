@@ -33,6 +33,6 @@ $aLang = array(
     'SHOP_MODULE_sLvApiRequestOrderRev'                 => 'Sorting criteria',
     'SHOP_MODULE_sLvApiRequestPrefixRev'                => 'Searchprefix which will be put in front of article title (optional)',
     'SHOP_MODULE_sLvApiRequestSuffixRev'                => 'Searchsuffix which will be put behind article title (optional)',
-    'SHOP_MODULE_sLvApiChannelIdRev'                    => 'Search in channel-ID (optional)',
+    'SHOP_MODULE_aLvApiChannelIdsRev'                   => 'Search in channel-IDs (optional)',
 );
 

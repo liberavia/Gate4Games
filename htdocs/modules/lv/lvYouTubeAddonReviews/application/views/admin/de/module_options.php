@@ -32,6 +32,6 @@ $aLang = array(
     'SHOP_MODULE_sLvApiRequestOrderRev'                 => 'Sortierkriterium',
     'SHOP_MODULE_sLvApiRequestPrefixRev'                => 'Suchpräfix der dem Titel des Produkts vorangestellt wird (optional)',
     'SHOP_MODULE_sLvApiRequestSuffixRev'                => 'Suchsuffix der dem Titel des Produkts hinten angestellt wird (optional)',
-    'SHOP_MODULE_sLvApiChannelIdRev'                    => 'Suche in Kanal-ID (optional)',
+    'SHOP_MODULE_aLvApiChannelIdsRev'                   => 'Suche in Kanal-IDs (optional)',
 );
 

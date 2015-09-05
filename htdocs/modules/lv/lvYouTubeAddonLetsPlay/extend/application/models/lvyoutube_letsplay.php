@@ -34,16 +34,44 @@ class lvyoutube_letsplay extends lvyoutube_letsplay_parent {
      * @return void
      */
     public function lvAddVideoLetsPlayForProduct( $sOxid ) {
-        $sRequestUrl    = $this->_lvGetRequestUrl( $sOxid, 'productletsplay' );
-        $aResult        = $this->_lvGetRequestResult( $sRequestUrl );
+        $aLvApiChannelIds                   = $this->_oLvConfig->getConfigParam( 'aLvApiChannelIdsLep' );
+        $blLvTitleCheck                     = $this->_oLvConfig->getConfigParam( 'blLvTitleCheck' );
         
-        if ( count( $aResult ) > 0 ) {
-            foreach ( $aResult['items'] as $aVideoInfo ) {
-                $sVideoId       = (string)$aVideoInfo['id']['videoId'];
-                $sVideoTitle    = (string)$aVideoInfo['snippet']['title'];
-                
-                if ( $sVideoId != '' ) {
-                    $this->_lvAddVideoUrlToProduct( $sOxid, $sVideoId, $sVideoTitle, 'productletsplay' );
+        // channelid is optional. If empty fill with empty dummy value
+        if ( !$aLvApiChannelIds || count( $aLvApiChannelIds ) ) {
+            $aLvApiChannelIds = array('');
+        }
+        
+        $blMatch = false;
+        foreach ( $aLvApiChannelIds as $sChannelId ) {
+            if ( $blMatch ) continue;
+            
+            $sRequestUrl    = $this->_lvGetRequestUrl( $sOxid, 'productletsplay', $sChannelId );
+            $aResult        = $this->_lvGetRequestResult( $sRequestUrl );
+
+            if ( count( $aResult ) > 0 ) {
+                foreach ( $aResult['items'] as $aVideoInfo ) {
+                    if ( $blMatch ) continue;
+                    $sVideoId       = (string)$aVideoInfo['id']['videoId'];
+                    $sVideoTitle    = (string)$aVideoInfo['snippet']['title'];
+                    $sProductTitle  = $this->_lvGetProductTitle( $sOxid );
+                    
+                    if ( $blLvTitleCheck ) {
+                        if ( strpos( $sVideoTitle, $sProductTitle ) !== false ) {
+                            $blVideoTitleValid = true;
+                        }
+                        else {
+                            $blVideoTitleValid = false;
+                        }
+                    }
+                    else {
+                        $blVideoTitleValid = true;
+                    }
+                    
+                    if ( $sVideoId != '' && $blVideoTitleValid ) {
+                        $this->_lvAddVideoUrlToProduct( $sOxid, $sVideoId, $sVideoTitle, 'productletsplay' );
+                        $blMatch = true;
+                    }
                 }
             }
         }
@@ -56,19 +84,11 @@ class lvyoutube_letsplay extends lvyoutube_letsplay_parent {
      * @param string $sOxid
      * @return string
      */
-    protected function _lvGetRequestUrl( $sOxid, $sExtendId=null ) {
+    protected function _lvGetRequestUrl( $sOxid, $sExtendId=null, $sLvApiChannelId ) {
         $sRequestUrl = "";
         
         if ( $sExtendId == 'productletsplay' ) {
-            $sQuery = "
-                SELECT OXTITLE
-                FROM 
-                    oxarticles
-                WHERE 
-                    OXID = '".$sOxid."'
-            ";
-
-            $sTitle = $this->_oLvDb->GetOne( $sQuery );
+            $sTitle = $this->_lvGetProductTitle( $sOxid );
 
             if ( $sTitle ) {
                 // get configuration
@@ -80,7 +100,6 @@ class lvyoutube_letsplay extends lvyoutube_letsplay_parent {
                 $sLvApiRequestOrder                 = $this->_oLvConfig->getConfigParam( 'sLvApiRequestOrderLep' );
                 $sLvApiRequestPrefix                = $this->_oLvConfig->getConfigParam( 'sLvApiRequestPrefixLep' );
                 $sLvApiRequestSuffix                = $this->_oLvConfig->getConfigParam( 'sLvApiRequestSuffixLep' );
-                $sLvApiChannelId                    = $this->_oLvConfig->getConfigParam( 'sLvApiChannelIdLep' );
 
                 $sRequestUrl     = $sLvApiBaseRequestAddress.$sLvApiRequestAction."?part=".$sLvApiRequestPart;
                 if ( $sLvApiRequestMaxResults && $sLvApiRequestMaxResults != '' && is_numeric( $sLvApiRequestMaxResults ) ) {

@@ -42,7 +42,6 @@ class lvyoutube_import_review_videos extends oxBase {
         $oYouTubeApi                = oxNew( 'lvyoutube' );
         
         $aArticlesWithoutVideo = $oYouTubeApi->lvGetProductsWithoutVideo( 'productreview' );
-        
         foreach ( $aArticlesWithoutVideo as $sOxid ) {
             $oYouTubeApi->lvAddVideoReviewForProduct( $sOxid );
         }

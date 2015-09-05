@@ -40,7 +40,9 @@ $aLang = array(
     'SHOP_MODULE_sLvApiRequestOrder'                    => 'Sortierkriterium',
     'SHOP_MODULE_sLvApiRequestPrefix'                   => 'Suchpräfix der dem Titel des Produkts vorangestellt wird (optional)',
     'SHOP_MODULE_sLvApiRequestSuffix'                   => 'Suchsuffix der dem Titel des Produkts hinten angestellt wird (optional)',
-    'SHOP_MODULE_sLvApiChannelId'                       => 'Suche in Kanal-ID (optional)',
+    'SHOP_MODULE_aLvApiChannelIds'                      => 'Suche auf folgende Kanal-IDs eingrenzen (optional)',
+    'SHOP_MODULE_blLvTitleCheck'                        => 'Titel des Produkts (ohne prä- und suffix) muss im Videotitel enthalten sein',
+    'SHOP_MODULE_aLvTitleRemove'                        => 'Die aufgelisteten Begriffe sollen vom Produkttitel VOR der Suche entfernt werden (optional)',
     // group debug
     'SHOP_MODULE_blLvYouTubeLogActive'                  => 'Aktivitäten in Log protokollieren (lvyoutube.log)',
     'SHOP_MODULE_sLvYouTubeLogLevel'                    => 'Log-Level (1=Fehler,2=Fehler+Warnungen,3=Alle Aktivitäten, 4=Alle Aktivitäten+Debug-Ausgaben)',
