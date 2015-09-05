@@ -46,7 +46,7 @@ class lvyoutube_letsplay extends lvyoutube_letsplay_parent {
         foreach ( $aLvApiChannelIds as $sChannelId ) {
             if ( $blMatch ) continue;
             
-            $sRequestUrl    = $this->_lvGetRequestUrl( $sOxid, 'productletsplay', $sChannelId );
+            $sRequestUrl    = $this->_lvGetRequestUrl( $sOxid, $sChannelId, 'productletsplay' );
             $aResult        = $this->_lvGetRequestResult( $sRequestUrl );
 
             if ( count( $aResult ) > 0 ) {
@@ -84,7 +84,7 @@ class lvyoutube_letsplay extends lvyoutube_letsplay_parent {
      * @param string $sOxid
      * @return string
      */
-    protected function _lvGetRequestUrl( $sOxid, $sExtendId=null, $sLvApiChannelId ) {
+    protected function _lvGetRequestUrl( $sOxid, $sLvApiChannelId, $sExtendId=null  ) {
         $sRequestUrl = "";
         
         if ( $sExtendId == 'productletsplay' ) {
@@ -134,7 +134,7 @@ class lvyoutube_letsplay extends lvyoutube_letsplay_parent {
             
         }
         else {
-            $sRequestUrl = parent::_lvGetRequestUrl( $sOxid, $sExtendId );
+            $sRequestUrl = parent::_lvGetRequestUrl( $sOxid, $sLvApiChannelId, $sExtendId );
         }
         
         return $sRequestUrl;

@@ -127,18 +127,18 @@ class lvyoutube extends oxBase {
         foreach ( $aLvApiChannelIds as $sChannelId ) {
             if ( $blMatch ) continue;
             
-            $sRequestUrl    = $this->_lvGetRequestUrl( $sOxid, null, $sChannelId );
+            $sRequestUrl    = $this->_lvGetRequestUrl( $sOxid, $sChannelId );
             $aResult        = $this->_lvGetRequestResult( $sRequestUrl );
 
             if ( count( $aResult ) > 0 ) {
                 foreach ( $aResult['items'] as $aVideoInfo ) {
                     if ( $blMatch ) continue;
                     $sVideoId       = (string)$aVideoInfo['id']['videoId'];
-                    $sVideoTitle    = (string)$aVideoInfo['snippet']['title'];
+                    $sVideoTitle    = $this->_lvGetNormalizedName( (string)$aVideoInfo['snippet']['title'] );
                     $sProductTitle  = $this->_lvGetProductTitle( $sOxid );
                     
                     if ( $blLvTitleCheck ) {
-                        if ( strpos( $sVideoTitle, $sProductTitle ) !== false ) {
+                        if ( stripos( $sVideoTitle, $sProductTitle ) !== false ) {
                             $blVideoTitleValid = true;
                         }
                         else {
@@ -252,9 +252,103 @@ class lvyoutube extends oxBase {
             }
         }
         
-        return (string)$sTitle;
+        $sTitle = $this->_lvGetNormalizedName( (string)$sTitle );
+        
+        return $sTitle;
     }
     
+    
+    /**
+     * Method tries to normalize name so it can be better matched with existing articles
+     * 
+     * @param string $sTitleFromVendor
+     * @return string
+     */
+    protected function _lvGetNormalizedName( $sTitleFromVendor ) {
+        $sNormalizedTitle = str_replace( ":", "", $sTitleFromVendor );
+        $sNormalizedTitle = str_replace( "-", "", $sNormalizedTitle );        
+        $sNormalizedTitle = str_replace( "  ", " ", $sNormalizedTitle );        
+        $sNormalizedTitle = $this->lvRoman2Arabic( $sNormalizedTitle );
+        $sNormalizedTitle = str_replace( "®", "", $sNormalizedTitle );
+        
+        // general cleanup of hidden signs
+        $sNormalizedTitle = preg_replace( '/[\x00-\x1F\x80-\xFF]/', '', $sNormalizedTitle );
+        
+        return $sNormalizedTitle;
+    }
+    
+    /**
+     * Converts first 20 roman numbers to arabic numbers
+     * 
+     * @param string $sNormalizedTitle
+     * @return string
+     */
+    public function lvRoman2Arabic( $sTitle ) {
+        $aRomanNumbers2Arabic = array(
+            'I'     =>'1',
+            'II'    =>'2',
+            'III'   =>'3',
+            'IV'    =>'4',
+            'VI'    =>'6',
+            'VII'   =>'7',
+            'VIII'  =>'8',
+            'IX'    =>'9',
+            'XI'    =>'11',
+            'XII'   =>'12',
+            'XIII'  =>'13',
+            'XIV'   =>'14',
+            'XV'    =>'15',
+            'XVI'   =>'16',
+            'XVII'  =>'17',
+            'XVIII' =>'18',
+            'XIX'   =>'19',
+            'XX'    =>'20',
+        );
+
+        foreach ( $aRomanNumbers2Arabic as $sRomanNumber=>$sArabicNumber ) {
+            if ( $this->lvContainsRoman( $sRomanNumber, $sTitle ) ) {
+                $sTitle = $this->lvContainsRoman( $sRomanNumber, $sTitle, $sArabicNumber );
+            }
+        }
+        
+        return $sTitle;
+    }
+    
+    /**
+     * Has two functions. First just checks if certain roman number exists in title
+     * Second one exchanges this number with given parameter
+     * 
+     * @param string $sRomanNumber
+     * @param string $sTitle
+     * @param string $sExchange
+     * @return mixed bool/string
+     */
+    public function lvContainsRoman( $sRomanNumber, $sTitle, $sExchange=false ) {
+        $mReturn = false;
+        
+        $blExchangeValid = ( $sExchange != false && !empty( $sExchange ) && is_numeric( $sExchange ) ); 
+        
+        $aTitleParts = explode( " ",  $sTitle );
+
+        foreach ( $aTitleParts as $iIndex=>$sTitlePart ) {
+            $sTitlePart = trim( $sTitlePart );
+            if ( strlen( $sTitlePart ) == strlen( $sRomanNumber ) ) {
+                if ( $sRomanNumber == $sTitlePart ) {
+                    $mReturn = true;
+                    if ( $blExchangeValid ) {
+                        $aTitleParts[$iIndex] = $sExchange;
+                    }
+                }
+            }
+        }
+        
+        if ( $blExchangeValid && is_array( $aTitleParts ) && count( $aTitleParts ) > 0 ) {
+            $mReturn = implode( " ", $aTitleParts );
+        }
+        
+        return $mReturn;
+    }
+
     
     /**
      * Returns request url based on article id and config params
@@ -262,7 +356,7 @@ class lvyoutube extends oxBase {
      * @param string $sOxid
      * @return string
      */
-    protected function _lvGetRequestUrl( $sOxid, $sExtendId=null, $sLvApiChannelId = '' ) {
+    protected function _lvGetRequestUrl( $sOxid, $sLvApiChannelId, $sExtendId=null ) {
         $sRequestUrl = "";
         
         $sTitle = $this->_lvGetProductTitle( $sOxid );

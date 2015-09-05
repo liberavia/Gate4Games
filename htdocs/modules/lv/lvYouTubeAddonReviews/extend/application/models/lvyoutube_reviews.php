@@ -38,26 +38,22 @@ class lvyoutube_reviews extends lvyoutube_reviews_parent {
         $blLvTitleCheck                     = $this->_oLvConfig->getConfigParam( 'blLvTitleCheck' );
         
         // channelid is optional. If empty fill with empty dummy value
-        if ( !$aLvApiChannelIds || count( $aLvApiChannelIds ) ) {
+        if ( !$aLvApiChannelIds || count( $aLvApiChannelIds ) == 0 ) {
             $aLvApiChannelIds = array('');
         }
-        
         $blMatch = false;
-        foreach ( $aLvApiChannelIds as $sChannelId ) {
+        foreach ( $aLvApiChannelIds as $sLvApiChannelId ) {
             if ( $blMatch ) continue;
-            
-            $sRequestUrl    = $this->_lvGetRequestUrl( $sOxid, 'productreview', $sChannelId );
+            $sRequestUrl    = $this->_lvGetRequestUrl( $sOxid, $sLvApiChannelId, 'productreview' );
             $aResult        = $this->_lvGetRequestResult( $sRequestUrl );
-
             if ( count( $aResult ) > 0 ) {
                 foreach ( $aResult['items'] as $aVideoInfo ) {
                     if ( $blMatch ) continue;
                     $sVideoId       = (string)$aVideoInfo['id']['videoId'];
-                    $sVideoTitle    = (string)$aVideoInfo['snippet']['title'];
+                    $sVideoTitle    = $this->_lvGetNormalizedName(  (string)$aVideoInfo['snippet']['title'] );
                     $sProductTitle  = $this->_lvGetProductTitle( $sOxid );
-                    
                     if ( $blLvTitleCheck ) {
-                        if ( strpos( $sVideoTitle, $sProductTitle ) !== false ) {
+                        if ( stripos( $sVideoTitle, $sProductTitle ) !== false ) {
                             $blVideoTitleValid = true;
                         }
                         else {
@@ -84,7 +80,7 @@ class lvyoutube_reviews extends lvyoutube_reviews_parent {
      * @param string $sOxid
      * @return string
      */
-    protected function _lvGetRequestUrl( $sOxid, $sExtendId=null, $sLvApiChannelId ) {
+    protected function _lvGetRequestUrl( $sOxid, $sLvApiChannelId, $sExtendId=null  ) {
         $sRequestUrl = "";
         
         if ( $sExtendId == 'productreview' ) {
@@ -133,11 +129,9 @@ class lvyoutube_reviews extends lvyoutube_reviews_parent {
             
         }
         else {
-            $sRequestUrl = parent::_lvGetRequestUrl( $sOxid, $sExtendId, $sLvApiChannelId );
+            $sRequestUrl = parent::_lvGetRequestUrl( $sOxid, $sLvApiChannelId, $sExtendId );
         }
         
         return $sRequestUrl;
     }
-    
-    
 }
