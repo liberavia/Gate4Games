@@ -148,6 +148,12 @@ class lvextmedia_oxarticle extends lvextmedia_oxarticle_parent {
             }
         }
         
+        // if this is still empty set link to nopic
+        if ( $sPicUrl == '' ) {
+            $sSize = $this->getConfig()->getConfigParam( 'aDetailImageSizes' );
+            $sPicUrl = oxRegistry::get("oxPictureHandler")->getProductPicUrl( "product/1/", 'nopic.jpg', $sSize, 'oxpic1' );
+        }
+        
         return $sPicUrl;
     }
     
@@ -174,7 +180,18 @@ class lvextmedia_oxarticle extends lvextmedia_oxarticle_parent {
         
         if ( $sCoverPicFieldName != '' ) {
             $sCoverPicFieldName = "oxarticles__".$sCoverPicFieldName;
-            $sPicUrl =  $oProduct->$sCoverPicFieldName->value;
+            $sPicUrl = $oProduct->$sCoverPicFieldName->value;
+            if ( $sPicUrl == '' ) {
+                $sPicUrl = $this->_lvSaveAndSetAlternativeCoverFromOtherVendor();
+                if ( $sPicUrl == '' ) {
+                    $sPicUrl = $this->lvGetFirstPictureUrl();
+                }        
+            }
+            else if ( strpos( $sPicUrl, 'http' ) === false ) {
+                // seems to be a native picture, but existing
+                $sSize = $this->getConfig()->getConfigParam( 'aDetailImageSizes' );
+                $sPicUrl = oxRegistry::get("oxPictureHandler")->getProductPicUrl( "product/1/", $sPicUrl, $sSize, 'oxpic1' );
+            }
         }
         else {
             // falbackurl
@@ -185,7 +202,69 @@ class lvextmedia_oxarticle extends lvextmedia_oxarticle_parent {
     }
     
     
-    
+    /**
+     * Fallback method which looks if other vendors have got a valid picture url which
+     * can be used to download cover and put it into own picture folder
+     * 
+     * @param void
+     * @return string
+     */
+    protected function _lvSaveAndSetAlternativeCoverFromOtherVendor() {
+        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
+        $sAlternativeImageUrl = '';
+        
+        // determine if we are a parent
+        if ( $this->oxarticles__oxparentid->value == '' ) {
+            $sParentId = $this->oxarticles__oxid->value;
+        }
+        else {
+            $sParentId = $this->oxarticles__oxparentid->value;
+        }
+        
+        
+        $sQuery = "SELECT OXID FROM oxarticles WHERE OXPARENTID='".$sParentId."'";
+        $oRs    = $oDb->Execute( $sQuery );
+        
+        if ( $oRs != false && $oRs->recordCount() > 0 ) {
+            $blFound = false;
+            while ( !$oRs->EOF && $blFound == false ) {
+                $sOxid  = $oRs->fields['OXID'];
+                
+                if ( $sOxid ) {
+                    $oArticle = oxNew( 'oxarticle' );
+                    $oArticle->load( $sOxid );
+                    
+                    $sTitleTrimmed = str_replace( " ", "", $oArticle->oxarticles__oxtitle->value );
+                    $sArtnum       = $oArticle->oxarticles__oxartnum->value;
+                    
+                    $sCoverPicFieldName = $oArticle->oxarticles__lvcoverpic->value;
+                    $sCoverPicFieldName = "oxarticles__".$sCoverPicFieldName;
+                    $sPicUrl            = $oArticle->$sCoverPicFieldName->value;
+                    
+                    if ( $sPicUrl != '' ) {
+                        $sPictureName = $sTitleTrimmed."_".$sArtnum.".jpg";
+                        $sTarget = getShopBasePath()."out/pictures/master/product/1/".$sPictureName;
+                        // copy foreign file to master folder
+                        file_put_contents( $sTarget, file_get_contents( $sPicUrl ) );
+                        $blFound = true;
+                    }
+
+                    
+                }
+                
+                unset( $oArticle );
+                $oRs->moveNext();
+            }
+            
+            if ( isset($sTarget) && file_exists( $sTarget ) && $sPictureName != '' ) {
+                $this->oxarticles__oxpic1 = new oxField( $sPictureName );
+                $this->save();
+                $sAlternativeImageUrl = $this->getPictureUrl();
+            }
+        }
+        
+        return $sAlternativeImageUrl;
+    }
     
     /**
      * Returns an array of all external picture links
