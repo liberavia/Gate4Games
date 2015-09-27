@@ -39,6 +39,7 @@ $aLang = array(
     'SHOP_MODULE_blLvAffiliateResetActive'              => 'Automatischen Artikelreset aktivieren',
     'SHOP_MODULE_sLvAffiliateResetFromHour'             => 'Stunde des Tages ab welcher der Artikelreset <b>frühestens</b> erfolgen darf',
     'SHOP_MODULE_sLvAffiliateResetToHour'               => 'Stunde des Tages ab welcher der Artikelreset <b>spätestens</b> erfolgen darf',
+    'SHOP_MODULE_sLvCompleteDeleteDelayDays'            => 'Tage nach denen inaktive Artikel aus der Datenbank entfernt werden sollen',
     // group debug
     'SHOP_MODULE_GROUP_lvaffiliate_debug'               => 'Logs and Debugging',
     'SHOP_MODULE_blLvAffiliateLogActive'                => 'Aktivitäten in Log protokollieren (lvaffiliate_import.log)',

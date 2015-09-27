@@ -167,6 +167,7 @@ $aModule = array(
         array( 'group' => 'lvaffiliate_maintenance',    'name' => 'blLvAffiliateResetActive',           'type' => 'bool',       'value' => false ),
         array( 'group' => 'lvaffiliate_maintenance',    'name' => 'sLvAffiliateResetFromHour',          'type' => 'str',        'value' => '03' ),
         array( 'group' => 'lvaffiliate_maintenance',    'name' => 'sLvAffiliateResetToHour',            'type' => 'str',        'value' => '08' ),
+        array( 'group' => 'lvaffiliate_maintenance',    'name' => 'sLvCompleteDeleteDelayDays',         'type' => 'str',        'value' => '60' ),
         // group debug
         array( 'group' => 'lvaffiliate_debug',          'name' => 'blLvAffiliateLogActive',             'type' => 'bool',       'value' => false ),
         array( 'group' => 'lvaffiliate_debug',          'name' => 'sLvAffiliateLogLevel',               'type' => 'str',        'value' => '1' ),

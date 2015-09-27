@@ -173,6 +173,7 @@ class lvaffiliate_import extends oxBase {
         $this->_blLvAffiliateResetActive        = $oConfig->getConfigParam( 'blLvAffiliateResetActive' );
         $this->_iLvAffiliateResetFromHour       = (int)$oConfig->getConfigParam( 'sLvAffiliateResetFromHour' );
         $this->_iLvAffiliateResetToHour         = (int)$oConfig->getConfigParam( 'sLvAffiliateResetToHour' );
+        $this->_iLvCompleteDeleteDelayDays      = (int)$oConfig->getConfigParam( 'sLvCompleteDeleteDelayDays' );
         // group debug
         $this->_blLvAffiliateLogActive          = (bool)$oConfig->getConfigParam( 'blLvAffiliateLogActive' );
         $this->_iLvAffiliateLogLevel            = (int)$oConfig->getConfigParam( 'sLvAffiliateLogLevel' );
@@ -209,7 +210,7 @@ class lvaffiliate_import extends oxBase {
      * @param void
      * @return void
      */
-    public function lvResetVendorArticles() {
+    public function lvResetVendorArticles( $blDropArticles = false ) {
         $oDb    = oxDb::getDb( MODE_FETCH_ASSOC );
         
         if ( $this->_sLvVendorId ) {
@@ -221,21 +222,31 @@ class lvaffiliate_import extends oxBase {
                 $oArticle = oxNew( 'oxarticle' );
                 while ( !$oRs->EOF ) {
                     $sOxid = $oRs->fields['OXID'];
-                    if ( $sOxid ) {
+                    if ( $sOxid  && $blDropArticles ) {
                         $oArticle->delete( $sOxid );
+                    }
+                    else {
+                        $this->_lvDeactivateArticle( $sOxid );
                     }
                     
                     $oRs->moveNext();
                 }
             }
+
+            if ( $blDropArticles ) {
+                // collect standalone parents and remove them
+                $sQuery = "DELETE FROM `oxarticles` WHERE OXPARENTID='' AND OXVARCOUNT='0'";
+            }
+            else {
+                // collect standalone parents and deactivate them
+                $sQuery = "UPDATE oxarticles SET OXACTIVE='0' WHERE OXPARENTID='' AND OXVARCOUNT='0'";
+            }
             
-            // collect standalone parents and remove them
-            $sQuery = "DELETE FROM `oxarticles` WHERE OXPARENTID='' AND OXVARCOUNT='0'";
             $oDb->Execute( $sQuery );
         }
     }
-
-
+    
+    
     /**
      * Loggs a message depending on the defined loglevel. Default is debug-level
      * 
@@ -278,6 +289,9 @@ class lvaffiliate_import extends oxBase {
         $this->_lvAssignCategories();
 
         $this->_lvAssignAttributes();
+        
+        // check for deprecated articles and cleanup garbage data
+        $this->_lvCleanupDeprecatedEntries();
     }
     
     
@@ -311,6 +325,78 @@ class lvaffiliate_import extends oxBase {
         $oDb->Execute( $sQuery );
     }
     
+    
+    /**
+     * Searches for deprecated entries and delete them from database
+     * 
+     * @param void
+     * @return void
+     */
+    protected function _lvCleanupDeprecatedEntries() {
+        if ( $this->_iLvCompleteDeleteDelayDays > 0 ) {
+            $oDb                = oxDb::getDb( MODE_FETCH_ASSOC );
+            $iMaxAgeTimestamp   = strtotime( "- ".$this->_iLvCompleteDeleteDelayDays." days" );
+            $sArticlesView      = getViewName( 'oxarticles' );
+            $aArticlesToDelete  = array();
+
+            $sQuery = "SELECT OXID, OXTIMESTAMP FROM ".$sArticlesView." WHERE OXACTIVE='0'";
+            
+            $oRs = $oDb->Execute( $sQuery );
+            
+            if ( $oRs != false && $oRs->recordCount() > 0 ) {
+                while ( !$oRs->EOF ) {
+                    $sOxid                  = $oRs->fields['OXID'];
+                    $sTimeStamp             = $oRs->fields['OXTIMESTAMP'];
+                    $iTimeStampOfArticleRow = strtotime();
+                    
+                    if ( $iTimeStampOfArticleRow <= $iMaxAgeTimestamp ) {
+                        $aArticlesToDelete[] = $sOxid;
+                    }
+                    
+                    $oRs->moveNext();
+                }
+            }
+            
+            foreach ( $aArticlesToDelete as $sOxid ) {
+                $oArticle = oxNew( 'oxarticle' );
+                $oArticle->load( $sOxid );
+                
+                if ( $oArticle ) {
+                    $oArticle->delete();
+                }
+            }
+        }
+    }
+    
+
+    /**
+     * Deactivates article and checks if all possible variants are inactive. If this is the case 
+     * Parent will also be deactivated
+     * 
+     * @param string $sOxid
+     * @return void
+     */
+    protected function _lvDeactivateArticle( $sOxid ) {
+        $oDb            = oxDb::getDb( MODE_FETCH_ASSOC );
+        $sArticlesTable = getViewName( 'oxarticles' );
+        
+        $sQuery = "SELECT OXPARENTID FROM ".$sArticlesTable." WHERE OXID=".$oDb->quote( $sOxid )." LIMIT 1";
+        $sParentId = $oDb->GetOne( $sQuery );
+        
+        // deactivate article
+        $sQuery = "UPDATE oxarticles SET oxactive = '0' WHERE OXID=".$oDb->quote( $sOxid )." LIMIT 1";
+        
+        // count active variants if article has parent. Deactivate parent if there are no other active variants
+        if ( $sParentId ) {
+            $sQuery = "SELECT count(OXID) FROM ".$sArticlesTable." WHERE OXPARENTID=".$oDb->quote( $sParentId )." AND OXACTIVE='1'";
+            $iCountActiveVariants = $oDb->GetOne( $sQuery );
+            if ( $iCountActiveVariants == 0 ) {
+                // deactivate parent
+                $sQuery = "UPDATE oxarticles SET oxactive = '0' WHERE OXID=".$oDb->quote( $sParentId )." LIMIT 1";
+            }
+        }
+    }
+
 
     /**
      * Method checks if current hour is foreseen for vendor article reset and if option is activated
@@ -668,6 +754,9 @@ class lvaffiliate_import extends oxBase {
                     $oArticle->$sTarget = new oxField( $this->_aLvCurrentArticleData[$sDataFieldName] );
                 }
             }
+            
+            // set article active
+            $oArticle->oxarticles__oxactive = new oxField( '1' );
 
             try {
                 $oArticle->save();
