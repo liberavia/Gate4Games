@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<addons>
+    <addon id="gate4games.kodi.isengard.german" name="Gate4Games Repo Deutschland [Isengard]" version="0.1.0" provider-name="Andre Gregor-Herrmann">
+        <requires>
+            <import addon="xbmc.addon" version="12.0.0"/>
+        </requires>
+        <extension point="xbmc.addon.repository" name="Gate4Games Repo Deutschland [Isengard]">
+            <info compressed="false">
+                http://kodi.gate4games.com/repos/isengard/german/addons.xml
+            </info>
+            <checksum>
+                http://kodi.gate4games.com/repos/isengard/german/addons.xml.md5
+            </checksum>
+            <datadir zip="true">http://kodi.gate4games.com/data/</datadir>
+            <hashes>true</hashes>
+        </extension>
+        <extension point="xbmc.addon.metadata">
+            <summary>
+                Install Addons from Gate4Games repository
+            </summary>
+            <summary lang="de">
+                Installation von Addons aus dem Gate4Games Repository
+            </summary>
+            <description>
+                A repository provided by Gate4Games whose aim it is to value up the media center as a media- and gaming-central.
+            </description>
+            <description lang="de">
+                Ein von Gate4Games angebotenes Repository für das Kodi-Mediencenter für Deutschland. Es enthält verschiedene Addons, die Kodi als Medien- und Gaming-Zentrale aufwerten.
+            </description>
+            <disclaimer>
+                This repository is maintained by Gate4Games as best as possible. There is no warranty for third-party addons in this repository.[CR]
+            </disclaimer>
+            <disclaimer lang="de">
+                Dieses Repository wird durch Gate4Games nach bestem Gewissen gepflegt. Eine Garantie für die enthaltenen Addons von Drittanbietern wird dennoch nicht übernommen.[CR]
+            </disclaimer>
+            <platform>all</platform>
+            <website>http://gate4games.com/</website>
+        </extension>
+    </addon>
+    <addon id="plugin.video.movie4k" name="Movie4k.to" version="1.5.0" provider-name="Liberavia">
+        <extension point="xbmc.python.pluginsource" library="default.py">
+            <provides>video</provides>
+        </extension>
+        <extension point="xbmc.addon.metadata">
+            <platform>all</platform>
+            <summary lang="de">Movie4K.to Videostreams</summary>
+            <summary lang="en">Movie4K.to Videostreaming</summary>
+            <language>de</language>
+            <description lang="de">Movie4K/Movie2K ist eine der besten Seiten um Filme über das Internet zu schauen. Einfach einen Film wählen und ohne Registration bequem schauen.</description>
+            <description lang="en">Movie4K/Movie2K is one of the best and easiest free movies websites to watch movies on the internet. Simply select the movie of your choice for free and without registration.</description>
+        </extension>
+        <nofanart>true</nofanart>
+    </addon>
+</addons>

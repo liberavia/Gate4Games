@@ -1,0 +1,22 @@
+v1.5.1
+- Improved icons to be more intuitive
+
+v1.5.0
+- Added support for configurable proxy inlcuding basic authentication
+
+v1.1.0 - v 1.4.4
+- Setting for sorting by imdb
+- Added new fanart and icons (taken from oxygen)
+- Added Mulitlanguage-Support frontend/backend
+- Added imdb ratings
+- Added quality ratings
+- Added age recommendations
+- Added youtube trailer search for current selected movie (youtube api v2)
+- Added listing of actors related to film
+- Added movie details page with description comments and most recent information
+- Refactored handling of TV-Shows (Seasons, Episodes etc.)
+- Fixed https image requesting for amazon firetv
+
+v1.0.0
+- Taken over base implementation from elezarencoding
+- Made things work basically again
