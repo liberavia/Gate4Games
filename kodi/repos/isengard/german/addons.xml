@@ -22,7 +22,7 @@
                 Installation von Addons aus dem Gate4Games Repository
             </summary>
             <description>
-                A repository provided by Gate4Games whose aim it is to value up the media center as a media- and gaming-central.
+                A repository provided by Gate4Games for Germany whose aim it is to value up the media center as a media- and gaming-central.
             </description>
             <description lang="de">
                 Ein von Gate4Games angebotenes Repository für das Kodi-Mediencenter für Deutschland. Es enthält verschiedene Addons, die Kodi als Medien- und Gaming-Zentrale aufwerten.
@@ -37,7 +37,7 @@
             <website>http://gate4games.com/</website>
         </extension>
     </addon>
-    <addon id="plugin.video.movie4k" name="Movie4k.to" version="1.5.1" provider-name="Liberavia">
+    <addon id="plugin.video.movie4k" name="Movie4k.to" version="1.5.2" provider-name="Liberavia">
         <extension point="xbmc.python.pluginsource" library="default.py">
             <provides>video</provides>
         </extension>
@@ -49,6 +49,5 @@
             <description lang="de">Movie4K/Movie2K ist eine der besten Seiten um Filme über das Internet zu schauen. Einfach einen Film wählen und ohne Registration bequem schauen.</description>
             <description lang="en">Movie4K/Movie2K is one of the best and easiest free movies websites to watch movies on the internet. Simply select the movie of your choice for free and without registration.</description>
         </extension>
-        <nofanart>true</nofanart>
     </addon>
 </addons>
