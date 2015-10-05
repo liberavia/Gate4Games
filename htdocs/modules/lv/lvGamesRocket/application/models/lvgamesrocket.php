@@ -160,7 +160,7 @@ class lvgamesrocket extends oxBase {
             $sDownloadCategory                          = trim( $aArticle[8] );
             if ( $sDownloadCategory != "PC / Mac" ) continue;
             
-            $sId                                        = (string)$aArticle[1];
+            $sId                                        = (string)$aArticle[0];
             $dPrice                                     = (double)str_replace( ",", ".", $aArticle[4] );
             $dTPrice                                    = (double)str_replace( ",", ".", $aArticle[19] );
             $sTitle                                     = trim( utf8_encode( $aArticle[1] ) );

@@ -385,6 +385,8 @@ class lvaffiliate_import extends oxBase {
         
         // deactivate article
         $sQuery = "UPDATE oxarticles SET oxactive = '0' WHERE OXID=".$oDb->quote( $sOxid )." LIMIT 1";
+
+        $oDb->Execute( $sQuery );
         
         // count active variants if article has parent. Deactivate parent if there are no other active variants
         if ( $sParentId ) {
@@ -393,6 +395,8 @@ class lvaffiliate_import extends oxBase {
             if ( $iCountActiveVariants == 0 ) {
                 // deactivate parent
                 $sQuery = "UPDATE oxarticles SET oxactive = '0' WHERE OXID=".$oDb->quote( $sParentId )." LIMIT 1";
+                
+                $oDb->Execute( $sQuery );
             }
         }
     }
@@ -757,6 +761,15 @@ class lvaffiliate_import extends oxBase {
             
             // set article active
             $oArticle->oxarticles__oxactive = new oxField( '1' );
+            
+            // check if article has parent. If true make sure parent will be activated as well
+            if ( $oArticle->oxarticles__oxparentid->value != '' ) {
+                $oParentArticle = $oArticle->getParentArticle();
+                if ( $oParentArticle ) {
+                    $oParentArticle->oxarticles__oxactive = new oxField( '1' );
+                    $oParentArticle->save();
+                }
+            }
 
             try {
                 $oArticle->save();

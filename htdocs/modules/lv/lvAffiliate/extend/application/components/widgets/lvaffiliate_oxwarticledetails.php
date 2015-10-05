@@ -67,7 +67,7 @@ class lvaffiliate_oxwarticledetails extends lvaffiliate_oxwarticledetails_parent
         if ( $sOxid ) {
             $oDb                = oxDb::getDb( FETCH_MODE_ASSOC );
             $sArticlesTable     = getViewName( 'oxarticles' );
-            $sQuery = "SELECT OXID FROM ".$sArticlesTable." WHERE OXPARENTID='".$sOxid."' ORDER BY OXPRICE ASC";
+            $sQuery = "SELECT OXID FROM ".$sArticlesTable." WHERE OXPARENTID='".$sOxid."' AND OXACTIVE = '1' ORDER BY OXPRICE ASC";
             
             $oResult = $oDb->Execute( $sQuery );
             
