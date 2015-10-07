@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+	<defaultcontrol always="true">9912</defaultcontrol>
+	<coordinates>
+		<system>1</system>
+		<left>10</left>
+		<top>10</top>
+	</coordinates>
+	<include>dialogeffect</include>
+	<controls>
+		<control type="image">
+			<left>0</left>
+			<top>0</top>
+			<width>1270</width>
+			<height>700</height>
+			<texture border="40">DialogBack.png</texture>
+		</control>
+		<control type="image">
+			<description>Dialog Header image</description>
+			<left>40</left>
+			<top>16</top>
+			<width>1270</width>
+			<height>40</height>
+			<texture>dialogheader.png</texture>
+		</control>
+		<control type="label" id="9900">
+			<description>header label</description>
+			<left>40</left>
+			<top>20</top>
+			<width>1270</width>
+			<height>30</height>
+			<font>font13_title</font>
+			<label>Details zum Film</label>
+			<align>center</align>
+			<aligny>center</aligny>
+			<textcolor>selected</textcolor>
+			<shadowcolor>black</shadowcolor>
+		</control>
+		<control type="button" id="9911">
+			<description>Close Window button</description>
+			<left>1190</left>
+			<top>15</top>
+			<width>64</width>
+			<height>32</height>
+			<label>-</label>
+			<font>-</font>
+			<onclick>PreviousMenu</onclick>
+			<texturefocus>DialogCloseButton-focus.png</texturefocus>
+			<texturenofocus>DialogCloseButton.png</texturenofocus>
+			<onleft>10</onleft>
+			<onright>10</onright>
+			<onup>10</onup>
+			<ondown>10</ondown>
+			<visible>system.getbool(input.enablemouse)</visible>
+		</control>
+                <control type="image" id="9901">
+                    <description>moviecover</description>
+                    <top>80</top>
+                    <left>30</left>
+                    <width>125</width>
+                    <height>198</height>
+                    <visible>true</visible>
+                    <colordiffuse>FFFFFFFF</colordiffuse>
+                    <fadetime>200</fadetime>
+                    <texture></texture>
+                    <aspectratio>stretch</aspectratio>
+                </control>
+                <control type="label">
+                        <description>label language</description>
+                        <left>230</left>
+                        <top>80</top>
+                        <width>150</width>
+                        <height>30</height>
+                        <align>left</align>
+                        <font>font13_title</font>
+                        <label>$ADDON[plugin.video.movie4k 30009]:</label>
+                        <align>left</align>
+                        <aligny>center</aligny>
+                        <textcolor>selected</textcolor>
+                        <shadowcolor>black</shadowcolor>
+                </control>
+                <control type="textbox" id="9903">
+                        <description>text language</description>
+                        <left>385</left>
+                        <top>80</top>
+                        <width>225</width>
+                        <height>30</height>
+                        <align>left</align>
+                        <label>-</label>
+                        <font>font13</font>
+                        <focusedcolor>blue</focusedcolor>
+                        <autoscroll>false</autoscroll>
+                </control>
+                <control type="label">
+                        <description>label quality</description>
+                        <left>230</left>
+                        <top>110</top>
+                        <width>150</width>
+                        <height>30</height>
+                        <align>left</align>
+                        <font>font13_title</font>
+                        <label>$ADDON[plugin.video.movie4k 30033]</label>
+                        <align>left</align>
+                        <aligny>center</aligny>
+                        <textcolor>selected</textcolor>
+                        <shadowcolor>black</shadowcolor>
+                </control>
+                <control type="textbox" id="9902">
+                        <description>text quality</description>
+                        <left>385</left>
+                        <top>110</top>
+                        <width>225</width>
+                        <height>30</height>
+                        <align>left</align>
+                        <label>-</label>
+                        <font>font13</font>
+                        <focusedcolor>blue</focusedcolor>
+                        <autoscroll>false</autoscroll>
+                </control>
+                <control type="label">
+                        <description>label imdb</description>
+                        <left>230</left>
+                        <top>140</top>
+                        <width>150</width>
+                        <height>30</height>
+                        <align>left</align>
+                        <font>font13_title</font>
+                        <label>$ADDON[plugin.video.movie4k 30058]:</label>
+                        <align>left</align>
+                        <aligny>center</aligny>
+                        <textcolor>selected</textcolor>
+                        <shadowcolor>black</shadowcolor>
+                </control>
+                <control type="textbox" id="9905">
+                        <description>text imdb</description>
+                        <left>385</left>
+                        <top>140</top>
+                        <width>225</width>
+                        <height>30</height>
+                        <align>left</align>
+                        <label>-</label>
+                        <font>font13</font>
+                        <focusedcolor>blue</focusedcolor>
+                        <autoscroll>false</autoscroll>
+                </control>
+                <control type="label">
+                        <description>label genre</description>
+                        <left>230</left>
+                        <top>170</top>
+                        <width>150</width>
+                        <height>30</height>
+                        <align>left</align>
+                        <font>font13_title</font>
+                        <label>$ADDON[plugin.video.movie4k 30052]:</label>
+                        <align>left</align>
+                        <aligny>center</aligny>
+                        <textcolor>selected</textcolor>
+                        <shadowcolor>black</shadowcolor>
+                </control>
+                <control type="textbox" id="9906">
+                        <description>text genre</description>
+                        <left>385</left>
+                        <top>170</top>
+                        <width>225</width>
+                        <height>30</height>
+                        <align>left</align>
+                        <label>-</label>
+                        <font>font13</font>
+                        <focusedcolor>blue</focusedcolor>
+                        <autoscroll>false</autoscroll>
+                </control>
+                <control type="label">
+                        <description>label landyear</description>
+                        <left>230</left>
+                        <top>200</top>
+                        <width>150</width>
+                        <height>30</height>
+                        <align>left</align>
+                        <font>font13_title</font>
+                        <label>$ADDON[plugin.video.movie4k 30055]:</label>
+                        <align>left</align>
+                        <aligny>center</aligny>
+                        <textcolor>selected</textcolor>
+                        <shadowcolor>black</shadowcolor>
+                </control>
+                <control type="textbox" id="9904">
+                        <description>text landyear</description>
+                        <left>385</left>
+                        <top>200</top>
+                        <width>225</width>
+                        <height>30</height>
+                        <align>left</align>
+                        <label>-</label>
+                        <font>font13</font>
+                        <focusedcolor>blue</focusedcolor>
+                        <autoscroll>false</autoscroll>
+                </control>
+                <control type="label">
+                        <description>label age recommendation</description>
+                        <left>230</left>
+                        <top>230</top>
+                        <width>150</width>
+                        <height>30</height>
+                        <align>left</align>
+                        <font>font13_title</font>
+                        <label>$ADDON[plugin.video.movie4k 30062]:</label>
+                        <align>left</align>
+                        <aligny>center</aligny>
+                        <textcolor>selected</textcolor>
+                        <shadowcolor>black</shadowcolor>
+                </control>
+                <control type="textbox" id="9910">
+                        <description>text age recommendation</description>
+                        <left>385</left>
+                        <top>230</top>
+                        <width>225</width>
+                        <height>30</height>
+                        <align>left</align>
+                        <label>-</label>
+                        <font>font13</font>
+                        <focusedcolor>blue</focusedcolor>
+                        <autoscroll>false</autoscroll>
+                </control>
+                <control type="textbox" id="9907">
+                        <description>actorsandmore</description>
+                        <left>615</left>
+                        <top>80</top>
+                        <width>575</width>
+                        <height>200</height>
+                        <align>left</align>
+                        <label>-</label>
+                        <font>font13</font>
+                        <focusedcolor>blue</focusedcolor>
+                        <autoscroll time="3000" delay="4000" repeat="5000">true</autoscroll>
+                </control>
+                <control type="label">
+                        <description>label description</description>
+                        <left>30</left>
+                        <top>310</top>
+                        <width>575</width>
+                        <height>30</height>
+                        <align>left</align>
+                        <font>font13_title</font>
+                        <label>$ADDON[plugin.video.movie4k 30050]</label>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>selected</textcolor>
+                        <shadowcolor>black</shadowcolor>
+                </control>
+		<control type="textbox" id="9908">
+			<description>moviedescription</description>
+			<left>30</left>
+			<top>340</top>
+			<width>575</width>
+			<height>330</height>
+			<align>left</align>
+			<label>-</label>
+			<font>font13</font>
+			<focusedcolor>blue</focusedcolor>
+			<autoscroll time="3000" delay="4000" repeat="5000">true</autoscroll>
+		</control>
+                <control type="label">
+                        <description>label comments</description>
+                        <left>615</left>
+                        <top>310</top>
+                        <width>575</width>
+                        <height>30</height>
+                        <align>left</align>
+                        <font>font13_title</font>
+                        <label>$ADDON[plugin.video.movie4k 30051]</label>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>selected</textcolor>
+                        <shadowcolor>black</shadowcolor>
+                </control>
+		<control type="textbox" id="9909">
+			<description>moviecomments</description>
+			<left>615</left>
+			<top>340</top>
+			<width>575</width>
+			<height>330</height>
+			<align>left</align>
+			<label>-</label>
+			<font>font13</font>
+			<focusedcolor>blue</focusedcolor>
+                        <pagecontrol>9912</pagecontrol>
+			<autoscroll time="3000" delay="30000" repeat="5000">true</autoscroll>
+		</control>
+                <control type="scrollbar" id="9912">
+                        <description>moviecomments scrollbar</description>
+                        <left>1190</left>
+                        <top>340</top>
+                        <width>30</width>
+                        <height>330</height>
+                        <visible>true</visible>
+                        <texturesliderbackground>scroll-background.png</texturesliderbackground>
+                        <texturesliderbar>bar.png</texturesliderbar>
+                        <texturesliderbarfocus>bar-focus.png</texturesliderbarfocus>
+                        <textureslidernib>nib.png</textureslidernib>
+                        <textureslidernibfocus>nib-focus.png</textureslidernibfocus>
+                        <pulseonselect></pulseonselect>
+                        <orientation>vertical</orientation>
+                        <showonepage></showonepage>
+                        <onup>2</onup>
+                        <ondown>3</ondown>
+                        <onleft>1</onleft>
+                        <onright>1</onright>
+                </control>
+        </controls>
+</window>

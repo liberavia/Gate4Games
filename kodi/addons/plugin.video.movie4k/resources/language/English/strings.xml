@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- English language-Team URL: http://www.transifex.com/projects/p/XBMC-Main-Frodo/language/en/ -->
+<!-- Report language file syntax bugs at: http://trac.xbmc.org/ -->
+
+<strings>
+    <!-- Settings strings -->
+    <string id="30001">Enable logs for problem reporting</string>
+    <string id="30002">Create advancedsettings.xml file for optimal streaming</string>
+    <string id="30003">Use Alternate UK Friendly Proxy Site</string>
+    <string id="30004">Sort genrelists descending by IMDB</string>
+    <string id="30008">Show adult section</string>
+    <string id="30009">Language</string>
+    <string id="30010">English</string>
+    <string id="30011">German</string>
+    <string id="30012">All languages</string>
+    <string id="30013">URL of Proxy</string>
+    <string id="30014">Proxy User (Optional)</string>
+    <string id="30015">Proxy Password (Optional)</string>
+    
+    <!-- Main strings -->
+    <string id="30020">Movies</string>
+    <string id="30021">TV-Shows</string>
+    <string id="30022">XXX</string>
+    <string id="30023">Search</string>
+    <string id="30024">Preferences</string>
+    <string id="30025">Cinema Movies</string>
+    <string id="30026">Latest</string>
+    <string id="30027">All Movies</string>
+    <string id="30028">By Genre</string>
+    <string id="30029">Featured</string>
+    <string id="30030">Latest</string>
+    <string id="30031">All TV-Shows</string>
+    <string id="30032">By Genre</string>
+    <string id="30033">Quality:</string>
+    <string id="30034">Void</string>
+    <string id="30035">Ugly</string>
+    <string id="30036">Bad</string>
+    <string id="30037">OK</string>
+    <string id="30038">Good</string>
+    <string id="30039">Brilliant</string>
+    <string id="30040">Published at</string>
+    <string id="30041">Play this video from</string>
+    <string id="30042">This video is not playable</string>
+    <string id="30043">This hoster is not working at this moment</string>
+    <string id="30044">Please select other option</string>
+    <string id="30045">No valid links found</string>
+    <string id="30046">Error reading data from movie4k.to, please try again</string>
+    <string id="30047">Alternative link found at</string>
+    <string id="30048">Episode</string>
+    <string id="30049">Season</string>
+    <string id="30050">Description</string>
+    <string id="30051">Comments</string>
+    <string id="30052">Genre</string>
+    <string id="30053">Details for</string>
+    <string id="30054">Length</string>
+    <string id="30055">Land/Year</string>
+    <string id="30056">Regie</string>
+    <string id="30057">Actors</string>
+    <string id="30058">IMDB</string>
+    <string id="30059">Movies</string>
+    <string id="30060">See trailers for</string>
+    <string id="30061"></string>
+    <string id="30062">For age (Germany)</string>
+    <string id="30063">Not available</string>
+    <string id="30064">Pending rating</string>
+    <string id="30065">from</string>
+    <string id="30066">years</string>
+    <string id="30067">List of main actors</string>
+    
+    <!-- Languages -->
+    <string id="30100">English</string>
+    <string id="30101">German</string>
+    <string id="30102">Spanish</string>
+    <string id="30103">Greek</string>
+    <string id="30104">Turk</string>
+    <string id="30105">Russian</string>
+    <string id="30106">Japanese</string>
+    <string id="30107">French</string>
+    
+</strings>

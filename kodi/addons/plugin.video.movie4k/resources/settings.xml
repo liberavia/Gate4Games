@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <setting id="debug"                         type="bool" label="30001" default="false"/>
+    <setting id="force_advancedsettings"        type="bool" label="30002" default="false"/>
+    <setting id="use_proxy"                     type="bool" label="30003" default="false"/>
+    <setting id="proxy_url"                     type="text" label="30013" default=""/>
+    <setting id="proxy_user"                    type="text" label="30014" default=""/>
+    <setting id="proxy_password"                type="text" label="30015" default="" option="hidden"/>
+    <setting id="sort_imdb"                     type="bool" label="30004" default="true"/>
+    <setting id="show_adult"                    type="bool" label="30008" default="false"/>
+    <setting id="movie4k_language"              type="enum" label="30009" lvalues="30012|30010|30011" default="0"/>
+</settings>
