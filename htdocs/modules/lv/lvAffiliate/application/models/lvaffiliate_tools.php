@@ -280,6 +280,7 @@ class lvaffiliate_tools extends oxBase {
         foreach ( $this->_aLvRemoveFromName as $sRemoval ) {
             $sRemoval = (string)$sRemoval;
             $sNormalizedTitle = str_replace( $sRemoval, "", $sNormalizedTitle );
+            $sNormalizedTitle = trim( $sNormalizedTitle );
         }
         
         return $sNormalizedTitle;

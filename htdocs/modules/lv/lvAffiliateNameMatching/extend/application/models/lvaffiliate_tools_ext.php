@@ -59,10 +59,10 @@ class lvaffiliate_tools_ext extends lvaffiliate_tools_ext_parent {
         $sToName = $oDb->GetOne( $sQuery );
         
         if ( $sToName ) {
-            $sReturn = $sToName;
+            $sReturn = trim( $sToName );
         }
         else {
-            $sReturn = $sNormalizedTitle;
+            $sReturn = trim( $sNormalizedTitle );
         }
         
         return $sReturn;
