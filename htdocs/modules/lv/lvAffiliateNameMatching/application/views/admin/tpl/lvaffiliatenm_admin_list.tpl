@@ -29,6 +29,7 @@ window.onload = function ()
         <col width="3%">
         <col width="40%">
         <col width="40%">
+        <col width="7%">
 </colgroup>
 <tr class="listitem">
     <td valign="top" class="listfilter first" height="20">
@@ -57,9 +58,9 @@ window.onload = function ()
 </tr>
 
 <tr>
-    <td class="listheader first" height="15" width="30" align="center"><a href="Javascript:top.oxid.admin.setSorting( document.search, 'lvaffiliatenm', 'lvactive', 'asc');document.search.submit();" class="listheader">[{ oxmultilang ident="GENERAL_ACTIVTITLE" }]</a></td>
-    <td class="listheader" height="15">&nbsp;<a href="Javascript:top.oxid.admin.setSorting( document.search, 'lvaffiliatenm', 'lvfromname', 'asc');document.search.submit();" class="listheader">[{ oxmultilang ident="LV_FROM_NAME" }]</a></td>
-    <td class="listheader" height="15">&nbsp;<a href="Javascript:top.oxid.admin.setSorting( document.search, 'lvaffiliatenm', 'lvtoname', 'asc');document.search.submit();" class="listheader">[{ oxmultilang ident="LV_TO_NAME" }]</a></td>
+    <td class="listheader first" height="15" width="30" align="center"><a href="Javascript:top.oxid.admin.setSorting( document.search, 'lvaffiliatenm', 'lvactive', 'asc');document.search.submit();" class="listheader">[{oxmultilang ident="GENERAL_ACTIVTITLE"}]</a></td>
+    <td class="listheader" height="15">&nbsp;<a href="Javascript:top.oxid.admin.setSorting( document.search, 'lvaffiliatenm', 'lvfromname', 'asc');document.search.submit();" class="listheader">[{oxmultilang ident="LV_FROM_NAME"}]</a></td>
+    <td colspan="2" class="listheader" height="15">&nbsp;<a href="Javascript:top.oxid.admin.setSorting( document.search, 'lvaffiliatenm', 'lvtoname', 'asc');document.search.submit();" class="listheader">[{oxmultilang ident="LV_TO_NAME"}]</a></td>
 </tr>
 [{assign var="blWhite" value=""}]
 [{assign var="_cnt" value=0}]
