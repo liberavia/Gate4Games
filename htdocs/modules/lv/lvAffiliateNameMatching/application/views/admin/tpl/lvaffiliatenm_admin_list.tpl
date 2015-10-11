@@ -77,7 +77,7 @@ window.onload = function ()
         [{assign var="listclass" value=listitem4 }]
     [{ /if}]
         
-    <td valign="top" class="[{ $listclass}][{ if $listitem->lvaffiliatenm__fcactive->value == 1}] active[{/if}]" height="15"><div class="listitemfloating">&nbsp</a></div></td>
+    <td valign="top" class="[{ $listclass}][{ if $listitem->lvaffiliatenm__lvactive->value == 1}] active[{/if}]" height="15"><div class="listitemfloating">&nbsp</a></div></td>
     <td valign="top" class="[{ $listclass}]" height="15"><div class="listitemfloating">&nbsp;<a href="Javascript:top.oxid.admin.editThis('[{ $listitem->lvaffiliatenm__oxid->value}]');" class="[{ $listclass}]">[{ $listitem->lvaffiliatenm__lvfromname->value }]</a></div></td>
     <td valign="top" class="[{ $listclass}]"><div class="listitemfloating">&nbsp;<a href="Javascript:top.oxid.admin.editThis('[{ $listitem->lvaffiliatenm__oxid->value }]');" class="[{ $listclass}]">[{ $listitem->lvaffiliatenm__lvtoname->value }]</a></div></td>
 

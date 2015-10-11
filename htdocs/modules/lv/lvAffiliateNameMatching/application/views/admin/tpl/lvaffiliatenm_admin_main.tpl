@@ -7,9 +7,9 @@
 
 <form name="transfer" id="transfer" action="[{$oViewConf->getSelfLink()}]" method="post">
     [{ $oViewConf->getHiddenSid() }]
-    <input type="hidden" name="oxid" value="[{ $oxid }]">
+    <input type="hidden" name="oxid" value="[{$oxid}]">
     <input type="hidden" name="cl" value="lvaffiliatenm_admin_main">
-    <input type="hidden" name="editlanguage" value="[{ $editlanguage }]">
+    <input type="hidden" name="editlanguage" value="[{$editlanguage}]">
 </form>
 
       <table cellspacing="0" cellpadding="0" border="0" width="98%">
@@ -26,10 +26,10 @@
             <table cellspacing="0" cellpadding="0" border="0">
               <tr>
                 <td class="edittext" width="90">
-                [{ oxmultilang ident="GENERAL_ACTIVE" }]&nbsp;
+                [{oxmultilang ident="GENERAL_ACTIVE"}]&nbsp;
                 </td>
                 <td class="edittext">
-                    <input class="edittext" type="checkbox" name="editval[lvaffiliatenm__fcactive]" value='1' [{if $edit->lvaffiliatenm__fcactive->value == 1}]checked[{/if}] [{$readonly}]>
+                    <input class="edittext" type="checkbox" name="editval[lvaffiliatenm__lvactive]" value='1' [{if $edit->lvaffiliatenm__lvactive->value == 1}]checked[{/if}] [{$readonly}]>
                 </td>
               </tr>
               <tr>
