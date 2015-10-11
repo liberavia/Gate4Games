@@ -74,7 +74,7 @@ class lvaffiliatenm_admin_main extends oxAdminDetails {
         $aParams    = $oConfig->getRequestParameter( "editval");
 
         if ( !isset( $aParams['lvaffiliatenm__lvactive']))
-            $aParams['lvaffiliatenm__fcactive'] = 0;
+            $aParams['lvaffiliatenm__lvactive'] = 0;
 
         $oSession->setVariable( 'blRedirectError', false );
         $iEditLanguage = $oConfig->getRequestParameter("editlanguage");
