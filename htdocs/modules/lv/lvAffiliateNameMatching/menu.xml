@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-15"?>
 <OX>
     <OXMENU id="NAVIGATION_ESHOPADMIN">
-        <MAINMENU id="mxmainmenu">
-            <SUBMENU id="fcredirect" cl="fcredirect_admin" list="fcredirect_admin_list">
-                <TAB id="tbclfcredirect_main" cl="fcredirect_admin_main" />
-                <BTN id="fcredirect_new" />
+        <MAINMENU id="mxmanageprod">
+            <SUBMENU id="lvaffiliatenm" cl="lvaffiliatenm_admin" list="lvaffiliatenm_admin_list">
+                <TAB id="tbcllvaffiliatenm_main" cl="lvaffiliatenm_admin_main" />
+                <BTN id="lvaffiliatenm_new" />
             </SUBMENU>
         </MAINMENU>
     </OXMENU>

@@ -60,7 +60,8 @@ $aModule = array(
         'lvaffiliatenmbottomnaviitem.tpl'           => 'lv/lvAffiliateNameMatching/application/views/admin/tpl/lvaffiliatenmbottomnaviitem.tpl',
     ),
     'events'       => array(
-        
+        'onActivate'                                => 'lvaffiliatenmevents::onActivate',
+        'onDeactivate'                              => 'lvaffiliatenmevents::onDeactivate',        
     ),
     'blocks' => array(
     ),
