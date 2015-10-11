@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<OX>
+    <OXMENU id="NAVIGATION_ESHOPADMIN">
+        <MAINMENU id="mxmainmenu">
+            <SUBMENU id="fcredirect" cl="fcredirect_admin" list="fcredirect_admin_list">
+                <TAB id="tbclfcredirect_main" cl="fcredirect_admin_main" />
+                <BTN id="fcredirect_new" />
+            </SUBMENU>
+        </MAINMENU>
+    </OXMENU>
+</OX>

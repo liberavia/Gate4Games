@@ -34,6 +34,7 @@ $aLang = array(
     'SHOP_MODULE_aLvField2CategoryAssignment'           => 'Direkte Zuordnung zur Kategorie, sobald die ID des Artikels bekannt ist.',
     'SHOP_MODULE_aLvField2Attribute'                    => 'Werte des Datenarrays die als Attributswerte zugeordnet werden. Erfolgt nur, wenn ID des Artikels ermittelt wurde.',
     'SHOP_MODULE_aLvCatId2Attr2CatId'                   => 'Produkte einer Kategorie in Abhängigkeit von einem oder mehreren Attributen anderen Katregorien zuordnen',
+    'SHOP_MODULE_aLvRemoveFromName'                     => 'Liste der folgenden Begriffe aus dem Namen entfernen, bevor ein Name-Matching probiert wird',
     // group maintenance
     'SHOP_MODULE_GROUP_lvaffiliate_maintenance'         => 'Wartungsfunktionen',
     'SHOP_MODULE_blLvAffiliateResetActive'              => 'Automatischen Artikelreset aktivieren',

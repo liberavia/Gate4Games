@@ -42,8 +42,22 @@ class lvaffiliate_tools extends oxBase {
      * @var string
      */
     protected $_sLogFile = 'lvaffiliate_tools.log';
+    
+    /**
+     * List of removals for name normalization
+     * @var array
+     */
+    protected $_aLvRemoveFromName = array();
 
     
+    public function __construct() {
+        // loading configuration into object
+        $oConfig = $this->getConfig();
+        $this->_aLvRemoveFromName   = $oConfig->getConfigParam( 'aLvRemoveFromName' );
+        
+        parent::__construct();
+    }
+
     /**
      * Sets logfile and loglevel to be using
      * 
@@ -261,6 +275,12 @@ class lvaffiliate_tools extends oxBase {
         
         // general cleanup of hidden signs
         $sNormalizedTitle = preg_replace( '/[\x00-\x1F\x80-\xFF]/', '', $sNormalizedTitle );
+        
+        // get configured terms and remove them from normalized title
+        foreach ( $this->_aLvRemoveFromName as $sRemoval ) {
+            $sRemoval = (string)$sRemoval;
+            $sNormalizedTitle = str_replace( $sRemoval, "", $sNormalizedTitle );
+        }
         
         return $sNormalizedTitle;
     }
