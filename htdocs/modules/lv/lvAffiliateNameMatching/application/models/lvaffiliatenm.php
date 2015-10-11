@@ -23,7 +23,7 @@
  * @author Gate4Games
  * @author André Gregor-Herrmann
  */
-class lvaffiliatenm extends oxBase {
+class lvaffiliatenm extends oxI18n {
     /**
      * Object core table name
      *
