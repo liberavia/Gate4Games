@@ -32,5 +32,6 @@ $aLang = array(
     'LV_TO_NAME'                                        => 'To Name',
     'LV_NAMEMATCHING_MENUITEM'                          => 'Manage Products',
     'LV_NAMEMATCHING_MENUSUBITEM'                       => 'Name-Mappings',
+    'LV_TOOLTIPPS_NEW_MAPPING'                          => 'Add new Name-Mapping',
 );
 
