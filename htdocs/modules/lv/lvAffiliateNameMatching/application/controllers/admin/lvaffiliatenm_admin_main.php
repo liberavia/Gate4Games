@@ -23,7 +23,7 @@
  * @author Gate4Games
  * @author André Gregor-Herrmann
  */
-class lvaffiliatenm_admin_main extends lvaffiliatenm_admin_main_parent {
+class lvaffiliatenm_admin_main extends oxAdminDetails {
     
     /**
      * set the needed template
