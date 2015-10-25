@@ -46,7 +46,6 @@ class lvigdbevents  {
     public static function onDeactivate() {
         // add additional field in oxnews table
         self::removeIGDBFields();
-        self::addIGDBTable();
         self::generateViews();
     }
     
@@ -58,14 +57,15 @@ class lvigdbevents  {
      * @return void
      */
     public static function addIGDBFields() {
+        $oUtils             = oxRegistry::getUtils();
         $oDb                = oxDb::getDb();
         $sTable             = 'oxarticles';
         $aFields            = array( 'LVIGDB_ID'=>'INT(11)', 'LVIGDB_RELEASE_DATE'=>'DATE', 'LVIGDB_RATING'=>'DOUBLE', 'LVIGDB_RELEVANCE'=>'INT(11)', 'LVIGDB_LAST_UPDATED'=>'DATE' );
         $blFieldsExisting   = self::checkFieldsExisting( $sTable, $aFields );
-        
         if ( !$blFieldsExisting ) {
             foreach ( $aFields as $sField=>$sType ) {
-                $sQuery = "ALTER TABLE `".$sTable."` ADD `".$sField."` ".$sType." NOT NULL`";
+                $sQuery = "ALTER TABLE `".$sTable."` ADD `".$sField."` ".$sType." NOT NULL";
+                $oUtils->writeToLog( $sQuery."\n", 'lvigdb_install.log' );
                 $oDb->Execute( $sQuery );
             }
         }
@@ -101,6 +101,7 @@ class lvigdbevents  {
      * @return void
      */
     public static function addIGDBTable() {
+        $oUtils             = oxRegistry::getUtils();
         $oDb                = oxDb::getDb();
         $sQuery = "
             CREATE TABLE `lvigdb` 
@@ -122,6 +123,9 @@ class lvigdbevents  {
                 INDEX (`LVIGDB_NAME`)
             ) ENGINE = InnoDB;            
         ";
+        
+        $oUtils->writeToLog( $sQuery."\n", 'lvigdb_install.log' );
+        $oDb->Execute( $sQuery );
     }
 
     

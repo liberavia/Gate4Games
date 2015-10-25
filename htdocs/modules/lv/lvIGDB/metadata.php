@@ -45,7 +45,7 @@ $aModule = array(
         // models
         'lvigdb'                            => 'lv/lvIGDB/application/models/lvigdb.php',
         // core
-        'lvigdbevents'                      => 'lv/lvNews/core/lvigdbevents.php',
+        'lvigdbevents'                      => 'lv/lvIGDB/core/lvigdbevents.php',
     ),
     'events'       => array(
         'onActivate'                        => 'lvigdbevents::onActivate',
