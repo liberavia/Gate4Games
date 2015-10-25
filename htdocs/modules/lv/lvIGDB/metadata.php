@@ -54,7 +54,8 @@ $aModule = array(
     'templates' => array(
     ),
     'blocks' => array(
-        array( 'template' => 'productmain.tpl',           'block'=>'details_productmain_ratings',            'file'=>'extend/application/views/blocks/block_details_productmain_ratings.tpl' ),
+        array( 'template' => 'page/details/inc/productmain.tpl',           'block'=>'details_productmain_ratings',              'file'=>'extend/application/views/blocks/block_details_productmain_ratings.tpl' ),
+        array( 'template' => 'layout/base.tpl',                            'block'=>'base_style',                               'file'=>'extend/application/views/blocks/block_base_style.tpl' ),
     ),
     'settings' => array(
         array( 
