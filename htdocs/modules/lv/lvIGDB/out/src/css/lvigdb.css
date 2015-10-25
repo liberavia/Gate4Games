@@ -23,6 +23,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     color: #27AE60;
     font-weight: normal;
     font-size: 14px !important;
+    margin-bottom: 10px;
+}
+
+#lvigdb_rating_container a {
+    color: #27AE60;
+    font-weight: normal;
+    font-size: 14px !important;
+    text-decoration: none;
 }
 
 #lvigdb_rating_result {

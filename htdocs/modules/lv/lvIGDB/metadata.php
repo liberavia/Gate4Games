@@ -1,6 +1,6 @@
 <?php
 /**
- * News extension module
+ * IGDB.com extension module
  *
  * This module is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -12,8 +12,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with OXID eSales PayPal module.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License.
+ * If not, see <http://www.gnu.org/licenses/>.
  *
  * @link      http://www.gate4games.com
  * @copyright (C) André Gregor-Herrmann
@@ -40,6 +40,7 @@ $aModule = array(
     'url'          => 'http://www.gate4games.com',
     'email'        => 'info@gate4games.com',
     'extend'       => array(
+        'oxarticle'                         => 'lv/lvIGDB/extend/application/models/lvigdb_oxarticle',
     ),
     'files' => array(
         // models
