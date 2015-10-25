@@ -25,7 +25,7 @@ $sLangName = 'Deutsch';
 
 $aLang = array(
     'charset'                                           => 'UTF-8',
-    'LV_IGDB_RATING'                                    => 'Bewertung von IGDB.com',
+    'LV_IGDB_RATING'                                    => 'Bewertung auf IGDB.com',
     'LVIGDB_RATING'                                     => 'IGDB Bewertung',
     'LVIGDB_RELEVANCE'                                  => 'Relevanz',
     'LVIGDB_RELEASE_DATE'                               => 'Release-Datum',

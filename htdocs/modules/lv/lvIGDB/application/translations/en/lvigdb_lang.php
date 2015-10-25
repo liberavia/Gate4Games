@@ -25,7 +25,7 @@ $sLangName = 'English';
 
 $aLang = array(
     'charset'                                           => 'UTF-8',
-    'LV_IGDB_RATING'                                    => 'Rating of IGDB.com',
+    'LV_IGDB_RATING'                                    => 'Rating on IGDB.com',
     'LVIGDB_RATING'                                     => 'IGDB Rating',
     'LVIGDB_RELEVANCE'                                  => 'Relevance',
     'LVIGDB_RELEASE_DATE'                               => 'Release-Date',
