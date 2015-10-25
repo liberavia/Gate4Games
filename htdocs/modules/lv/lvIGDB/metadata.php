@@ -76,6 +76,13 @@ $aModule = array(
             'value' => array( 
             ) 
         ),
+        array( 
+            'group' => 'lvigdbmain',      
+            'name' => 'aLvIGDBCleanupTerms',       
+            'type' => 'arr',  
+            'value' => array( 
+            ) 
+        ),
     )
 );
  

@@ -109,6 +109,13 @@ class lvigdb extends oxBase {
      */
     protected $_dBaseRatingForUpcomingGames = 5.5;
     
+    /**
+     * Terms that are lousy to search for
+     * @var array
+     */
+    protected $_aCleanupSearchTerms = array();
+    
+    
     
 
     /**
@@ -119,6 +126,7 @@ class lvigdb extends oxBase {
         $this->_oLvConfig               = $this->getConfig();
         $this->_iLvIGDBRefreshDayRatio  = (int)$this->_oLvConfig->getConfigParam( 'sLvIGDBRefreshDayRatio' );
         $this->_sLvIgdbApiAuthToken     = trim( $this->_oLvConfig->getConfigParam( 'sLvIGDBAuthToken' ) );
+        $this->_aCleanupSearchTerms     = $this->_oLvConfig->getConfigParam( 'aLvIGDBCleanupTerms' );
         $this->_iLvIgdbRequestCounter   = 0;
         
         // try to get affiliate tools if available
@@ -141,8 +149,7 @@ class lvigdb extends oxBase {
      */
     public function lvIgdbImportData() {
         $this->_lvSetAffectedArticles();
-        $this->_lvRequestAndUpdateBasicData();
-        $this->_lvRequestAndUpdateDetailsData();
+        $this->_lvRequestAndUpdateData();
     }
     
     
@@ -165,13 +172,9 @@ class lvigdb extends oxBase {
             FROM ".$sArticlesTable."
             WHERE
                 OXPARENTID='' AND
-                (
-                    LVIGDB_ID='' OR 
-                    LVIGDB_LAST_UPDATED <= '".$sMinLastDate."'
-                )
+                LVIGDB_LAST_UPDATED <= '".$sMinLastDate."'
             LIMIT ".$this->_iLvIgdbRequestMaxCount."
         ";
-        
         $oRs = $this->_oLvDb->Execute( $sQuery );
         
         if ( $oRs != false && $oRs->recordCount() > 0 ) {
@@ -189,36 +192,12 @@ class lvigdb extends oxBase {
                 
                 $this->_aAffectedArticles[] = $aArticleElement;
                 
-                $oRs->moveNex();
+                $oRs->moveNext();
             }
         }
     }
     
 
-    /**
-     * Checks lvigdb table for information that should be updated.
-     * 
-     * 
-     * @param void
-     * @return void
-     */
-    protected function _lvRequestAndUpdateDetailsData() {
-        foreach ( $this->_aAffectedArticles as $iIndex=>$aArticle ) {
-            $sOxid          = $aArticle['OXID'];
-            $sTitleToSearch = trim( $aArticle['OXTITLE'] );
-            $iLvIgdbId      = $aArticle['LVIGDBID'];
-            
-            if ( is_int( $iLvIgdbId ) ) {
-                $aResponse =  $this->_lvRequestIgdbApi( 'detail', (string)$iIndex );
-                if ( $aResponse && is_array( $aResponse ) && isset( $aResponse['game'] ) && count( $aResponse['game'] ) > 0 ) {
-                    $aGameDetails = $aResponse['game'];
-                    $this->_lvIgdbUpdateDetails( (string)$iLvIgdbId, $sOxid, $aGameDetails );
-                }
-            }
-        }
-    }
-    
-    
     /**
      * Update all information available
      * 
@@ -234,7 +213,7 @@ class lvigdb extends oxBase {
         $sSummary               = ( isset( $aGameDetails['summary'] ) ) ? trim( $aGameDetails['summary'] ): "";
         $sSummary               = $this->_oLvDb->quote( $sSummary );
         $sCover                 = ( isset( $aGameDetails['cover']['url'] ) ) ? trim( $aGameDetails['cover']['url'] ): "";;
-        $sCover                 = str_replace( $sCover, "_thumb.png", "_big.png" );
+        $sCover                 = str_replace( "_thumb.png", "_big.png", $sCover );
         $sCompanies             = ( isset( $aGameDetails['companies'] ) ) ? serialize( $aGameDetails['companies'] ): "";
         $sCompanies             = $this->_oLvDb->quote( $sCompanies );
         $sScreenshots           = ( isset( $aGameDetails['screenshots'] ) ) ? serialize( $aGameDetails['screenshots'] ): "";
@@ -354,19 +333,18 @@ class lvigdb extends oxBase {
 
     
     /**
-     * Perfoms searches for the given articles and update its basic information, also add the basic information into
-     * lvigdb table
+     * Perfoms searches for the given articles and update its information, basic and details as well
      * 
      * @param void
      * @return void
      */
-    protected function _lvRequestAndUpdateBasicData() {
+    protected function _lvRequestAndUpdateData() {
         foreach ( $this->_aAffectedArticles as $iIndex=>$aArticle ) {
             $sOxid          = $aArticle['OXID'];
-            $sTitleToSearch = trim( $aArticle['OXTITLE'] );
+            $sTitleToSearch = trim( $aArticle['TITLE'] );
             $aResponse =  $this->_lvRequestIgdbApi( 'search', $sTitleToSearch );
+            $blMatch = false;
             if ( $aResponse && is_array( $aResponse ) && isset( $aResponse['games'] ) && count( $aResponse['games'] ) > 0 ) {
-                $blMatch = false;
                 foreach ( $aResponse['games'] as $aGame ) {
                     if ( $blMatch ) continue;
                     
@@ -374,22 +352,57 @@ class lvigdb extends oxBase {
                         $iLvIgdbId      = (int)$aGame['id'];
                         $sTitleFound    = trim( $aGame['name'] );
                         
-                        // add gameid to global array
-                        $this->_aAffectedArticles[$iIndex]['LVIGDBID'] = $iLvIgdbId;
-                        
                         if ( $this->_blAffiliateToolsAvailable ) {
                             $sTitleFound    = $this->_oAffiliateTools->lvGetNormalizedName( $sTitleFound );
                             $aGame['name']  = $sTitleFound;
                         }
-                        
-                        if ( $sTitleToSearch == $sTitleFound ) {
+                        $sTitleToSearch = $this->_lvCleanSearchTerm( $sTitleToSearch );
+                        if ( strtolower( $sTitleToSearch ) == strtolower( $sTitleFound ) ) {
                             $blMatch = true;
+                            // add gameid to global array
+                            $this->_aAffectedArticles[$iIndex]['LVIGDBID'] = $iLvIgdbId;
                             $this->_lvUpdateIgdbBasicInfo( $sOxid, $aGame );
+                            $aDetailsResponse =  $this->_lvRequestIgdbApi( 'details', (string)$iLvIgdbId );
+                            if ( $aDetailsResponse && is_array( $aDetailsResponse ) && isset( $aDetailsResponse['game'] ) && count( $aDetailsResponse['game'] ) > 0 ) {
+                                $aGameDetails = $aDetailsResponse['game'];
+                                $this->_lvIgdbUpdateDetails( (string)$iLvIgdbId, $sOxid, $aGameDetails );
+                            }
                         }
                     }
                 }
             }
+            else if ( $aResponse && is_array( $aResponse ) && isset( $aResponse['error'] ) ) {
+                exit( $aResponse['error']."\n" ); 
+            }
+            
+            if ( !$blMatch ) {
+                // if nothing has been found mark at least the last updated statement so it won't be requested over and over again
+                $sQuery = "
+                    UPDATE oxarticles SET
+                        LVIGDB_LAST_UPDATED = NOW()
+                    WHERE 
+                        OXID = '".$sOxid."'
+                    LIMIT 1
+                ";
+                $this->_oLvDb->Execute( $sQuery );
+            }
         }
+    }
+    
+    
+    /**
+     * Returns cleaned search term
+     * 
+     * @param string $sTitleToSearch
+     * @return string
+     */
+    protected function _lvCleanSearchTerm( $sTitleToSearch ) {
+        foreach ( $this->_aCleanupSearchTerms as $sTermToSearch ) {
+            $sTitleToSearch = str_replace( $sTermToSearch, "", $sTitleToSearch );
+            $sTitleToSearch = trim( $sTitleToSearch );
+        }
+        
+        return $sTitleToSearch;
     }
     
     
@@ -410,10 +423,10 @@ class lvigdb extends oxBase {
         $sQuery = "
             UPDATE oxarticles SET
                 LVIGDB_ID = '".$sLvIgdbId."',
-                LVIGDB_RELEASE_DATE = '".$sLvIgdbReleaseDate."',
-                LVIGDB_LAST_UPDATED = NOW()
+                LVIGDB_RELEASE_DATE = '".$sLvIgdbReleaseDate."'
             WHERE 
                 OXID = '".$sOxid."'
+            LIMIT 1
         ";
         
         $this->_oLvDb->Execute( $sQuery );
@@ -438,10 +451,7 @@ class lvigdb extends oxBase {
                 ".$sLvIgdbSlug.",
                 '".$sLvIgdbReleaseDate."'
             )
-            ON DUPLICATE KEY UPDATE ".$this->_sLvIgdbTable." SET
-                LVIGDB_SLUG = ".$sLvIgdbSlug."
-            WHERE 
-                LVIGDBID = '".$sLvIgdbId."'
+            ON DUPLICATE KEY UPDATE  LVIGDB_SLUG = ".$sLvIgdbSlug."
         ";
         
         $this->_oLvDb->Execute( $sQuery );
@@ -461,15 +471,14 @@ class lvigdb extends oxBase {
         if ( $sType == 'search' ) {
             $sRequest .= "search?q=".urlencode( $sRequestString );
         }
-        else if ( $sTypem == 'details' && is_numeric( $sRequestString ) ) {
-            $sRequest .= (int)$sRequestString;
+        else if ( $sType == 'details' && is_numeric( $sRequestString ) ) {
+            $sRequest .= $sRequestString;
         }
         else {
             // unknown request type
             $mReturn = false;
             $blPerformRequest = false;
         }
-        
 
         if ( $blPerformRequest && $this->_iLvIgdbRequestCounter <= $this->_iLvIgdbRequestMaxCount ) {
             $resCurl = curl_init( $sRequest );

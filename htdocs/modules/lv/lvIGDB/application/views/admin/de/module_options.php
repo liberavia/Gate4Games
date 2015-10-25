@@ -30,5 +30,6 @@ $aLang = array(
     'SHOP_MODULE_sLvIGDBAuthToken'                      => 'Authentifizierungstoken für die API',
     'SHOP_MODULE_sLvIGDBRefreshDayRatio'                => 'Tage nach denen die Informationen zu Games erneut abgefragt werden',
     'SHOP_MODULE_aLvIGDBPlatforms'                      => 'Liste der Plattformen, die berücksichtigt werden sollen',
+    'SHOP_MODULE_aLvIGDBCleanupTerms'                   => 'Liste der Begriffe die aus Suchanfragen ausgeschlossen werden sollen.',
 );
 

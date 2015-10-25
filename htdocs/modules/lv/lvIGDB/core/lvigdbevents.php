@@ -104,7 +104,7 @@ class lvigdbevents  {
         $oUtils             = oxRegistry::getUtils();
         $oDb                = oxDb::getDb();
         $sQuery = "
-            CREATE TABLE `lvigdb` 
+            CREATE TABLE IF NOT EXISTS `lvigdb` 
             ( 
                 `LVIGDBID` INT(11) NOT NULL , 
                 `LVIGDB_NAME` VARCHAR(255) NOT NULL , 
