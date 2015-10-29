@@ -37,17 +37,38 @@
             <website>http://gate4games.com/</website>
         </extension>
     </addon>
-    <addon id="plugin.video.movie4k" name="Movie4k.to" version="1.5.8" provider-name="Liberavia">
+    <addon id="plugin.video.movie4k" name="Movie4K.to" version="1.5.8" provider-name="liberavia based on work of eleazarcoding">
+        <requires>
+            <import addon="xbmc.python" version="2.1.0"/>
+            <import addon="script.module.urlresolver"  version="2.1.2"/>
+        </requires>
         <extension point="xbmc.python.pluginsource" library="default.py">
             <provides>video</provides>
         </extension>
         <extension point="xbmc.addon.metadata">
-            <platform>all</platform>
-            <summary lang="de">Movie4K.to Videostreams</summary>
-            <summary lang="en">Movie4K.to Videostreaming</summary>
-            <language>de</language>
-            <description lang="de">Movie4K/Movie2K ist eine der besten Seiten um Filme über das Internet zu schauen. Einfach einen Film wählen und ohne Registration bequem schauen.</description>
+            <summary lang="en">Movie4K.to</summary>
+            <summary lang="de">Movie4K.to</summary>
             <description lang="en">Movie4K/Movie2K is one of the best and easiest free movies websites to watch movies on the internet. Simply select the movie of your choice for free and without registration.</description>
+            <description lang="de">Movie4K/Movie2K ist eine der besten Seiten um Filme über das Internet zu schauen.</description>
+            <platform>all</platform>
+            <forum>http://www.xbmchub.com/forums/eleazars-xbmc-add-repository/</forum>
+            <website>http://www.xbmchub.com/</website>
+        </extension>
+    </addon>
+    <addon id="script.module.urlresolver" name="URLResolver" version="2.9.0" provider-name="Eldorado">
+        <requires>
+            <import addon="xbmc.python" version="2.1.0" />
+            <import addon="script.module.t0mm0.common" version="2.0.0"/>
+            <import addon="script.module.simplejson" version="3.3.0"/>
+            <import addon="plugin.video.youtube" version="4.4.7"/>
+        </requires>
+        <extension point="xbmc.python.module" library="lib" />
+        <extension point="xbmc.addon.metadata">
+            <platform>all</platform>
+            <summary lang="en">Resolve common video host URL's to be playable in XBMC/Kodi.</summary>
+            <summary lang="de">Auflösen von URLs der bekannten Videohoster</summary>
+            <description lang="en">Resolve common video host URL's to be playable in XBMC/Kodi, simplify addon development of video plugins requiring multi video hosts.</description>    
+            <description lang="de">Mit dieser Bibliothek erhalten darauf aufbauende Addons die Möglichkeit Video-URLs von den bekannten Hostern aufzulösen.</description>    
         </extension>
     </addon>
 </addons>
