@@ -37,7 +37,7 @@
             <website>http://gate4games.com/</website>
         </extension>
     </addon>
-    <addon id="plugin.video.movie4k" name="Movie4K.to" version="1.5.8" provider-name="liberavia based on work of eleazarcoding">
+    <addon id="plugin.video.movie4k" name="Movie4K.to" version="1.5.9" provider-name="liberavia based on work of eleazarcoding">
         <requires>
             <import addon="xbmc.python" version="2.1.0"/>
             <import addon="script.module.urlresolver"  version="2.1.2"/>
