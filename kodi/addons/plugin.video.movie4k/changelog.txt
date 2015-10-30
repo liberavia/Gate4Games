@@ -1,3 +1,8 @@
+v1.5.9
+- Fixed nowvideo
+- Improved titles of movies and tv-show while playing
+- Passed fanart and thumbnails through the whole process for not breaking UI-Experience
+
 v1.5.4 - 1.5.8
 - Adding simple version of get_body_and_headers for using them with api call
 - Fixing trailer functionality

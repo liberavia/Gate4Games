@@ -566,11 +566,12 @@ def tvshow_detailspage(params):
             episodenr += 1
             url = urlparse.urljoin(params.get("url"),episodeurl)
             title=LANG_SEASON + " " + str(season) + ", " + LANG_EPISODE + " " + str(episodenr)
-            thumbnail = ""
+            tvshow_title = params.get("title")
+            thumbnail = params.get("thumbnail")
             plot = ""
             plugintools.log("movie4k.tvshow_seasons title="+title+", url="+url+", thumbnail="+thumbnail)
 
-            plugintools.add_item( action="single_tvshow", title=title, url=url, thumbnail=thumbnail , plot=plot, fanart=thumbnail , folder=True )
+            plugintools.add_item( action="single_tvshow", title=title, url=url, thumbnail=thumbnail , plot=plot, fanart=thumbnail , folder=True, extra=tvshow_title )
             
 # TV Show seasons
 def tvshow_seasons(params):
@@ -734,14 +735,16 @@ def single_tvshow(params):
     for scrapedurl, hoster_name in matches:
         url = urlparse.urljoin(params.get("url"),scrapedurl)
         title = hoster_name.strip()
-        thumbnail = ""
+        season_episode = params.get("title")
+        standard_title = params.get("extra")
+        thumbnail = params.get("thumbnail")
         plot = ""
         plugintools.log("movie4k.single_tvshow title="+title+", url="+url+", thumbnail="+thumbnail)
 
         for hoster in HOSTERS_ALLOWED:
             #plugintools.log("<<<<<"+hoster+">>>>> IN <<<<<<"+title.lower()+">>>>>>")
             if hoster in title.lower():
-                plugintools.add_item( action="play", title=LANG_PUBLISHED_AT+" "+title, url=url, thumbnail=thumbnail , plot=plot, fanart=thumbnail , folder=True )
+                plugintools.add_item( action="play", title=LANG_PUBLISHED_AT+" "+title, url=url, thumbnail=thumbnail , plot=plot, fanart=thumbnail , folder=True, extra=standard_title+" "+season_episode )
                 found = True
 
     if not found:
@@ -797,8 +800,10 @@ def single_movie(params):
     pattern += '<a href="[^"]+" style="color:#000000;">([^>]+)</a[^<]+'
     details_title = plugintools.find_single_match(body,pattern)
     details_title = details_title.strip()
+    standard_title = details_title
     trailer_title = LANG_SEARCH_TRAILERS_FOR_1 + " " + details_title + " " + LANG_SEARCH_TRAILERS_FOR_2
     details_title = LANG_DETAILS_TITLE_PREFIX +  " " + details_title
+    
     
     # movie image 
     '''
@@ -938,14 +943,14 @@ def single_movie(params):
         
         url = urlparse.urljoin(params.get("url"),scrapedurl)
         title = server_name.strip().replace("&nbsp;","")+" (IMDB:"+imdb_rating+") ("+LANG_QUALITY+quality+") ("+date_added+")"
-        thumbnail = ""
+        thumbnail = details_image
         plot = ""
         plugintools.log("movie4k.single_movie title="+title+", url="+url+", thumbnail="+thumbnail)
 
         for hoster in HOSTERS_ALLOWED:
             #plugintools.log("<<<<<"+hoster+">>>>> IN <<<<<<"+title.lower()+">>>>>>")
             if hoster in title.lower():
-                plugintools.add_item( action="play", title=LANG_PUBLISHED_AT+" "+title, url=url, thumbnail=thumbnail , plot=plot, fanart=thumbnail , folder=True )
+                plugintools.add_item( action="play", title=LANG_PUBLISHED_AT+" "+title, url=url, thumbnail=thumbnail , plot=plot, fanart=thumbnail , folder=True, extra=standard_title )
                 found = True
 
     '''
@@ -983,7 +988,7 @@ def single_movie(params):
         for hoster in HOSTERS_ALLOWED:
             #plugintools.log("<<<<<"+hoster+">>>>> IN <<<<<<"+title.lower()+">>>>>>")
             if hoster in title.lower():
-                plugintools.add_item( action="play", title=LANG_PUBLISHED_AT+" "+title, url=url, thumbnail=thumbnail , plot=plot, fanart=FANART , folder=True )
+                plugintools.add_item( action="play", title=LANG_PUBLISHED_AT+" "+title, url=url, thumbnail=thumbnail , plot=plot, fanart=FANART , folder=True, extra=standard_title )
                 found = True
                 
                 
@@ -1131,6 +1136,8 @@ def play(params):
         if url!="":
             if url.startswith("http://www.nowvideo.sx/video/"):
                 url = url.replace("http://www.nowvideo.sx/video/","http://embed.nowvideo.eu/embed.php?v=")+"&width=600&height=480"
+            elif url.startswith("http://www.nowvideo.to/video/"):
+                url = url.replace("http://www.nowvideo.to/video/","http://embed.nowvideo.eu/embed.php?v=")+"&width=600&height=480"
 
             from urlresolver.types import HostedMediaFile
             hosted_media_file = HostedMediaFile(url=url)
@@ -1141,7 +1148,7 @@ def play(params):
                 plugintools.log("movie4k.play media_url="+repr(media_url))
 
                 if media_url:
-                    plugintools.add_item( action="playable", title=LANG_PLAY_VIDEO_FROM+" [B]"+hosted_media_file.get_host()+"[/B] ["+get_filename_from_url(media_url)[-4:]+"]", url=media_url, isPlayable=True, folder=False )
+                    plugintools.add_item( action="playable", title=extraparam+" [B]("+hosted_media_file.get_host()+")[/B] ["+get_filename_from_url(media_url)[-4:]+"]", url=media_url, isPlayable=True, folder=False )
                 else:
                     plugintools.add_item( action="play", title=LANG_VIDEO_NOT_PLAYABLE, isPlayable=True, folder=False )
             except:
