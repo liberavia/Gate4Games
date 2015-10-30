@@ -85,6 +85,12 @@ $aModule = array(
             'value' => array( 
             ) 
         ),
+        array( 
+            'group' => 'lvigdbmain',      
+            'name' => 'sLvIGDBReleaseDateAttribute',       
+            'type' => 'str',  
+            'value' => ''
+        ),
     )
 );
  

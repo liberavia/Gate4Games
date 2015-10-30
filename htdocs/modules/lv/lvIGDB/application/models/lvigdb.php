@@ -92,6 +92,12 @@ class lvigdb extends oxBase {
     protected $_sLvIgdbApiAuthToken = '';
 
     /**
+     * Configured attribute id for release date
+     * @var string
+     */
+    protected $_sLvIGDBReleaseDateAttribute = '';
+
+    /**
      * Base URL for API-Calls
      * @var string
      */
@@ -122,12 +128,13 @@ class lvigdb extends oxBase {
      * Init neeeded objects that will be used in this class
      */
     public function __construct() {
-        $this->_oLvDb                   = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
-        $this->_oLvConfig               = $this->getConfig();
-        $this->_iLvIGDBRefreshDayRatio  = (int)$this->_oLvConfig->getConfigParam( 'sLvIGDBRefreshDayRatio' );
-        $this->_sLvIgdbApiAuthToken     = trim( $this->_oLvConfig->getConfigParam( 'sLvIGDBAuthToken' ) );
-        $this->_aCleanupSearchTerms     = $this->_oLvConfig->getConfigParam( 'aLvIGDBCleanupTerms' );
-        $this->_iLvIgdbRequestCounter   = 0;
+        $this->_oLvDb                       = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
+        $this->_oLvConfig                   = $this->getConfig();
+        $this->_iLvIGDBRefreshDayRatio      = (int)$this->_oLvConfig->getConfigParam( 'sLvIGDBRefreshDayRatio' );
+        $this->_sLvIgdbApiAuthToken         = trim( $this->_oLvConfig->getConfigParam( 'sLvIGDBAuthToken' ) );
+        $this->_aCleanupSearchTerms         = $this->_oLvConfig->getConfigParam( 'aLvIGDBCleanupTerms' );
+        $this->_sLvIGDBReleaseDateAttribute = trim( $this->_oLvConfig->getConfigParam( 'sLvIGDBReleaseDateAttribute' ) );
+        $this->_iLvIgdbRequestCounter       = 0;
         
         // try to get affiliate tools if available
         try {
@@ -207,7 +214,7 @@ class lvigdb extends oxBase {
      */
     protected function _lvIgdbUpdateDetails( $sLvIgdbId, $sOxid, $aGameDetails ) {
         $sSlug                  = $this->_oLvDb->quote( trim( $aGameDetails['slug'] ) );
-        $sReleaseDate           = $aGameDetails['release_date'];
+        $sReleaseDate           = ( isset( $aGameDetails['release_date'] ) ) ? trim( $aGameDetails['release_date'] ) : '';
         $iReleaseTime           = strtotime( $sReleaseDate );
         $iNowTime               = time();
         $sSummary               = ( isset( $aGameDetails['summary'] ) ) ? trim( $aGameDetails['summary'] ): "";
@@ -223,9 +230,9 @@ class lvigdb extends oxBase {
         
         $dRating                = ( isset( $aGameDetails['rating'] ) ) ? round( (double)$aGameDetails['rating'], 2 ): 0.0;
         if ( $dRating == 0.0 && $iReleaseTime > $iNowTime ) {
-            $dRating            = $this->_dBaseRatingForUpcomingGames;
+            $dFakeRating            = $this->_dBaseRatingForUpcomingGames;
             if ( isset( $aGameDetails['release_dates'] ) ) {
-                $dRating        += (double)count( $aGameDetails['release_dates'] );
+                $dFakeRating        += (double)count( $aGameDetails['release_dates'] );
             }
         }
         
@@ -276,7 +283,8 @@ class lvigdb extends oxBase {
 
         $this->_oLvDb->Execute( $sQuery );
         
-        $iRelevance = $this->_lvCalcRelevance( $dRating, $sReleaseDate );
+        $dRelevanceRating = ( isset( $dFakeRating ) && $dFakeRating > 0 ) ? $dFakeRating: $dRating;
+        $iRelevance = $this->_lvCalcRelevance( $dRelevanceRating, $sReleaseDate, $sOxid );
         
         // update oxarticles
         $sQuery = "
@@ -291,7 +299,99 @@ class lvigdb extends oxBase {
         
         $this->_oLvDb->Execute( $sQuery );
         
+        // set release date for all variants if set
+        if ( $this->_sLvIGDBReleaseDateAttribute && $sReleaseDate ) {
+            $this->_lvSetReleaseDateAttribute( $sOxid, $sReleaseDate );
+        }
+        
+        // check cover available of all variants an set this cover if not
+        if ( $sCover ) {
+            $this->_lvCheckAndSetMissingCover( $sOxid, $sCover );
+        }
+        
+        // check and set summary for those variants missing it
+        if ( $sSummary ) {
+            /**
+             * @todo
+             */
+        }
+        
+        /**
+         * @todo screenshots, videos, genres (inlcuding category assignments)
+         */
+        
     }
+    
+    
+    /**
+     * Set release date attribute to given value
+     * 
+     * @param string $sOxid
+     * @param string $sReleaseDate
+     * @return void
+     */
+    protected function _lvSetReleaseDateAttribute( $sOxid, $sReleaseDate ) {
+        $aOxids = $this->_lvGetVariantIds( $sOxid );
+        
+        foreach ( $aOxids as $sCurrentOxid ) {
+            $sDeleteQuery = "DELETE FROM oxobject2attribute WHERE OXOBJECTID='".$sCurrentOxid."' AND OXATTRID='".$this->_sLvIGDBReleaseDateAttribute."'";
+            $this->_oLvDb->Execute( $sDeleteQuery );
+            $sNewOxid = oxRegistry::get( 'oxUtilsObject' )->generateUId();
+            
+            $sInsertQuery = "
+                INSERT INTO oxobject2attribute
+                (
+                    OXID,
+                    OXOBJECTID,
+                    OXATTRID,
+                    OXVALUE
+                    
+                )
+                VALUES
+                (
+                    '".$sNewOxid."',
+                    '".$sCurrentOxid."',
+                    '".$this->_sLvIGDBReleaseDateAttribute."',
+                    '".$sReleaseDate."'
+                )
+            ";
+            
+            $this->_oLvDb->Execute( $sInsertQuery );
+        }
+    }
+    
+    
+    /**
+     * Checks if coverimages are available and sets them
+     * 
+     * @param string $sOxid
+     * @param string $sCover
+     * @return void
+     */
+    protected function _lvCheckAndSetMissingCover( $sOxid, $sCover ) {
+        $aOxids = $this->_lvGetVariantIds( $sOxid );        
+        
+        foreach ( $aOxids as $sCurrentOxid ) {
+            $sArticlesTable = getViewName( 'oxarticles' );
+            $sQuery = "SELECT OXPIC1 FROM ".$sArticlesTable." WHERE OXID='".$sCurrentOxid."' LIMIT 1";
+            
+            $sPic = $this->_oLvDb->GetOne( $sQuery );
+            
+            $blReplace = false;
+            if ( !$sPic || strtolower( $sPic != 'nopic.jpg' ) ) {
+                $blReplace = true;
+            }
+            else if ( strpos( 'http://', $sPic ) !== false &&  $this->_lvCheckIsAvailableUrl( $sPic ) == false ) {
+                $blReplace = true;
+            }
+            
+            if ( $blReplace ) {
+                $sQuery = "UPDATE oxarticles SET OXPIC1='".$sCover."' WHERE OXID='".$sCurrentOxid."' LIMIT 1";
+                $this->_oLvDb->Execute( $sQuery );
+            }
+        }
+    }
+            
     
     
     /**
@@ -299,10 +399,17 @@ class lvigdb extends oxBase {
      * 
      * @param double $dRating
      * @param string $sReleaseDate
+     * @param string $sOxid
      */
-    protected function _lvCalcRelevance( $dRating, $sReleaseDate ) {
+    protected function _lvCalcRelevance( $dRating, $sReleaseDate, $sOxid ) {
         // the base of all is the user rating
         $dBaseValue         = $dRating * 100;
+        
+        // relevance bonus for amount of partners provide offers for title
+        $iAmountOffers = $this->_lvGetAmountOffers( $sOxid );
+        if ( $iAmountOffers > 0 ) {
+            $dBaseValue     += ( $iAmountOffers * 10 );
+        }
         
         // the older a title is the more it will lower the rating, so newer titles have the chance to compete
         $iTimeReleaseDate   = strtotime( $sReleaseDate );
@@ -329,6 +436,46 @@ class lvigdb extends oxBase {
         }
         
         return $iRelevance;
+    }
+    
+    
+    /**
+     * Method returns amount of available offers (variants) for given title
+     * 
+     * @param string $sOxid
+     * @return int
+     */
+    protected function _lvGetAmountOffers( $sOxid ) {
+        $sArticlesTable = getViewName( 'oxarticles' );
+        $sQuery         = "SELECT count(*) FROM ".$sArticlesTable." WHERE OXPARENTID='".$sOxid."' AND OXACTIVE='1'";
+        $iAmountOffers  = (int)$this->_oLvDb->GetOne( $sQuery );
+        
+        return $iAmountOffers;
+    }
+
+    /**
+     * Method returns oxids of parent
+     * 
+     * @param string $sOxid
+     * @return array
+     */
+    protected function _lvGetVariantIds( $sOxid ) {
+        $sArticlesTable = getViewName( 'oxarticles' );
+        $aOxids         = array();
+        $sQuery         = "SELECT OXID FROM ".$sArticlesTable." WHERE OXPARENTID='".$sOxid."' AND OXACTIVE='1'";
+        
+        $oRs = $this->_oLvDb->Execute( $sQuery );
+        
+        if ( $oRs != false && $oRs->recordCount() > 0 ) { 
+            while ( !$oRs->EOF ) {
+                $sOxid      = $oRs->fields['OXID'];
+                $aOxids[]   = $sOxid;
+                
+                $oRs->moveNext();
+            }
+        }
+        
+        return $aOxids;
     }
 
     
