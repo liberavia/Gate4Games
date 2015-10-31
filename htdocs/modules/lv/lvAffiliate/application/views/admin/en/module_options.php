@@ -35,6 +35,7 @@ $aLang = array(
     'SHOP_MODULE_aLvField2Attribute'                    => 'Values of data array that will be assigned to shop attributes. Wil only be done if ID of article is known.',
     'SHOP_MODULE_aLvCatId2Attr2CatId'                   => 'Assign categories in condition of one ore more attributes to other category-ids',
     'SHOP_MODULE_aLvRemoveFromName'                     => 'Remove list of following terms from name before trying to match it',
+    'SHOP_MODULE_aLvDeclineImportOnTerm'                => 'List of terms that lead to not importing products (Steam-Presents etc.)',
     // group maintenance
     'SHOP_MODULE_GROUP_lvaffiliate_maintenance'         => 'Maintenance functions',
     'SHOP_MODULE_blLvAffiliateResetActive'              => 'Activate automatic articlereset',

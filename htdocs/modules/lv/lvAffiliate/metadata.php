@@ -169,6 +169,12 @@ $aModule = array(
             'type' => 'arr',  
             'value' => array() 
         ),
+        array(
+            'group' => 'lvaffiliateassignment',      
+            'name' => 'aLvDeclineImportOnTerm',         
+            'type' => 'arr',  
+            'value' => array() 
+        ),
         // group maintencance
         array( 'group' => 'lvaffiliate_maintenance',    'name' => 'blLvAffiliateResetActive',           'type' => 'bool',       'value' => false ),
         array( 'group' => 'lvaffiliate_maintenance',    'name' => 'sLvAffiliateResetFromHour',          'type' => 'str',        'value' => '03' ),

@@ -117,6 +117,12 @@ class lvaffiliate_import extends oxBase {
     protected $_aLvField2Attribute = null;
     
     /**
+     * Configured list of forbidden terms leading to declining import
+     * @var array
+     */
+    protected $_aLvDeclineImportOnTerm = null;
+    
+    /**
      * Flag that indicates if automatic articlereset should be performed
      * @var bool
      */
@@ -169,6 +175,7 @@ class lvaffiliate_import extends oxBase {
         $this->_aLvField2DirectTable            = $oConfig->getConfigParam( 'aLvField2DirectTable' );
         $this->_aLvField2CategoryAssignment     = $oConfig->getConfigParam( 'aLvField2CategoryAssignment' );
         $this->_aLvField2Attribute              = $oConfig->getConfigParam( 'aLvField2Attribute' );
+        $this->_aLvDeclineImportOnTerm          = $oConfig->getConfigParam( 'aLvDeclineImportOnTerm' );
         // group maintenance
         $this->_blLvAffiliateResetActive        = $oConfig->getConfigParam( 'blLvAffiliateResetActive' );
         $this->_iLvAffiliateResetFromHour       = (int)$oConfig->getConfigParam( 'sLvAffiliateResetFromHour' );
@@ -273,25 +280,35 @@ class lvaffiliate_import extends oxBase {
      * @return void
      */
     public function lvAddArticle( $aArticleData, $sLangAbbr ) {
-        // reset data
-        $this->_sLvCurrentArticleId         = null;
-        $this->_sLvCurrentParentId          = null;
-        $this->_sLvCurrentManufacturerId    = null;
-        $this->_sLvCurrentLangAbbr          = $sLangAbbr;
-        $this->_iLvCurrentStockFlag         = 4; // improvement would be to make this configurable indeed 4 is mostly needed
+        // validate against forbidden terms
+        $blArticleAllowed = true;
+        foreach ( $this->_aLvDeclineImportOnTerm as $sDeclineTerm ) {
+            if ( stripos( $aArticleData['TITLE'], $sDeclineTerm ) ) {
+                $blArticleAllowed = false;
+            }
+        }        
         
-        $this->_aLvCurrentArticleData = $aArticleData;
-        $this->_lvSetManufacturerId();
-        
-        $blCreateComplete = $this->_lvSetArticleIds();
-        $this->_lvSetArticleData( $blCreateComplete );
-        
-        $this->_lvAssignCategories();
+        if ( $blArticleAllowed ) {
+            // reset data
+            $this->_sLvCurrentArticleId         = null;
+            $this->_sLvCurrentParentId          = null;
+            $this->_sLvCurrentManufacturerId    = null;
+            $this->_sLvCurrentLangAbbr          = $sLangAbbr;
+            $this->_iLvCurrentStockFlag         = 4; // improvement would be to make this configurable indeed 4 is mostly needed
 
-        $this->_lvAssignAttributes();
-        
-        // check for deprecated articles and cleanup garbage data
-        $this->_lvCleanupDeprecatedEntries();
+            $this->_aLvCurrentArticleData = $aArticleData;
+            $this->_lvSetManufacturerId();
+
+            $blCreateComplete = $this->_lvSetArticleIds();
+            $this->_lvSetArticleData( $blCreateComplete );
+
+            $this->_lvAssignCategories();
+
+            $this->_lvAssignAttributes();
+
+            // check for deprecated articles and cleanup garbage data
+            $this->_lvCleanupDeprecatedEntries();
+        }
     }
     
     
