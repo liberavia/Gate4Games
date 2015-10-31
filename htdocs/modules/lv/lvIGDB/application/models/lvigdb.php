@@ -475,7 +475,7 @@ class lvigdb extends oxBase {
         $iSeconds = abs( $iTimeDelta );
         $iWeeks   = round( ( $iSeconds/604800 ), 0 );
         
-        if ( $blUpComingRelease && $dBaseValue > 0 ) {
+        if ( $blUpComingRelease && $dBaseValue > 0 && $iWeeks > 0 ) {
             // the shorter the release of the upcoming game is, the more it will be hyped here
             $iRelevance = (int)floor( $dBaseValue + ($dBaseValue/$iWeeks) );
         }

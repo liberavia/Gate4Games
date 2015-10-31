@@ -57,18 +57,18 @@ class lvigdbevents  {
      * @return void
      */
     public static function addIGDBFields() {
-//        $oUtils             = oxRegistry::getUtils();
-//        $oDb                = oxDb::getDb();
-//        $sTable             = 'oxarticles';
-//        $aFields            = array( 'LVIGDB_ID'=>'INT(11)', 'LVIGDB_RELEASE_DATE'=>'DATE', 'LVIGDB_RATING'=>'DOUBLE', 'LVIGDB_RELEVANCE'=>'INT(11)', 'LVIGDB_LAST_UPDATED'=>'DATE' );
-//        $blFieldsExisting   = self::checkFieldsExisting( $sTable, $aFields );
-//        if ( !$blFieldsExisting ) {
-//            foreach ( $aFields as $sField=>$sType ) {
-//                $sQuery = "ALTER TABLE `".$sTable."` ADD `".$sField."` ".$sType." NOT NULL";
-//                $oUtils->writeToLog( $sQuery."\n", 'lvigdb_install.log' );
-//                $oDb->Execute( $sQuery );
-//            }
-//        }
+        $oUtils             = oxRegistry::getUtils();
+        $oDb                = oxDb::getDb();
+        $sTable             = 'oxarticles';
+        $aFields            = array( 'LVIGDB_ID'=>'INT(11)', 'LVIGDB_RELEASE_DATE'=>'DATE', 'LVIGDB_RATING'=>'DOUBLE', 'LVIGDB_RELEVANCE'=>'INT(11)', 'LVIGDB_LAST_UPDATED'=>'DATE' );
+        $blFieldsExisting   = self::checkFieldsExisting( $sTable, $aFields );
+        if ( !$blFieldsExisting ) {
+            foreach ( $aFields as $sField=>$sType ) {
+                $sQuery = "ALTER TABLE `".$sTable."` ADD `".$sField."` ".$sType." NOT NULL";
+                $oUtils->writeToLog( $sQuery."\n", 'lvigdb_install.log' );
+                $oDb->Execute( $sQuery );
+            }
+        }
     }
     
     
@@ -79,17 +79,17 @@ class lvigdbevents  {
      * @return void
      */
     public static function removeIGDBFields() {
-//        $oDb                = oxDb::getDb();
-//        $sTable             = 'oxarticles';
-//        $aFields            = array( 'LVIGDB_ID'=>'INT(11)', 'LVIGDB_RELEASE_DATE'=>'DATE', 'LVIGDB_RATING'=>'DOUBLE', 'LVIGDB_RELEVANCE'=>'INT(11)', 'LVIGDB_LAST_UPDATED'=>'DATE' );
-//        $blFieldsExisting   = self::checkFieldsExisting( $sTable, $aFields );
-//        
-//        if ( $blFieldsExisting ) {
-//            foreach ( $aFields as $sField=>$sType ) {
-//                $sQuery = "ALTER TABLE `".$sTable."` DROP `".$sField;
-//                $oDb->Execute( $sQuery );
-//            }
-//        }
+        $oDb                = oxDb::getDb();
+        $sTable             = 'oxarticles';
+        $aFields            = array( 'LVIGDB_ID'=>'INT(11)', 'LVIGDB_RELEASE_DATE'=>'DATE', 'LVIGDB_RATING'=>'DOUBLE', 'LVIGDB_RELEVANCE'=>'INT(11)', 'LVIGDB_LAST_UPDATED'=>'DATE' );
+        $blFieldsExisting   = self::checkFieldsExisting( $sTable, $aFields );
+        
+        if ( $blFieldsExisting ) {
+            foreach ( $aFields as $sField=>$sType ) {
+                $sQuery = "ALTER TABLE `".$sTable."` DROP `".$sField;
+                $oDb->Execute( $sQuery );
+            }
+        }
     }
     
 
