@@ -383,6 +383,7 @@ class lvigdb extends oxBase {
             }
             
             if ( $blReplace ) {
+                $sCover = $this->_sLvIgdbBaseUrl.$sCover;
                 $sQuery = "UPDATE oxarticles SET OXPIC1='".$sCover."' WHERE OXID='".$sCurrentOxid."' LIMIT 1";
                 $this->_oLvDb->Execute( $sQuery );
             }
@@ -474,7 +475,7 @@ class lvigdb extends oxBase {
         $iSeconds = abs( $iTimeDelta );
         $iWeeks   = round( ( $iSeconds/604800 ), 0 );
         
-        if ( $blUpComingRelease ) {
+        if ( $blUpComingRelease && $dBaseValue > 0 ) {
             // the shorter the release of the upcoming game is, the more it will be hyped here
             $iRelevance = (int)floor( $dBaseValue + ($dBaseValue/$iWeeks) );
         }
