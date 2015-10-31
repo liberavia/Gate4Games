@@ -182,7 +182,7 @@ class lvextmedia_oxarticle extends lvextmedia_oxarticle_parent {
             $sCoverPicFieldName = "oxarticles__".$sCoverPicFieldName;
             $sPicUrl = $oProduct->$sCoverPicFieldName->value;
             if ( $sPicUrl == '' ) {
-                $sPicUrl = $this->_lvSaveAndSetAlternativeCoverFromOtherVendor();
+                $sPicUrl = $this->_lvSaveAndSetAlternativeCoverFromOtherVendor( $oProduct );
                 if ( $sPicUrl == '' ) {
                     $sPicUrl = $this->lvGetFirstPictureUrl();
                 }        
@@ -206,10 +206,10 @@ class lvextmedia_oxarticle extends lvextmedia_oxarticle_parent {
      * Fallback method which looks if other vendors have got a valid picture url which
      * can be used to download cover and put it into own picture folder
      * 
-     * @param void
+     * @param object $oProduct
      * @return string
      */
-    protected function _lvSaveAndSetAlternativeCoverFromOtherVendor() {
+    protected function _lvSaveAndSetAlternativeCoverFromOtherVendor( $oProduct ) {
         $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
         $sAlternativeImageUrl = '';
         
@@ -257,8 +257,8 @@ class lvextmedia_oxarticle extends lvextmedia_oxarticle_parent {
             }
             
             if ( isset($sTarget) && file_exists( $sTarget ) && $sPictureName != '' ) {
-                $this->oxarticles__oxpic1 = new oxField( $sPictureName );
-                $this->save();
+                $oProduct->oxarticles__oxpic1 = new oxField( $sPictureName );
+                $oProduct->save();
                 $sAlternativeImageUrl = $this->getPictureUrl();
             }
         }
