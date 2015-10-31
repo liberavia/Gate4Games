@@ -366,6 +366,7 @@ class lvigdb extends oxBase {
      * @return void
      */
     protected function _lvCheckAndSetMissingCover( $sOxid, $sCover ) {
+        $sCover = $this->_sLvIgdbBaseUrl.$sCover;
         $aOxids = $this->_lvGetVariantIds( $sOxid );        
         
         foreach ( $aOxids as $sCurrentOxid ) {
@@ -383,7 +384,6 @@ class lvigdb extends oxBase {
             }
             
             if ( $blReplace ) {
-                $sCover = $this->_sLvIgdbBaseUrl.$sCover;
                 $sQuery = "UPDATE oxarticles SET OXPIC1='".$sCover."' WHERE OXID='".$sCurrentOxid."' LIMIT 1";
                 $this->_oLvDb->Execute( $sQuery );
             }
