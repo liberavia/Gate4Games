@@ -311,15 +311,12 @@ class lvigdb extends oxBase {
         
         // check and set summary for those variants missing it
         if ( $sSummary ) {
-            /**
-             * @todo
-             */
+            $this->_lvCheckAndSetMissingSummary( $sOxid, $sSummary );
         }
         
         /**
          * @todo screenshots, videos, genres (inlcuding category assignments)
          */
-        
     }
     
     
@@ -390,6 +387,57 @@ class lvigdb extends oxBase {
                 $this->_oLvDb->Execute( $sQuery );
             }
         }
+    }
+    
+    
+    /**
+     * 
+     * @param string $sOxid
+     * @param string $sSummary
+     * @return void
+     */
+    protected function _lvCheckAndSetMissingSummary( $sOxid, $sSummary ) {
+        if ( strlen( $sSummary ) > 255 ) {
+            $sSummary = substr( $sSummary, 0, 250 );
+            $sSummary .= "...";
+        }
+        
+        $aOxids = $this->_lvGetVariantIds( $sOxid );        
+        
+        foreach ( $aOxids as $sCurrentOxid ) {
+            $sArticlesTable = getViewName( 'oxarticles' );
+            $sQuery = "SELECT OXSHORTDESC FROM ".$sArticlesTable." WHERE OXID='".$sCurrentOxid."' LIMIT 1";
+            
+            $sShortDesc = $this->_oLvDb->GetOne( $sQuery );
+            
+            if ( !$sShortDesc || $sShortDesc == '' ) {
+                $sQuery = "UPDATE oxarticles SET OXSHORTDESC=".$this->_oLvDb->quote( $sSummary )." WHERE OXID='".$sCurrentOxid."' LIMIT 1";
+                $this->_oLvDb->Execute( $sQuery );
+            }
+        }
+    }
+    
+    
+    /**
+     * Checks if an url exists
+     * 
+     * @param string $sUrl
+     * @return boolean
+     */
+    protected function _lvCheckIsAvailableUrl( $sUrl ) {
+        $aFileHeaders = @get_headers( $sUrl );
+
+        if( $aFileHeaders[0] == 'HTTP/1.0 404 Not Found'){
+            $blReturn = false;
+        } 
+        else if ( $$aFileHeaders[0] == 'HTTP/1.0 302 Found' && $aFileHeaders[7] == 'HTTP/1.0 404 Not Found' ) {
+            $blReturn = false;
+        } 
+        else {
+            $blReturn = true;
+        }
+        
+        return $blReturn;
     }
             
     
