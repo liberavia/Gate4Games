@@ -1,4 +1,6 @@
 [{$smarty.block.parent}]
+[{assign var="lvFeedbackJs" value=$oViewConf->getBaseDir()|cat:"modules/lv/lvReCaptcha/out/src/js/lvfeedback.js"}]
+[{oxscript include=$lvFeedbackJs}]
 <script>
     [{if $oViewConf->getActiveClassName() == 'details'}]
         var lvrecaptcha_review;
