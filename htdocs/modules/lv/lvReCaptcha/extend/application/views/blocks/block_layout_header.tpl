@@ -41,7 +41,7 @@
                         <textarea name="editval[message]" cols="60" rows="10">[{$smarty.get.lvFeedbackMessage}]</textarea>
                     </td>
                 </tr>
-                [{if $oViewConf->lvFeedbackRecaptchaActive()}]
+                [{if $oViewConf->lvGetFeedbackIsActive()}]
                     <tr>
                         <td colspan="2">
                             <div id="lvrecaptcha_feedback"></div>
