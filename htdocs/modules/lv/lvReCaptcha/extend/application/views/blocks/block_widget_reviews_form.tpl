@@ -30,21 +30,6 @@
         [{/if}]
         <br>[{oxmultilang ident="LV_RATING_USERNAME"}] <input type="text" value="" maxlength="32" name="lvusername"><br>
         <textarea  rows="15" name="rvw_txt" class="areabox"></textarea><br>
-        <script>
-            var lvrecaptcha_review;
-            var lvrecaptcha_feedback;
-            
-            var lvReCaptchaCallBack = function() {
-                lvrecaptcha_review = grecaptcha.render( 'lvrecaptcha_review', {
-                    'sitekey' : '[{$oView->lvGetReCaptchaWebsiteKey()}]',
-                    'theme' : 'light'
-                });
-                lvrecaptcha_feedback = grecaptcha.render( 'lvrecaptcha_feedback', {
-                    'sitekey' : '[{$oViewConf->lvGetReCaptchaWebsiteKey()}]',
-                    'theme' : 'light'
-                });
-            }
-        </script>                        
         <div id="lvrecaptcha_review"></div>
         <br>
         <button id="reviewSave" type="submit" class="submitButton">[{oxmultilang ident="SAVE_RATING_AND_REVIEW"}]</button>
