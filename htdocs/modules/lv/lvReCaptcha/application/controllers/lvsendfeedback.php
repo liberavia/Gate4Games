@@ -35,14 +35,8 @@ class lvsendfeedback extends oxUBase {
         $oConfig                    = $this->getConfig();
         $aParams                    = $oConfig->getRequestParameter( 'editval' );
         $sReturnPage                = $oConfig->getRequestParameter( 'currentpage' );
-        $blUseReCaptcha             = (bool)$oConfig->getConfigParam( 'blLvFeedbackUseCaptcha' );
 
-        if ( $blUseReCaptcha ) {
-            $blLvReCaptchaValidated = $this->_lvValidateReCaptchaResponse();
-        }
-        else {
-            $blLvReCaptchaValidated = true;
-        }
+        $blLvReCaptchaValidated = $this->_lvValidateReCaptchaResponse();
         
         if ( $blLvReCaptchaValidated === true ) {
             $this->_lvSendMessage( $aParams, $sReturnPage );
@@ -124,8 +118,8 @@ class lvsendfeedback extends oxUBase {
         $blReturn                   = false;
         $oConfig                    = $this->getConfig();
         $sReCaptchaResponse         = $oConfig->getRequestParameter( 'g-recaptcha-response' );
-        $sReCaptchaSecretKey        = $oConfig->getConfigParam( 'sLvFeedbackSecretKey' );
-        $sReCaptchaApiRequestUrl    = $oConfig->getConfigParam( 'sLvFeedbackRequestUrl' );
+        $sReCaptchaSecretKey        = $oConfig->getConfigParam( 'sLvRecaptchaSecretKey' );
+        $sReCaptchaApiRequestUrl    = $oConfig->getConfigParam( 'sLvRecaptchaRequestUrl' );
         
         if ( $sReCaptchaResponse && $sReCaptchaSecretKey && $sReCaptchaApiRequestUrl ) {
             // preparing data to post

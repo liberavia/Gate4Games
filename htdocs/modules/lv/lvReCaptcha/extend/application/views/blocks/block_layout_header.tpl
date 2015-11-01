@@ -41,13 +41,11 @@
                         <textarea name="editval[message]" cols="60" rows="10">[{$smarty.get.lvFeedbackMessage}]</textarea>
                     </td>
                 </tr>
-                [{if $oViewConf->lvGetFeedbackIsActive()}]
-                    <tr>
-                        <td colspan="2">
-                            <div id="lvrecaptcha_feedback"></div>
-                        </td>
-                    </tr>
-                [{/if}]
+                <tr>
+                    <td colspan="2">
+                        <div id="lvrecaptcha_feedback"></div>
+                    </td>
+                </tr>
                 <tr>
                     <td colspan="2">
                         <button id="submitfeedback" type="submit" class="submitButton">[{oxmultilang ident="LVFEEDBACK_FORM_SUBMIT"}]</button>
