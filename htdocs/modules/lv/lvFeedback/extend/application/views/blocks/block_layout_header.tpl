@@ -43,7 +43,17 @@
             [{if $oViewConf->lvFeedbackRecaptchaActive()}]
                 <tr>
                     <td colspan="2">
-                        <div class="g-recaptcha" data-sitekey="[{$oViewConf->lvGetReCaptchaWebsiteKey()}]"></div>
+                        <script>
+                            var lvrecaptcha_feedback;
+
+                            var lvFeedbackReCaptchaCallBack = function() {
+                                lvrecaptcha_feedback = grecaptcha.render('lvrecaptcha_feedback', {
+                                    'sitekey' : '[{$oViewConf->lvGetReCaptchaWebsiteKey()}]',
+                                    'theme' : 'light'
+                                });
+                            }
+                        </script>                        
+                        <div id="lvrecaptcha_feedback"></div>
                     </td>
                 </tr>
             [{/if}]
