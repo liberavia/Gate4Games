@@ -44,14 +44,18 @@
                 <tr>
                     <td colspan="2">
                         <script>
+                            var lvrecaptcha_review;
                             var lvrecaptcha_feedback;
 
-                            var lvFeedbackReCaptchaCallBack = function() {
-                                lvrecaptcha_feedback = grecaptcha.render('lvrecaptcha_feedback', {
+                            var lvReCaptchaCallBack = function() {
+                                lvrecaptcha_review = grecaptcha.render( 'lvrecaptcha_review', {
+                                    'sitekey' : '[{$oView->lvGetReCaptchaWebsiteKey()}]',
+                                    'theme' : 'light'
+                                });
+                                lvrecaptcha_feedback = grecaptcha.render( 'lvrecaptcha_feedback', {
                                     'sitekey' : '[{$oViewConf->lvGetReCaptchaWebsiteKey()}]',
                                     'theme' : 'light'
                                 });
-                            }
                         </script>                        
                         <div id="lvrecaptcha_feedback"></div>
                     </td>
