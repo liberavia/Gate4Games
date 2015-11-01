@@ -26,5 +26,12 @@ $sLangName = 'English';
 $aLang = array(
     'charset'                                           => 'UTF-8',
     'LV_RATING_USERNAME'                                => 'Your Name (or nick)',
+    'LVFEEDBACK_FORM_GREETER'                           => 'Thanks for your feedback',
+    'LVFEEDBACK_FORM_EMAIL'                             => 'Your E-Mail (Optional)',
+    'LVFEEDBACK_FORM_NAME'                              => 'Your Name (Optional)',
+    'LVFEEDBACK_FORM_MESSAGE'                           => 'Your message for us',
+    'LVFEEDBACK_FORM_SUBMIT'                            => 'Submit',
+    'LVFEEDBACK_FORM_SUBMIT_SUCCESS'                    => 'Your message has been transferred successfully',
+    'LVFEEDBACK_FORM_SUBMIT_ERROR'                      => 'An Error occured, please try again',
 );
 

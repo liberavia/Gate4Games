@@ -29,5 +29,8 @@ $aLang = array(
     'SHOP_MODULE_sLvRecaptchaWebsiteKey'                => 'Websiteschlüssel',           
     'SHOP_MODULE_sLvRecaptchaSecretKey'                 => 'Geheimer Schlüssel',  
     'SHOP_MODULE_sLvRecaptchaRequestUrl'                => 'API Request URL',
+    'SHOP_MODULE_GROUP_lvfeedback'                      => 'Feedback-Komponente',
+    'SHOP_MODULE_blLvFeedbackActive'                    => 'Feedback-Komponente aktivieren',
+    'SHOP_MODULE_sLvFeedbackEmail'                      => 'E-Mail Zieladdresse für Feedback',
 );
 
