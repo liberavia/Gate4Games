@@ -51,6 +51,8 @@ $aModule = array(
         'oxviewconfig'              => 'lv/lvReCaptcha/extend/core/lvfeedback_oxviewconfig',
     ),
     'files' => array(
+        // controllers
+        'lvsendfeedback'            => 'lv/lvReCaptcha/application/controllers/lvsendfeedback.php',
     ),
     'events'       => array(
     ),
