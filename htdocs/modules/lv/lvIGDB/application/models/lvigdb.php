@@ -379,8 +379,12 @@ class lvigdb extends oxBase {
             if ( !$sPic || strtolower( $sPic != 'nopic.jpg' ) ) {
                 $blReplace = true;
             }
-            else if ( strpos( 'http://', $sPic ) !== false &&  $this->_lvCheckIsAvailableUrl( $sPic ) == false ) {
+            else if ( strpos( $sPic, 'http://' ) !== false &&  $this->_lvCheckIsAvailableUrl( $sPic ) == false ) {
                 $blReplace = true;
+            }            
+            
+            if ( strpos( $sPic, '/res.cloudinary.com' ) && $this->_lvCheckIsAvailableUrl( $sPic ) == false ) {
+                $sPic = str_replace( '/res.cloudinary.com', 'http://res.cloudinary.com', $sPic );
             }
             
             if ( $blReplace ) {
