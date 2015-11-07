@@ -18,7 +18,7 @@
  */
 
 /**
- * Description of lvigdb
+ * Main class for managing igdb connections
  *
  * @author Gate4Games
  * @author André Gregor-Herrmann
@@ -157,6 +157,7 @@ class lvigdb extends oxBase {
     public function lvIgdbImportData() {
         $this->_lvSetAffectedArticles();
         $this->_lvRequestAndUpdateData();
+        $this->_lvCleanupImageLinks();
     }
     
     
@@ -396,6 +397,7 @@ class lvigdb extends oxBase {
     
     
     /**
+     * Checks if shortdesk is available for current oxid and sets shortdesc of igdb if not available
      * 
      * @param string $sOxid
      * @param string $sSummary
@@ -435,7 +437,7 @@ class lvigdb extends oxBase {
         if( $aFileHeaders[0] == 'HTTP/1.0 404 Not Found'){
             $blReturn = false;
         } 
-        else if ( $$aFileHeaders[0] == 'HTTP/1.0 302 Found' && $aFileHeaders[7] == 'HTTP/1.0 404 Not Found' ) {
+        else if ( $aFileHeaders[0] == 'HTTP/1.0 302 Found' && $aFileHeaders[7] == 'HTTP/1.0 404 Not Found' ) {
             $blReturn = false;
         } 
         else {
@@ -703,5 +705,19 @@ class lvigdb extends oxBase {
         
         return $mReturn;    
     }
+    
+    
+    /**
+     * This method performs a query that shall avoid that there are too
+     * 
+     * @todo Usually that should not be needed but currently this patches occuring problems 
+     * @param void
+     * @return void
+     */
+    protected function _lvCleanupImageLinks() {
+        $sQuery = "UPDATE oxarticles SET OXPIC1 = REPLACE( OXPIC1, 'https://www.igdb.com//res.cloudinary.com', 'https://res.cloudinary.com') WHERE OXPIC1 LIKE '%https://www.igdb.com//res.cloudinary.com%'";
+        $this->_oLvDb->Execute( $sQuery );
+    }
+    
     
 }
