@@ -256,10 +256,10 @@ class lvextmedia_oxarticle extends lvextmedia_oxarticle_parent {
                 $oRs->moveNext();
             }
             
-            if ( isset($sTarget) && file_exists( $sTarget ) && $sPictureName != '' ) {
+            if ( isset( $sTarget ) && file_exists( $sTarget ) && $sPictureName != '' ) {
                 $oProduct->oxarticles__oxpic1 = new oxField( $sPictureName );
                 $oProduct->save();
-                $sAlternativeImageUrl = $this->getPictureUrl();
+                $sAlternativeImageUrl = $oProduct->getPictureUrl();
             }
         }
         
