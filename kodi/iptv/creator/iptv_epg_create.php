@@ -109,6 +109,7 @@ class iptv_epg_create {
         'prosieben.ch'      => array( 'display-name'=>'Pro 7',              'url' => 'http://www.prosieben.de',     'icon' => 'pro_sieben.png',             'sourceid' => 'Pro7.ch'                 ),
         'vox.ch'            => array( 'display-name'=>'VOX',                'url' => 'http://www.vox.de',           'icon' => 'vox.png',                    'sourceid' => 'Vox.de'                  ),
         'rtl2.ch'           => array( 'display-name'=>'RTL II',             'url' => 'http://www.rtl2.de',          'icon' => 'rtl2.png',                   'sourceid' => 'RTL2.de'                 ),
+        'kabeleins.ch'      => array( 'display-name'=>'Kabel 1',            'url' => 'http://www.kabel1.de',        'icon' => 'kabel1.png',                 'sourceid' => 'Kabel.de'                ),
         'superrtl.ch'       => array( 'display-name'=>'SuperRTL',           'url' => 'http://www.superrtl.de',      'icon' => 'kabel_eins.png',             'sourceid' => 'SuperRTL.de'             ),
         'kika.de'           => array( 'display-name'=>'KIKA',               'url' => 'http://www.kika.de',          'icon' => 'kika.png',                   'sourceid' => 'Kika.de'                 ),
         'disney.de'         => array( 'display-name'=>'Disney Channel',     'url' => 'http://www.disneychannel.de', 'icon' => 'disney_channel.png',         'sourceid' => 'disneychannel.de'        ),
