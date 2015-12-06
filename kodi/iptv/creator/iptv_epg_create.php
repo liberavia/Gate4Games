@@ -49,7 +49,7 @@ class iptv_epg_create {
      * Define max age of epg source files in tmp
      * @var string
      */
-    protected $_sThisMaxAgeTmpFile = "- 2 days";
+    protected $_sMaxAgeTmpFile = "- 2 days";
 
     /**
      * Target file
@@ -248,7 +248,7 @@ class iptv_epg_create {
     protected function _lvFinishTargetFile() {
         fwrite( $this->_oTargetFileTmp, "</tv>\n" );
         fclose( $this->_oTargetFileTmp );
-        rename( $this->_sTargetFileTmp, __DIR__."/../".$this->_sTargetFile );
+        rename( __DIR__."/".$this->_sTargetFileTmp, __DIR__."/../".$this->_sTargetFile );
         system( 'cd '.__DIR__."/../"." && "."gzip -f ".$this->_sTargetFile );
     }
 
