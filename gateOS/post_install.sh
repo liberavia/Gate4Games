@@ -50,7 +50,7 @@ then
   exit
 fi
 dbus-send --system --type=method_call --print-reply --dest=org.freedesktop.Accounts /org/freedesktop/Accounts/User1000 org.freedesktop.Accounts.User.SetXSession string:gnome
-dbus-send --system --type=method_call --print-reply --dest=org.freedesktop.Accounts /org/freedesktop/Accounts/User1001 org.freedesktop.Accounts.User.SetXSession string:steamos
+dbus-send --system --type=method_call --print-reply --dest=org.freedesktop.Accounts /org/freedesktop/Accounts/User1001 org.freedesktop.Accounts.User.SetXSession string:openbox
 systemctl enable build-dkms
 (for i in `dkms status | cut -d, -f1-2 | tr , / | tr -d ' '`; do sudo dkms remove $i --all; done) | zenity --progress --no-cancel --pulsate --auto-close --text="Configuring Kernel Modules" --title="SteamOS Installation"
 plymouth-set-default-theme -R steamos
@@ -63,7 +63,83 @@ rm /etc/sudoers.d/post_logon
 rm /usr/bin/post_logon.sh && reboot
 rm /home/steam/.config/autostart/post_logon.desktop
 EOF
+
 chmod +x /target/usr/bin/post_logon.sh
+
+#
+# gateOS adding udev-rule for allowing gamepads on new xserver sessions
+#
+cat - > /target/etc/udev/rules.d/99-joystick.rules << 'EOF'
+KERNEL=="event*", ENV{ID_INPUT_JOYSTICK}=="?*", MODE:="0644"
+EOF
+
+#
+# gateOS set autostart options for openbox, which is essentially set background black and start kodi fullscreen
+#
+cat - > /target/home/steam/.config/openbox/autostart << 'EOF'
+xsetroot -solid black &
+kodi -fs &
+# check if desktop mode switch has been triggered. Do so if not
+if [ -f /usr/share/xsessions/killsteam.desktop ]
+    sudo /usr/bin/gateos_xsession_switch
+fi    
+EOF
+
+chmod +x /target/home/steam/.config/openbox/autostart
+
+#
+# gateOS add steam terminate script
+#
+cat - > /target/usr/bin/terminatesteam << 'EOF'
+#!/bin/sh
+
+killall -9 steam
+killall -9 steamcompmgr
+killall steam
+killall steamcompmgr
+EOF
+
+chmod +x /target/usr/bin/terminatesteam
+
+#
+# gateOS changes for enabling returning to kodi when selecting switching to desktop mode
+#
+
+# kill steamos session script -> will be triggered by fake gnome xsession
+cat - > /target/usr/bin/kill-steamos-session << 'EOF'
+#!/bin/sh
+sudo /usr/bin/terminatesteam
+/usr/bin/returntosteam.sh
+EOF
+
+# template for fake gnome session -> desktop mode should be handled by kodi later on
+cat - > /target/usr/share/xsessions/killsteam.desktop << 'EOF'
+[Desktop Entry]
+Name=Fake GNOME
+Comment=Fake GNOME Session that aims to kill steam
+Exec=kill-steamos-session
+TryExec=kill-steamos-session
+Icon=
+Type=Application
+EOF
+
+# script for triggering exchanging gnome desktop mode session with fake gnome session
+cat - > /target/usr/bin/gateos_xsession_switch << 'EOF'
+# copy std gnome session to seperate file
+cp /usr/share/xsessions/gnome.desktop /usr/share/xsessions/gnome_gateos.desktop
+cp /usr/share/xsessions/killsteam.desktop /usr/share/xsessions/gnome.desktop
+rm /usr/share/xsessions/killsteam.desktop
+EOF
+
+#
+# gateOS enable anyone to sudo the steam terminate script
+#
+echo ALL ALL=NOPASSWD: /usr/bin/terminatesteam > /target/etc/sudoers.d/terminatesteam
+
+#
+# gateOS enable anyone to sudo the xsession switcher
+#
+echo ALL ALL=NOPASSWD: /usr/bin/gateos_xsession_switch > /target/etc/sudoers.d/gateos_xsession_switch
 
 #
 # Enable anyone to sudo the post logon script
