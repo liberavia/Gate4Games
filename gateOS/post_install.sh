@@ -21,6 +21,10 @@ cp /target/etc/skel/.imageversion /target/home/steam/.imageversion
 #
 cat - > /target/usr/bin/post_logon.sh << 'EOF'
 #! /bin/bash
+
+sudo apt-get update
+sudo apt-get install apt-transport-https deb-multimedia-keyring openbox kodi kodi-standalone kodi-pvr-iptvsimple qjoypad unclutter
+
 if [[ "$UID" -ne "0" ]]
 then
   #
@@ -76,6 +80,7 @@ EOF
 #
 # gateOS set autostart options for openbox, which is essentially set background black and start kodi fullscreen
 #
+mkdir -p /target/home/steam/.config/openbox/
 cat - > /target/home/steam/.config/openbox/autostart << 'EOF'
 xsetroot -solid black &
 kodi -fs &
