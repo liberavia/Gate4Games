@@ -18,29 +18,6 @@ dialog = xbmcgui.Dialog()
 language = addon.getLocalizedString
 scriptid = 'script.gateossteam.launcher'
 
-steamLinux = addon.getSetting("SteamLinux").decode("utf-8")
-kodiLinux = addon.getSetting("KodiLinux").decode("utf-8")
-steamWin = addon.getSetting("SteamWin").decode("utf-8")
-kodiWin = addon.getSetting("KodiWin").decode("utf-8")
-steamOsx = addon.getSetting("SteamOsx").decode("utf-8")
-kodiOsx = addon.getSetting("KodiOsx").decode("utf-8")
-delUserScriptSett = addon.getSetting("DelUserScript")
-quitKodiSetting = addon.getSetting("QuitKodi")
-busyDialogTime = int(addon.getSetting("BusyDialogTime"))
-scriptUpdateCheck = addon.getSetting("ScriptUpdateCheck")
-filePathCheck = addon.getSetting("FilePathCheck")
-kodiPortable = addon.getSetting("KodiPortable")
-preScriptEnabled = addon.getSetting("PreScriptEnabled")
-preScript = addon.getSetting("PreScript").decode("utf-8")
-postScriptEnabled = addon.getSetting("PostScriptEnabled")
-postScript = addon.getSetting("PostScript").decode("utf-8")
-osWin = xbmc.getCondVisibility('system.platform.windows')
-osOsx = xbmc.getCondVisibility('system.platform.osx')
-osLinux = xbmc.getCondVisibility('system.platform.linux')
-osAndroid = xbmc.getCondVisibility('system.platform.android')
-wmctrlCheck = addon.getSetting("WmctrlCheck")
-suspendAudio = addon.getSetting("SuspendAudio")
-
 #HACK: sys.getfilesystemencoding() is not supported on all systems (e.g. Android)
 txt_encode = 'utf-8'
 try:
