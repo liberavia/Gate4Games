@@ -24,10 +24,6 @@ try:
 	txt_encode = sys.getfilesystemencoding()
 except:
 	pass
-#osAndroid returns linux + android
-if osAndroid: 
-	osLinux = 0
-	txt_encode = 'utf-8'
 
 def log(msg):
 	msg = msg.encode(txt_encode)
@@ -53,7 +49,7 @@ def getAddonDataPath():
 
 
 def makeScriptExec():
-	scriptPath = os.path.join(getAddonDataPath(), 'scripts', 'steam-launch.sh')
+	scriptPath = os.path.join(getAddonInstallPath(), 'resources', 'scripts', 'steam-launch.sh')
 	if os.path.isfile(scriptPath):
 		if not stat.S_IXUSR & os.stat(scriptPath)[stat.ST_MODE]:
 			log('steam-launch.sh not executable: %s' % scriptPath)
@@ -75,11 +71,10 @@ def kodiBusyDialog():
 
 
 def launchSteam():
-	basePath = os.path.join(getAddonDataPath(), 'scripts')
+	basePath = os.path.join(getAddonInstallPath(), 'resources', 'scripts')
         steamlauncher = os.path.join(basePath, 'steam-launch.sh')
         cmd = '"%s"' % (steamlauncher)
 	try:
-		print suspendAudio
 		log('attempting to launch: %s' % cmd)
 		print cmd.encode('utf-8')
                 subprocess.Popen(cmd.encode(txt_encode), shell=True, close_fds=True)

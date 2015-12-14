@@ -14,6 +14,3 @@
   * Released 2015-12-14
   * fixed start script path
   
-== 1.0.3 ==
-  * Released 2015-12-14
-  * bugfixes
