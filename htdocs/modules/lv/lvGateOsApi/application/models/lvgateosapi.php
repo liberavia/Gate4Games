@@ -293,7 +293,7 @@ class lvgateosapi extends oxBase {
                 FROM ".$this->_sObject2AttributeTable." o2a
                 LEFT JOIN ".$this->_sArticlesTable." oa ON (o2a.OXOBJECTID=oa.OXID)
                 WHERE o2a.OXATTRID IN ( ".$sAllowedAttributes." )
-                ORDER BY oa.LVIGDB_RELEVANCE
+                ORDER BY oa.LVIGDB_RELEVANCE DESC
                 LIMIT ".$iFrom.",".$iLimit."
             ";
         }
