@@ -71,4 +71,36 @@
             <description lang="de">Mit dieser Bibliothek erhalten darauf aufbauende Addons die Möglichkeit Video-URLs von den bekannten Hostern aufzulösen.</description>    
         </extension>
     </addon>
+    <addon id="script.gateossteam.launcher" name="Steam" version="1.0.4" provider-name="liberavia">
+        <requires>
+            <import addon="xbmc.python" version="2.19.0"/>
+        </requires>
+        <extension point="xbmc.python.script" library="default.py">
+            <provides>game executable</provides>
+        </extension>
+        <extension point="xbmc.addon.metadata">
+            <summary lang="en">Launches Steam on gateOS</summary>
+            <description lang="en">Starts Steam on the gateOS operating system. IMPORTANT: THIS WILL ONLY WORK ON gateOS!!! If you want to use Steam in Kodi for any other system please consider teedubs original Steam Launcher which this launcher is based on.</description>
+            <platform>linux</platform>
+            <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+            <website>http://www.gate4games.com</website>
+            <email>info@gate4games.com</email>
+        </extension>
+    </addon>
+    <addon id="script.g4g.manager" name="Game Manager" version="0.0.2" provider-name="liberavia">
+        <requires>
+            <import addon="xbmc.python" version="2.19.0"/>
+        </requires>
+        <extension point="xbmc.python.pluginsource" library="default.py">
+            <provides>game executable</provides>
+        </extension>
+        <extension point="xbmc.addon.metadata">
+            <summary lang="en">Manages Games</summary>
+            <description lang="en">With Gate4Games Manger you can purchase, install and play games from different platforms</description>
+            <platform>linux</platform>
+            <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+            <website>http://www.gate4games.com</website>
+            <email>info@gate4games.com</email>
+        </extension>
+    </addon>
 </addons>
