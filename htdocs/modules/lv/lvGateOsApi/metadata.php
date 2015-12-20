@@ -45,7 +45,7 @@ $aModule = array(
         // models
         'lvgateosapi'                       => 'lv/lvGateOsApi/application/models/lvgateosapi.php',
         // controllers
-        'gateosapi'                         => 'lv/lvGateOsApi/controllers/gateosapi.php',
+        'gateosapi'                         => 'lv/lvGateOsApi/application/controllers/gateosapi.php',
     ),
     'events'       => array(
     ),
