@@ -221,24 +221,26 @@ class lvgateosapi extends oxBase {
                 $sXml .= '</product>'.$this->_sNewLine;
             }
             else {
+                $sXml .= '<result>'.$this->_sNewLine;
                 $aListInfos = $this->_lvGetListInfos();
-                $sXml .= '<listinfos>'.$this->_sNewLine;
+                $sXml .= "\t".'<listinfos>'.$this->_sNewLine;
                 foreach ( $aListInfos as $sTag=>$sValue ) {
-                    $sXml .= "\t".'<'.$sTag.'>'.$sValue.'</'.$sTag.'>'.$this->_sNewLine;
+                    $sXml .= "\t\t".'<'.$sTag.'>'.$sValue.'</'.$sTag.'>'.$this->_sNewLine;
                 }
-                $sXml .= '</listinfos>'.$this->_sNewLine;
-                $sXml .= '<products>'.$this->_sNewLine;
+                $sXml .= "\t".'</listinfos>'.$this->_sNewLine;
+                $sXml .= "\t".'<products>'.$this->_sNewLine;
                 foreach ( $aArticles as $oArticle ) {
-                    $sXml .= "\t".'<product>'.$this->_sNewLine;
-                    $sXml .= "\t\t".'<id>'.$oArticle->getId().'</id>'.$this->_sNewLine;
-                    $sXml .= "\t\t".'<name><![CDATA['.$oArticle->oxarticles__oxtitle->value.']]></name>'.$this->_sNewLine;
-                    $sXml .= "\t\t".'<fromprice>'.$oArticle->oxarticles__oxvarminprice->value.'</fromprice>'.$this->_sNewLine;
-                    $sXml .= "\t\t".'<currency>EUR</currency>'.$this->_sNewLine;
-                    $sXml .= "\t\t".'<coverpic>'.$oArticle->lvGetCoverPictureUrl().'</coverpic>'.$this->_sNewLine;
-                    $sXml .= "\t\t".'<fanart></fanart>'.$this->_sNewLine;
-                    $sXml .= "\t".'</product>'.$this->_sNewLine;
+                    $sXml .= "\t\t".'<product>'.$this->_sNewLine;
+                    $sXml .= "\t\t\t".'<id>'.$oArticle->getId().'</id>'.$this->_sNewLine;
+                    $sXml .= "\t\t\t".'<name><![CDATA['.$oArticle->oxarticles__oxtitle->value.']]></name>'.$this->_sNewLine;
+                    $sXml .= "\t\t\t".'<fromprice>'.$oArticle->oxarticles__oxvarminprice->value.'</fromprice>'.$this->_sNewLine;
+                    $sXml .= "\t\t\t".'<currency>EUR</currency>'.$this->_sNewLine;
+                    $sXml .= "\t\t\t".'<coverpic>'.$oArticle->lvGetCoverPictureUrl().'</coverpic>'.$this->_sNewLine;
+                    $sXml .= "\t\t\t".'<fanart></fanart>'.$this->_sNewLine;
+                    $sXml .= "\t\t".'</product>'.$this->_sNewLine;
                 }
-                $sXml .= '</products>'.$this->_sNewLine;
+                $sXml .= "\t".'</products>'.$this->_sNewLine;
+                $sXml .= '</result>'.$this->_sNewLine;
             }
         }
         
