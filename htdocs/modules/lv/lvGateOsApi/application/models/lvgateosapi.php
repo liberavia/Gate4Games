@@ -55,7 +55,15 @@ class lvgateosapi extends oxBase {
      */
     protected $_oLvDb = null;
     
-    
+    /**
+     * New Line string
+     * @var string
+     */
+    protected $_sNewLine = "\n";
+
+
+
+
     public function __construct() {
         parent::__construct();
         
@@ -142,64 +150,66 @@ class lvgateosapi extends oxBase {
      * @return string
      */
     protected function _lvGetXml( $aArticles ) {
-        $sXml = '<?xml version="1.0" encoding="UTF-8"?>';
+        $sXml = '<?xml version="1.0" encoding="UTF-8"?>'.$this->_sNewLine;
         if ( count( $aArticles ) > 0 ) {
             if ( isset( $this->_aParams['id'] ) ) {
                 $oArticle       = $aArticles[0];
                 $oManufacturer  = $oArticle->getManufacturer();
                 $aMediaData     = $oArticle->lvGetAllMedia();
                 
-                $sXml .= '<product>';
-                $sXml .= "\t".'<id>'.$oArticle->getId().'</id>';
-                $sXml .= "\t".'<name><![CDATA['.$oArticle->oxarticles__oxtitle->value.']]></name>';
-                $sXml .= "\t".'<currency>EUR</currency>';
-                $sXml .= "\t".'<description><![CDATA['.$oArticle->lvGetShortDescription().']]></description>';
-                $sXml .= "\t".'<longdesc><![CDATA['.$oArticle->lvGetShortDescription().']]></longdesc>';
-                $sXml .= "\t".'<manufacturer><![CDATA['.$oManufacturer->getTitle().']]></manufacturer>';
-                $sXml .= "\t".'<igdb>'.$oArticle->oxarticles__lvigdb_rating->value.'</igdb>';
-                $sXml .= "\t".'<coverpic>'.$oArticle->lvGetCoverPictureUrl().'</coverpic>';
-                $sXml .= "\t".'<fanart></fanart>';
-                $sXml .= "\t".'<pictures>';
+                $sXml .= '<product>'.$this->_sNewLine;
+                $sXml .= "\t".'<id>'.$oArticle->getId().'</id>'.$this->_sNewLine;
+                $sXml .= "\t".'<name><![CDATA['.$oArticle->oxarticles__oxtitle->value.']]></name>'.$this->_sNewLine;
+                $sXml .= "\t".'<currency>EUR</currency>'.$this->_sNewLine;
+                $sXml .= "\t".'<description><![CDATA['.$oArticle->lvGetShortDescription().']]></description>'.$this->_sNewLine;
+                $sXml .= "\t".'<longdesc><![CDATA['.$oArticle->lvGetShortDescription().']]></longdesc>'.$this->_sNewLine;
+                $sXml .= "\t".'<manufacturer><![CDATA['.$oManufacturer->getTitle().']]></manufacturer>'.$this->_sNewLine;
+                $sXml .= "\t".'<igdb>'.$oArticle->oxarticles__lvigdb_rating->value.'</igdb>'.$this->_sNewLine;
+                $sXml .= "\t".'<coverpic>'.$oArticle->lvGetCoverPictureUrl().'</coverpic>'.$this->_sNewLine;
+                $sXml .= "\t".'<fanart></fanart>'.$this->_sNewLine;
+                $sXml .= "\t".'<pictures>'.$this->_sNewLine;
                 foreach ( $aMediaData as $aMedia ) {
                     if ( $aMedia['mediatype'] == 'extpic' ) {
-                        $sXml .= "\t\t".'<picture>'.$aMedia['detailsurl'].'</picture>';
+                        $sXml .= "\t\t".'<picture>'.$aMedia['detailsurl'].'</picture>'.$this->_sNewLine;
                     }
                 }
-                $sXml .= "\t".'</pictures>';
-                $sXml .= "\t".'<videos>';
+                $sXml .= "\t".'</pictures>'.$this->_sNewLine;
+                $sXml .= "\t".'<videos>'.$this->_sNewLine;
                 foreach ( $aMediaData as $aMedia ) {
                     if ( $aMedia['mediatype'] == 'youtube' ) {
-                        $sXml .= "\t\t".'<video>'.$aMedia['url'].'</video>';
+                        $sXml .= "\t\t".'<video>'.$aMedia['url'].'</video>'.$this->_sNewLine;
                     }
                 }
-                $sXml .= "\t".'</videos>';
-                $sXml .= "\t".'<prices>';
+                $sXml .= "\t".'</videos>'.$this->_sNewLine;
+                $sXml .= "\t".'<prices>'.$this->_sNewLine;
                 foreach ( $this->lvGetAffiliateDetails as $aAffiliate ) {
                     $sXml .= "\t\t".'<vendor>';
-                    $sXml .= "\t\t\t".'<vendorname>'.$aAffiliate['vendor']->getTitle().'</vendorname>';
-                    $sXml .= "\t\t\t".'<vendoricon>'.$aAffiliate['vendor']->getIconUrl().'</vendoricon>';
-                    $sXml .= "\t\t\t".'<vendorprice>'.$aAffiliate['product']->getPrice()->getBruttoPrice().'</vendorprice>';
-                    $sXml .= "\t\t\t".'<vendorlink>'.$aAffiliate['product']->oxarticles__oxexturl->rawValue.'</vendorlink>';
-                    $sXml .= "\t\t".'</vendor>';                
+                    $sXml .= "\t\t\t".'<vendorname>'.$aAffiliate['vendor']->getTitle().'</vendorname>'.$this->_sNewLine;
+                    $sXml .= "\t\t\t".'<vendoricon>'.$aAffiliate['vendor']->getIconUrl().'</vendoricon>'.$this->_sNewLine;
+                    $sXml .= "\t\t\t".'<vendorprice>'.$aAffiliate['product']->getPrice()->getBruttoPrice().'</vendorprice>'.$this->_sNewLine;
+                    $sXml .= "\t\t\t".'<vendorlink>'.$aAffiliate['product']->oxarticles__oxexturl->rawValue.'</vendorlink>'.$this->_sNewLine;
+                    $sXml .= "\t\t".'</vendor>'.$this->_sNewLine;                
                 }
-                $sXml .= "\t".'</prices>';
-                $sXml .= '</product>';
+                $sXml .= "\t".'</prices>'.$this->_sNewLine;
+                $sXml .= '</product>'.$this->_sNewLine;
             }
             else {
-                $sXml .= '<products>';
+                $sXml .= '<products>'.$this->_sNewLine;
                 foreach ( $aArticles as $oArticle ) {
-                    $sXml .= "\t".'<product>';
-                    $sXml .= "\t\t".'<id>'.$oArticle->getId().'</id>';
-                    $sXml .= "\t\t".'<name><![CDATA['.$oArticle->oxarticles__oxtitle->value.']]></name>';
-                    $sXml .= "\t\t".'<fromprice>'.$oArticle->oxarticles__oxvarminprice->value.'</fromprice>';
-                    $sXml .= "\t\t".'<currency>EUR</currency>';
-                    $sXml .= "\t\t".'<coverpic>'.$oArticle->lvGetCoverPictureUrl().'</coverpic>';
-                    $sXml .= "\t\t".'<fanart></fanart>';
-                    $sXml .= "\t".'</product>';
+                    $sXml .= "\t".'<product>'.$this->_sNewLine;
+                    $sXml .= "\t\t".'<id>'.$oArticle->getId().'</id>'.$this->_sNewLine;
+                    $sXml .= "\t\t".'<name><![CDATA['.$oArticle->oxarticles__oxtitle->value.']]></name>'.$this->_sNewLine;
+                    $sXml .= "\t\t".'<fromprice>'.$oArticle->oxarticles__oxvarminprice->value.'</fromprice>'.$this->_sNewLine;
+                    $sXml .= "\t\t".'<currency>EUR</currency>'.$this->_sNewLine;
+                    $sXml .= "\t\t".'<coverpic>'.$oArticle->lvGetCoverPictureUrl().'</coverpic>'.$this->_sNewLine;
+                    $sXml .= "\t\t".'<fanart></fanart>'.$this->_sNewLine;
+                    $sXml .= "\t".'</product>'.$this->_sNewLine;
                 }
-                $sXml .= '</products>';
+                $sXml .= '</products>'.$this->_sNewLine;
             }
         }
+        
+        return $sXml;
     }
     
     
@@ -255,7 +265,7 @@ class lvgateosapi extends oxBase {
      */
     protected function _lvGetQuery() {
         if ( isset( $this->_aParams['id'] ) ) {
-            $sQuery = "SELECT OXID FROM ".$this->_sArticlesTable." WHERE OXID='".$this->_oLvDb->quote( $this->_aParams['id'] );
+            $sQuery = "SELECT OXID FROM ".$this->_sArticlesTable." WHERE OXID=".$this->_oLvDb->quote( $this->_aParams['id'] );
         }
         else {
             $iPage = 1;
