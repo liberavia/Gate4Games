@@ -221,6 +221,12 @@ class lvgateosapi extends oxBase {
                 $sXml .= '</product>'.$this->_sNewLine;
             }
             else {
+                $aListInfos = $this->_lvGetListInfos();
+                $sXml .= '<listinfos>'.$this->_sNewLine;
+                foreach ( $aListInfos as $sTag=>$sValue ) {
+                    $sXml .= "\t".'<'.$sTag.'>'.$sValue.'</'.$sTag.'>'.$this->_sNewLine;
+                }
+                $sXml .= '</listinfos>'.$this->_sNewLine;
                 $sXml .= '<products>'.$this->_sNewLine;
                 foreach ( $aArticles as $oArticle ) {
                     $sXml .= "\t".'<product>'.$this->_sNewLine;
@@ -250,6 +256,46 @@ class lvgateosapi extends oxBase {
         }
     }
     
+    
+    /**
+     * Returns meta information for list to organize paging results etc.
+     * 
+     * @param void
+     * @return array
+     */
+    protected function _lvGetListInfos() {
+        $iPage = 1;
+        if ( isset( $this->_aParams['page'] ) && is_numeric( $this->_aParams['page'] ) ) {
+            $iPage = (int)$this->_aParams['page'];
+        }
+
+        $iLimit = 25;
+        if ( isset( $this->_aParams['limit'] ) && is_numeric( $this->_aParams['limit'] ) ) {
+            $iLimit = (int)$this->_aParams['limit'];
+        }
+
+        if ( $iPage <= 1 ) {
+            $iFrom = 0;
+        }
+        else {
+            $iFrom = ( $iPage-1 ) * $iLimit;
+        }
+        
+        // count result information
+        $sQuery     = $this->_lvGetQuery( true );
+        $oResult    = $this->_oLvDb->Execute( $sQuery );
+        $iResults   = (int)$oResult->recordCount();
+        $iMaxPage   = floor( ( $iResults/$iLimit ) );
+        
+        $aListInfos = array(
+            'currentpage'       => $iPage,
+            'maxpage'           => $iMaxPage,
+            'resultsperpage'    => $iLimit,
+            'resultssum'        => $iResults,
+        );
+        
+        return $aListInfos;
+    }
     
     /**
      * Returns an array of article objects depending on params
@@ -290,7 +336,7 @@ class lvgateosapi extends oxBase {
      * @param void
      * @return string
      */
-    protected function _lvGetQuery() {
+    protected function _lvGetQuery( $blCount = false ) {
         if ( isset( $this->_aParams['id'] ) ) {
             $sQuery = "SELECT OXID FROM ".$this->_sArticlesTable." WHERE OXID=".$this->_oLvDb->quote( $this->_aParams['id'] );
         }
@@ -315,15 +361,26 @@ class lvgateosapi extends oxBase {
             // fetch allowed attributes
             $sAllowedAttributes = implode( ", ", $this->_oLvDb->quoteArray( $this->_aCompatibilityAttributes ) );
 
-            $sQuery ="
-                SELECT oa.OXID, oa.OXPARENTID, (SELECT LVIGDB_RELEVANCE FROM ".$this->_sArticlesTable." oa2 WHERE oa2.OXID=oa.OXPARENTID) as RELEVANCE
-                FROM ".$this->_sObject2AttributeTable." o2a
-                INNER JOIN ".$this->_sArticlesTable." oa ON (o2a.OXOBJECTID=oa.OXID)
-                WHERE o2a.OXATTRID IN ( ".$sAllowedAttributes." )
-                GROUP BY oa.OXPARENTID
-                ORDER BY RELEVANCE DESC
-                LIMIT ".$iFrom.",".$iLimit."
-            ";
+            if ( $blCount ) {
+                $sQuery ="
+                    SELECT count(*)
+                    FROM oxobject2attribute o2a
+                    INNER JOIN oxarticles oa ON (o2a.OXOBJECTID=oa.OXID)
+                    WHERE o2a.OXATTRID IN ( ".$sAllowedAttributes." )
+                    GROUP BY oa.OXPARENTID
+                ";
+            }
+            else {
+                $sQuery ="
+                    SELECT oa.OXID, oa.OXPARENTID, (SELECT LVIGDB_RELEVANCE FROM ".$this->_sArticlesTable." oa2 WHERE oa2.OXID=oa.OXPARENTID) as RELEVANCE
+                    FROM ".$this->_sObject2AttributeTable." o2a
+                    INNER JOIN ".$this->_sArticlesTable." oa ON (o2a.OXOBJECTID=oa.OXID)
+                    WHERE o2a.OXATTRID IN ( ".$sAllowedAttributes." )
+                    GROUP BY oa.OXPARENTID
+                    ORDER BY RELEVANCE DESC
+                    LIMIT ".$iFrom.",".$iLimit."
+                ";
+            }
         }
 
         return $sQuery;
