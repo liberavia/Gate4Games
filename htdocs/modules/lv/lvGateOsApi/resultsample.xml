@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (C) 2015 André Gregor-Herrmann
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!-- LIST -->
+<products>
+    <product>
+        <id></id>
+        <name></name>
+        <fromprice></fromprice>
+        <currency></currency>
+        <coverpic></coverpic>
+        <fanart></fanart>
+    </product>
+</products>
+
+<product>
+    <id></id>
+    <name></name>
+    <currency></currency>
+    <description></description>
+    <manufacturer></manufacturer>
+    <igdb></igdb>
+    <coverpic></coverpic>
+    <fanart></fanart>
+    <pictures>
+        <picture></picture>
+    </pictures>
+    <videos>
+        <video></video>
+    </videos>
+    <prices>
+        <vendor>
+            <vendorname></vendorname>
+            <vendoricon></vendoricon>
+            <vendorprice></vendorprice>
+            <vendorlink></vendorlink>
+        </vendor>
+    </prices>
+</product>
+    
