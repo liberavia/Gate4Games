@@ -92,10 +92,10 @@ class lvgateosapi extends oxBase {
      * @param void
      * @return array
      */
-    public function lvGetAffiliateDetails() {
+    public function lvGetAffiliateDetails( $sOxid ) {
         $aAffiliatesForProduct = array();
-        $aSortedVariantIds = $this->_lvGetSortedVariantIds();
-        
+        $aSortedVariantIds = $this->_lvGetSortedVariantIds( $sOxid );
+
         if ( count( $aSortedVariantIds ) > 0 ) {
             $iIndex = 0;
             $iCurrentLangId = oxRegistry::getLang()->getBaseLanguage();
@@ -110,8 +110,27 @@ class lvgateosapi extends oxBase {
                 $iIndex++;
             }
         }
-        
+
         return $aAffiliatesForProduct;
+    }
+    
+    /**
+     * Template getter returns an array with review videos
+     * 
+     * @param object $oProduct
+     * @return array
+     */
+    public function lvGetReviewVideos( $oProduct ) {
+        $aReturn    = array();
+        $oArticle   = $oProduct->lvGetProduct();
+        
+        foreach ( $oArticle->getMediaUrls() as $oMediaUrl ) {
+            if ( $oMediaUrl->oxmediaurls__lvmediatype->value != 'productreview' ) continue;
+            
+            $aReturn[] = $oMediaUrl->oxmediaurls__oxurl->value;            
+        }
+        
+        return $aReturn;
     }
     
     
@@ -121,9 +140,8 @@ class lvgateosapi extends oxBase {
      * @param void
      * @return array
      */
-    protected function _lvGetSortedVariantIds() {
+    protected function _lvGetSortedVariantIds( $sOxid ) {
         $aVariantIds = array();
-        $sOxid = $this->getId();
         
         if ( $sOxid ) {
             $oDb                = oxDb::getDb( FETCH_MODE_ASSOC );
@@ -174,20 +192,29 @@ class lvgateosapi extends oxBase {
                     }
                 }
                 $sXml .= "\t".'</pictures>'.$this->_sNewLine;
-                $sXml .= "\t".'<videos>'.$this->_sNewLine;
+                $sXml .= "\t".'<trailers>'.$this->_sNewLine;
                 foreach ( $aMediaData as $aMedia ) {
                     if ( $aMedia['mediatype'] == 'youtube' ) {
-                        $sXml .= "\t\t".'<video>'.$aMedia['url'].'</video>'.$this->_sNewLine;
+                        $sXml .= "\t\t".'<trailer>'.$aMedia['url'].'</trailer>'.$this->_sNewLine;
                     }
                 }
-                $sXml .= "\t".'</videos>'.$this->_sNewLine;
+                $sXml .= "\t".'</trailers>'.$this->_sNewLine;
+                $sXml .= "\t".'<review_videos>'.$this->_sNewLine;
+                foreach ( $this->lvGetReviewVideos( $oArticle ) as $sReviewUrl ) {
+                    $sXml .= "\t\t".'<review_video>'.$sReviewUrl.'</review_video>'.$this->_sNewLine;
+                }
+                $sXml .= "\t".'</review_videos>'.$this->_sNewLine;
                 $sXml .= "\t".'<prices>'.$this->_sNewLine;
-                foreach ( $this->lvGetAffiliateDetails as $aAffiliate ) {
-                    $sXml .= "\t\t".'<vendor>';
+                $aAffiliateDetails = $this->lvGetAffiliateDetails( $oArticle->getId() );
+                foreach ( $aAffiliateDetails as $aAffiliate ) {
+                    $sVendorLink    = $aAffiliate['product']->oxarticles__oxexturl->rawValue;
+                    $sQrLink        = "https://chart.googleapis.com/chart?chs=500x500&cht=qr&choe=UTF-8&chl=".urlencode( $sVendorLink );
+                    $sXml .= "\t\t".'<vendor>'.$this->_sNewLine;
                     $sXml .= "\t\t\t".'<vendorname>'.$aAffiliate['vendor']->getTitle().'</vendorname>'.$this->_sNewLine;
                     $sXml .= "\t\t\t".'<vendoricon>'.$aAffiliate['vendor']->getIconUrl().'</vendoricon>'.$this->_sNewLine;
                     $sXml .= "\t\t\t".'<vendorprice>'.$aAffiliate['product']->getPrice()->getBruttoPrice().'</vendorprice>'.$this->_sNewLine;
-                    $sXml .= "\t\t\t".'<vendorlink>'.$aAffiliate['product']->oxarticles__oxexturl->rawValue.'</vendorlink>'.$this->_sNewLine;
+                    $sXml .= "\t\t\t".'<vendorlink>'.$sVendorLink.'</vendorlink>'.$this->_sNewLine;
+                    $sXml .= "\t\t\t".'<vendorqrcode>'.$sQrLink.'</vendorlink>'.$this->_sNewLine;
                     $sXml .= "\t\t".'</vendor>'.$this->_sNewLine;                
                 }
                 $sXml .= "\t".'</prices>'.$this->_sNewLine;
@@ -289,14 +316,16 @@ class lvgateosapi extends oxBase {
             $sAllowedAttributes = implode( ", ", $this->_oLvDb->quoteArray( $this->_aCompatibilityAttributes ) );
 
             $sQuery ="
-                SELECT oa.OXID, oa.OXPARENTID
+                SELECT oa.OXID, oa.OXPARENTID, (SELECT LVIGDB_RELEVANCE FROM ".$this->_sArticlesTable." oa2 WHERE oa2.OXID=oa.OXPARENTID) as RELEVANCE
                 FROM ".$this->_sObject2AttributeTable." o2a
-                LEFT JOIN ".$this->_sArticlesTable." oa ON (o2a.OXOBJECTID=oa.OXID)
+                INNER JOIN ".$this->_sArticlesTable." oa ON (o2a.OXOBJECTID=oa.OXID)
                 WHERE o2a.OXATTRID IN ( ".$sAllowedAttributes." )
-                ORDER BY oa.LVIGDB_RELEVANCE DESC
+                GROUP BY oa.OXPARENTID
+                ORDER BY RELEVANCE DESC
                 LIMIT ".$iFrom.",".$iLimit."
             ";
         }
+
         return $sQuery;
     }
     
