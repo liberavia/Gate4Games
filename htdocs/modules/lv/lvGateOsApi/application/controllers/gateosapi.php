@@ -24,32 +24,85 @@
  * @author André Gregor-Herrmann
  */
 class gateosapi extends oxUBase {
-    
+
+    /**
+     * Init default if no fcn isset
+     */
     public function init() {
         parent::init();
-        
+        $oConfig        = $this->getConfig();
+        $sFnc           = $oConfig->getRequestParameter( 'fnc' );
+        if ( !$sFnc ) {
+            $this->lvGetInfo();
+        }
+    }
+    
+    /**
+     * Get filtered and sorted xml list or details of product
+     * 
+     * @param void
+     * @return string
+     */
+    public function lvGetInfo() {
         // init needed objects
         $oConfig        = $this->getConfig();
         $oLvGateOsApi   = oxNew( 'lvgateosapi' ); 
         
         $aParams        = array();
+        
         // get parameters
         $sProductId     = $oConfig->getRequestParameter( 'id' );
         $sPage          = $oConfig->getRequestParameter( 'page' );
         $sLimit         = $oConfig->getRequestParameter( 'limit' );
+        $sAttributes    = $oConfig->getRequestParameter( 'attributes' );
+        $sSortBy        = $oConfig->getRequestParameter( 'sortby' );
+        $sSortDir       = $oConfig->getRequestParameter( 'sortdir' );
         
         //assign params if exist
         if ( $sProductId ) {
-            $aParams['id']      = trim( $sProductId );
+            $aParams['id']          = trim( $sProductId );
         }
         if ( $sPage ) {
-            $aParams['page']    = trim( $sPage );
+            $aParams['page']        = trim( $sPage );
         }
         if ( $sLimit ) {
-            $aParams['limit']   = trim( $sLimit );
+            $aParams['limit']       = trim( $sLimit );
         }
-        
+        if ( $sAttributes ) {
+            $aParams['attributes']  = trim( urldecode( $sAttributes ) );
+        }
+        if ( $sSortBy ) {
+            $aParams['sortby']      = trim( urldecode( $sSortBy ) );
+        }
+        if ( $sSortDir ) {
+            $aParams['sortdir']     = trim( urldecode( $sSortDir ) );
+        }
+
         $sXml = $oLvGateOsApi->lvGetRequestResult( $aParams );
+        
+        exit( $sXml );
+    }
+
+    /**
+     * Returns a list of genres as XML
+     * 
+     * @param void
+     * @return string
+     */
+    public function lvGetGenres() {
+        parent::init();
+        
+        $oConfig        = $this->getConfig();
+        $oLvGateOsApi   = oxNew( 'lvgateosapi' ); 
+        
+        $aParams        = array();
+        
+        // get parameters
+        $sAttributes    = $oConfig->getRequestParameter( 'attributes' );
+        if ( $sAttributes ) {
+            $aParams['attributes']  = trim( urldecode( $sAttributes ) );
+        }
+        $sXml           = $oLvGateOsApi->lvGetGenres( $aParams );
         
         exit( $sXml );
     }

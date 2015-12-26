@@ -38,10 +38,31 @@ class lvgateosapi extends oxBase {
     protected $_sObject2AttributeTable = '';
     
     /**
-     * Array of allowed compatibility attributes
+     * Array of allowed sort methods
      * @var array
      */
-    protected $_aCompatibilityAttributes = array( 'CompatibilityTypeLin' );
+    protected $_aAllowedSortings = array( 
+        'relevance'         => array(
+            'select'    => ' (SELECT LVIGDB_RELEVANCE FROM %%ARTTABLE%% oa2 WHERE oa2.OXID=oa.OXPARENTID) as RELEVANCE ',
+            'order'     => 'RELEVANCE',
+        ), 
+        'name'              => array(
+            'select'    => ' (SELECT OXTITLE FROM %%ARTTABLE%% oa2 WHERE oa2.OXID=oa.OXPARENTID) as ARTNAME ',
+            'order'     => 'ARTNAME',
+        ), 
+        'price'             => array(
+            'select'    => '(SELECT OXVARMINPRICE FROM %%ARTTABLE%% oa2 WHERE oa2.OXID=oa.OXPARENTID) as PRICE ',
+            'order'     => 'PRICE',
+        ), 
+        'igdb'              => array(
+            'select'    => ' (SELECT LVIGDB_RATING FROM %%ARTTABLE%% oa2 WHERE oa2.OXID=oa.OXPARENTID) as RATING ',
+            'order'     => 'RATING',
+        ), 
+        'release'       => array(
+            'select'    => ' (SELECT LVIGDB_RELEASE_DATE FROM %%ARTTABLE%% oa2 WHERE oa2.OXID=oa.OXPARENTID) as RELEASEDATE ',
+            'order'     => 'RELEASEDATE',
+        ), 
+    );
     
     /**
      * Settings parameters
@@ -81,7 +102,21 @@ class lvgateosapi extends oxBase {
     public function lvGetRequestResult( $aParams=null ) {
         $this->_lvSetParams( $aParams );
         $aArticles  = $this->_lvGetArticles();
-        $sXml       = $this->_lvGetXml( $aArticles );
+        $sXml       = $this->_lvGetInfoXml( $aArticles );
+        
+        return $sXml;
+    }
+    
+    
+    /**
+     * Performs a request on the available gamegenre values
+     * 
+     * @param array $aParams
+     * @return string
+     */
+    public function lvGetGenres( $aParams ) {
+        $this->_lvSetParams( $aParams );
+        $sXml = $this->_lvGetGenreXml();
         
         return $sXml;
     }
@@ -161,13 +196,35 @@ class lvgateosapi extends oxBase {
         return $aVariantIds;
     }
 
+    
     /**
-     * Returns the xml 
+     * Returns an xml of available genres
+     * 
+     * @param void
+     * @return string
+     */
+    protected function _lvGetGenreXml() {
+        $sXml = '<?xml version="1.0" encoding="UTF-8"?>'.$this->_sNewLine;
+        $aGenres = $this->_lvGetGenres();
+        if ( count( $aGenres ) > 0 ) {
+            $sXml .= '<genres>'.$this->_sNewLine;
+            foreach ( $aGenres as $sGenre ) {
+                $sXml .= "\t".'<genre>'.$sGenre.'</genre>'.$this->_sNewLine;
+            }
+            $sXml .= '</genres>'.$this->_sNewLine;
+        }
+        
+        return $sXml;
+    }
+    
+    
+    /**
+     * Returns the info xml 
      * 
      * @param array $aArticles
      * @return string
      */
-    protected function _lvGetXml( $aArticles ) {
+    protected function _lvGetInfoXml( $aArticles ) {
         $sXml = '<?xml version="1.0" encoding="UTF-8"?>'.$this->_sNewLine;
         if ( count( $aArticles ) > 0 ) {
             if ( isset( $this->_aParams['id'] ) ) {
@@ -251,6 +308,8 @@ class lvgateosapi extends oxBase {
     /**
      * Set request parameters
      * 
+     * @param void
+     * @return void
      */
     protected function _lvSetParams( $aParams ) {
         if ( $aParams !== null && is_array( $aParams ) ) {
@@ -287,7 +346,7 @@ class lvgateosapi extends oxBase {
         $sQuery     = $this->_lvGetQuery( true );
         $oResult    = $this->_oLvDb->Execute( $sQuery );
         $iResults   = (int)$oResult->recordCount();
-        $iMaxPage   = floor( ( $iResults/$iLimit ) );
+        $iMaxPage   = ceil( ( $iResults/$iLimit ) );
         
         $aListInfos = array(
             'currentpage'       => $iPage,
@@ -298,6 +357,7 @@ class lvgateosapi extends oxBase {
         
         return $aListInfos;
     }
+    
     
     /**
      * Returns an array of article objects depending on params
@@ -333,6 +393,33 @@ class lvgateosapi extends oxBase {
     
     
     /**
+     * Returns an array of genres available
+     * 
+     * @param void
+     * @return array
+     */
+    protected function _lvGetGenres() {
+        $aGenres = array();
+        // set attributes
+        $aAttributes        = $this->_lvGetRequestAttributes();
+        // filter values query
+        $sFilterIdQuery     = $this->_lvGetFilteredIds( $aAttributes );
+        
+        $sQuery = "SELECT o2a.OXVALUE FROM ".$this->_sObject2AttributeTable." o2a WHERE o2a.OXATTRID='GameGenre' ".$sFilterIdQuery." GROUP BY o2a.OXVALUE ORDER BY o2a.OXVALUE ASC";
+
+        $oRs = $this->_oLvDb->Execute( $sQuery );
+        if ( $oRs != false && $oRs->recordCount() > 0 ) {
+            while ( !$oRs->EOF ) {
+                $aGenres[] = $oRs->fields['OXVALUE'];
+                $oRs->moveNext();
+            }
+        }
+        
+        return $aGenres;
+    }
+    
+    
+    /**
      * Returns the query for requesting articleids
      * 
      * @param void
@@ -360,32 +447,165 @@ class lvgateosapi extends oxBase {
                 $iFrom = ( $iPage-1 ) * $iLimit;
             }
             
-            // fetch allowed attributes
-            $sAllowedAttributes = implode( ", ", $this->_oLvDb->quoteArray( $this->_aCompatibilityAttributes ) );
+            // sorting
+            $sSortSelect                = " (SELECT LVIGDB_RELEVANCE FROM ".$this->_sArticlesTable." oa2 WHERE oa2.OXID=oa.OXPARENTID) as RELEVANCE ";
+            $sSortOrderBy               = "RELEVANCE";
+            $sSortOrderDirection        = "DESC";
+            
+            if ( isset( $this->_aParams['sortby'] ) && in_array( $this->_aParams['sortby'], array_keys( $this->_aAllowedSortings ) ) ) {
+                $sSortBy                = $this->_aParams['sortby'];
+                $sSortSelect            = str_replace( '%%ARTTABLE%%', $this->_sArticlesTable, $this->_aAllowedSortings[$sSortBy]['select'] );
+                $sSortOrderBy           = $this->_aAllowedSortings[$sSortBy]['order'];
+                
+                $sSortOrderDirection    = "DESC";
+                if ( isset( $this->_aParams['sortdir'] ) && strtolower( $this->_aParams['sortdir'] ) == 'asc' ) {
+                    $sSortOrderDirection    = "ASC";
+                }
+            }
+            
+            // set attributes
+            $aAttributes                = $this->_lvGetRequestAttributes();
+            // filter values query
+            $sFilterIdQuery             = $this->_lvGetFilteredIds( $aAttributes );
+
+            $sAllowedAttributes     = '';
+            if ( count( $aAttributes ) > 0 ) {
+                $aAttributeKeys         = array_keys( $aAttributes );
+                $sAllowedAttributes = implode( ", ", $this->_oLvDb->quoteArray( $aAttributeKeys ) );
+            }
 
             if ( $blCount ) {
                 $sQuery ="
                     SELECT count(*)
                     FROM oxobject2attribute o2a
                     INNER JOIN oxarticles oa ON (o2a.OXOBJECTID=oa.OXID)
-                    WHERE o2a.OXATTRID IN ( ".$sAllowedAttributes." )
+                    WHERE 1
+                ";
+                
+                if ( $sAllowedAttributes ) {
+                    $sQuery .= "
+                        AND o2a.OXATTRID IN ( ".$sAllowedAttributes." )
+                    ";
+                    // filter values
+                    $sQuery .= $sFilterIdQuery;
+                }
+                
+                $sQuery .= "
                     GROUP BY oa.OXPARENTID
                 ";
             }
             else {
-                $sQuery ="
-                    SELECT oa.OXID, oa.OXPARENTID, (SELECT LVIGDB_RELEVANCE FROM ".$this->_sArticlesTable." oa2 WHERE oa2.OXID=oa.OXPARENTID) as RELEVANCE
+                $sQuery  = "
+                    SELECT 
+                        oa.OXID, 
+                        oa.OXPARENTID, 
+                        ".$sSortSelect."
                     FROM ".$this->_sObject2AttributeTable." o2a
                     INNER JOIN ".$this->_sArticlesTable." oa ON (o2a.OXOBJECTID=oa.OXID)
-                    WHERE o2a.OXATTRID IN ( ".$sAllowedAttributes." )
+                    WHERE 1
+                ";
+                
+                if ( $sAllowedAttributes ) {
+                    $sQuery .= "
+                        AND o2a.OXATTRID IN ( ".$sAllowedAttributes." )
+                    ";
+                    // filter values
+                    $sQuery .= $sFilterIdQuery;
+                }
+                
+                $sQuery .= "
                     GROUP BY oa.OXPARENTID
-                    ORDER BY RELEVANCE DESC
+                    ORDER BY ".$sSortOrderBy." ".$sSortOrderDirection."
                     LIMIT ".$iFrom.",".$iLimit."
                 ";
             }
         }
 
         return $sQuery;
+    }
+    
+    
+    /**
+     * Filters attributes to given attributes and their values
+     * 
+     * @param array $aAttributes
+     * @return string
+     */
+    protected function _lvGetFilteredIds( $aAttributes ) {
+        $sResultQuery               = "";
+        $aCurrentlyFilteredIds      = array();
+        
+        foreach ( $aAttributes as $sAttributeId => $aAttribute ) {
+            foreach ( $aAttribute as $sAttributeValue ) {
+                if ( $sAttributeValue ) {
+                    // SELECT OXOBJECTID FROM oxobject2attribute WHERE OXATTRID='CompatibilityTypeLin' AND OXVALUE='Ja' 
+                    $sQuery = "SELECT OXOBJECTID FROM oxobject2attribute WHERE OXATTRID=".$this->_oLvDb->quote( $sAttributeId )." AND OXVALUE=".$this->_oLvDb->quote( $sAttributeValue );
+                    // if we have results of a former filtering limit results to these ids
+                    if ( count( $aCurrentlyFilteredIds ) > 0 ) {
+                        $sCurrentlyFilteredIds = implode( ", ", $this->_oLvDb->quoteArray( $aCurrentlyFilteredIds ) );
+                        $sQuery .= "
+                            AND OXOBJECTID IN ( ".$sCurrentlyFilteredIds." )
+                        ";
+                    }
+
+                    // refill filtered ids with new result
+                    $aCurrentlyFilteredIds  = array();
+                    $oRs                    = $this->_oLvDb->Execute( $sQuery );
+                    
+                    if ( $oRs != false && $oRs->recordCount() > 0 ) {
+                        while ( !$oRs->EOF ) {
+                            $aCurrentlyFilteredIds[] = $oRs->fields['OXOBJECTID'];
+                            $oRs->moveNext();
+                        }
+                    }
+                }
+            }
+        }
+        
+        // finally we have a set of ids which are completed filtered by given attribute values
+        // bring this into the needed query form
+        if ( count( $aCurrentlyFilteredIds ) > 0 ) {
+            $sCurrentlyFilteredIds = implode( ", ", $this->_oLvDb->quoteArray( $aCurrentlyFilteredIds ) );
+            $sResultQuery = "
+                AND o2a.OXOBJECTID IN ( ".$sCurrentlyFilteredIds." )
+            ";
+        }
+        
+        return $sResultQuery;
+    }
+
+
+
+
+    /**
+     * Builds attribute array of requested attributes
+     * 
+     * @param void
+     * @return array
+     */
+    protected function _lvGetRequestAttributes() {
+        $aAttributes = array();
+
+        if ( isset( $this->_aParams['attributes'] ) && !empty( $this->_aParams['attributes'] ) ) {
+            // explode attributes into groups for later fetching names and values
+            $aAttributeGroups = explode( '|', $this->_aParams['attributes'] );
+            foreach ( $aAttributeGroups as $sAttributeGroup ) {
+                $aAttributeGroup = explode( "--", $sAttributeGroup );
+                if ( count( $aAttributeGroup ) == 2 ) {
+                    $aAttributeValues = explode( ',', $aAttributeGroup[1] );
+                    if ( count( $aAttributeValues ) > 0 ) {
+                        foreach ( $aAttributeValues as $sAttributeValue ) {
+                            $aAttributes[$aAttributeGroup[0]]['values'] = $sAttributeValue;
+                        }
+                    }
+                }
+                else {
+                    $aAttributes[$aAttributeGroup[0]]['values'] = array();
+                }
+            }
+        }
+
+        return $aAttributes;
     }
     
     
