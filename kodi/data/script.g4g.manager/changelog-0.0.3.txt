@@ -1,0 +1,11 @@
+== 0.0.1 ==
+  * Released 2015-12-17
+  * Initial development pre alpha release
+
+== 0.0.2 ==
+  * Released 2015-12-17
+  * Removed debug message  
+  
+== 0.0.3 ==
+  * Released 2015-12-20
+  * Initial add of gate4games store    

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="50000">Hauptmenü</string>
+    
+    <!-- Main menu -->
+    <string id="50001">Steam Starten</string>
+    <string id="50002">Bibliothek</string>
+    <string id="50003">Games Hinzufügen</string>
+    <string id="50004">Einstellungen</string>
+    
+    <!-- Library -->
+    <string id="50010">Installiert</string>
+    <string id="50011">Verfügbar</string>
+
+    <!-- Add Games -->
+    <string id="50020">PC-Games</string>
+    <string id="50021">Android Apps</string>
+    <string id="50022">Sony Playstation 1</string>
+    <string id="50023">Sony Playstation 2</string>
+    <string id="50024">Nintendo Gamecube</string>
+
+    <!-- List actions -->
+    <string id="50050">[COLOR blue]Direkt zu Seite springen...[/COLOR]</string>
+    <string id="50051">[COLOR blue]Nach Genre...[/COLOR]</string>
+    <string id="50052">[COLOR blue]Sortieren nach...[/COLOR]</string>
+    <string id="50053">Nächste Seite</string>
+    
+    <!-- Settings -->
+    <string id="50101">Kodi beenden, wenn ein Spiel gestartet wird.</string>
+
+    <!-- General -->
+    <string id="50200">ab</string>
+    <string id="50201">von</string>
+</strings>

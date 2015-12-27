@@ -87,7 +87,7 @@
             <email>info@gate4games.com</email>
         </extension>
     </addon>
-    <addon id="script.g4g.manager" name="Game Manager" version="0.0.2" provider-name="liberavia">
+    <addon id="script.g4g.manager" name="Game Manager" version="0.0.4" provider-name="liberavia">
         <requires>
             <import addon="xbmc.python" version="2.19.0"/>
         </requires>
@@ -96,7 +96,9 @@
         </extension>
         <extension point="xbmc.addon.metadata">
             <summary lang="en">Manages Games</summary>
-            <description lang="en">With Gate4Games Manger you can purchase, install and play games from different platforms</description>
+            <description lang="en">With Gate4Games Manager you can purchase, install and play games from different platforms</description>
+            <summary lang="de">Verwaltet Games</summary>
+            <description lang="de">Mit Gate4Games Manager kannst du Spiele verschiedender Plattformen hinzufügen, installieren und spielen</description>
             <platform>linux</platform>
             <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
             <website>http://www.gate4games.com</website>
