@@ -24,6 +24,18 @@
     <string id="50051">[COLOR blue]Nach Genre...[/COLOR]</string>
     <string id="50052">[COLOR blue]Sortieren nach...[/COLOR]</string>
     <string id="50053">Nächste Seite</string>
+    <string id="50054">[COLOR blue]Nach Relevanz (Absteigend)[/COLOR]</string>
+    <string id="50055">[COLOR blue]Nach Relevanz (Aufsteigend)[/COLOR]</string>
+    <string id="50056">[COLOR blue]Nach Name (Aufsteigend)[/COLOR]</string>
+    <string id="50057">[COLOR blue]Nach Name (Absteigend)[/COLOR]</string>
+    <string id="50058">[COLOR blue]Nach Preis (Absteigend)[/COLOR]</string>
+    <string id="50059">[COLOR blue]Nach Preis (Aufsteigend)[/COLOR]</string>
+    <string id="50060">[COLOR blue]Nach IGDB-Wertung (Absteigend)[/COLOR]</string>
+    <string id="50061">[COLOR blue]Nach IGDB-Wertung (Aufsteigend)[/COLOR]</string>
+    <string id="50062">[COLOR blue]Nach Veröffentlichung (Absteigend)[/COLOR]</string>
+    <string id="50063">[COLOR blue]Nach Veröffentlichung (Aufsteigend)[/COLOR]</string>
+    <string id="50064">[COLOR blue]Zurück zum Hauptmenü[/COLOR]</string>
+    <string id="50065">[COLOR blue]Genre-Einschränkung aufheben[/COLOR]</string>
     
     <!-- Settings -->
     <string id="50101">Kodi beenden, wenn ein Spiel gestartet wird.</string>
@@ -31,4 +43,13 @@
     <!-- General -->
     <string id="50200">ab</string>
     <string id="50201">von</string>
+    <string id="50202">Details zu</string>
+    <string id="50203">Trailer für</string>
+    <string id="50204">Reviews für</string>
+    <string id="50205">Trailer für</string>
+    <string id="50206">Review für</string>
+    <string id="50207">Screenshots für</string>
+    <string id="50208">bei</string>
+    
+    <string id="59999">Dieser Teil der Anwendung befindet sich noch in Entwicklung</string>
 </strings>

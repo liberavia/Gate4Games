@@ -24,6 +24,20 @@
     <string id="50051">[COLOR blue]Filter by genre...[/COLOR]</string>
     <string id="50052">[COLOR blue]Sort result...[/COLOR]</string>
     <string id="50053">Next page</string>
+    <string id="50054">[COLOR blue]Sort by relevance descending[/COLOR]</string>
+    <string id="50055">[COLOR blue]Sort by relevance ascending[/COLOR]</string>
+    <string id="50056">[COLOR blue]Sort by name ascending[/COLOR]</string>
+    <string id="50057">[COLOR blue]Sort by name descending[/COLOR]</string>
+    <string id="50058">[COLOR blue]Sort by price ascending[/COLOR]</string>
+    <string id="50059">[COLOR blue]Sort by price descending[/COLOR]</string>
+    <string id="50060">[COLOR blue]Sort by IGDB-Rating descending[/COLOR]</string>
+    <string id="50061">[COLOR blue]Sort by IGDB-Rating ascending[/COLOR]</string>
+    <string id="50062">[COLOR blue]Sort by release date descending[/COLOR]</string>
+    <string id="50063">[COLOR blue]Sort by release date ascending[/COLOR]</string>
+    <string id="50064">[COLOR blue]Back to Game Manger main menu[/COLOR]</string>
+    <string id="50065">[COLOR blue]Release Genre-Selection[/COLOR]</string>
+    
+    <!-- pc game details -->
     
     <!-- Settings -->
     <string id="50100">General</string>
@@ -32,4 +46,13 @@
     <!-- General -->
     <string id="50200">from</string>
     <string id="50201">of</string>
+    <string id="50202">Details for</string>
+    <string id="50203">Trailers for</string>
+    <string id="50204">Reviews for</string>
+    <string id="50205">Trailer for</string>
+    <string id="50206">Review for</string>
+    <string id="50207">Screenshots for</string>
+    <string id="50208">at</string>
+    
+    <string id="59999">This feature is currently under development</string>
 </strings>

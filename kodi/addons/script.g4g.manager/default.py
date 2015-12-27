@@ -17,6 +17,7 @@ import re
 import pprint
 import xml.etree.ElementTree as ET
 import urllib
+import json
 
 plugintools.module_log_enabled = False
 plugintools.http_debug_log_enabled = False
@@ -34,6 +35,9 @@ FOLDER_IMAGES = os.path.join(FOLDER_G4G, 'images')
 FOLDER_ICONS = os.path.join(FOLDER_IMAGES, 'icons')
 FOLDER_FANART = os.path.join(FOLDER_IMAGES, 'fanart')
 FOLDER_COVER = os.path.join(FOLDER_IMAGES, 'cover')
+API_BASE_URL = "http://www.gate4games.com/index.php?cl=gateosapi"
+API_COMPATIBILITY_ATTRIBUTE = "&attributes=CompatibilityTypeLin--Ja"
+YOUTUBE_API_KEY='AIzaSyDEJmWgKTSb8Gi4OUmWKY2YrLgI4pIbZQ0';
 
 addon = xbmcaddon.Addon(id='script.g4g.manager')
 addonPath = addon.getAddonInfo('path')
@@ -72,7 +76,7 @@ def run():
 
     # Get params
     params = plugintools.get_params()
-
+    log("g4gmanager.run "+repr(params))
     if params.get("action") is None:
         main_list(params)
     else:
@@ -94,7 +98,7 @@ def main_list(params):
     
 # dummy message
 def dummy(params):
-    plugintools.message("Gate4Games Manager", "This feature ist currently not implemented.","")
+    plugintools.message("Gate4Games Manager", language(59999).encode('utf8'),"")
 
 # add games
 def add_games(params):
@@ -102,25 +106,27 @@ def add_games(params):
     
     plugintools.set_view(plugintools.THUMBNAIL)
     
-    plugintools.add_item( action="add_pc_games", title=language(50020).encode('utf-8'), thumbnail = DEFAULT_THUMB, fanart=FANART , folder=True, page="1" )
-    plugintools.add_item( action="dummy", title=language(50021).encode('utf-8') , thumbnail = DEFAULT_THUMB, fanart=FANART , folder=False )
-    plugintools.add_item( action="dummy", title=language(50022).encode('utf-8') , thumbnail = DEFAULT_THUMB , fanart=FANART , folder=False )
-    plugintools.add_item( action="dummy", title=language(50023).encode('utf-8') , thumbnail = DEFAULT_THUMB , fanart=FANART , folder=False )
-    plugintools.add_item( action="dummy", title=language(50024).encode('utf-8') , thumbnail = DEFAULT_THUMB , fanart=FANART , folder=False )
+    default_filter_and_sort = json.dumps(dict([('genre', ''), ('sortby', 'relevance'), ('sortdir', 'desc')]))
+    
+    plugintools.add_item( action="add_pc_games", title=language(50020).encode('utf-8'), thumbnail=DEFAULT_THUMB, fanart=FANART, extra=default_filter_and_sort, folder=True, page="1" )
+    plugintools.add_item( action="dummy", title=language(50021).encode('utf-8'), thumbnail=DEFAULT_THUMB, fanart=FANART , folder=False )
+    plugintools.add_item( action="dummy", title=language(50022).encode('utf-8'), thumbnail=DEFAULT_THUMB, fanart=FANART , folder=False )
+    plugintools.add_item( action="dummy", title=language(50023).encode('utf-8'), thumbnail=DEFAULT_THUMB, fanart=FANART , folder=False )
+    plugintools.add_item( action="dummy", title=language(50024).encode('utf-8'), thumbnail=DEFAULT_THUMB, fanart=FANART , folder=False )
 
 # add games
 def add_pc_games(params):
     log("g4gmanager.add_pc_games "+repr(params))
     
     page = params.get('page') 
-
-    extra = params.get('extra')
+    extra = json.loads(params.get('extra'))
     
     # category filter?
     add_genre = ""
     if extra != '' and extra['genre'] != None and extra['genre'] != '':
         add_genre = "|GameGenre--" + urllib.quote_plus(extra['genre'])
-            
+    
+    # sorting ?
     add_sortby = ""
     if extra != '' and extra['sortby'] != None and extra['sortby'] != '':
         add_sortby = "&sortby=" + urllib.quote_plus(extra['sortby'])
@@ -129,10 +135,9 @@ def add_pc_games(params):
     if extra != '' and extra['sortdir'] != None and extra['sortdir'] != '':
         add_sortdir = "&sortdir=" + urllib.quote_plus(extra['sortdir'])
         
-    attributes_filter = "&attributes=CompatibilityTypeLin--Ja" + add_genre
+    attributes_filter = API_COMPATIBILITY_ATTRIBUTE + add_genre
     
-    
-    url = "http://www.gate4games.com/index.php?cl=gateosapi" + attributes_filter + add_sortby + add_sortdir
+    url = API_BASE_URL + attributes_filter + add_sortby + add_sortdir
     
     if page > 1:
         url += "&page=" + str(page)
@@ -142,18 +147,21 @@ def add_pc_games(params):
     
     root = ET.fromstring(body)
     log("g4gmanager.root "+root.tag)
-    # products = root.findall("./products")
     
     # get list information
+    extra['maxpage'] = "1"
     for listinfos in root.iter('listinfos'):
         maxpage = listinfos.find('maxpage').text
+        extra['maxpage'] = str(maxpage)
     
     plugintools.set_view(plugintools.LIST)
     
+    maintenance_extra = json.dumps(extra)
     # add maintenance entries
-    plugintools.add_item( action="add_pc_game_to_page", title=language(50050).encode('utf-8'), thumbnail=DEFAULT_THUMB, fanart=FANART , extra=extra, folder=True )
-    plugintools.add_item( action="add_pc_game_by_genre", title=language(50051).encode('utf-8'), thumbnail=DEFAULT_THUMB, fanart=FANART , extra=extra, folder=True )
-    plugintools.add_item( action="add_pc_game_sort", title=language(50052).encode('utf-8'), thumbnail=DEFAULT_THUMB, fanart=FANART , extra=extra, folder=True )
+    plugintools.add_item( action="main_list", title=language(50064).encode('utf-8'), thumbnail=DEFAULT_THUMB, fanart=FANART , extra=maintenance_extra, folder=True )
+    plugintools.add_item( action="add_pc_game_to_page", title=language(50050).encode('utf-8'), thumbnail=DEFAULT_THUMB, fanart=FANART , extra=maintenance_extra, folder=True, page=str(page) )
+    plugintools.add_item( action="add_pc_game_by_genre", title=language(50051).encode('utf-8'), thumbnail=DEFAULT_THUMB, fanart=FANART , extra=maintenance_extra, folder=True )
+    plugintools.add_item( action="add_pc_game_sort", title=language(50052).encode('utf-8'), thumbnail=DEFAULT_THUMB, fanart=FANART , extra=maintenance_extra, folder=True )
 
     for product in root.iter('product'):
         log("g4gmanager.product "+repr(product))
@@ -166,35 +174,235 @@ def add_pc_games(params):
         fromprice = str(fromprice)
         fromprice = fromprice.replace('.', ',')
         coverpic = product.find('coverpic').text
+        extra['id'] = product_id
+        details_extra = json.dumps(extra)
         
-        title = name.encode('utf-8') + " " + language(50200).encode('utf-8') + fromprice + " " + currency
+        title = name.encode('utf-8') + " " + language(50200).encode('utf-8') + "[COLOR red]" + fromprice + " " + currency  + "[/COLOR]"
         
-        plugintools.add_item( action="add_pc_game", title=title, thumbnail=coverpic, fanart=coverpic , extra=product_id, folder=True )
+        plugintools.add_item( action="add_pc_game", title=title, thumbnail=coverpic, fanart=coverpic , extra=details_extra, folder=True )
         
     # add prev and next page entry if there are still pages
     log("g4gmanager.current_page "+str(page)+ " maxpage " + str(maxpage))
     if int(page) < int(maxpage):
         next_page = int(page) + 1
         next_page_title = "[COLOR blue]" + language(50053).encode('utf-8') + " " +  str(next_page) + " " + language(50201).encode('utf-8') + " " + str(maxpage) + "[/COLOR]"
-        plugintools.add_item( action="add_pc_games", title=next_page_title, thumbnail=DEFAULT_THUMB, fanart=FANART , extra=extra, folder=True, page=str(next_page)  )
+        plugintools.add_item( action="add_pc_games", title=next_page_title, thumbnail=DEFAULT_THUMB, fanart=FANART , extra=maintenance_extra, folder=True, page=str(next_page)  )
 
 # directly jumping to certain page        
 def add_pc_game_to_page(params):
+    log("g4gmanager.add_pc_game_to_page "+repr(params))
+    page = params.get('page') 
+    extra = json.loads(params.get('extra'))
+    
     plugintools.set_view(plugintools.LIST)
+    
+    maxpage = extra['maxpage']
+    extra = json.dumps(extra)
+    
+    for current_page in range(1, int(maxpage)):
+        title_page = str(current_page)
+        if current_page == int(page):
+            title_page = "[COLOR green]" +  title_page + "[/COLOR]"
+            
+        plugintools.add_item( action="add_pc_games", title=title_page, thumbnail=DEFAULT_THUMB, fanart=FANART , extra=extra, folder=True, page=str(current_page)  )
 
 # get genre filtered list
 def add_pc_game_by_genre(params):
+    extra = json.loads(params.get('extra'))
+    
+    current_genre = ""
+    if extra != '' and extra['genre'] != None and extra['genre'] != '':
+        current_genre = extra['genre']
+    
+    attributes_filter = API_COMPATIBILITY_ATTRIBUTE
+    
+    url = API_BASE_URL + attributes_filter + "&fnc=lvGetGenres"
+    log("g4gmanager.add_pc_game_by_genre.url is "+ url)
+    
+    body,response_headers = plugintools.read_body_and_headers(url)
+    
+    root = ET.fromstring(body)
+    log("g4gmanager.add_pc_game_by_genre.root "+root.tag)
+    
     plugintools.set_view(plugintools.LIST)
+    
+    #reset entry
+    extra['genre'] = ""
+    genre_values = json.dumps(extra)
+    plugintools.add_item( action="add_pc_games", title=language(50065).encode('utf8'), thumbnail=DEFAULT_THUMB, fanart=FANART , extra=genre_values, folder=True, page="1"  )
+    
+    for genre in root.iter('genre'):
+        genre_name = genre.find('name').text
+        genre_name = genre_name.encode('utf8')
+        if current_genre == genre_name:
+            genre_name = "[COLOR green]" + genre_name + "[/COLOR]"
+        extra['genre'] = genre_name
+        genre_values = json.dumps(extra)
+        plugintools.add_item( action="add_pc_games", title=genre_name, thumbnail=DEFAULT_THUMB, fanart=FANART , extra=genre_values, folder=True, page="1"  )
 
 # get sorted list
 def add_pc_game_sort(params):
+    extra = json.loads(params.get('extra'))
     plugintools.set_view(plugintools.LIST)
+    
+    # maybe there are former filters for category so we should use it
+    if extra != '' and extra['genre'] != None and extra['genre'] != '':
+        filter_genre = extra['genre']
+    else:
+        filter_genre = ""
+    
+    # prepare values for sortings
+    sortby_relevance_desc = json.dumps(dict([('genre', filter_genre), ('sortby', 'relevance'), ('sortdir', 'desc')]))
+    sortby_relevance_asc = json.dumps(dict([('genre', filter_genre), ('sortby', 'relevance'), ('sortdir', 'asc')]))
+    sortby_name_asc = json.dumps(dict([('genre', filter_genre), ('sortby', 'name'), ('sortdir', 'asc')]))
+    sortby_name_desc = json.dumps(dict([('genre', filter_genre), ('sortby', 'name'), ('sortdir', 'desc')]))
+    sortby_price_asc = json.dumps(dict([('genre', filter_genre), ('sortby', 'price'), ('sortdir', 'asc')]))
+    sortby_price_desc = json.dumps(dict([('genre', filter_genre), ('sortby', 'price'), ('sortdir', 'desc')]))
+    sortby_igdb_desc = json.dumps(dict([('genre', filter_genre), ('sortby', 'igdb'), ('sortdir', 'desc')]))
+    sortby_igdb_asc = json.dumps(dict([('genre', filter_genre), ('sortby', 'igdb'), ('sortdir', 'asc')]))
+    sortby_release_desc = json.dumps(dict([('genre', filter_genre), ('sortby', 'release'), ('sortdir', 'desc')]))
+    sortby_release_asc = json.dumps(dict([('genre', filter_genre), ('sortby', 'release'), ('sortdir', 'asc')]))
+    
+    # titles
+    title_sortby_relevance_desc = language(50054).encode('utf8')
+    title_sortby_relevance_asc = language(50055).encode('utf8')
+    title_sortby_name_asc = language(50056).encode('utf8')
+    title_sortby_name_desc = language(50057).encode('utf8')
+    title_sortby_price_asc = language(50058).encode('utf8')
+    title_sortby_price_desc = language(50059).encode('utf8')
+    title_sortby_igdb_desc = language(50060).encode('utf8')
+    title_sortby_igdb_asc = language(50061).encode('utf8')
+    title_sortby_release_desc = language(50062).encode('utf8')
+    title_sortby_release_asc = language(50063).encode('utf8')
+    
+    plugintools.add_item( action="add_pc_games", title=title_sortby_relevance_desc, thumbnail=DEFAULT_THUMB, fanart=FANART , extra=sortby_relevance_desc, folder=True, page="1" )
+    plugintools.add_item( action="add_pc_games", title=title_sortby_relevance_asc, thumbnail=DEFAULT_THUMB, fanart=FANART , extra=sortby_relevance_asc, folder=True, page="1" )
+    plugintools.add_item( action="add_pc_games", title=title_sortby_name_asc, thumbnail=DEFAULT_THUMB, fanart=FANART , extra=sortby_name_asc, folder=True, page="1" )
+    plugintools.add_item( action="add_pc_games", title=title_sortby_name_desc, thumbnail=DEFAULT_THUMB, fanart=FANART , extra=sortby_name_desc, folder=True, page="1" )
+    plugintools.add_item( action="add_pc_games", title=title_sortby_price_asc, thumbnail=DEFAULT_THUMB, fanart=FANART , extra=sortby_price_asc, folder=True, page="1" )
+    plugintools.add_item( action="add_pc_games", title=title_sortby_price_desc, thumbnail=DEFAULT_THUMB, fanart=FANART , extra=sortby_price_desc, folder=True, page="1" )
+    plugintools.add_item( action="add_pc_games", title=title_sortby_igdb_desc, thumbnail=DEFAULT_THUMB, fanart=FANART , extra=sortby_igdb_desc, folder=True, page="1" )
+    plugintools.add_item( action="add_pc_games", title=title_sortby_igdb_asc, thumbnail=DEFAULT_THUMB, fanart=FANART , extra=sortby_igdb_asc, folder=True, page="1" )
+    plugintools.add_item( action="add_pc_games", title=title_sortby_release_desc, thumbnail=DEFAULT_THUMB, fanart=FANART , extra=sortby_release_desc, folder=True, page="1" )
+    plugintools.add_item( action="add_pc_games", title=title_sortby_release_asc, thumbnail=DEFAULT_THUMB, fanart=FANART , extra=sortby_release_asc, folder=True, page="1" )
 
 # game details page        
 def add_pc_game(params):
+    extra = json.loads(params.get('extra'))
+    
+    product_id = extra['id']
+    url = API_BASE_URL + "&id=" + product_id
+    log("g4gmanager.add_pc_game.url is "+ url)
+    
+    body,response_headers = plugintools.read_body_and_headers(url)
     plugintools.set_view(plugintools.LIST)
     
-    #plugintools.add_item( action="dummy", title=params.get('title') , thumbnail=params.get('thumbnail'), fanart=params.get('fanrart') , folder=False )
+    root = ET.fromstring(body)
+    log("g4gmanager.add_pc_game.root "+root.tag)
+    
+    #get general informations
+    product_name = root.find('name').text
+    product_coverpic = root.find('coverpic').text
+    product_fanart = root.find('fanart').text
+    if product_fanart is None:
+        product_fanart = params.get('fanart')
+        
+    if product_fanart is None:
+        product_fanart = ""
+
+    log("g4gmanager.add_pc_game.product_name "+product_name)
+    log("g4gmanager.add_pc_game.product_coverpic "+product_coverpic)
+    log("g4gmanager.add_pc_game.product_fanart "+product_fanart)
+    
+    details_standard_extra = json.dumps(extra)
+    # details standard
+    details_for_product = language(50202).encode('utf8') + " " + product_name
+    trailer_for_product = language(50203).encode('utf8') + " " + product_name
+    reviews_for_product = language(50204).encode('utf8') + " " + product_name
+    pictures_for_product = language(50207).encode('utf8') + " " + product_name
+    
+    plugintools.add_item( action="dummy", title=details_for_product, thumbnail=product_coverpic, fanart=product_fanart, extra=details_standard_extra, folder=False )
+    plugintools.add_item( action="add_pc_game_trailer", title=trailer_for_product, thumbnail=product_coverpic, fanart=product_fanart, extra=details_standard_extra, folder=True )
+    plugintools.add_item( action="add_pc_game_review", title=reviews_for_product, thumbnail=product_coverpic, fanart=product_fanart, extra=details_standard_extra, folder=True )
+    plugintools.add_item( action="dummy", title=pictures_for_product, thumbnail=product_coverpic, fanart=product_fanart, extra=details_standard_extra, folder=False )
+    
+    for vendor in root.iter('vendor'):
+        vendorname = vendor.find('vendorname').text
+        vendoricon = vendor.find('vendoricon').text
+        vendorlink = vendor.find('vendorlink').text
+        vendorqrcode = vendor.find('vendorqrcode').text
+        vendorprice = vendor.find('vendorprice').text
+        
+        vendortitle = "[COLOR red]" + vendorprice.replace('.', ',') + " EUR [/COLOR]" + product_name + " " + language(50208).encode('utf8') + " " + vendorname
+        
+        plugintools.add_item( action="dummy", title=vendortitle, thumbnail=vendoricon, fanart=product_fanart, extra=details_standard_extra, folder=False )
+        
+def add_pc_game_trailer(params):
+    from urlresolver.types import HostedMediaFile
+    extra = json.loads(params.get('extra'))
+    
+    product_id = extra['id']
+    url = API_BASE_URL + "&id=" + product_id
+    log("g4gmanager.add_pc_game_trailer.url is "+ url)
+    
+    body,response_headers = plugintools.read_body_and_headers(url)
+    plugintools.set_view(plugintools.LIST)
+    
+    root = ET.fromstring(body)
+    log("g4gmanager.add_pc_game_trailer.root "+root.tag)
+
+    #get general informations
+    product_name = root.find('name').text
+    product_coverpic = root.find('coverpic').text
+    product_fanart = root.find('fanart').text
+    if product_fanart is None:
+        product_fanart = params.get('fanart')
+        
+    if product_fanart is None:
+        product_fanart = ""
+        
+    trailer_for_product = language(50205).encode('utf8') + " " + product_name
+    for trailer in root.iter('trailer'):
+        video_url = trailer.find('videourl').text
+        hosted_media_file = HostedMediaFile(url=video_url)
+        media_url = hosted_media_file.resolve()
+
+        log("g4gmanager.add_pc_game_review.media_url "+media_url)
+        plugintools.add_item( action="playable", title=trailer_for_product, url=media_url, thumbnail=product_coverpic, fanart=product_coverpic, isPlayable=True, folder=False )
+    
+def add_pc_game_review(params):
+    from urlresolver.types import HostedMediaFile
+    extra = json.loads(params.get('extra'))
+    
+    product_id = extra['id']
+    url = API_BASE_URL + "&id=" + product_id
+    log("g4gmanager.add_pc_game_review.url is "+ url)
+    
+    body,response_headers = plugintools.read_body_and_headers(url)
+    plugintools.set_view(plugintools.LIST)
+    
+    root = ET.fromstring(body)
+    log("g4gmanager.add_pc_game_review.root "+root.tag)
+
+    #get general informations
+    product_name = root.find('name').text
+    product_coverpic = root.find('coverpic').text
+    product_fanart = root.find('fanart').text
+    if product_fanart is None:
+        product_fanart = params.get('fanart')
+        
+    if product_fanart is None:
+        product_fanart = ""
+        
+    review_for_product = language(50206).encode('utf8') + " " + product_name
+    for review_video in root.iter('review_video'):
+        video_url = review_video.find('videourl').text
+        hosted_media_file = HostedMediaFile(url=video_url)
+        media_url = hosted_media_file.resolve()
+        plot=""
+
+        log("g4gmanager.add_pc_game_review.media_url "+media_url)
+        plugintools.add_item( action="playable", title=review_for_product, url=media_url, thumbnail=product_coverpic, plot=plot, fanart=product_coverpic, extra="istrailer", isPlayable=True, folder=False )
 
 # library selections    
 def library_selection(params):
@@ -202,8 +410,8 @@ def library_selection(params):
 
     plugintools.set_view(plugintools.THUMBNAIL)
     
-    plugintools.add_item( action="library_installed", title=language(50010).encode('utf-8') , thumbnail = DEFAULT_THUMB , fanart=FANART , folder=True )
-    plugintools.add_item( action="dummy", title=language(50011).encode('utf-8') , thumbnail = DEFAULT_THUMB , fanart=FANART , folder=False )
+    plugintools.add_item( action="library_installed", title=language(50010).encode('utf-8') , thumbnail=DEFAULT_THUMB , fanart=FANART , folder=True )
+    plugintools.add_item( action="dummy", title=language(50011).encode('utf-8') , thumbnail=DEFAULT_THUMB , fanart=FANART , folder=False )
     
 # show installed apps and read their information
 def library_installed(params):
@@ -225,20 +433,20 @@ def library_installed(params):
                     game_name = line.replace('Name=', '')
                     
                        
-            plugintools.add_item( action="launch_game",   title=game_name.encode('utf-8') , thumbnail = game_cover.encode('utf-8') ,    fanart=game_fanart.encode('utf-8') ,    extra = execute_path,   folder=False )
+            plugintools.add_item( action="launch_game", title=game_name.encode('utf-8') , thumbnail = game_cover.encode('utf-8') , fanart=game_fanart.encode('utf-8') , extra=execute_path, folder=False )
 
 # launch game
 def launch_game(params):
     execute_path = params.get('extra')
     game_name = params.get('title')
     try:
-            log('attempting to launch: %s' % cmd)
-            print cmd.encode('utf-8')
+            log('attempting to launch: %s' % execute_path)
+            print execute_path.encode('utf-8')
             subprocess.Popen(execute_path, shell=True, close_fds=True)
             kodiBusyDialog()
     except:
-            log('ERROR: failed to launch: %s' % cmd)
-            print cmd.encode(txt_encode)
+            log('ERROR: failed to launch: %s' % execute_path)
+            print execute_path.encode(txt_encode)
             dialog.notification('Aaaaaaargghh!!')
     
     
@@ -249,25 +457,30 @@ def settings(params):
 
 # show a busy dialog
 def kodiBusyDialog():
-        xbmc.executebuiltin("ActivateWindow(busydialog)")
-        log('busy dialog started')
-        time.sleep(10)
-        xbmc.executebuiltin("Dialog.Close(busydialog)")        
+    xbmc.executebuiltin("ActivateWindow(busydialog)")
+    log('busy dialog started')
+    time.sleep(10)
+    xbmc.executebuiltin("Dialog.Close(busydialog)")        
 
 # launch steam
 def launchSteam():
-	basePath = os.path.join(getAddonInstallPath(), 'resources', 'scripts')
-        steamlauncher = os.path.join(basePath, 'steam-launch.sh')
-        cmd = steamlauncher
-	try:
-		log('attempting to launch: %s' % cmd)
-		print cmd.encode('utf-8')
-                subprocess.Popen(cmd.encode(txt_encode), shell=True, close_fds=True)
-                kodiBusyDialog()
-	except:
-		log('ERROR: failed to launch: %s' % cmd)
-		print cmd.encode(txt_encode)
-		dialog.notification(language(50123), language(50126), addonIcon, 5000)
+    basePath = os.path.join(getAddonInstallPath(), 'resources', 'scripts')
+    steamlauncher = os.path.join(basePath, 'steam-launch.sh')
+    cmd = steamlauncher
+    try:
+            log('attempting to launch: %s' % cmd)
+            print cmd.encode('utf-8')
+            subprocess.Popen(cmd.encode(txt_encode), shell=True, close_fds=True)
+            kodiBusyDialog()
+    except:
+            log('ERROR: failed to launch: %s' % cmd)
+            print cmd.encode(txt_encode)
+            dialog.notification(language(50123), language(50126), addonIcon, 5000)
+		
+# Play hoster link
+def playable(params):
+    log("g4gmanager.playable.media_url "+params.get("url"))
+    plugintools.play_resolved_url( params.get("url") )    
 
 # run the program
 run()
