@@ -20,6 +20,7 @@ import urlparse
 import urllib
 import urllib2
 import json
+from qrcodewindow import ShowQrCodeDialog
 
 plugintools.module_log_enabled = False
 plugintools.http_debug_log_enabled = False
@@ -172,7 +173,7 @@ def add_pc_games(params):
         currency = product.find('currency').text
         fromprice = product.find('fromprice').text
         fromprice = float(fromprice)
-        fromprice = "{:10.2f}".format(fromprice)
+        fromprice = "{:6.2f}".format(fromprice)
         fromprice = str(fromprice)
         fromprice = fromprice.replace('.', ',')
         coverpic = product.find('coverpic').text
@@ -319,10 +320,12 @@ def add_pc_game(params):
     # checking amount for trailers and reviews 
     trailers_count = 0
     for trailer in root.iter('trailer'):
+        trailer_video_url = trailer.find('videourl').text
         trailers_count += 1
             
     reviews_count = 0
     for reviews in root.iter('review_video'):
+        review_video_url = reviews.find('videourl').text
         reviews_count += 1
     
     details_standard_extra = json.dumps(extra)
@@ -333,10 +336,14 @@ def add_pc_game(params):
     pictures_for_product = language(50207).encode('utf8') + " " + product_name
     
     plugintools.add_item( action="dummy", title=details_for_product, thumbnail=product_coverpic, fanart=product_fanart, extra=details_standard_extra, folder=False )
-    if trailers_count > 0:
+    if trailers_count > 1:
         plugintools.add_item( action="add_pc_game_trailer", title=trailer_for_product, thumbnail=product_coverpic, fanart=product_fanart, extra=details_standard_extra, folder=True )
-    if reviews_count > 0:
+    elif trailers_count == 1:
+        plugintools.add_item( action="play_youtube_video", url=trailer_video_url, title=trailer_for_product, thumbnail=product_coverpic, fanart=product_fanart, extra=details_standard_extra, folder=False )
+    if reviews_count > 1:
         plugintools.add_item( action="add_pc_game_review", title=reviews_for_product, thumbnail=product_coverpic, fanart=product_fanart, extra=details_standard_extra, folder=True )
+    elif reviews_count == 1:
+        plugintools.add_item( action="play_youtube_video", url=review_video_url, title=reviews_for_product, thumbnail=product_coverpic, fanart=product_fanart, extra=details_standard_extra, folder=False )
     plugintools.add_item( action="dummy", title=pictures_for_product, thumbnail=product_coverpic, fanart=product_fanart, extra=details_standard_extra, folder=False )
     
     for vendor in root.iter('vendor'):
@@ -345,11 +352,23 @@ def add_pc_game(params):
         vendorlink = vendor.find('vendorlink').text
         vendorqrcode = vendor.find('vendorqrcode').text
         vendorprice = vendor.find('vendorprice').text
+        vendorprice = float(vendorprice)
+        vendorprice = "{:10.2f}".format(vendorprice)
+        vendorprice = str(vendorprice)
+        vendorprice = vendorprice.replace('.', ',')
         
-        vendortitle = "[COLOR red]" + vendorprice.replace('.', ',') + " EUR [/COLOR]" + product_name + " " + language(50208).encode('utf8') + " " + vendorname
+        vendortitle = "[COLOR red]" + vendorprice + " EUR [/COLOR]" + product_name + " " + language(50208).encode('utf8') + " " + vendorname
         
-        plugintools.add_item( action="dummy", title=vendortitle, thumbnail=vendoricon, fanart=product_fanart, extra=details_standard_extra, folder=False )
-        
+        plugintools.add_item( action="show_qr_code", title=vendortitle, thumbnail=vendoricon, fanart=product_fanart, plot=vendorqrcode, extra=details_standard_extra, folder=False )
+
+# shows qr code of product
+def show_qr_code(params):
+    vendorqrcode = params.get('plot')
+    qrcodeisplay=ShowQrCodeDialog()
+    qrcodeisplay.setGameQrCode(vendorqrcode)
+    qrcodeisplay.doModal()
+
+    
 def add_pc_game_trailer(params):
     extra = json.loads(params.get('extra'))
     
@@ -408,11 +427,13 @@ def add_pc_game_review(params):
     
 # plays a youtube video using the internal plugin    
 def play_youtube_video(params):
+    xbmc.executebuiltin("ActivateWindow(busydialog)")
     from urlresolver.types import HostedMediaFile
     video_url = params.get('url')
     hosted_media_file = HostedMediaFile(url=video_url)
     media_url = hosted_media_file.resolve()
     xbmc.executebuiltin("xbmc.PlayMedia("+media_url+")")
+    xbmc.executebuiltin("Dialog.Close(busydialog)")        
 
 # library selections    
 def library_selection(params):

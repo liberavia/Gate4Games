@@ -37,7 +37,8 @@
     <string id="50064">[COLOR blue]Back to Game Manger main menu[/COLOR]</string>
     <string id="50065">[COLOR blue]Release Genre-Selection[/COLOR]</string>
     
-    <!-- pc game details -->
+    <!-- Window displays -->
+    <string id="50080">[COLOR yellow]Scanne den QR-Code mit deinem Smartphone oder Tablet[/COLOR]</string>
     
     <!-- Settings -->
     <string id="50100">General</string>

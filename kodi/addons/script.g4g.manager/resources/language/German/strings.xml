@@ -37,6 +37,9 @@
     <string id="50064">[COLOR blue]Zurück zum Hauptmenü[/COLOR]</string>
     <string id="50065">[COLOR blue]Genre-Einschränkung aufheben[/COLOR]</string>
     
+    <!-- Window displays -->
+    <string id="50080">[COLOR yellow]Scanne den QR-Code mit deinem Smartphone oder Tablet[/COLOR]</string>
+    
     <!-- Settings -->
     <string id="50101">Kodi beenden, wenn ein Spiel gestartet wird.</string>
 
