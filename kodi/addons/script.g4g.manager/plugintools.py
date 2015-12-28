@@ -118,7 +118,7 @@ def log(message):
 
 # Write this module messages on XBMC log
 def _log(message):
-    if True:
+    if module_log_enabled:
         #message = message.encode('utf-8')
         xbmc.log("plugintools."+message)
 
@@ -576,9 +576,7 @@ def add_item( action="" , title="" , plot="" , url="" , thumbnail="" , fanart=""
     
     if url.startswith("plugin://"):
         itemurl = url
-        _log('entered plugin link section. Itemurl is ' + itemurl)
         listitem.setProperty('IsPlayable', 'true')
-        _log('handle' + str(sys.argv[1]))
         xbmcplugin.addDirectoryItem( handle=int(sys.argv[1]), url=itemurl, listitem=listitem, isFolder=folder)
     elif isPlayable:
         listitem.setProperty("Video", "true")

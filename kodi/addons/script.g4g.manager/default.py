@@ -16,7 +16,9 @@ import ntpath
 import re
 import pprint
 import xml.etree.ElementTree as ET
+import urlparse
 import urllib
+import urllib2
 import json
 
 plugintools.module_log_enabled = False
@@ -314,6 +316,15 @@ def add_pc_game(params):
     log("g4gmanager.add_pc_game.product_coverpic "+product_coverpic)
     log("g4gmanager.add_pc_game.product_fanart "+product_fanart)
     
+    # checking amount for trailers and reviews 
+    trailers_count = 0
+    for trailer in root.iter('trailer'):
+        trailers_count += 1
+            
+    reviews_count = 0
+    for reviews in root.iter('review_video'):
+        reviews_count += 1
+    
     details_standard_extra = json.dumps(extra)
     # details standard
     details_for_product = language(50202).encode('utf8') + " " + product_name
@@ -322,8 +333,10 @@ def add_pc_game(params):
     pictures_for_product = language(50207).encode('utf8') + " " + product_name
     
     plugintools.add_item( action="dummy", title=details_for_product, thumbnail=product_coverpic, fanart=product_fanart, extra=details_standard_extra, folder=False )
-    plugintools.add_item( action="add_pc_game_trailer", title=trailer_for_product, thumbnail=product_coverpic, fanart=product_fanart, extra=details_standard_extra, folder=True )
-    plugintools.add_item( action="add_pc_game_review", title=reviews_for_product, thumbnail=product_coverpic, fanart=product_fanart, extra=details_standard_extra, folder=True )
+    if trailers_count > 0:
+        plugintools.add_item( action="add_pc_game_trailer", title=trailer_for_product, thumbnail=product_coverpic, fanart=product_fanart, extra=details_standard_extra, folder=True )
+    if reviews_count > 0:
+        plugintools.add_item( action="add_pc_game_review", title=reviews_for_product, thumbnail=product_coverpic, fanart=product_fanart, extra=details_standard_extra, folder=True )
     plugintools.add_item( action="dummy", title=pictures_for_product, thumbnail=product_coverpic, fanart=product_fanart, extra=details_standard_extra, folder=False )
     
     for vendor in root.iter('vendor'):
@@ -338,7 +351,6 @@ def add_pc_game(params):
         plugintools.add_item( action="dummy", title=vendortitle, thumbnail=vendoricon, fanart=product_fanart, extra=details_standard_extra, folder=False )
         
 def add_pc_game_trailer(params):
-    from urlresolver.types import HostedMediaFile
     extra = json.loads(params.get('extra'))
     
     product_id = extra['id']
@@ -364,14 +376,9 @@ def add_pc_game_trailer(params):
     trailer_for_product = language(50205).encode('utf8') + " " + product_name
     for trailer in root.iter('trailer'):
         video_url = trailer.find('videourl').text
-        hosted_media_file = HostedMediaFile(url=video_url)
-        media_url = hosted_media_file.resolve()
-
-        log("g4gmanager.add_pc_game_review.media_url "+media_url)
-        plugintools.add_item( action="playable", title=trailer_for_product, url=media_url, thumbnail=product_coverpic, fanart=product_coverpic, isPlayable=True, folder=False )
+        plugintools.add_item( action="play_youtube_video", title=trailer_for_product, url=video_url, thumbnail=product_coverpic, fanart=product_coverpic, folder=False )
     
 def add_pc_game_review(params):
-    from urlresolver.types import HostedMediaFile
     extra = json.loads(params.get('extra'))
     
     product_id = extra['id']
@@ -397,12 +404,15 @@ def add_pc_game_review(params):
     review_for_product = language(50206).encode('utf8') + " " + product_name
     for review_video in root.iter('review_video'):
         video_url = review_video.find('videourl').text
-        hosted_media_file = HostedMediaFile(url=video_url)
-        media_url = hosted_media_file.resolve()
-        plot=""
-
-        log("g4gmanager.add_pc_game_review.media_url "+media_url)
-        plugintools.add_item( action="playable", title=review_for_product, url=media_url, thumbnail=product_coverpic, plot=plot, fanart=product_coverpic, extra="istrailer", isPlayable=True, folder=False )
+        plugintools.add_item( action="play_youtube_video", title=review_for_product, url=video_url, thumbnail=product_coverpic, fanart=product_coverpic, folder=False )
+    
+# plays a youtube video using the internal plugin    
+def play_youtube_video(params):
+    from urlresolver.types import HostedMediaFile
+    video_url = params.get('url')
+    hosted_media_file = HostedMediaFile(url=video_url)
+    media_url = hosted_media_file.resolve()
+    xbmc.executebuiltin("xbmc.PlayMedia("+media_url+")")
 
 # library selections    
 def library_selection(params):
