@@ -25,7 +25,7 @@ cat - > /target/usr/bin/post_logon.sh << 'EOF'
 # install gateOS packages
 (sudo apt-get update -y -q) | zenity --progress --no-cancel --pulsate --auto-close --text="Updating Package Sources" --title="gateOS Installation"
 (sudo apt-get -y --force-yes install apt-transport-https deb-multimedia-keyring) | zenity --progress --no-cancel --pulsate --auto-close --text="Installing Keyring of Multimedia Repository" --title="gateOS Installation"
-(sudo apt-get -y --force-yes install openbox kodi kodi-standalone kodi-pvr-iptvsimple qjoypad unclutter python-pip gzip xautomation pcsxr mupen64plus) | zenity --progress --no-cancel --pulsate --auto-close --text="Installing additional packages" --title="gateOS Installation" 
+(sudo apt-get -y --force-yes install openbox kodi kodi-standalone kodi-pvr-iptvsimple qjoypad unclutter python-pip gzip xautomation xdotool pcsxr mupen64plus) | zenity --progress --no-cancel --pulsate --auto-close --text="Installing additional packages" --title="gateOS Installation" 
 (sudo apt-get -y --force-yes install google-chrome-stable) | zenity --progress --no-cancel --pulsate --auto-close --text="Installing Google Chrome Browser" --title="gateOS Installation"
 
 # gateOS: change Xwrapper.conf from console to anybody
@@ -42,10 +42,10 @@ sudo sed -i 's,deb http://dl.google.com/linux/chrome/deb/ stable main,#removed,g
 (sudo apt-get -y --force-yes install playonlinux) | zenity --progress --no-cancel --pulsate --auto-close --text="Final installation of PlayOnLinux" --title="gateOS Installation"
 
 # gateOS: install steamoscontroller useland driver
-(sudo pip install libusb1) | zenity --progress --no-cancel --pulsate --auto-close --text="Installing SteamController standalone driver" --title="gateOS Installation"
-(sudo pip install enum34) | zenity --progress --no-cancel --pulsate --auto-close --text="Installing SteamController standalone driver" --title="gateOS Installation"
-(wget https://github.com/ynsta/steamcontroller/archive/master.tar.gz) | zenity --progress --no-cancel --pulsate --auto-close --text="Installing SteamController standalone driver" --title="gateOS Installation"
-(tar xf master.tar.gz) | zenity --progress --no-cancel --pulsate --auto-close --text="Installing SteamController standalone driver" --title="gateOS Installation"
+(sudo pip install libusb1) | zenity --progress --no-cancel --pulsate --auto-close --text="Installing SteamController standalone driver dependencies" --title="gateOS Installation"
+(sudo pip install enum34) | zenity --progress --no-cancel --pulsate --auto-close --text="Installing SteamController standalone driver dependencies" --title="gateOS Installation"
+(wget https://github.com/ynsta/steamcontroller/archive/master.tar.gz) | zenity --progress --no-cancel --pulsate --auto-close --text="Downloading SteamController standalone driver" --title="gateOS Installation"
+(tar xf master.tar.gz) | zenity --progress --no-cancel --pulsate --auto-close --text="Extract SteamController standalone driver" --title="gateOS Installation"
 cd steamcontroller-master
 (sudo python setup.py install) | zenity --progress --no-cancel --pulsate --auto-close --text="Installing SteamController standalone driver" --title="gateOS Installation"
 
@@ -166,6 +166,7 @@ EOF
 
 # script for triggering exchanging gnome desktop mode session with fake gnome session
 cat - > /target/usr/bin/gateos_xsession_switch << 'EOF'
+#!/bin/sh
 # copy std gnome session to seperate file
 mv /usr/share/xsessions/gnome.desktop /usr/share/xsessions/gnome_gateos.desktop
 cp /usr/share/xsessions/killsteam.desktop /usr/share/xsessions/gnome.desktop

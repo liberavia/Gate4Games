@@ -71,7 +71,7 @@
             <description lang="de">Mit dieser Bibliothek erhalten darauf aufbauende Addons die Möglichkeit Video-URLs von den bekannten Hostern aufzulösen.</description>    
         </extension>
     </addon>
-    <addon id="script.gateossteam.launcher" name="Steam" version="1.0.4" provider-name="liberavia">
+    <addon id="script.gateossteam.launcher" name="Steam" version="1.0.5" provider-name="liberavia">
         <requires>
             <import addon="xbmc.python" version="2.19.0"/>
         </requires>
@@ -87,7 +87,7 @@
             <email>info@gate4games.com</email>
         </extension>
     </addon>
-    <addon id="script.g4g.manager" name="Game Manager" version="0.0.5" provider-name="liberavia">
+    <addon id="script.g4g.manager" name="Game Manager" version="0.0.7" provider-name="liberavia">
         <requires>
             <import addon="xbmc.python" version="2.19.0"/>
             <import addon="script.module.urlresolver"  version="2.1.2"/>
