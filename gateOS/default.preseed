@@ -33,8 +33,7 @@ d-i localechooser/supported-locales multiselect \
                 uk_UA.UTF-8
 
 # Keyboard selection.
-# Disable automatic (interactive) keymap detection.
-d-i console-setup/ask_detect boolean false
+d-i console-setup/ask_detect boolean true
 # Keyboard selection.
 d-i keyboard-configuration/xkb-keymap select us
 
@@ -108,14 +107,18 @@ d-i apt-setup/local0/source boolean true
 # apt will complain about the unauthenticated repository and so the
 # sources.list line will be left commented out
 #d-i apt-setup/local0/key string http://local.server/key
-# liberavia Add multimedia repositories
+# gateOS Add multimedia repositories
 d-i apt-setup/local1/repository string deb http://ftp.uni-kl.de/debian-multimedia/ stable main
 d-i apt-setup/local1/comment string Multimedia Repository
 d-i apt-setup/local1/source boolean false
-# liberavia add jessie std repository
-d-i apt-setup/local2/repository string deb http://httpredir.debian.org/debian jessie main
+# gateOS add jessie std repository with contrib and non-free branches
+d-i apt-setup/local2/repository string deb http://httpredir.debian.org/debian jessie main contrib non-free
 d-i apt-setup/local2/comment string Jessie std repository
 d-i apt-setup/local2/source boolean false
+# gateOS add chrome repository
+d-i apt-setup/local3/repository string deb http://dl.google.com/linux/chrome/deb/ stable main
+d-i apt-setup/local3/comment string Google Chrome repository
+d-i apt-setup/local3/source boolean false
 
 # By default the installer requires that repositories be authenticated
 # using a known gpg key. This setting can be used to disable that

@@ -22,8 +22,33 @@ cp /target/etc/skel/.imageversion /target/home/steam/.imageversion
 cat - > /target/usr/bin/post_logon.sh << 'EOF'
 #! /bin/bash
 
-sudo apt-get update
-sudo apt-get install apt-transport-https deb-multimedia-keyring openbox kodi kodi-standalone kodi-pvr-iptvsimple qjoypad unclutter
+# install gateOS packages
+(sudo apt-get update -y -q) | zenity --progress --no-cancel --pulsate --auto-close --text="Updating Package Sources" --title="gateOS Installation"
+(sudo apt-get -y --force-yes install apt-transport-https deb-multimedia-keyring) | zenity --progress --no-cancel --pulsate --auto-close --text="Installing Keyring of Multimedia Repository" --title="gateOS Installation"
+(sudo apt-get -y --force-yes install openbox kodi kodi-standalone kodi-pvr-iptvsimple qjoypad unclutter python-pip gzip xautomation pcsxr mupen64plus) | zenity --progress --no-cancel --pulsate --auto-close --text="Installing additional packages" --title="gateOS Installation" 
+(sudo apt-get -y --force-yes install google-chrome-stable) | zenity --progress --no-cancel --pulsate --auto-close --text="Installing Google Chrome Browser" --title="gateOS Installation"
+
+# gateOS: change Xwrapper.conf from console to anybody
+sudo sed -i 's/console/anybody/g' /etc/X11/Xwrapper.config
+
+# gateOS: remove chrome repository from sources.list after installation due it will put an own repo into sources.d
+sudo sed -i 's,deb http://dl.google.com/linux/chrome/deb/ stable main,#removed,g' /etc/apt/sources.list
+(sudo apt-get update -y -q) | zenity --progress --no-cancel --pulsate --auto-close --text="Updating Package Sources" --title="gateOS Installation"
+
+# gateOS: install playonlinux
+(sudo apt-get -y --force-yes install playonlinux) | zenity --progress --no-cancel --pulsate --auto-close --text="Initial installation of PlayOnLinux (will fail as expected)" --title="gateOS Installation"
+(sudo rm -f /usr/share/doc/libattr1/changelog.Debian.gz) | zenity --progress --no-cancel --pulsate --auto-close --text="Fixing expected dependency errors" --title="gateOS Installation"
+(sudo apt-get install -f -y --force-yes) | zenity --progress --no-cancel --pulsate --auto-close --text="Fixing expected dependency errors" --title="gateOS Installation"
+(sudo apt-get -y --force-yes install playonlinux) | zenity --progress --no-cancel --pulsate --auto-close --text="Final installation of PlayOnLinux" --title="gateOS Installation"
+
+# gateOS: install steamoscontroller useland driver
+(sudo pip install libusb1) | zenity --progress --no-cancel --pulsate --auto-close --text="Installing SteamController standalone driver" --title="gateOS Installation"
+(sudo pip install enum34) | zenity --progress --no-cancel --pulsate --auto-close --text="Installing SteamController standalone driver" --title="gateOS Installation"
+(wget https://github.com/ynsta/steamcontroller/archive/master.tar.gz) | zenity --progress --no-cancel --pulsate --auto-close --text="Installing SteamController standalone driver" --title="gateOS Installation"
+(tar xf master.tar.gz) | zenity --progress --no-cancel --pulsate --auto-close --text="Installing SteamController standalone driver" --title="gateOS Installation"
+cd steamcontroller-master
+(sudo python setup.py install) | zenity --progress --no-cancel --pulsate --auto-close --text="Installing SteamController standalone driver" --title="gateOS Installation"
+
 
 if [[ "$UID" -ne "0" ]]
 then
@@ -78,16 +103,25 @@ KERNEL=="event*", ENV{ID_INPUT_JOYSTICK}=="?*", MODE:="0644"
 EOF
 
 #
+# gateOS adding udev-rule for useland steamcontroller driver
+#
+cat - > /target/etc/udev/rules.d/99-steam-controller.rules << 'EOF'
+SUBSYSTEM=="usb", ATTRS{idVendor}=="28de", GROUP="steam", MODE="0660"
+KERNEL=="uinput", MODE="0660", GROUP="steam", OPTIONS+="static_node=uinput"
+EOF
+
+#
 # gateOS set autostart options for openbox, which is essentially set background black and start kodi fullscreen
 #
 mkdir -p /target/home/steam/.config/openbox/
 cat - > /target/home/steam/.config/openbox/autostart << 'EOF'
 xsetroot -solid black &
+sc-desktop.py start &
 kodi -fs &
 # check if desktop mode switch has been triggered. Do so if not
 if [ -f /usr/share/xsessions/killsteam.desktop ]
     sudo /usr/bin/gateos_xsession_switch
-fi    
+fi 
 EOF
 
 chmod +x /target/home/steam/.config/openbox/autostart
@@ -117,6 +151,8 @@ sudo /usr/bin/terminatesteam
 /usr/bin/returntosteam.sh
 EOF
 
+chmod +x /target/usr/bin/kill-steamos-session
+
 # template for fake gnome session -> desktop mode should be handled by kodi later on
 cat - > /target/usr/share/xsessions/killsteam.desktop << 'EOF'
 [Desktop Entry]
@@ -131,10 +167,12 @@ EOF
 # script for triggering exchanging gnome desktop mode session with fake gnome session
 cat - > /target/usr/bin/gateos_xsession_switch << 'EOF'
 # copy std gnome session to seperate file
-cp /usr/share/xsessions/gnome.desktop /usr/share/xsessions/gnome_gateos.desktop
+mv /usr/share/xsessions/gnome.desktop /usr/share/xsessions/gnome_gateos.desktop
 cp /usr/share/xsessions/killsteam.desktop /usr/share/xsessions/gnome.desktop
 rm /usr/share/xsessions/killsteam.desktop
 EOF
+
+chmod +x /target/usr/bin/gateos_xsession_switch
 
 #
 # gateOS enable anyone to sudo the steam terminate script
