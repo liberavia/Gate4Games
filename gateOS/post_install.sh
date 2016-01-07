@@ -17,6 +17,11 @@ chroot /target date > /target/etc/skel/.imageversion
 cp /target/etc/skel/.imageversion /target/home/steam/.imageversion
 
 #
+# gateOS: Add preconfiguration data for steam user (preinstalled kodi addons for instance...)
+#
+cp /cdrom/gateOS/steamuserconfig.tar.gz /target/home/steam/
+
+#
 # Add post-logon configuration script
 #
 cat - > /target/usr/bin/post_logon.sh << 'EOF'
@@ -25,7 +30,7 @@ cat - > /target/usr/bin/post_logon.sh << 'EOF'
 # install gateOS packages
 (sudo apt-get update -y -q) | zenity --progress --no-cancel --pulsate --auto-close --text="Updating Package Sources" --title="gateOS Installation"
 (sudo apt-get -y --force-yes install apt-transport-https deb-multimedia-keyring) | zenity --progress --no-cancel --pulsate --auto-close --text="Installing Keyring of Multimedia Repository" --title="gateOS Installation"
-(sudo apt-get -y --force-yes install openbox kodi kodi-standalone kodi-pvr-iptvsimple qjoypad unclutter python-pip gzip xautomation xdotool pcsxr mupen64plus) | zenity --progress --no-cancel --pulsate --auto-close --text="Installing additional packages" --title="gateOS Installation" 
+(sudo apt-get -y --force-yes install openbox kodi kodi-standalone kodi-pvr-iptvsimple qjoypad unclutter python-pip gzip xautomation xdotool pcsxr mupen64plus lib32gcc1 gdebi-core p7zip) | zenity --progress --no-cancel --pulsate --auto-close --text="Installing additional packages" --title="gateOS Installation" 
 (sudo apt-get -y --force-yes install google-chrome-stable) | zenity --progress --no-cancel --pulsate --auto-close --text="Installing Google Chrome Browser" --title="gateOS Installation"
 
 # gateOS: change Xwrapper.conf from console to anybody
@@ -49,6 +54,17 @@ sudo sed -i 's,deb http://dl.google.com/linux/chrome/deb/ stable main,#removed,g
 cd steamcontroller-master
 (sudo python setup.py install) | zenity --progress --no-cancel --pulsate --auto-close --text="Installing SteamController standalone driver" --title="gateOS Installation"
 
+# gateOS install pcsx2 emulator get single package from launchpad ppa for ubuntu (dirty I know...) => Will also need a bios solution. Just to have it on board at the moment
+(wget https://launchpad.net/~gregory-hainaut/+archive/ubuntu/pcsx2.official.ppa/+files/pcsx2_1.4.0-1_i386.deb) | zenity --progress --no-cancel --pulsate --auto-close --text="Downloading single pcsx2 package" --title="gateOS Installation"
+(sudo gdebi -n pcsx2_1.4.0-1_i386.deb) | zenity --progress --no-cancel --pulsate --auto-close --text="Installing single pcsx2 package and its dependencies"
+
+# gateOS install SteamCMD
+sudo mkdir /home/steam/.steamcmd
+sudo cd /home/steam/.steamcmd
+(sudo wget https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz) | zenity --progress --no-cancel --pulsate --auto-close --text="Downloading SteamCMD"
+(sudo tar -xvzf steamcmd_linux.tar.gz) | zenity --progress --no-cancel --pulsate --auto-close --text="Extract SteamCMD"
+sudo chown -R steam:steam /home/steam/.steamcmd
+cd /home/desktop/
 
 if [[ "$UID" -ne "0" ]]
 then
@@ -118,10 +134,7 @@ cat - > /target/home/steam/.config/openbox/autostart << 'EOF'
 xsetroot -solid black &
 sc-desktop.py start &
 kodi -fs &
-# check if desktop mode switch has been triggered. Do so if not
-if [ -f /usr/share/xsessions/killsteam.desktop ]
-    sudo /usr/bin/gateos_xsession_switch
-fi 
+sudo /usr/bin/gateos_xsession_switch
 EOF
 
 chmod +x /target/home/steam/.config/openbox/autostart
@@ -171,6 +184,8 @@ cat - > /target/usr/bin/gateos_xsession_switch << 'EOF'
 mv /usr/share/xsessions/gnome.desktop /usr/share/xsessions/gnome_gateos.desktop
 cp /usr/share/xsessions/killsteam.desktop /usr/share/xsessions/gnome.desktop
 rm /usr/share/xsessions/killsteam.desktop
+# finally remove calling this script from autostart
+sed -i 's,sudo /usr/bin/gateos_xsession_switch,#removed,g' /home/steam/.config/openbox/autostart
 EOF
 
 chmod +x /target/usr/bin/gateos_xsession_switch

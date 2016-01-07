@@ -1,6 +1,6 @@
 ### Localization
 # Preseeding only locale sets language, country and locale.
-d-i debian-installer/locale string en_US
+# d-i debian-installer/locale string en_US
 
 # Optionally specify additional locales to be generated.
 d-i localechooser/supported-locales multiselect \
@@ -33,9 +33,9 @@ d-i localechooser/supported-locales multiselect \
                 uk_UA.UTF-8
 
 # Keyboard selection.
-d-i console-setup/ask_detect boolean true
+d-i console-setup/ask_detect boolean false
 # Keyboard selection.
-d-i keyboard-configuration/xkb-keymap select us
+# d-i keyboard-configuration/xkb-keymap select us
 
 ### Network configuration
 # Disable network configuration entirely. This is useful for cdrom
