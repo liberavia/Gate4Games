@@ -1,0 +1,41 @@
+== 0.0.8 ==
+  * Released 2015-01-19
+  * Added possibility to install psx roms from freeroms
+
+== 0.0.7 ==
+  * Released 2015-12-28
+  * gate4games store: improved trailer and review calls
+  * added qrcode to vendor offers
+
+== 0.0.6 ==
+  * Released 2015-12-28
+  * gate4games store: fixed video playback for reviews and trailers
+
+== 0.0.5 ==
+  * Released 2015-12-27
+  * gate4games store: filter categories
+  * gate4games store: sorting lists
+  * gate4games store: rudimentary details page
+
+== 0.0.4 ==
+  * Released 2015-12-26
+  * Improved lists for final API calls for gate4games store
+
+== 0.0.3 ==
+  * Released 2015-12-20
+  * Initial add of gate4games store    
+  
+== 0.0.2 ==
+  * Released 2015-12-17
+  * Removed debug message  
+
+== 0.0.1 ==
+  * Released 2015-12-17
+  * Initial development pre alpha release
+
+  
+  
+  
+
+
+  

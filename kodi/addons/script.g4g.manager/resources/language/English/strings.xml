@@ -54,6 +54,13 @@
     <string id="50206">Review for</string>
     <string id="50207">Screenshots for</string>
     <string id="50208">at</string>
+    <string id="50209">Install</string>
+    <string id="50210">Download of</string>
+    <string id="50211">Extract</string>
+    <string id="50212">Start</string>
+    <string id="50213">Remove</string>
+    <string id="50214">removed</string>
+    <string id="50215">Really remove? Cannot be undone then!</string>
     
     <string id="59999">This feature is currently under development</string>
 </strings>
