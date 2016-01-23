@@ -58,23 +58,22 @@ CLASS SECTION
 
 '''
 
-def DownloaderClass(url,dest,title):
-    dp = xbmcgui.DialogProgress()
-    dp.create(language(50209).encode('utf8') + " " + title,language(50210).encode('utf8') + " " + title, url)
+def DirectDownloaderStart(url,dest,title):
+    dp = xbmcgui.DialogProgressBG()
+    dp.create(language(50209).encode('utf8') + " " + title, language(50210).encode('utf8') + " " + title)
     urllib.urlretrieve(url,dest,lambda nb, bs, fs, url=url: _pbhook(nb,bs,fs,url,dp))
- 
-def _pbhook(numblocks, blocksize, filesize, url=None,dp=None):
-    try:
-        percent = min((numblocks*blocksize*100)/filesize, 100)
-        print percent
-        dp.update(percent)
-    except:
-        percent = 100
-        dp.update(percent)
-    if dp.iscanceled(): 
-        print "DOWNLOAD CANCELLED" # need to get this part working
-        dp.close()
+    return dp
 
+def DirectDownloaderUpdate(dp, percent, heading, message):
+    dp.update(percent, heading, message)
+
+def DirectDownloaderStop(dp):
+    dp.close()
+    
+def _pbhook(numblocks, blocksize, filesize, url=None,dp=None):
+    percent = min((numblocks*blocksize*100)/filesize, 100)
+    print percent
+    dp.update(percent)
 
 '''
 FUNCTION SECTION
@@ -235,89 +234,135 @@ def psx_game_details(params):
     pattern = '&nbsp;<a href="([^"]+)">[^>]+'
     zip_source = plugintools.find_single_match(body,pattern)
     
-    pattern = '<img src="([^"]+)" alt="[^"]+" width=300><BR></CENTER>[^>]+'
-    cover_image = plugintools.find_single_match(body,pattern)
+    pattern = '<img src="([^"]+)" alt="[^"]+" width=300><BR>+'
+    game_images = plugintools.find_multiple_matches(body,pattern)
+    
+    screenshot = ''
+    game_image_count = 1
+    for game_image in game_images:
+        if game_image_count == 1:
+            cover_image = game_image
+        else:
+            screenshot = game_image
+        game_image_count += 1
+    if screenshot == '':
+        screenshot = cover_image
 
-    plugintools.add_item( action="install_psx_game", url=zip_source,   title=language(50209).encode('utf8') + " " + psx_title, thumbnail=cover_image, fanart=cover_image , extra=psx_title, folder=False )
+    plugintools.add_item( action="install_psx_game", url=zip_source, title=language(50209).encode('utf8') + " " + psx_title, thumbnail=cover_image, fanart=screenshot, actorsandmore=screenshot, extra=psx_title, folder=False )
     
 # downloads and installs psx game    
 def install_psx_game(params):
     log("g4gmanager.install_psx_game "+repr(params))
     
+    dialog = xbmcgui.Dialog()
+    install_title = params.get('title')
     title = params.get('extra')
-    thumbnail = params.get('thumbnail')
+    install_message = language(50216).encode('utf8') + " " + title + " " + language(50217).encode('utf8')
+    if dialog.yesno(install_title, install_message):
+        thumbnail = params.get('thumbnail')
+        fanart = params.get('actorsandmore')
+        
+        # get work id
+        next_id = get_next_game_id()
+        
+        # download zip
+        download_source = params.get('url')
+        target_path = HOME_DIR + "/.g4g/downloads/download_" + next_id + ".zip"
+        #progress_dialog = DirectDownloaderStart(download_source,target_path,title)
+        
+        dp = xbmcgui.DialogProgressBG()
+        dp.create(language(50209).encode('utf8') + " " + title, language(50210).encode('utf8') + " " + title)
+        urllib.urlretrieve(download_source,target_path,lambda nb, bs, fs, url=download_source: _pbhook(nb,bs,fs,url,dp))
+
+        
+        
+        # extract zip to target
+        installation_heading = language(50209).encode('utf8') + " " + title
+        installation_message = language(50211).encode('utf8') + ' ' + title
+        dp.update(0, installation_heading, installation_message)
+        fh = open(target_path, 'rb')
+        downloaded_zip = zipfile.ZipFile(fh)
+        
+        # search binfile and move to target
+        #xbmc.executebuiltin('Notification(' + title + ',' + language(50211).encode('utf8') + ' ' + title + ',2000,' + thumbnail + ')')
+        #xbmc.executebuiltin("ActivateWindow(busydialog)")
+        for filename in downloaded_zip.namelist():
+            log("g4gmanager.install_psx_game => extract => filename "+repr(filename))
+            splitted_filename = filename.split('.')
+            file_ending = splitted_filename[1]
+            log("g4gmanager.install_psx_game => extract => file_ending "+repr(file_ending))
+            if file_ending == 'bin':
+                outfile_path = HOME_DIR + "/.g4g/roms/psx/"
+                outfile_target_name = "rom_" + next_id + ".bin"
+                log("g4gmanager.install_psx_game => extract => outfile_path "+repr(outfile_path))
+                dp.update(50, installation_heading, installation_message)
+                downloaded_zip.extract(filename, outfile_path)
+                downloaded_zipfilename = filename
+        fh.close()
+        dp.update(75, installation_heading, installation_message)
+        os.rename(outfile_path + downloaded_zipfilename, outfile_path + outfile_target_name)
+        dp.update(100, installation_heading, installation_message)
+        #xbmc.executebuiltin("Dialog.Close(busydialog)") 
+        
+        dp.update(0, installation_heading, language(50223).encode('utf8') + " " + language(50220).encode('utf8'))
+        
+        # create startscript
+        '''
+        #!/bin/sh
+        qjoypad Playstation1 &
+        killall -9 kodi.bin
+        pcsx -nogui -cdfile /home/steam/.g4g/roms/psx/tekken_3.bin
+        killall -9 pcsx
+        killall -9 qjoypad
+        /usr/bin/kodi -fs
+        '''
+        script_filepath = HOME_DIR + "/.g4g/scripts/script_" + next_id
+        target_scriptfile = open(script_filepath, 'w')
+        
+        target_scriptfile.write('#!/bin/sh')
+        target_scriptfile.write("\n")
+        target_scriptfile.write('qjoypad Playstation1 &')
+        target_scriptfile.write("\n")
+        target_scriptfile.write('killall -9 kodi.bin')
+        target_scriptfile.write("\n")
+        target_scriptfile.write('pcsx -nogui -cdfile ' + outfile_path + outfile_target_name)
+        target_scriptfile.write("\n")
+        target_scriptfile.write('killall -9 pcsx')
+        target_scriptfile.write("\n")
+        target_scriptfile.write('killall -9 qjoypad')
+        target_scriptfile.write("\n")
+        target_scriptfile.write('/usr/bin/kodi -fs')
+        target_scriptfile.write("\n")
+        target_scriptfile.close()
+        
+        st = os.stat(script_filepath)
+        os.chmod(script_filepath, st.st_mode | stat.S_IEXEC)
+        dp.update(25, installation_heading, language(50223).encode('utf8') + " " + language(50220).encode('utf8'))
+        xbmc.sleep(500)
+        
+        
+        # create desktop file and cover
+        create_desktop_file(title, 0, next_id, thumbnail,fanart, "")
+        dp.update(50, installation_heading, language(50223).encode('utf8') + " " + language(50220).encode('utf8'))
+        xbmc.sleep(500)
+        
+        # cleanup
+        os.remove(target_path)
+        dp.update(75, installation_heading, language(50223).encode('utf8') + " " + language(50220).encode('utf8'))
+        xbmc.sleep(500)
+        
+        # remove textures db to force regenarating thumbnails
+        textures_db_path = HOME_DIR + "/.kodi/userdata/Database/Textures13.db"
+        if os.path.isfile(textures_db_path):
+            os.remove(textures_db_path)
+
+        dp.update(100, installation_heading, language(50218).encode('utf8'))
+        xbmc.sleep(1000)
+        dp.close()
+
     
-    # get work id
-    next_id = get_next_game_id()
     
-    # download zip
-    download_source = params.get('url')
-    target_path = HOME_DIR + "/.g4g/downloads/download_" + next_id + ".zip"
-    DownloaderClass(download_source,target_path,title)
-    
-    
-    # extract zip to target
-    fh = open(target_path, 'rb')
-    downloaded_zip = zipfile.ZipFile(fh)
-    
-    # search binfile and move to target
-    xbmc.executebuiltin('Notification(' + title + ',' + language(50211).encode('utf8') + ' ' + title + ',2000,' + thumbnail + ')')
-    xbmc.executebuiltin("ActivateWindow(busydialog)")
-    for filename in downloaded_zip.namelist():
-        log("g4gmanager.install_psx_game => extract => filename "+repr(filename))
-        splitted_filename = filename.split('.')
-        file_ending = splitted_filename[1]
-        log("g4gmanager.install_psx_game => extract => file_ending "+repr(file_ending))
-        if file_ending == 'bin':
-            outfile_path = HOME_DIR + "/.g4g/roms/psx/"
-            outfile_target_name = "rom_" + next_id + ".bin"
-            log("g4gmanager.install_psx_game => extract => outfile_path "+repr(outfile_path))
-            downloaded_zip.extract(filename, outfile_path)
-            downloaded_zipfilename = filename
-    fh.close()
-    os.rename(outfile_path + downloaded_zipfilename, outfile_path + outfile_target_name)
-    xbmc.executebuiltin("Dialog.Close(busydialog)") 
-    
-    # create startscript
-    '''
-    #!/bin/sh
-    qjoypad Playstation1 &
-    killall -9 kodi.bin
-    pcsx -nogui -cdfile /home/steam/.g4g/roms/psx/tekken_3.bin
-    killall -9 pcsx
-    killall -9 qjoypad
-    /usr/bin/kodi -fs
-    '''
-    script_filepath = HOME_DIR + "/.g4g/scripts/script_" + next_id
-    target_scriptfile = open(script_filepath, 'w')
-    
-    target_scriptfile.write('#!/bin/sh')
-    target_scriptfile.write("\n")
-    target_scriptfile.write('qjoypad Playstation1 &')
-    target_scriptfile.write("\n")
-    target_scriptfile.write('killall -9 kodi.bin')
-    target_scriptfile.write("\n")
-    target_scriptfile.write('pcsx -nogui -cdfile ' + outfile_path + outfile_target_name)
-    target_scriptfile.write("\n")
-    target_scriptfile.write('killall -9 pcsx')
-    target_scriptfile.write("\n")
-    target_scriptfile.write('killall -9 qjoypad')
-    target_scriptfile.write("\n")
-    target_scriptfile.write('/usr/bin/kodi -fs')
-    target_scriptfile.write("\n")
-    target_scriptfile.close()
-    
-    st = os.stat(script_filepath)
-    os.chmod(script_filepath, st.st_mode | stat.S_IEXEC)
-    
-    
-    # create desktop file and cover
-    create_desktop_file(title, 0, next_id, thumbnail, "")
-    
-    # cleanup
-    os.remove(target_path)
-    
-def create_desktop_file(title,df_type,next_id,thumbnail,pc_type):
+def create_desktop_file(title,df_type,next_id,thumbnail,fanart,pc_type):
     script_filepath     = HOME_DIR + "/.g4g/scripts/script_" + next_id
     desktop_filepath    = HOME_DIR + "/.g4g/applications/game_" + next_id + ".desktop"
     icon_filepath       = HOME_DIR + "/.g4g/images/icons/icon_" + next_id + ".jpg"
@@ -364,8 +409,9 @@ def create_desktop_file(title,df_type,next_id,thumbnail,pc_type):
     
     # downloading cover and fanart
     log("g4gmanager.install_psx_game => image download from "+repr(thumbnail)+" to "+ cover_filepath)
+    log("g4gmanager.install_psx_game => image download from "+repr(fanart)+" to "+ fanart_filepath)
     urllib.urlretrieve(thumbnail, cover_filepath)    
-    urllib.urlretrieve(thumbnail, fanart_filepath)
+    urllib.urlretrieve(fanart, fanart_filepath)
 
 # checks application dir iterate through all files and take the highest value add 1 and transfer it to 8 letter length string 
 def get_next_game_id():
@@ -377,7 +423,9 @@ def get_next_game_id():
         id_value = int(current_id)
         if id_value > highest_id:
             highest_id = id_value
-
+    for filename in os.listdir(HOME_DIR + '/.g4g/downloads/'):
+        highest_id += 1
+        
     highest_id += 1
     next_id = str(highest_id)
     next_id = next_id.zfill(8)
@@ -727,12 +775,16 @@ def library_installed(params):
             for line in current_file:
                 if line.startswith('Exec='):
                     execute_path = line.replace('Exec=', '')
+                    execute_path = execute_path.strip()
                 if line.startswith('Name='):
                     game_name = line.replace('Name=', '')
+                    game_name = game_name.strip()
                 if line.startswith('Type='):
                     game_type = line.replace('Type=', '')
+                    game_type = game_type.strip()
                 if line.startswith('Type='):
                     pc_game_type = line.replace('PCType=', '')
+                    pc_game_type = pc_game_type.strip()
 
             game_infos = {
                 'execute_path': '',
@@ -755,12 +807,16 @@ def installed_app_actions(params):
     for line in current_file:
         if line.startswith('Exec='):
             execute_path = line.replace('Exec=', '')
+            execute_path = execute_path.strip()
         if line.startswith('Name='):
             game_name = line.replace('Name=', '')
+            game_name = game_name.strip()
         if line.startswith('Type='):
             game_type = line.replace('Type=', '')
+            game_type = game_type.strip()
         if line.startswith('Type='):
             pc_game_type = line.replace('PCType=', '')
+            pc_game_type = pc_game_type.strip()
 
     current_file.close()
     plugintools.set_view(plugintools.LIST)
@@ -770,16 +826,19 @@ def installed_app_actions(params):
     
     #actions
     plugintools.add_item( action="launch_app", title=start_app_caption , thumbnail=game_cover.encode('utf-8') , fanart=game_cover.encode('utf-8') , extra=execute_path, folder=False )
-    plugintools.add_item( action="remove_app", title=remove_app_caption , thumbnail=game_cover.encode('utf-8') , fanart=game_cover.encode('utf-8') , extra=app_install_id, folder=False )
+    plugintools.add_item( action="remove_app", title=remove_app_caption , thumbnail=game_cover.encode('utf-8') , fanart=game_cover.encode('utf-8') , actorsandmore=game_name.encode('utf-8'), extra=app_install_id, folder=False )
     
 # remove app
 def remove_app(params):
     dialog = xbmcgui.Dialog()
     remove_title = params.get('title')
-    remove_message = language(50215).encode('utf8')
+    game_title = params.get('actorsandmore')
+    remove_message = language(50216).encode('utf8') + " " + game_title + " " + language(50215).encode('utf8')
     if dialog.yesno(remove_title, remove_message):
         log("g4gmanager.remove_app => answer yes")
-        xbmc.executebuiltin("ActivateWindow(busydialog)")
+        dp = xbmcgui.DialogProgressBG()
+        dp.create(remove_title, language(50221).encode('utf8'))
+        xbmc.sleep(1000)
 
         app_install_id          = params.get('extra')
         script_filepath         = HOME_DIR + "/.g4g/scripts/script_" + app_install_id
@@ -799,7 +858,9 @@ def remove_app(params):
                 pc_game_type = line.replace('PCType=', '')
         
         game_type = game_type.strip()
-                        
+
+        dp.update(25,remove_title,language(50213).encode('utf8') + " " + language(50219).encode('utf8'))
+        xbmc.sleep(1000)
         delete_path = None
         delete_file = None
         log("g4gmanager.remove_app => game_type: '" + game_type  + "'")        
@@ -814,17 +875,27 @@ def remove_app(params):
         log("g4gmanager.remove_app => delete_file: " + delete_file)        
         if delete_file is not None:
             os.remove(delete_file)
+            dp.update(50, remove_title,language(50213).encode('utf8') + " " + language(50220).encode('utf8'))
+            xbmc.sleep(1000)
             os.remove(script_filepath)
             os.remove(desktop_filepath)
             os.remove(fanart_filepath)
-            xbmc.executebuiltin('Notification(' + remove_title + ',' + remove_title + ' ' + language(50214).encode('utf8') + ',4000,' + cover_filepath + ')')
             os.remove(cover_filepath)
             
         if delete_path is not None:            
             log("g4gmanager.remove_app => delete_path: " + delete_path)        
             # delete complete path with all subfiles via shutil.rmtree() => will delete a directory and all its contents. 
             
-        xbmc.executebuiltin("Dialog.Close(busydialog)")        
+        dp.update(75, remove_title,language(50222).encode('utf8'))
+        # remove textures db to force regenarating thumbnails
+        textures_db_path = HOME_DIR + "/.kodi/userdata/Database/Textures13.db"
+        if os.path.isfile(textures_db_path):
+            os.remove(textures_db_path)
+            
+        dp.update(100, remove_title, game_title + " " + language(50214).encode('utf8'))
+        xbmc.sleep(1000)
+        dp.close()
+        
             
 # launch app
 def launch_app(params):
@@ -838,7 +909,6 @@ def launch_app(params):
     except:
             log('ERROR: failed to launch: %s' % execute_path)
             print execute_path.encode(txt_encode)
-            dialog.notification('Aaaaaaargghh!!')
     
     
 # Settings dialog

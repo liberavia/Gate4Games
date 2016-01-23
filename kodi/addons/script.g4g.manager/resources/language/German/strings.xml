@@ -59,7 +59,15 @@
     <string id="50212">Starte</string>
     <string id="50213">Entferne</string>
     <string id="50214">entfernt</string>
-    <string id="50215">Wirklich entfernen? Kann nicht mehr rückgängig gemacht werden!</string>
+    <string id="50215">entfernen?</string>
+    <string id="50216">Willst du</string>
+    <string id="50217">installieren?</string>
+    <string id="50218">Installation abgeschlossen.</string>
+    <string id="50219">Spieldaten</string>
+    <string id="50220">Verlinkungen</string>
+    <string id="50221">Entfernung wird vorbereitet</string>
+    <string id="50222">Bildercache löschen</string>
+    <string id="50223">Erstelle</string>
     
     <string id="59999">Dieser Teil der Anwendung befindet sich noch in Entwicklung</string>
 </strings>

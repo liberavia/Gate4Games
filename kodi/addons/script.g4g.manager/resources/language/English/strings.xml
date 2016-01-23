@@ -60,7 +60,15 @@
     <string id="50212">Start</string>
     <string id="50213">Remove</string>
     <string id="50214">removed</string>
-    <string id="50215">Really remove? Cannot be undone then!</string>
+    <string id="50215">installation?</string>
+    <string id="50216">Confirm to</string>
+    <string id="50217">removal?</string>
+    <string id="50218">Finished installation.</string>
+    <string id="50219">Gamedata</string>
+    <string id="50220">Links</string>
+    <string id="50221">Preparing removal</string>
+    <string id="50222">Refreshing thumbnail cache</string>
+    <string id="50223">Erstelle</string>
     
     <string id="59999">This feature is currently under development</string>
 </strings>
