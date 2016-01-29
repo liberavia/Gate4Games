@@ -586,6 +586,9 @@ def add_item( action="" , title="" , plot="" , url="" , thumbnail="" , fanart=""
     else:
         itemurl = '%s?action=%s&title=%s&url=%s&thumbnail=%s&plot=%s&extra=%s&page=%s&quality=%s&imdb_rating=%s&comments=%s&movie_language=%s&genre=%s&actorsandmore=%s&landyear=%s&age_recomm=%s' % ( sys.argv[ 0 ] , action , urllib.quote_plus( title ) , urllib.quote_plus(url) , urllib.quote_plus( thumbnail ) , urllib.quote_plus( plot ) , urllib.quote_plus( extra ) , urllib.quote_plus( page ), urllib.quote_plus( quality ), urllib.quote_plus( imdb_rating ), urllib.quote_plus( comments ), urllib.quote_plus( movie_language ), urllib.quote_plus( genre ), urllib.quote_plus( actorsandmore ), urllib.quote_plus( landyear ), urllib.quote_plus( age_recomm ) )
         xbmcplugin.addDirectoryItem( handle=int(sys.argv[1]), url=itemurl, listitem=listitem, isFolder=folder)
+        
+    return listitem
+
 
 def close_item_list():
     _log("close_item_list")

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+        <defaultcontrol always="true">9906</defaultcontrol>
+        <coordinates>
+                <system>1</system>
+                <left>200</left>
+                <top>50</top>
+        </coordinates>
+        <include>dialogeffect</include>
+        <controls>
+                <control type="image">
+                        <left>0</left>
+                        <top>0</top>
+                        <width>850</width>
+                        <height>320</height>
+                        <texture border="40">DialogBack.png</texture>
+                </control>
+                <control type="image">
+                        <description>Dialog Header image</description>
+                        <left>40</left>
+                        <top>16</top>
+                        <width>850</width>
+                        <height>40</height>
+                        <texture>dialogheader.png</texture>
+                </control>
+                <control type="label" id="9900">
+                        <description>header label</description>
+                        <left>40</left>
+                        <top>20</top>
+                        <width>850</width>
+                        <height>30</height>
+                        <font>font13_title</font>
+                        <label></label>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>selected</textcolor>
+                        <shadowcolor>black</shadowcolor>
+                </control>
+                <control type="image" id="9904">
+                    <description>gamecover</description>
+                    <top>80</top>
+                    <left>30</left>
+                    <width>125</width>
+                    <height>198</height>
+                    <visible>true</visible>
+                    <colordiffuse>FFFFFFFF</colordiffuse>
+                    <fadetime>200</fadetime>
+                    <texture></texture>
+                    <aspectratio>stretch</aspectratio>
+                </control>
+                <control type="label">
+                    <description>label percent progress</description>
+                    <left>630</left>
+                    <top>80</top>
+                    <width>200</width>
+                    <height>30</height>
+                    <align>left</align>
+                    <font>font13_title</font>
+                    <label>$ADDON[script.g4g.manager 50030]:</label>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <textcolor>selected</textcolor>
+                    <shadowcolor>black</shadowcolor>
+                </control>
+                <control type="label" id="9901">
+                    <description>label percent</description>
+                    <left>750</left>
+                    <top>80</top>
+                    <width>80</width>
+                    <height>30</height>
+                    <align>left</align>
+                    <font>font13_title</font>
+                    <label></label>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <textcolor>selected</textcolor>
+                    <shadowcolor>black</shadowcolor>
+                </control>
+                <control type="label" id="9908">
+                    <description>label message</description>
+                    <left>180</left>
+                    <top>120</top>
+                    <width>620</width>
+                    <height>30</height>
+                    <align>left</align>
+                    <font>font13_title</font>
+                    <label></label>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <textcolor>selected</textcolor>
+                    <shadowcolor>black</shadowcolor>
+                </control>
+                <control type="progress" id="9905">
+                    <description>progress of task</description>
+                    <top>160</top>
+                    <left>180</left>
+                    <width>620</width>
+                    <height>30</height>
+                    <info></info>
+                </control>                
+                <control type="button" id="9906">
+                    <description>Go Back</description>
+                    <top>220</top>
+                    <left>180</left>
+                    <width>250</width>
+                    <height>60</height>
+                    <visible>true</visible>
+                    <label>$ADDON[script.g4g.manager 50031]</label>
+                    <font>font12</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <focusedcolor>FFFFFFFF</focusedcolor>
+                    <disabledcolor>80FFFFFF</disabledcolor>
+                    <invalidcolor>FFFFFFFF</invalidcolor>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <onclick>PreviousMenu</onclick>
+                    <onright>9907</onright>
+                </control>
+                <control type="button" id="9907">
+                    <description>Abort Download</description>
+                    <top>220</top>
+                    <left>550</left>
+                    <width>250</width>
+                    <height>60</height>
+                    <visible>true</visible>
+                    <label>$ADDON[script.g4g.manager 50032]</label>
+                    <font>font12</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <focusedcolor>FFFFFFFF</focusedcolor>
+                    <disabledcolor>80FFFFFF</disabledcolor>
+                    <invalidcolor>FFFFFFFF</invalidcolor>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <onclick>PreviousMenu</onclick>
+                    <onleft>9906</onleft>
+                </control>
+    </controls>
+</window>

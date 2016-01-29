@@ -7,6 +7,7 @@
     <string id="50002">Bibliothek</string>
     <string id="50003">Games Hinzufügen</string>
     <string id="50004">Einstellungen</string>
+    <string id="50005">Downloads</string>
     
     <!-- Library -->
     <string id="50010">Installiert</string>
@@ -19,6 +20,11 @@
     <string id="50023">Sony Playstation 2</string>
     <string id="50024">Nintendo Gamecube</string>
 
+    <!-- Downloads -->
+    <string id="50030">Fortschritt</string>
+    <string id="50031">Zurück</string>
+    <string id="50032">Download abbrechen</string>
+    
     <!-- List actions -->
     <string id="50050">[COLOR blue]Direkt zu Seite springen...[/COLOR]</string>
     <string id="50051">[COLOR blue]Nach Genre...[/COLOR]</string>
@@ -68,6 +74,9 @@
     <string id="50221">Entfernung wird vorbereitet</string>
     <string id="50222">Bildercache löschen</string>
     <string id="50223">Erstelle</string>
+    <string id="50224">Installation</string>
+    <string id="50225">gestartet</string>
+    <string id="50226">Verfolge den Fortschritt bei den Downloads</string>
     
     <string id="59999">Dieser Teil der Anwendung befindet sich noch in Entwicklung</string>
 </strings>

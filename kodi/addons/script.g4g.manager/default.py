@@ -1,16 +1,19 @@
-    # gate4games game manager
+# gate4games game manager
 # script for managing videogames (download, install, start, remove). Provides different platforms in one interface
 
 import os
 import sys
 import plugintools
 import subprocess
+import thread
+import threading
 import time
 import shutil
 import stat
 import xbmc
 import xbmcaddon
 import xbmcgui
+import xbmcplugin
 from os.path import expanduser
 import ntpath
 import re
@@ -21,6 +24,7 @@ import urllib
 import urllib2
 import json
 from qrcodewindow import ShowQrCodeDialog
+from downloadwindow import ShowDownloadDialog
 import zipfile
 
 plugintools.module_log_enabled = False
@@ -39,6 +43,7 @@ FOLDER_IMAGES = os.path.join(FOLDER_G4G, 'images')
 FOLDER_ICONS = os.path.join(FOLDER_IMAGES, 'icons')
 FOLDER_FANART = os.path.join(FOLDER_IMAGES, 'fanart')
 FOLDER_COVER = os.path.join(FOLDER_IMAGES, 'cover')
+FOLDER_PROGRESS = os.path.join(FOLDER_G4G, 'progress')
 API_BASE_URL = "http://www.gate4games.com/index.php?cl=gateosapi"
 API_COMPATIBILITY_ATTRIBUTE = "&attributes=CompatibilityTypeLin--Ja"
 YOUTUBE_API_KEY='AIzaSyDEJmWgKTSb8Gi4OUmWKY2YrLgI4pIbZQ0'
@@ -114,6 +119,7 @@ def run():
         exec action+"(params)"
 
     plugintools.close_item_list()
+
     
 # Main menu
 def main_list(params):
@@ -121,14 +127,22 @@ def main_list(params):
 
     plugintools.set_view(plugintools.THUMBNAIL)
     
+    downloads_count = len([f for f in os.listdir(FOLDER_PROGRESS) if os.path.isfile(os.path.join(FOLDER_PROGRESS, f))])
+    download_title = language(50005).encode('utf-8') + ' (' + str(downloads_count) + ')'
+    if downloads_count > 0:
+        download_title = '[COLOR green]' + download_title + '[/COLOR]'
+    
     plugintools.add_item( action="dummy", title=language(50001).encode('utf-8'), thumbnail=DEFAULT_THUMB, fanart=FANART , folder=False )
     plugintools.add_item( action="library_selection", title=language(50002).encode('utf-8') , thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
     plugintools.add_item( action="add_games", title=language(50003).encode('utf-8') , thumbnail=DEFAULT_THUMB , fanart=FANART , folder=True )
+    plugintools.add_item( action="downloads_overview", title=download_title , thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
     plugintools.add_item( action="settings", title=language(50004).encode('utf-8') , thumbnail=SETTINGS_THUMB , fanart=FANART , folder=False )
-    
+
+
 # dummy message
 def dummy(params):
     plugintools.message("Gate4Games Manager", language(59999).encode('utf8'),"")
+
 
 # add games
 def add_games(params):
@@ -143,6 +157,7 @@ def add_games(params):
     plugintools.add_item( action="add_psx_games_letters", title=language(50022).encode('utf-8'), thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
     plugintools.add_item( action="dummy", title=language(50023).encode('utf-8'), thumbnail=DEFAULT_THUMB, fanart=FANART , folder=False )
     plugintools.add_item( action="dummy", title=language(50024).encode('utf-8'), thumbnail=DEFAULT_THUMB, fanart=FANART , folder=False )
+
 
 # choose game by letter    
 def add_psx_games_letters(params):
@@ -206,6 +221,7 @@ def add_psx_games_letters(params):
     plugintools.add_item( action="psx_letter_list", url=free_roms_y,     title="Y", thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
     plugintools.add_item( action="psx_letter_list", url=free_roms_z,     title="Z", thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
 
+
 # list games for letter    
 def psx_letter_list(params):
     log("g4gmanager.psx_letter_list "+repr(params))
@@ -223,6 +239,8 @@ def psx_letter_list(params):
         details_title = game[1]
         plugintools.add_item( action="psx_game_details", url=details_url,   title=details_title, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
 
+
+# detail actions for psx game
 def psx_game_details(params):
     log("g4gmanager.psx_letter_list "+repr(params))
     
@@ -249,169 +267,30 @@ def psx_game_details(params):
         screenshot = cover_image
 
     plugintools.add_item( action="install_psx_game", url=zip_source, title=language(50209).encode('utf8') + " " + psx_title, thumbnail=cover_image, fanart=screenshot, actorsandmore=screenshot, extra=psx_title, folder=False )
+
     
 # downloads and installs psx game    
 def install_psx_game(params):
     log("g4gmanager.install_psx_game "+repr(params))
     
-    dialog = xbmcgui.Dialog()
     install_title = params.get('title')
     title = params.get('extra')
     install_message = language(50216).encode('utf8') + " " + title + " " + language(50217).encode('utf8')
     if dialog.yesno(install_title, install_message):
-        thumbnail = params.get('thumbnail')
+        image = params.get('thumbnail')
         fanart = params.get('actorsandmore')
-        
-        # get work id
-        next_id = get_next_game_id()
-        
-        # download zip
-        download_source = params.get('url')
-        target_path = HOME_DIR + "/.g4g/downloads/download_" + next_id + ".zip"
-        #progress_dialog = DirectDownloaderStart(download_source,target_path,title)
-        
-        dp = xbmcgui.DialogProgressBG()
-        dp.create(language(50209).encode('utf8') + " " + title, language(50210).encode('utf8') + " " + title)
-        urllib.urlretrieve(download_source,target_path,lambda nb, bs, fs, url=download_source: _pbhook(nb,bs,fs,url,dp))
-
-        
-        
-        # extract zip to target
-        installation_heading = language(50209).encode('utf8') + " " + title
-        installation_message = language(50211).encode('utf8') + ' ' + title
-        dp.update(0, installation_heading, installation_message)
-        fh = open(target_path, 'rb')
-        downloaded_zip = zipfile.ZipFile(fh)
-        
-        # search binfile and move to target
-        #xbmc.executebuiltin('Notification(' + title + ',' + language(50211).encode('utf8') + ' ' + title + ',2000,' + thumbnail + ')')
-        #xbmc.executebuiltin("ActivateWindow(busydialog)")
-        for filename in downloaded_zip.namelist():
-            log("g4gmanager.install_psx_game => extract => filename "+repr(filename))
-            splitted_filename = filename.split('.')
-            file_ending = splitted_filename[1]
-            log("g4gmanager.install_psx_game => extract => file_ending "+repr(file_ending))
-            if file_ending == 'bin':
-                outfile_path = HOME_DIR + "/.g4g/roms/psx/"
-                outfile_target_name = "rom_" + next_id + ".bin"
-                log("g4gmanager.install_psx_game => extract => outfile_path "+repr(outfile_path))
-                dp.update(50, installation_heading, installation_message)
-                downloaded_zip.extract(filename, outfile_path)
-                downloaded_zipfilename = filename
-        fh.close()
-        dp.update(75, installation_heading, installation_message)
-        os.rename(outfile_path + downloaded_zipfilename, outfile_path + outfile_target_name)
-        dp.update(100, installation_heading, installation_message)
-        #xbmc.executebuiltin("Dialog.Close(busydialog)") 
-        
-        dp.update(0, installation_heading, language(50223).encode('utf8') + " " + language(50220).encode('utf8'))
-        
-        # create startscript
-        '''
-        #!/bin/sh
-        qjoypad Playstation1 &
-        killall -9 kodi.bin
-        pcsx -nogui -cdfile /home/steam/.g4g/roms/psx/tekken_3.bin
-        killall -9 pcsx
-        killall -9 qjoypad
-        /usr/bin/kodi -fs
-        '''
-        script_filepath = HOME_DIR + "/.g4g/scripts/script_" + next_id
-        target_scriptfile = open(script_filepath, 'w')
-        
-        target_scriptfile.write('#!/bin/sh')
-        target_scriptfile.write("\n")
-        target_scriptfile.write('qjoypad Playstation1 &')
-        target_scriptfile.write("\n")
-        target_scriptfile.write('killall -9 kodi.bin')
-        target_scriptfile.write("\n")
-        target_scriptfile.write('pcsx -nogui -cdfile ' + outfile_path + outfile_target_name)
-        target_scriptfile.write("\n")
-        target_scriptfile.write('killall -9 pcsx')
-        target_scriptfile.write("\n")
-        target_scriptfile.write('killall -9 qjoypad')
-        target_scriptfile.write("\n")
-        target_scriptfile.write('/usr/bin/kodi -fs')
-        target_scriptfile.write("\n")
-        target_scriptfile.close()
-        
-        st = os.stat(script_filepath)
-        os.chmod(script_filepath, st.st_mode | stat.S_IEXEC)
-        dp.update(25, installation_heading, language(50223).encode('utf8') + " " + language(50220).encode('utf8'))
-        xbmc.sleep(500)
-        
-        
-        # create desktop file and cover
-        create_desktop_file(title, 0, next_id, thumbnail,fanart, "")
-        dp.update(50, installation_heading, language(50223).encode('utf8') + " " + language(50220).encode('utf8'))
-        xbmc.sleep(500)
-        
-        # cleanup
-        os.remove(target_path)
-        dp.update(75, installation_heading, language(50223).encode('utf8') + " " + language(50220).encode('utf8'))
-        xbmc.sleep(500)
-        
-        # remove textures db to force regenarating thumbnails
-        textures_db_path = HOME_DIR + "/.kodi/userdata/Database/Textures13.db"
-        if os.path.isfile(textures_db_path):
-            os.remove(textures_db_path)
-
-        dp.update(100, installation_heading, language(50218).encode('utf8'))
-        xbmc.sleep(1000)
-        dp.close()
-
-    
-    
-def create_desktop_file(title,df_type,next_id,thumbnail,fanart,pc_type):
-    script_filepath     = HOME_DIR + "/.g4g/scripts/script_" + next_id
-    desktop_filepath    = HOME_DIR + "/.g4g/applications/game_" + next_id + ".desktop"
-    icon_filepath       = HOME_DIR + "/.g4g/images/icons/icon_" + next_id + ".jpg"
-    cover_filepath      = HOME_DIR + "/.g4g/images/cover/cover_" + next_id + ".jpg"
-    fanart_filepath     = HOME_DIR + "/.g4g/images/fanart/fanart_" + next_id + ".jpg"
-    
-    type_switcher = {
-        0: "psx",
-        1: "ps2",
-        2: "gc",
-        3: "pc",
-        4: "android",
-    }
-
-    pc_type_switcher = {
-        0: "steam",
-        1: "steam_wine",
-        2: "gog",
-        3: "gog_wine",
-        4: "wine",
-    }
-    
-    install_type = type_switcher.get(df_type, "none")
-    pc_install_type = type_switcher.get(pc_type, "none")
-    
-    target_desktopfile = open(desktop_filepath, 'w')
-    
-    target_desktopfile.write('[Desktop Entry]')
-    target_desktopfile.write("\n")
-    target_desktopfile.write('Version=1.0')
-    target_desktopfile.write("\n")
-    target_desktopfile.write('Terminal=false')
-    target_desktopfile.write("\n")
-    target_desktopfile.write('Type='+ install_type)
-    target_desktopfile.write("\n")
-    target_desktopfile.write('PCType='+ pc_install_type)
-    target_desktopfile.write("\n")
-    target_desktopfile.write('Name=' + title + ' (' + install_type + ')')
-    target_desktopfile.write("\n")
-    target_desktopfile.write('Exec=' + script_filepath)
-    target_desktopfile.write("\n")
-    target_desktopfile.write('Icon=' + icon_filepath)
-    target_desktopfile.close()
-    
-    # downloading cover and fanart
-    log("g4gmanager.install_psx_game => image download from "+repr(thumbnail)+" to "+ cover_filepath)
-    log("g4gmanager.install_psx_game => image download from "+repr(fanart)+" to "+ fanart_filepath)
-    urllib.urlretrieve(thumbnail, cover_filepath)    
-    urllib.urlretrieve(fanart, fanart_filepath)
+        url = params.get('url')
+        systemtype = "psx"
+        downloadtype = "direct"
+        packagetype = "zip"
+        basePath = os.path.join(getAddonInstallPath(), 'resources', 'scripts')
+        install_script = os.path.join(basePath, 'install.py')        
+        cmd = install_script + ' --url=' + url + ' --downloadtype=' + downloadtype + ' --image=' + image + ' --name="' + title + '" --systemtype=' + systemtype + ' --packagetype=' + packagetype + ' --fanart=' + fanart
+        log("g4gmanager.install_psx_game => trigger command: "+ cmd)
+        subprocess.Popen(cmd, shell=True, close_fds=True)
+        notification_title = language(50224).encode('utf8') + " " + language(50201).encode('utf8') + " " + title + " " + language(50225).encode('utf8')
+        notification_message = language(50226).encode('utf8')
+        xbmc.executebuiltin('Notification(' + notification_title + ',' + notification_message + ',5000,' + image + ')')
 
 # checks application dir iterate through all files and take the highest value add 1 and transfer it to 8 letter length string 
 def get_next_game_id():
@@ -431,6 +310,7 @@ def get_next_game_id():
     next_id = next_id.zfill(8)
     
     return next_id
+
     
 # add games
 def add_pc_games(params):
@@ -506,6 +386,7 @@ def add_pc_games(params):
         next_page_title = "[COLOR blue]" + language(50053).encode('utf-8') + " " +  str(next_page) + " " + language(50201).encode('utf-8') + " " + str(maxpage) + "[/COLOR]"
         plugintools.add_item( action="add_pc_games", title=next_page_title, thumbnail=DEFAULT_THUMB, fanart=FANART , extra=maintenance_extra, folder=True, page=str(next_page)  )
 
+
 # directly jumping to certain page        
 def add_pc_game_to_page(params):
     log("g4gmanager.add_pc_game_to_page "+repr(params))
@@ -523,6 +404,7 @@ def add_pc_game_to_page(params):
             title_page = "[COLOR green]" +  title_page + "[/COLOR]"
             
         plugintools.add_item( action="add_pc_games", title=title_page, thumbnail=DEFAULT_THUMB, fanart=FANART , extra=extra, folder=True, page=str(current_page)  )
+
 
 # get genre filtered list
 def add_pc_game_by_genre(params):
@@ -557,6 +439,7 @@ def add_pc_game_by_genre(params):
         extra['genre'] = genre_name
         genre_values = json.dumps(extra)
         plugintools.add_item( action="add_pc_games", title=genre_name, thumbnail=DEFAULT_THUMB, fanart=FANART , extra=genre_values, folder=True, page="1"  )
+
 
 # get sorted list
 def add_pc_game_sort(params):
@@ -603,6 +486,7 @@ def add_pc_game_sort(params):
     plugintools.add_item( action="add_pc_games", title=title_sortby_igdb_asc, thumbnail=DEFAULT_THUMB, fanart=FANART , extra=sortby_igdb_asc, folder=True, page="1" )
     plugintools.add_item( action="add_pc_games", title=title_sortby_release_desc, thumbnail=DEFAULT_THUMB, fanart=FANART , extra=sortby_release_desc, folder=True, page="1" )
     plugintools.add_item( action="add_pc_games", title=title_sortby_release_asc, thumbnail=DEFAULT_THUMB, fanart=FANART , extra=sortby_release_asc, folder=True, page="1" )
+
 
 # game details page        
 def add_pc_game(params):
@@ -676,6 +560,7 @@ def add_pc_game(params):
         
         plugintools.add_item( action="show_qr_code", title=vendortitle, thumbnail=vendoricon, fanart=product_fanart, plot=vendorqrcode, extra=details_standard_extra, folder=False )
 
+
 # shows qr code of product
 def show_qr_code(params):
     vendorqrcode = params.get('plot')
@@ -683,7 +568,8 @@ def show_qr_code(params):
     qrcodeisplay.setGameQrCode(vendorqrcode)
     qrcodeisplay.doModal()
 
-    
+
+# play trailer for game    
 def add_pc_game_trailer(params):
     extra = json.loads(params.get('extra'))
     
@@ -711,7 +597,9 @@ def add_pc_game_trailer(params):
     for trailer in root.iter('trailer'):
         video_url = trailer.find('videourl').text
         plugintools.add_item( action="play_youtube_video", title=trailer_for_product, url=video_url, thumbnail=product_coverpic, fanart=product_coverpic, folder=False )
-    
+
+
+# play review for pc game    
 def add_pc_game_review(params):
     extra = json.loads(params.get('extra'))
     
@@ -739,6 +627,7 @@ def add_pc_game_review(params):
     for review_video in root.iter('review_video'):
         video_url = review_video.find('videourl').text
         plugintools.add_item( action="play_youtube_video", title=review_for_product, url=video_url, thumbnail=product_coverpic, fanart=product_coverpic, folder=False )
+
     
 # plays a youtube video using the internal plugin    
 def play_youtube_video(params):
@@ -750,6 +639,7 @@ def play_youtube_video(params):
     xbmc.executebuiltin("xbmc.PlayMedia("+media_url+")")
     xbmc.executebuiltin("Dialog.Close(busydialog)")        
 
+
 # library selections    
 def library_selection(params):
     log("g4gmanager.library_selection "+repr(params))
@@ -757,7 +647,127 @@ def library_selection(params):
     plugintools.set_view(plugintools.THUMBNAIL)
     
     plugintools.add_item( action="library_installed", title=language(50010).encode('utf-8') , thumbnail=DEFAULT_THUMB , fanart=FANART , folder=True )
-    plugintools.add_item( action="dummy", title=language(50011).encode('utf-8') , thumbnail=DEFAULT_THUMB , fanart=FANART , folder=False )
+    plugintools.add_item( action="library_available", title=language(50011).encode('utf-8') , thumbnail=DEFAULT_THUMB , fanart=FANART , folder=True )
+
+
+#show available games which are not installed from steam,gog,amazon
+def library_available(params):
+    log("g4gmanager.library_available "+repr(params))
+    
+    #currently this is only a dummy entry for testing the custom download progress dialog
+    extra = dict([('downloadtype', 'direct'), ('packagetype', 'zip'), ('appid', '12345'), ('url', 'http://www.irgendwo.de/mypack.zip')])
+    extra = json.dumps(extra)
+    
+    plugintools.add_item( action="details_available", title="Sample Game" , thumbnail=DEFAULT_THUMB , fanart=FANART, extra=extra , folder=True )
+
+
+# available actions for certain available game
+def details_available(params):
+    log("g4gmanager.details_available "+repr(params))
+    
+    extra = params.get('extra')
+    plugintools.add_item( action="start_install_game", title="Install Sample Game" , thumbnail=DEFAULT_THUMB , fanart=FANART, extra=extra , folder=False )
+
+
+# trigger the install script which will do the job and report about it in json files
+def start_install_game(params):
+    log("g4gmanager.start_install_game "+repr(params))
+    
+    options = json.loads(params.get('extra'))
+    name = params.get('title')
+    thumbnail = params.get('thumbnail')
+    basePath = os.path.join(getAddonInstallPath(), 'resources', 'scripts')
+    install_script = os.path.join(basePath, 'install.py')
+    cmd = "%s" % (install_script)
+    log("g4gmanager.start_install_game => CMD: " + cmd)
+    #args = [install_script.encode('utf8'), "-dt", options['downloadtype'], "-pt", options['packagetype'], "-aid", options['appid'], "-u", options['url'], "-n", name]
+    #subprocess.Popen(args, shell=True, close_fds=True)
+    subprocess.Popen(install_script, shell=True, close_fds=True)
+    notification_title = language(50224).encode('utf8') + " " + language(50201).encode('utf8') + " " + name + " " + language(50225).encode('utf8')
+    notification_message = language(50226).encode('utf8')
+    xbmc.executebuiltin('Notification(' + notification_title + ',' + notification_message + ',5000,' + thumbnail + ')')
+    
+
+# overview page of running downloads    
+def downloads_overview(params):
+    log("g4gmanager.downloads_overview "+repr(params))
+    
+    thumbnail = params.get('thumbnail')
+    
+    plugintools.set_view(plugintools.LIST)
+    
+    # initial 
+    for progress_file in os.listdir(FOLDER_PROGRESS):
+        progress_filepath = os.path.join(FOLDER_PROGRESS,progress_file)
+        handle = int(sys.argv[1])
+        if os.path.isfile(progress_filepath):
+            current_file = open(progress_filepath,'r')
+            with current_file as json_file:
+                progress_info = json.load(json_file)
+                title = progress_info['name'] # + " (" + str(progress_info['percent']) + " %)"
+                listitem = plugintools.add_item( action="show_download_progress", title=title , extra=progress_filepath, thumbnail=DEFAULT_THUMB , fanart=FANART , folder=False )
+                #update_listitem_thread = threading.Thread(target=update_progress_listitem, args=(handle, listitem, progress_filepath))
+                #update_listitem_thread.daemon = True
+                #update_listitem_thread.start()    
+            current_file.close()
+                
+    # periodically update list
+
+
+# Shows download progress
+def show_download_progress(params):
+    progress_filepath = params.get('extra')
+    current_file = open(progress_filepath,'r')
+    with current_file as json_file:
+        try:
+            progress_info = json.load(json_file)
+            downloaddisplay=ShowDownloadDialog()
+            downloaddisplay.setDownloadPercent(progress_info['percent'])
+            downloaddisplay.setDownloadTitle(progress_info['name'])
+            downloaddisplay.setDownloadImage(progress_info['image'])
+            downloaddisplay.setDownloadMessage(progress_info['message'])
+            update_thread = threading.Thread(target=update_progress_details, args=(downloaddisplay, progress_filepath))
+            update_thread.daemon = True
+            update_thread.start()    
+            downloaddisplay.doModal()
+        except:
+            pass
+    current_file.close()
+    #update_thread.set()
+
+
+# Thread to periodically update progress of a certain task
+def update_progress_details(window, filepath):
+    while os.path.isfile(filepath):
+        current_file = open(filepath,'r')
+        try:
+            with current_file as json_file:
+                progress_info = json.load(json_file)
+                log("g4gmanager.update_progress_details "+repr(progress_info))
+                window.udpateDownloadPercent(progress_info['percent'])  
+                window.udpateDownloadMessage(progress_info['message'])
+                window.setProgressFilePath(filepath)
+        except:
+            pass
+        time.sleep(1)
+        current_file.close()
+    
+
+# Thread to periodically update listlabel
+def update_progress_listitem(handle, listitem, filepath):
+    while os.path.isfile(filepath):
+        current_file = open(filepath,'r')
+        with current_file as json_file:
+            progress_info = json.load(json_file)
+            title = progress_info['name'] + " (" + str(progress_info['percent']) + ")"
+            log("g4gmanager.update_progress_listitem "+repr(progress_info))
+            log("g4gmanager.update_progress_listitem => Current Label: "+ listitem.getLabel())
+            listitem.setLabel(title)
+        current_file.close()
+        log("g4gmanager.update_progress_listitem => Update Container")
+        # xbmc.executebuiltin("Container.Refresh")
+        time.sleep(1)
+
     
 # show installed apps and read their information
 def library_installed(params):

@@ -7,6 +7,7 @@
     <string id="50002">Library</string>
     <string id="50003">Add Games</string>
     <string id="50004">Settings</string>
+    <string id="50005">Downloads</string>
     
     <!-- Library -->
     <string id="50010">Installed</string>
@@ -18,6 +19,11 @@
     <string id="50022">Sony Playstation 1</string>
     <string id="50023">Sony Playstation 2</string>
     <string id="50024">Nintendo Gamecube</string>
+    
+    <!-- Downloads -->
+    <string id="50030">Progress</string>
+    <string id="50031">Back</string>
+    <string id="50032">Cancel Download</string>
     
     <!-- List actions -->
     <string id="50050">[COLOR blue]Directly to page...[/COLOR]</string>
@@ -68,7 +74,10 @@
     <string id="50220">Links</string>
     <string id="50221">Preparing removal</string>
     <string id="50222">Refreshing thumbnail cache</string>
-    <string id="50223">Erstelle</string>
+    <string id="50223">Create</string>
+    <string id="50224">Started installation</string>
+    <string id="50225"></string>
+    <string id="50226">Follow progress in Download-Section</string>
     
     <string id="59999">This feature is currently under development</string>
 </strings>

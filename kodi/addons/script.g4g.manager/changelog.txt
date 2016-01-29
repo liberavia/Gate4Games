@@ -1,3 +1,7 @@
+== 0.0.13 ==
+  * Released 2016-01-29
+  * Added inital version of an integrated download manager
+
 == 0.0.12 ==
   * Released 2016-01-23
   * Improved downloading and removing of psx games to be completely non-blocking
