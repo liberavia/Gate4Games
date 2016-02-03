@@ -39,6 +39,8 @@ FOLDER_COVER = os.path.join(FOLDER_IMAGES, 'cover')
 FOLDER_PROGRESS = os.path.join(FOLDER_G4G, 'progress')
 FOLDER_DOWNLOADS = os.path.join(FOLDER_G4G, 'downloads')
 FOLDER_ROMS = os.path.join(FOLDER_G4G, 'roms')
+# std setttings
+QJOYPAD_THEME_EXIT_ONLY = "Playstation1"
 
 # get options set
 opts, args = getopt.getopt(sys.argv[1:], 'd:p:a:u:n:i:s:f', ['downloadtype=', 'packagetype=', 'appid=', 'url=', 'name=', 'image=', 'systemtype=','fanart='])
@@ -93,10 +95,12 @@ def get_next_game_id():
     
     return next_id
 
+
 def direct_download(progress_id, source, name, image, message):
     # do the direct download
     target_path = FOLDER_DOWNLOADS + "/download_" + progress_id + ".zip"
     urllib.urlretrieve(source,target_path,lambda nb, bs, fs, url=source: direct_download_progress_message(nb,bs,fs,progress_id,name,image,message))
+
     
 def extract_package(progress_id, name, image, message, systemtype):
     write_progress(10,progress_id, name, message, image)
@@ -105,6 +109,11 @@ def extract_package(progress_id, name, image, message, systemtype):
         fileending = "bin"
         download_source = FOLDER_DOWNLOADS + "/download_" + progress_id + ".zip"
         target_path = FOLDER_ROMS + "/psx/"
+        target_filename = "rom_" + progress_id + "." + fileending
+    elif systemtype == 'nintendo_gamecube':
+        fileending = "iso"
+        download_source = FOLDER_DOWNLOADS + "/download_" + progress_id + ".zip"
+        target_path = FOLDER_ROMS + "/gamecube/"
         target_filename = "rom_" + progress_id + "." + fileending
     
     fh = open(download_source, 'rb')
@@ -172,7 +181,7 @@ def create_desktop_file(title,install_type,next_id,thumbnail,fanart,pc_type):
     target_desktopfile.write("\n")
     target_desktopfile.write('PCType='+ pc_type)
     target_desktopfile.write("\n")
-    target_desktopfile.write('Name=' + title + ' (' + install_type + ')')
+    target_desktopfile.write('Name=' + title )
     target_desktopfile.write("\n")
     target_desktopfile.write('Exec=' + script_filepath)
     target_desktopfile.write("\n")
@@ -187,32 +196,109 @@ def create_script(progress_id, name, image, message, systemtype):
     script_filepath = FOLDER_SCRIPTS + "/script_" + progress_id
     target_scriptfile = open(script_filepath, 'w')
     
-    if systemtype == 'psx':
-        fileending = "bin"
-        target_path = FOLDER_ROMS + "/psx/"
-        target_filename = "rom_" + progress_id + "." + fileending
-        target_scriptfile.write('#!/bin/sh')
-        target_scriptfile.write("\n")
-        target_scriptfile.write('qjoypad Playstation1 &')
-        target_scriptfile.write("\n")
-        target_scriptfile.write('killall -9 kodi.bin')
-        target_scriptfile.write("\n")
-        target_scriptfile.write('pcsx -nogui -cdfile ' + target_path + target_filename)
-        target_scriptfile.write("\n")
-        target_scriptfile.write('killall -9 pcsx')
-        target_scriptfile.write("\n")
-        target_scriptfile.write('killall -9 qjoypad')
-        target_scriptfile.write("\n")
-        target_scriptfile.write('/usr/bin/kodi -fs')
-        target_scriptfile.write("\n")
-        
-        
-    target_scriptfile.close()
+    subfolder = get_subfolder_by_systemtype(systemtype)
+    fileending = get_fileending_by_systemtype(systemtype)
     
+    target_path = FOLDER_ROMS + "/" + subfolder + "/"
+    target_filename = "rom_" + progress_id + "." + fileending
+    
+    filecontent = get_script_content(systemtype, progress_id,target_path,target_filename)
+    
+    target_scriptfile.write(filecontent)
+    target_scriptfile.close()
     st = os.stat(script_filepath)
     os.chmod(script_filepath, st.st_mode | stat.S_IEXEC)
+        
     
+# return fileending by given systemtype
+def get_fileending_by_systemtype(systemtype):
+    switcher = {
+        'psx'                   : 'bin',
+        'nintendo_gamecube'     : 'iso',
+    }
+    
+    return switcher.get(systemtype, "none")
 
+
+# returns subfolder by given systemtype
+def get_subfolder_by_systemtype(systemtype):
+    switcher = {
+        'psx'                   : 'psx',
+        'nintendo_gamecube'     : 'gamecube',
+    }
+    
+    return switcher.get(systemtype, "none")
+
+
+# returns start command by given systemtype
+def get_startcommand_by_systemtype(systemtype, target_path, target_filename):
+    switcher = {
+        'psx'                   : 'pcsx -nogui -cdfile ' + target_path + target_filename,
+        'nintendo_gamecube'     : 'dolphin-emu --exec="'+ target_path + target_filename + '" --batch &',
+    }
+    
+    return switcher.get(systemtype, "")
+
+
+# returns subfolder by given systemtype
+def get_program_by_systemtype(systemtype):
+    switcher = {
+        'psx'                   : 'pcsx',
+        'nintendo_gamecube'     : '',
+    }
+    
+    return switcher.get(systemtype, "")
+
+
+# returns matching qjoypad load line
+def get_qjoypad_theme_by_systemtype(systemtype,progress_id):
+    # currently just return the standard exit
+    theme_line = ""
+    if systemtype == 'psx' or systemtype == 'nintendo_gamecube':
+        theme_line += "qjoypad " + QJOYPAD_THEME_EXIT_ONLY + " &\n"
+    
+    return theme_line
+
+# returns matching qjoypad kill line
+def get_qjoypad_kill_by_systemtype(systemtype,progress_id):
+    # currently just return the standard exit
+    kill_line = ""
+    if systemtype == 'psx' or systemtype == 'nintendo_gamecube':
+        kill_line += "killall -9 qjoypad\n"
+    
+    return kill_line
+
+# create xdotool
+def get_xdotool_by_systemtype(systemtype):
+    xdotool_script = ""
+    if systemtype == 'nintendo_gamecube':
+        xdotool_script += "xprop_command=`which xprop`\n"
+        xdotool_script += "xdotool_command=`which xdotool`\n"
+        xdotool_script += "xte_command=`which xte`\n"
+        xdotool_script += "PID=$!\n"
+        xdotool_script += "sleep 2\n"
+        xdotool_script += "$xdotool_command windowminimize $(xdotool getactivewindow)\n"
+        xdotool_script += "sleep 1\n"
+        xdotool_script += "wait $PID\n"
+        
+    return xdotool_script
+
+
+# return script content by systemtype    
+def get_script_content(systemtype, progress_id,target_path,target_filename):
+    content  = "#!/bin/sh\n"
+    content += get_qjoypad_theme_by_systemtype(systemtype,progress_id)
+    content += "killall -9 kodi.bin\n"
+    content += "sc-desktop.py stop\n"
+    content += "sc-xbox.py start\n"
+    content += get_startcommand_by_systemtype(systemtype, target_path, target_filename) + "\n"
+    content += get_xdotool_by_systemtype(systemtype)
+    content += "sc-xbox.py stop\n"
+    content += "sc-desktop.py start\n"
+    content += get_qjoypad_kill_by_systemtype(systemtype,progress_id)
+    content += "/usr/bin/kodi -fs &\n"
+    
+    return content
 
 # MAIN PROGRAM
 progress_id = get_next_game_id()

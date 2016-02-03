@@ -1,3 +1,8 @@
+== 0.0.14 ==
+  * Released 2016-02-02
+  * Added gamecube downloading
+  * Added platform default cover
+
 == 0.0.13 ==
   * Released 2016-01-29
   * Added inital version of an integrated download manager

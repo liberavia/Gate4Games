@@ -36,6 +36,10 @@ FANART = os.path.join(plugintools.get_runtime_path() , "fanart.jpg")
 FANART = FANART.encode('utf8')
 DEFAULT_THUMB = os.path.join(THUMBNAIL_PATH,"default.png").encode('utf-8')
 SETTINGS_THUMB = os.path.join(THUMBNAIL_PATH,"settings.png").encode('utf-8')
+GAMECUBE_THUMB = os.path.join(THUMBNAIL_PATH,"gamecube.jpg").encode('utf-8')
+PSX_THUMB = os.path.join(THUMBNAIL_PATH,"psx.png").encode('utf-8')
+PS2_THUMB = os.path.join(THUMBNAIL_PATH,"playstation2.png").encode('utf-8')
+ANDROID_THUMB = os.path.join(THUMBNAIL_PATH,"android.png").encode('utf-8')
 FOLDER_G4G = os.path.join(HOME_DIR, '.g4g')
 FOLDER_SCRIPTS = os.path.join(FOLDER_G4G, 'scripts')
 FOLDER_APPS = os.path.join(FOLDER_G4G, 'applications')
@@ -153,99 +157,105 @@ def add_games(params):
     default_filter_and_sort = json.dumps(dict([('genre', ''), ('sortby', 'relevance'), ('sortdir', 'desc')]))
     
     plugintools.add_item( action="add_pc_games", title=language(50020).encode('utf-8'), thumbnail=DEFAULT_THUMB, fanart=FANART, extra=default_filter_and_sort, folder=True, page="1" )
-    plugintools.add_item( action="dummy", title=language(50021).encode('utf-8'), thumbnail=DEFAULT_THUMB, fanart=FANART , folder=False )
-    plugintools.add_item( action="add_psx_games_letters", title=language(50022).encode('utf-8'), thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action="dummy", title=language(50023).encode('utf-8'), thumbnail=DEFAULT_THUMB, fanart=FANART , folder=False )
-    plugintools.add_item( action="dummy", title=language(50024).encode('utf-8'), thumbnail=DEFAULT_THUMB, fanart=FANART , folder=False )
+    plugintools.add_item( action="dummy", title=language(50021).encode('utf-8'), thumbnail=ANDROID_THUMB, fanart=FANART , folder=False )
+    plugintools.add_item( action="add_freeroms_games_letters", title=language(50022).encode('utf-8'), extra="psx", thumbnail=PSX_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action="dummy", title=language(50023).encode('utf-8'), thumbnail=PS2_THUMB, fanart=FANART , folder=False )
+    plugintools.add_item( action="add_freeroms_games_letters", title=language(50024).encode('utf-8'), extra="nintendo_gamecube", thumbnail=GAMECUBE_THUMB, fanart=FANART , folder=True )
 
 
 # choose game by letter    
-def add_psx_games_letters(params):
+def add_freeroms_games_letters(params):
     log("g4gmanager.add_psx_games_letters "+repr(params))
+    platform = params.get('extra')
+    # action = platform + "_letter_list"
+    action = "freeroms_letter_list"
     
     plugintools.set_view(plugintools.LIST)
     
-    free_roms_num       = FREE_ROMS_BASE_URL + "psx_roms_NUM.htm"
-    free_roms_a         = FREE_ROMS_BASE_URL + "psx_roms_A.htm"
-    free_roms_b         = FREE_ROMS_BASE_URL + "psx_roms_B.htm"
-    free_roms_c         = FREE_ROMS_BASE_URL + "psx_roms_C.htm"
-    free_roms_d         = FREE_ROMS_BASE_URL + "psx_roms_D.htm"
-    free_roms_e         = FREE_ROMS_BASE_URL + "psx_roms_E.htm"
-    free_roms_f         = FREE_ROMS_BASE_URL + "psx_roms_F.htm"
-    free_roms_g         = FREE_ROMS_BASE_URL + "psx_roms_G.htm"
-    free_roms_h         = FREE_ROMS_BASE_URL + "psx_roms_H.htm"
-    free_roms_i         = FREE_ROMS_BASE_URL + "psx_roms_I.htm"
-    free_roms_j         = FREE_ROMS_BASE_URL + "psx_roms_J.htm"
-    free_roms_k         = FREE_ROMS_BASE_URL + "psx_roms_K.htm"
-    free_roms_l         = FREE_ROMS_BASE_URL + "psx_roms_L.htm"
-    free_roms_m         = FREE_ROMS_BASE_URL + "psx_roms_M.htm"
-    free_roms_n         = FREE_ROMS_BASE_URL + "psx_roms_N.htm"
-    free_roms_o         = FREE_ROMS_BASE_URL + "psx_roms_O.htm"
-    free_roms_p         = FREE_ROMS_BASE_URL + "psx_roms_P.htm"
-    free_roms_q         = FREE_ROMS_BASE_URL + "psx_roms_Q.htm"
-    free_roms_r         = FREE_ROMS_BASE_URL + "psx_roms_R.htm"
-    free_roms_s         = FREE_ROMS_BASE_URL + "psx_roms_S.htm"
-    free_roms_t         = FREE_ROMS_BASE_URL + "psx_roms_T.htm"
-    free_roms_u         = FREE_ROMS_BASE_URL + "psx_roms_U.htm"
-    free_roms_v         = FREE_ROMS_BASE_URL + "psx_roms_V.htm"
-    free_roms_w         = FREE_ROMS_BASE_URL + "psx_roms_W.htm"
-    free_roms_x         = FREE_ROMS_BASE_URL + "psx_roms_X.htm"
-    free_roms_y         = FREE_ROMS_BASE_URL + "psx_roms_X.htm"
-    free_roms_z         = FREE_ROMS_BASE_URL + "psx_roms_Z.htm"
+    free_roms_num       = FREE_ROMS_BASE_URL + platform + "_roms_NUM.htm"
+    free_roms_a         = FREE_ROMS_BASE_URL + platform + "_roms_A.htm"
+    free_roms_b         = FREE_ROMS_BASE_URL + platform + "_roms_B.htm"
+    free_roms_c         = FREE_ROMS_BASE_URL + platform + "_roms_C.htm"
+    free_roms_d         = FREE_ROMS_BASE_URL + platform + "_roms_D.htm"
+    free_roms_e         = FREE_ROMS_BASE_URL + platform + "_roms_E.htm"
+    free_roms_f         = FREE_ROMS_BASE_URL + platform + "_roms_F.htm"
+    free_roms_g         = FREE_ROMS_BASE_URL + platform + "_roms_G.htm"
+    free_roms_h         = FREE_ROMS_BASE_URL + platform + "_roms_H.htm"
+    free_roms_i         = FREE_ROMS_BASE_URL + platform + "_roms_I.htm"
+    free_roms_j         = FREE_ROMS_BASE_URL + platform + "_roms_J.htm"
+    free_roms_k         = FREE_ROMS_BASE_URL + platform + "_roms_K.htm"
+    free_roms_l         = FREE_ROMS_BASE_URL + platform + "_roms_L.htm"
+    free_roms_m         = FREE_ROMS_BASE_URL + platform + "_roms_M.htm"
+    free_roms_n         = FREE_ROMS_BASE_URL + platform + "_roms_N.htm"
+    free_roms_o         = FREE_ROMS_BASE_URL + platform + "_roms_O.htm"
+    free_roms_p         = FREE_ROMS_BASE_URL + platform + "_roms_P.htm"
+    free_roms_q         = FREE_ROMS_BASE_URL + platform + "_roms_Q.htm"
+    free_roms_r         = FREE_ROMS_BASE_URL + platform + "_roms_R.htm"
+    free_roms_s         = FREE_ROMS_BASE_URL + platform + "_roms_S.htm"
+    free_roms_t         = FREE_ROMS_BASE_URL + platform + "_roms_T.htm"
+    free_roms_u         = FREE_ROMS_BASE_URL + platform + "_roms_U.htm"
+    free_roms_v         = FREE_ROMS_BASE_URL + platform + "_roms_V.htm"
+    free_roms_w         = FREE_ROMS_BASE_URL + platform + "_roms_W.htm"
+    free_roms_x         = FREE_ROMS_BASE_URL + platform + "_roms_X.htm"
+    free_roms_y         = FREE_ROMS_BASE_URL + platform + "_roms_X.htm"
+    free_roms_z         = FREE_ROMS_BASE_URL + platform + "_roms_Z.htm"
     
-    plugintools.add_item( action="psx_letter_list", url=free_roms_num,   title="#", thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action="psx_letter_list", url=free_roms_a,     title="A", thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action="psx_letter_list", url=free_roms_b,     title="B", thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action="psx_letter_list", url=free_roms_c,     title="C", thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action="psx_letter_list", url=free_roms_d,     title="D", thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action="psx_letter_list", url=free_roms_e,     title="E", thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action="psx_letter_list", url=free_roms_f,     title="F", thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action="psx_letter_list", url=free_roms_g,     title="G", thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action="psx_letter_list", url=free_roms_h,     title="H", thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action="psx_letter_list", url=free_roms_i,     title="I", thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action="psx_letter_list", url=free_roms_j,     title="J", thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action="psx_letter_list", url=free_roms_k,     title="K", thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action="psx_letter_list", url=free_roms_l,     title="L", thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action="psx_letter_list", url=free_roms_m,     title="M", thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action="psx_letter_list", url=free_roms_n,     title="N", thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action="psx_letter_list", url=free_roms_o,     title="O", thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action="psx_letter_list", url=free_roms_p,     title="P", thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action="psx_letter_list", url=free_roms_q,     title="Q", thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action="psx_letter_list", url=free_roms_r,     title="R", thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action="psx_letter_list", url=free_roms_s,     title="S", thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action="psx_letter_list", url=free_roms_t,     title="T", thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action="psx_letter_list", url=free_roms_u,     title="U", thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action="psx_letter_list", url=free_roms_v,     title="V", thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action="psx_letter_list", url=free_roms_w,     title="W", thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action="psx_letter_list", url=free_roms_x,     title="X", thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action="psx_letter_list", url=free_roms_y,     title="Y", thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action="psx_letter_list", url=free_roms_z,     title="Z", thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action=action, url=free_roms_num,   title="#", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action=action, url=free_roms_a,     title="A", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action=action, url=free_roms_b,     title="B", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action=action, url=free_roms_c,     title="C", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action=action, url=free_roms_d,     title="D", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action=action, url=free_roms_e,     title="E", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action=action, url=free_roms_f,     title="F", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action=action, url=free_roms_g,     title="G", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action=action, url=free_roms_h,     title="H", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action=action, url=free_roms_i,     title="I", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action=action, url=free_roms_j,     title="J", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action=action, url=free_roms_k,     title="K", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action=action, url=free_roms_l,     title="L", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action=action, url=free_roms_m,     title="M", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action=action, url=free_roms_n,     title="N", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action=action, url=free_roms_o,     title="O", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action=action, url=free_roms_p,     title="P", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action=action, url=free_roms_q,     title="Q", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action=action, url=free_roms_r,     title="R", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action=action, url=free_roms_s,     title="S", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action=action, url=free_roms_t,     title="T", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action=action, url=free_roms_u,     title="U", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action=action, url=free_roms_v,     title="V", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action=action, url=free_roms_w,     title="W", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action=action, url=free_roms_x,     title="X", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action=action, url=free_roms_y,     title="Y", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action=action, url=free_roms_z,     title="Z", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
 
 
 # list games for letter    
-def psx_letter_list(params):
-    log("g4gmanager.psx_letter_list "+repr(params))
-    
+def freeroms_letter_list(params):
+    log("g4gmanager.freeroms_letter_list "+repr(params))
+
+    platform = params.get('extra')
     url = params.get('url')
     
     body,response_headers = plugintools.read_body_and_headers(url)
     
     # only roms that provide images
-    pattern = '<a href="([^"]+)">([^>]+)<img[^<]+'
+    #pattern = '<a href="([^"]+)">([^>]+)<img[^<]+'
+    pattern = '<td align=left nowrap><a href="([^"]+)">([^>]+)<[^<]+'
     games = plugintools.find_multiple_matches(body,pattern)    
     
     for game in games:
         details_url = game[0]
         details_title = game[1]
-        plugintools.add_item( action="psx_game_details", url=details_url,   title=details_title, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
+        plugintools.add_item( action="freeroms_game_details", url=details_url,   title=details_title, extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
 
 
-# detail actions for psx game
-def psx_game_details(params):
-    log("g4gmanager.psx_letter_list "+repr(params))
+# detail actions for freeroms game
+def freeroms_game_details(params):
+    log("g4gmanager.freeroms_game_details"+repr(params))
     
     url = params.get('url')
-    psx_title = params.get('title')
+    freeroms_title = params.get('title')
+    platform = params.get('extra')
     
     body,response_headers = plugintools.read_body_and_headers(url)
     
@@ -257,6 +267,7 @@ def psx_game_details(params):
     
     screenshot = ''
     game_image_count = 1
+    cover_image = get_default_thumb_by_platform(platform)
     for game_image in game_images:
         if game_image_count == 1:
             cover_image = game_image
@@ -266,21 +277,34 @@ def psx_game_details(params):
     if screenshot == '':
         screenshot = cover_image
 
-    plugintools.add_item( action="install_psx_game", url=zip_source, title=language(50209).encode('utf8') + " " + psx_title, thumbnail=cover_image, fanart=screenshot, actorsandmore=screenshot, extra=psx_title, folder=False )
+    plugintools.add_item( action="install_freeroms_game", url=zip_source, title=language(50209).encode('utf8') + " " + freeroms_title, thumbnail=cover_image, fanart=screenshot, actorsandmore=screenshot, plot=freeroms_title, extra=platform, folder=False )
+
+# returns default thumb by platform
+def get_default_thumb_by_platform(platform):
+    switcher = {
+        'psx'                   : PSX_THUMB,
+        'nintendo_gamecube'     : GAMECUBE_THUMB,
+    }
+    
+    return switcher.get(platform, "")
+    
 
     
-# downloads and installs psx game    
-def install_psx_game(params):
-    log("g4gmanager.install_psx_game "+repr(params))
+# downloads and installs freeroms game    
+def install_freeroms_game(params):
+    log("g4gmanager.install_freeroms_game "+repr(params))
     
     install_title = params.get('title')
-    title = params.get('extra')
+    title = params.get('plot')
+    platform = params.get('extra')
+
+
     install_message = language(50216).encode('utf8') + " " + title + " " + language(50217).encode('utf8')
     if dialog.yesno(install_title, install_message):
         image = params.get('thumbnail')
         fanart = params.get('actorsandmore')
         url = params.get('url')
-        systemtype = "psx"
+        systemtype = platform
         downloadtype = "direct"
         packagetype = "zip"
         basePath = os.path.join(getAddonInstallPath(), 'resources', 'scripts')
@@ -821,12 +845,6 @@ def installed_app_actions(params):
         if line.startswith('Name='):
             game_name = line.replace('Name=', '')
             game_name = game_name.strip()
-        if line.startswith('Type='):
-            game_type = line.replace('Type=', '')
-            game_type = game_type.strip()
-        if line.startswith('Type='):
-            pc_game_type = line.replace('PCType=', '')
-            pc_game_type = pc_game_type.strip()
 
     current_file.close()
     plugintools.set_view(plugintools.LIST)
@@ -879,8 +897,11 @@ def remove_app(params):
             log("g4gmanager.remove_app => rom_psx_path: " + rom_psx_path)        
             rom_filename = "rom_" + app_install_id + ".bin"
             delete_file = os.path.join(rom_psx_path,rom_filename)
-            log("g4gmanager.remove_app => delete_file: " + delete_file)        
-            
+        if game_type == 'nintendo_gamecube':
+            rom_gamecube_path = rom_base_path + 'gamecube/'
+            log("g4gmanager.remove_app => rom_gamecube_path: " + rom_gamecube_path)        
+            rom_filename = "rom_" + app_install_id + ".iso"
+            delete_file = os.path.join(rom_gamecube_path,rom_filename)
 
         log("g4gmanager.remove_app => delete_file: " + delete_file)        
         if delete_file is not None:
