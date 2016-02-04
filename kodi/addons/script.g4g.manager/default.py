@@ -309,7 +309,7 @@ def install_freeroms_game(params):
         packagetype = "zip"
         basePath = os.path.join(getAddonInstallPath(), 'resources', 'scripts')
         install_script = os.path.join(basePath, 'install.py')        
-        cmd = install_script + ' --url=' + url + ' --downloadtype=' + downloadtype + ' --image=' + image + ' --name="' + title + '" --systemtype=' + systemtype + ' --packagetype=' + packagetype + ' --fanart=' + fanart
+        cmd = "python " + install_script + ' --url=' + url + ' --downloadtype=' + downloadtype + ' --image=' + image + ' --name="' + title + '" --systemtype=' + systemtype + ' --packagetype=' + packagetype + ' --fanart=' + fanart
         log("g4gmanager.install_psx_game => trigger command: "+ cmd)
         subprocess.Popen(cmd, shell=True, close_fds=True)
         notification_title = language(50224).encode('utf8') + " " + language(50201).encode('utf8') + " " + title + " " + language(50225).encode('utf8')
@@ -750,6 +750,8 @@ def show_download_progress(params):
             downloaddisplay.setDownloadTitle(progress_info['name'])
             downloaddisplay.setDownloadImage(progress_info['image'])
             downloaddisplay.setDownloadMessage(progress_info['message'])
+            downloaddisplay.setDownloadRemainingTime(progress_info['remainingtime'])
+            downloaddisplay.setDownloadCurrentRate(progress_info['currentrate'])
             update_thread = threading.Thread(target=update_progress_details, args=(downloaddisplay, progress_filepath))
             update_thread.daemon = True
             update_thread.start()    
@@ -768,8 +770,10 @@ def update_progress_details(window, filepath):
             with current_file as json_file:
                 progress_info = json.load(json_file)
                 log("g4gmanager.update_progress_details "+repr(progress_info))
-                window.udpateDownloadPercent(progress_info['percent'])  
-                window.udpateDownloadMessage(progress_info['message'])
+                window.updateDownloadPercent(progress_info['percent'])  
+                window.updateDownloadMessage(progress_info['message'])
+                window.updateDownloadRemainingTime(progress_info['remainingtime'])
+                window.updateDownloadCurrentRate(progress_info['currentrate'])
                 window.setProgressFilePath(filepath)
         except:
             pass

@@ -8,17 +8,19 @@ import subprocess
 import time
 import shutil
 import stat
-from os.path import expanduser
 import ntpath
 import re
 import pprint
-import xml.etree.ElementTree as ET
 import urlparse
 import urllib
 import urllib2
 import json
 import zipfile
 import getopt
+import xml.etree.ElementTree as ET
+from os.path import expanduser
+from pySmartDL import SmartDL
+
 #import xbmcaddon
 
 # xbmc addon stuff
@@ -65,8 +67,8 @@ for opt, arg in opts:
         fanart = arg
 
 # write current progress into progress file
-def write_progress(percent, progress_id, name, message, image="", downloaded="", todownload="" ):
-    progress_info = dict([('pid', str(os.getpid())), ('percent', percent), ('name', name), ('downloaded', downloaded), ('todownload', todownload), ('image', image), ('message', message)])
+def write_progress(percent, progress_id, name, message, image="", downloaded="", todownload="", remainingtime="", currentrate="" ):
+    progress_info = dict([('pid', str(os.getpid())), ('percent', percent), ('name', name), ('downloaded', downloaded), ('todownload', todownload), ('image', image), ('message', message), ('remainingtime', remainingtime), ('currentrate', currentrate)])
     progress_info_json = json.dumps(progress_info)
     progress_filename = "progress_" + progress_id + ".json"
     filehandler = open(FOLDER_PROGRESS + "/" + progress_filename, 'w')
@@ -96,11 +98,33 @@ def get_next_game_id():
     return next_id
 
 
+#def direct_download(progress_id, source, name, image, message):
+    ## do the direct download
+    #target_path = FOLDER_DOWNLOADS + "/download_" + progress_id + ".zip"
+    #urllib.urlretrieve(source,target_path,lambda nb, bs, fs, url=source: direct_download_progress_message(nb,bs,fs,progress_id,name,image,message))
+
 def direct_download(progress_id, source, name, image, message):
     # do the direct download
     target_path = FOLDER_DOWNLOADS + "/download_" + progress_id + ".zip"
-    urllib.urlretrieve(source,target_path,lambda nb, bs, fs, url=source: direct_download_progress_message(nb,bs,fs,progress_id,name,image,message))
-
+    download = SmartDL(source, target_path, progress_bar=False)
+    download.start(blocking=False)
+    while not download.isFinished():
+        currentrate     = str(download.get_speed(human=True))
+        remaining_eta   = int(download.get_eta())
+        remaining_hrs   = str(int(remaining_eta / 3600))
+        remaining_hrs   = remaining_hrs.zfill(2)
+        remaining_min   = str(int(remaining_eta / 60))
+        remaining_min   = remaining_min.zfill(2)
+        remaining_sec   = str(int((remaining_eta % 60) % 60))
+        remaining_sec   = remaining_sec.zfill(2)
+        remainingtime   = remaining_hrs + ":" + remaining_min + ":" + remaining_sec
+        percent         = str(int((download.get_progress()*100)))
+        downloaded      = str(download.get_dl_size(human=True))
+        todownload      = ""
+        
+        write_progress(percent, progress_id, name, message, image, downloaded, todownload, remainingtime, currentrate)
+        time.sleep(1)
+    
     
 def extract_package(progress_id, name, image, message, systemtype):
     write_progress(10,progress_id, name, message, image)
@@ -134,11 +158,11 @@ def extract_package(progress_id, name, image, message, systemtype):
     os.remove(download_source)
     
     
-def direct_download_progress_message(numblocks, blocksize, filesize, progress_id, name, image, message):
-    percent = min((numblocks*blocksize*100)/filesize, 100)
-    todownload = str(numblocks*blocksize)
-    downloaded = str(filesize)
-    write_progress(percent, progress_id, name, message, image, downloaded, todownload )    
+#def direct_download_progress_message(numblocks, blocksize, filesize, progress_id, name, image, message):
+    #percent = min((numblocks*blocksize*100)/filesize, 100)
+    #todownload = str(numblocks*blocksize)
+    #downloaded = str(filesize)
+    #write_progress(percent, progress_id, name, message, image, downloaded, todownload )    
 
 # sends a notification to kodi instance
 def send_notification(header,message,length,image):

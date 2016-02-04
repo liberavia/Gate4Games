@@ -40,33 +40,61 @@
                     <description>gamecover</description>
                     <top>80</top>
                     <left>30</left>
-                    <width>125</width>
-                    <height>198</height>
+                    <width>200</width>
+                    <height>200</height>
                     <visible>true</visible>
                     <colordiffuse>FFFFFFFF</colordiffuse>
                     <fadetime>200</fadetime>
                     <texture></texture>
-                    <aspectratio>stretch</aspectratio>
+                    <aspectratio>scale</aspectratio>
                 </control>
                 <control type="label">
-                    <description>label percent progress</description>
-                    <left>630</left>
+                    <description>label rate caption</description>
+                    <left>250</left>
                     <top>80</top>
                     <width>200</width>
                     <height>30</height>
                     <align>left</align>
                     <font>font13_title</font>
-                    <label>$ADDON[script.g4g.manager 50030]:</label>
+                    <label>$ADDON[script.g4g.manager 50228]:</label>
                     <align>right</align>
                     <aligny>center</aligny>
                     <textcolor>selected</textcolor>
                     <shadowcolor>black</shadowcolor>
                 </control>
-                <control type="label" id="9901">
-                    <description>label percent</description>
-                    <left>750</left>
+                <control type="label" id="9909">
+                    <description>label rate</description>
+                    <left>410</left>
                     <top>80</top>
-                    <width>80</width>
+                    <width>120</width>
+                    <height>30</height>
+                    <align>left</align>
+                    <font>font13_title</font>
+                    <label></label>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <textcolor>selected</textcolor>
+                    <shadowcolor>black</shadowcolor>
+                </control>
+                <control type="label">
+                    <description>label time remaining caption</description>
+                    <left>600</left>
+                    <top>80</top>
+                    <width>200</width>
+                    <height>30</height>
+                    <align>left</align>
+                    <font>font13_title</font>
+                    <label>$ADDON[script.g4g.manager 50227]:</label>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <textcolor>selected</textcolor>
+                    <shadowcolor>black</shadowcolor>
+                </control>
+                <control type="label" id="9903">
+                    <description>label time remaining</description>
+                    <left>720</left>
+                    <top>80</top>
+                    <width>150</width>
                     <height>30</height>
                     <align>left</align>
                     <font>font13_title</font>
@@ -78,7 +106,7 @@
                 </control>
                 <control type="label" id="9908">
                     <description>label message</description>
-                    <left>180</left>
+                    <left>250</left>
                     <top>120</top>
                     <width>620</width>
                     <height>30</height>
@@ -93,15 +121,29 @@
                 <control type="progress" id="9905">
                     <description>progress of task</description>
                     <top>160</top>
-                    <left>180</left>
-                    <width>620</width>
+                    <left>250</left>
+                    <width>550</width>
                     <height>30</height>
                     <info></info>
                 </control>                
+                <control type="label" id="9901">
+                    <description>label percent inside progress bar</description>
+                    <left>520</left>
+                    <top>160</top>
+                    <width>80</width>
+                    <height>30</height>
+                    <align>left</align>
+                    <font>font13_title</font>
+                    <label></label>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <textcolor>selected</textcolor>
+                    <shadowcolor>black</shadowcolor>
+                </control>
                 <control type="button" id="9906">
                     <description>Go Back</description>
                     <top>220</top>
-                    <left>180</left>
+                    <left>250</left>
                     <width>250</width>
                     <height>60</height>
                     <visible>true</visible>

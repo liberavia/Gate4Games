@@ -23,6 +23,7 @@ LABEL_PERCENT = 9901
 LABEL_DOWNLOADED = 9902
 LABEL_REMAINING = 9903
 LABEL_MESSAGE = 9908
+LABEL_RATE = 9909
 IMAGE_TITLE = 9904
 PROGRESSBAR = 9905
 BUTTON_ABORT = 9907
@@ -65,6 +66,8 @@ class ShowDownloadDialog(xbmcgui.WindowXMLDialog):
         self.getControl(LABEL_HEADLINE).setLabel(self.downloadTitle)
         self.getControl(PROGRESSBAR).setPercent(float(self.downloadPercent))
         self.getControl(LABEL_MESSAGE).setLabel(str(self.downloadMessage) + "...")
+        self.getControl(LABEL_REMAINING).setLabel(str(self.downloadRemainingTime))
+        self.getControl(LABEL_RATE).setLabel(str(self.downloadCurrentRate))
         pass
         
     def onClick(self, controlID):
@@ -119,12 +122,13 @@ class ShowDownloadDialog(xbmcgui.WindowXMLDialog):
         if os.path.isfile(progress_filepath):
             xbmc.log('Removing ' + progress_filepath)
             os.remove(progress_filepath)
-        if os.path.isfile(download_filepath_zip):
-            os.remove(download_filepath_zip)
-        if os.path.isfile(download_filepath_targz):
-            os.remove(download_filepath_targz)
-        if os.path.isfile(download_filepath_7z):
-            os.remove(download_filepath_7z)
+            
+        for downloadpath in os.listdir(FOLDER_DOWNLOADS):
+            downloadfile = ntpath.basename(downloadpath)
+            xbmc.log('Check DownloadFile: ' + downloadfile +  " in  DownloadPath: " + downloadpath)
+            if downloadfile.startswith("download_" + ProgressId):
+                deletepath = os.path.join(FOLDER_DOWNLOADS, downloadfile)
+                os.remove(deletepath)
             
         xbmc.executebuiltin('Container.Update')
         xbmc.executebuiltin('Container.Refresh')
@@ -153,19 +157,32 @@ class ShowDownloadDialog(xbmcgui.WindowXMLDialog):
     def setDownloadDownloaded(self, Downloaded):
         self.downloadDownloaded = Downloaded
 
-    def setDownloadRemaining(self, Remaining):
-        self.downloadRemaining = Remaining
+    def setDownloadRemainingTime(self, RemainingTime):
+        self.downloadRemainingTime = RemainingTime
+
+    def setDownloadCurrentRate(self, CurrentRate):
+        self.downloadCurrentRate = CurrentRate
 
     def setDownloadMessage(self, Message):
         self.downloadMessage = Message
 
-    def udpateDownloadPercent(self, Percent):
+    def updateDownloadPercent(self, Percent):
         self.getControl(LABEL_PERCENT).setLabel(str(Percent) + " %")
         self.getControl(PROGRESSBAR).setPercent(float(Percent))
         pass
 
-    def udpateDownloadMessage(self, Message):
+    def updateDownloadMessage(self, Message):
         self.getControl(LABEL_MESSAGE).setLabel(str(Message) + "...")
+        pass
+    
+    def updateDownloadRemainingTime(self, RemainingTime):
+        xbmc.log('Update RemainingTime to : ' + RemainingTime)
+        self.getControl(LABEL_REMAINING).setLabel(str(RemainingTime) + "")
+        pass
+    
+    def updateDownloadCurrentRate(self, CurrentRate):
+        xbmc.log('Update CurrentRate to : ' + str(CurrentRate))
+        self.getControl(LABEL_RATE).setLabel(str(CurrentRate) + "")
         pass
 
 '''

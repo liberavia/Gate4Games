@@ -1,4 +1,9 @@
 == 0.0.14 ==
+  * Released 2016-02-05
+  * Exchanged central download mechanism to use pySmartDL library
+  * Added speed and remaining time to download
+
+== 0.0.14 ==
   * Released 2016-02-02
   * Added gamecube downloading
   * Added platform default cover

@@ -78,6 +78,8 @@
     <string id="50224">Started installation</string>
     <string id="50225"></string>
     <string id="50226">Follow progress in Download-Section</string>
+    <string id="50227">Remaining</string>
+    <string id="50228">Speed</string>
     
     <string id="59999">This feature is currently under development</string>
 </strings>
