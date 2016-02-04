@@ -87,7 +87,7 @@
             <email>info@gate4games.com</email>
         </extension>
     </addon>
-    <addon id="script.g4g.manager" name="Game Manager" version="0.0.12" provider-name="liberavia">
+    <addon id="script.g4g.manager" name="Game Manager" version="0.0.15" provider-name="liberavia">
         <requires>
             <import addon="xbmc.python" version="2.19.0"/>
             <import addon="script.module.urlresolver"  version="2.1.2"/>
