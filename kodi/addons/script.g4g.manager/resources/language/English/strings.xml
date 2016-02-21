@@ -3,7 +3,7 @@
     <string id="50000">Main Menu</string>
     
     <!-- Main menu -->
-    <string id="50001">Start Steam</string>
+    <string id="50001">Steam</string>
     <string id="50002">Library</string>
     <string id="50003">Add Games</string>
     <string id="50004">Settings</string>
@@ -19,11 +19,16 @@
     <string id="50022">Sony Playstation 1</string>
     <string id="50023">Sony Playstation 2</string>
     <string id="50024">Nintendo Gamecube</string>
+    <string id="50025">From Media</string>
+    <string id="50026">From the Internet</string>
     
     <!-- Downloads -->
     <string id="50030">Progress</string>
     <string id="50031">Back</string>
     <string id="50032">Cancel Download</string>
+    
+    <!-- Steam -->
+    <string id="50040">Start Steam Session</string>
     
     <!-- List actions -->
     <string id="50050">[COLOR blue]Directly to page...[/COLOR]</string>

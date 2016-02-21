@@ -1,0 +1,16 @@
+QLabel {
+    color: #ffffff;
+    font-size: 30px; 
+    font-weight:bold;
+} 
+
+QPushButton {
+    background-color: #5d005d; 
+    color: #ffffff; 
+    font-size: 20px;
+}
+
+QMessageBox {
+    background-color: #5d005d; 
+}
+ 

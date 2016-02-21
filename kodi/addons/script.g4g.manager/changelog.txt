@@ -1,4 +1,11 @@
-== 0.0.14 ==
+== 0.0.16 ==
+  * Released 2016-02-05
+  
+  * Added start steam option
+  * Added initial version of ingame overlay
+  * Changed install script trigger command to use doublequotes
+
+== 0.0.15 ==
   * Released 2016-02-05
   * Exchanged central download mechanism to use pySmartDL library
   * Added speed and remaining time to download

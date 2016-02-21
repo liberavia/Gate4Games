@@ -14,7 +14,7 @@ import xbmc
 import xbmcaddon
 import xbmcgui
 import xbmcplugin
-from os.path import expanduser
+import collections
 import ntpath
 import re
 import pprint
@@ -23,23 +23,19 @@ import urlparse
 import urllib
 import urllib2
 import json
+import zipfile
 from qrcodewindow import ShowQrCodeDialog
 from downloadwindow import ShowDownloadDialog
-import zipfile
+from os.path import expanduser
 
 plugintools.module_log_enabled = False
 plugintools.http_debug_log_enabled = False
 
+# directories
 HOME_DIR = expanduser("~")
 THUMBNAIL_PATH = os.path.join(plugintools.get_runtime_path() , "resources" , "img")
-FANART = os.path.join(plugintools.get_runtime_path() , "fanart.jpg")
-FANART = FANART.encode('utf8')
-DEFAULT_THUMB = os.path.join(THUMBNAIL_PATH,"default.png").encode('utf-8')
-SETTINGS_THUMB = os.path.join(THUMBNAIL_PATH,"settings.png").encode('utf-8')
-GAMECUBE_THUMB = os.path.join(THUMBNAIL_PATH,"gamecube.jpg").encode('utf-8')
-PSX_THUMB = os.path.join(THUMBNAIL_PATH,"psx.png").encode('utf-8')
-PS2_THUMB = os.path.join(THUMBNAIL_PATH,"playstation2.png").encode('utf-8')
-ANDROID_THUMB = os.path.join(THUMBNAIL_PATH,"android.png").encode('utf-8')
+ADDON_SCRIPTS_PATH = os.path.join(plugintools.get_runtime_path() , "resources" , "scripts")
+FOLDER_QJOYPAD = os.path.join(HOME_DIR, '.qjoypad3')
 FOLDER_G4G = os.path.join(HOME_DIR, '.g4g')
 FOLDER_SCRIPTS = os.path.join(FOLDER_G4G, 'scripts')
 FOLDER_APPS = os.path.join(FOLDER_G4G, 'applications')
@@ -48,11 +44,39 @@ FOLDER_ICONS = os.path.join(FOLDER_IMAGES, 'icons')
 FOLDER_FANART = os.path.join(FOLDER_IMAGES, 'fanart')
 FOLDER_COVER = os.path.join(FOLDER_IMAGES, 'cover')
 FOLDER_PROGRESS = os.path.join(FOLDER_G4G, 'progress')
+FOLDER_TEMP = os.path.join(FOLDER_G4G, 'temp')
+OVERLAY_GAME_RUNNING = os.path.join(FOLDER_TEMP, 'gameinfo')
+OVERLAY_RUNS_PATH = os.path.join(FOLDER_TEMP, 'overlay.pid')
+
+# fanarts
+FANART = os.path.join(plugintools.get_runtime_path() , "fanart.jpg")
+FANART = FANART.encode('utf8')
+STEAM_FANART = os.path.join(THUMBNAIL_PATH,"steamfanart.png").encode('utf-8')
+
+# thumbs
+DEFAULT_THUMB = os.path.join(THUMBNAIL_PATH,"default.png").encode('utf-8')
+LIBRARY_THUMB = os.path.join(THUMBNAIL_PATH,"library.png").encode('utf-8')
+LIBRARY_AVAILABLE_THUMB = os.path.join(THUMBNAIL_PATH,"library_available.png").encode('utf-8')
+LIBRARY_INSTALLED_THUMB = os.path.join(THUMBNAIL_PATH,"library_installed.png").encode('utf-8')
+DOWNLOADS_THUMB = os.path.join(THUMBNAIL_PATH,"downloads.png").encode('utf-8')
+FROM_MEDIA_THUMB = os.path.join(THUMBNAIL_PATH,"create_image.png").encode('utf-8')
+INTERNET_THUMB = os.path.join(THUMBNAIL_PATH,"internet.png").encode('utf-8')
+ADD_GAMES_THUMB = os.path.join(THUMBNAIL_PATH,"add_games.png").encode('utf-8')
+SETTINGS_THUMB = os.path.join(THUMBNAIL_PATH,"settings.png").encode('utf-8')
+GAMECUBE_THUMB = os.path.join(THUMBNAIL_PATH,"gamecube.jpg").encode('utf-8')
+PSX_THUMB = os.path.join(THUMBNAIL_PATH,"psx.png").encode('utf-8')
+PS2_THUMB = os.path.join(THUMBNAIL_PATH,"playstation2.png").encode('utf-8')
+STEAM_THUMB = os.path.join(THUMBNAIL_PATH,"steamicon.png").encode('utf-8')
+ANDROID_THUMB = os.path.join(THUMBNAIL_PATH,"android.png").encode('utf-8')
+
+# urls
 API_BASE_URL = "http://www.gate4games.com/index.php?cl=gateosapi"
 API_COMPATIBILITY_ATTRIBUTE = "&attributes=CompatibilityTypeLin--Ja"
 YOUTUBE_API_KEY='AIzaSyDEJmWgKTSb8Gi4OUmWKY2YrLgI4pIbZQ0'
 FREE_ROMS_BASE_URL='http://www.freeroms.com/'
 FREE_ROMS_BASE_URL=FREE_ROMS_BASE_URL.encode('utf8')
+
+# internals
 addon = xbmcaddon.Addon(id='script.g4g.manager')
 addonPath = addon.getAddonInfo('path')
 addonIcon = addon.getAddonInfo('icon')
@@ -61,6 +85,7 @@ dialog = xbmcgui.Dialog()
 language = addon.getLocalizedString
 scriptid = 'script.g4g.manager'
 txt_encode = 'utf-8'
+
 
 '''
 CLASS SECTION
@@ -136,10 +161,10 @@ def main_list(params):
     if downloads_count > 0:
         download_title = '[COLOR green]' + download_title + '[/COLOR]'
     
-    plugintools.add_item( action="dummy", title=language(50001).encode('utf-8'), thumbnail=DEFAULT_THUMB, fanart=FANART , folder=False )
-    plugintools.add_item( action="library_selection", title=language(50002).encode('utf-8') , thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action="add_games", title=language(50003).encode('utf-8') , thumbnail=DEFAULT_THUMB , fanart=FANART , folder=True )
-    plugintools.add_item( action="downloads_overview", title=download_title , thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action="steam_selection", title=language(50001).encode('utf-8'), thumbnail=STEAM_THUMB, fanart=STEAM_FANART , folder=True )
+    plugintools.add_item( action="library_selection", title=language(50002).encode('utf-8') , thumbnail=LIBRARY_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action="add_games", title=language(50003).encode('utf-8') , thumbnail=ADD_GAMES_THUMB , fanart=FANART , folder=True )
+    plugintools.add_item( action="downloads_overview", title=download_title , thumbnail=DOWNLOADS_THUMB, fanart=FANART , folder=True )
     plugintools.add_item( action="settings", title=language(50004).encode('utf-8') , thumbnail=SETTINGS_THUMB , fanart=FANART , folder=False )
 
 
@@ -147,6 +172,27 @@ def main_list(params):
 def dummy(params):
     plugintools.message("Gate4Games Manager", language(59999).encode('utf8'),"")
 
+
+# steam selection
+def steam_selection(params):
+    log("g4gmanager.selection "+repr(params))
+
+    plugintools.set_view(plugintools.THUMBNAIL)
+    plugintools.add_item( action="launch_steam", title=language(50040).encode('utf-8'), thumbnail=STEAM_THUMB, fanart=STEAM_FANART , folder=False )
+    
+
+# launch steam session
+def launch_steam():
+    steamlauncher = os.path.join(ADDON_SCRIPTS_PATH, 'steam-launch.sh')
+    cmd = '"%s"' % (steamlauncher)
+    try:
+        log('attempting to launch: %s' % cmd)
+        print cmd.encode('utf-8')
+        subprocess.Popen(cmd.encode(txt_encode), shell=True, close_fds=True)
+    except:
+        log('ERROR: failed to launch: %s' % cmd)
+        print cmd.encode(txt_encode)
+        
 
 # add games
 def add_games(params):
@@ -158,10 +204,23 @@ def add_games(params):
     
     plugintools.add_item( action="add_pc_games", title=language(50020).encode('utf-8'), thumbnail=DEFAULT_THUMB, fanart=FANART, extra=default_filter_and_sort, folder=True, page="1" )
     plugintools.add_item( action="dummy", title=language(50021).encode('utf-8'), thumbnail=ANDROID_THUMB, fanart=FANART , folder=False )
-    plugintools.add_item( action="add_freeroms_games_letters", title=language(50022).encode('utf-8'), extra="psx", thumbnail=PSX_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action="add_choose_rom_source", title=language(50022).encode('utf-8'), extra="psx", thumbnail=PSX_THUMB, fanart=FANART , folder=True )
     plugintools.add_item( action="dummy", title=language(50023).encode('utf-8'), thumbnail=PS2_THUMB, fanart=FANART , folder=False )
-    plugintools.add_item( action="add_freeroms_games_letters", title=language(50024).encode('utf-8'), extra="nintendo_gamecube", thumbnail=GAMECUBE_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action="add_choose_rom_source", title=language(50024).encode('utf-8'), extra="nintendo_gamecube", thumbnail=GAMECUBE_THUMB, fanart=FANART , folder=True )
 
+
+# choose source for gettings
+def add_choose_rom_source(params):
+    log("g4gmanager.add_choose_rom_source "+repr(params))
+    
+    plugintools.set_view(plugintools.THUMBNAIL)
+    
+    thumbnail = params.get('thumbnail')
+    platform = params.get('extra')
+    
+    plugintools.add_item( action="dummy", title=language(50025).encode('utf-8'), extra=platform, thumbnail=FROM_MEDIA_THUMB, fanart=thumbnail , folder=False )
+    plugintools.add_item( action="add_freeroms_games_letters", title=language(50026).encode('utf-8'), extra=platform, thumbnail=INTERNET_THUMB, fanart=thumbnail , folder=True )
+    
 
 # choose game by letter    
 def add_freeroms_games_letters(params):
@@ -309,7 +368,7 @@ def install_freeroms_game(params):
         packagetype = "zip"
         basePath = os.path.join(getAddonInstallPath(), 'resources', 'scripts')
         install_script = os.path.join(basePath, 'install.py')        
-        cmd = "python " + install_script + ' --url=' + url + ' --downloadtype=' + downloadtype + ' --image=' + image + ' --name="' + title + '" --systemtype=' + systemtype + ' --packagetype=' + packagetype + ' --fanart=' + fanart
+        cmd = "python " + install_script + ' --url="' + url + '" --downloadtype="' + downloadtype + '" --image="' + image + '" --name="' + title + '" --systemtype="' + systemtype + '" --packagetype="' + packagetype + '" --fanart="' + fanart + '"'
         log("g4gmanager.install_psx_game => trigger command: "+ cmd)
         subprocess.Popen(cmd, shell=True, close_fds=True)
         notification_title = language(50224).encode('utf8') + " " + language(50201).encode('utf8') + " " + title + " " + language(50225).encode('utf8')
@@ -670,8 +729,8 @@ def library_selection(params):
 
     plugintools.set_view(plugintools.THUMBNAIL)
     
-    plugintools.add_item( action="library_installed", title=language(50010).encode('utf-8') , thumbnail=DEFAULT_THUMB , fanart=FANART , folder=True )
-    plugintools.add_item( action="library_available", title=language(50011).encode('utf-8') , thumbnail=DEFAULT_THUMB , fanart=FANART , folder=True )
+    plugintools.add_item( action="library_installed", title=language(50010).encode('utf-8') , thumbnail=LIBRARY_INSTALLED_THUMB , fanart=FANART , folder=True )
+    plugintools.add_item( action="library_available", title=language(50011).encode('utf-8') , thumbnail=LIBRARY_AVAILABLE_THUMB , fanart=FANART , folder=True )
 
 
 #show available games which are not installed from steam,gog,amazon
@@ -857,7 +916,7 @@ def installed_app_actions(params):
     remove_app_caption = language(50213).encode('utf8') + " " + game_name.encode('utf-8')
     
     #actions
-    plugintools.add_item( action="launch_app", title=start_app_caption , thumbnail=game_cover.encode('utf-8') , fanart=game_cover.encode('utf-8') , extra=execute_path, folder=False )
+    plugintools.add_item( action="launch_app", title=start_app_caption , thumbnail=game_cover.encode('utf-8') , fanart=game_cover.encode('utf-8') , extra=execute_path, actorsandmore=app_install_id, folder=False )
     plugintools.add_item( action="remove_app", title=remove_app_caption , thumbnail=game_cover.encode('utf-8') , fanart=game_cover.encode('utf-8') , actorsandmore=game_name.encode('utf-8'), extra=app_install_id, folder=False )
     
 # remove app
@@ -935,15 +994,57 @@ def remove_app(params):
 # launch app
 def launch_app(params):
     execute_path = params.get('extra')
-    game_name = params.get('title')
+    game_name = str( params.get('title') )
+    app_install_id = params.get('actorsandmore')
+    
+    gamepad_layout_file = 'layout_' + app_install_id
+    gamepad_layout_filepath = os.path.join(FOLDER_QJOYPAD, gamepad_layout_file)
+    
     try:
             log('attempting to launch: %s' % execute_path)
-            print execute_path.encode('utf-8')
+            log('GAME RUNNING PATH:' + OVERLAY_GAME_RUNNING)
+            # make sure overlay is clear and reset
+            if os.path.isfile(OVERLAY_GAME_RUNNING):
+                log("REMOVE OVERLAY_GAME_RUNNING")
+                os.remove(OVERLAY_GAME_RUNNING)
+            if os.path.isfile(OVERLAY_RUNS_PATH):
+                lof("OPEN OVERLAY_RUNS_PATH")
+                pidfile = open(OVERLAY_RUNS_PATH, 'r')
+                with pidfile as f:
+                    pid_to_kill = f.readline()
+                if pid_to_kill != None:
+                    # kill process
+                    os.kill(int(pid_to_kill.strip()), signal.SIGTERM)
+                    pidfile.close()
+                    os.remove(OVERLAY_RUNS_PATH)
+            
+            # placing game infos in temp for overlay
+            game_name_parts = game_name.split(' ')
+            log("Game name parts: " + repr(game_name_parts))
+            extracted_game_name = ""
+            parts_index = 0
+            for game_name_part in game_name_parts:
+                if parts_index > 0:
+                    extracted_game_name += game_name_part + " "
+                parts_index += 1
+                
+            extracted_game_name = extracted_game_name.strip()
+            
+            log("Name extracted: " + repr(extracted_game_name))
+            gameinfos = {"gamename" : extracted_game_name, "controllerconfig": gamepad_layout_file}
+            json_gameinfos = json.dumps(gameinfos)
+            log('placing game infos in temp for overlay: %s' % json_gameinfos)
+            log('open : %s' % OVERLAY_GAME_RUNNING)
+            gameinfo_file = open(OVERLAY_GAME_RUNNING, 'w')
+            gameinfo_file.write(json_gameinfos)
+            gameinfo_file.close()
+            
+            log('launching: %s' % execute_path)            
             subprocess.Popen(execute_path, shell=True, close_fds=True)
             kodiBusyDialog()
     except:
             log('ERROR: failed to launch: %s' % execute_path)
-            print execute_path.encode(txt_encode)
+            print execute_path.encode('utf8')
     
     
 # Settings dialog
