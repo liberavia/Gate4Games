@@ -1,6 +1,10 @@
+== 0.0.17 ==
+  * Released 2016-02-26
+  * Improved ingame overlay
+  * Added initial handling for multiple gamepad layouts
+
 == 0.0.16 ==
   * Released 2016-02-05
-  
   * Added start steam option
   * Added initial version of ingame overlay
   * Changed install script trigger command to use doublequotes

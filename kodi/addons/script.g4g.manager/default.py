@@ -35,18 +35,33 @@ plugintools.http_debug_log_enabled = False
 HOME_DIR = expanduser("~")
 THUMBNAIL_PATH = os.path.join(plugintools.get_runtime_path() , "resources" , "img")
 ADDON_SCRIPTS_PATH = os.path.join(plugintools.get_runtime_path() , "resources" , "scripts")
+ADDON_FOLDER_CONTROLLER_DEFAULTS = os.path.join(plugintools.get_runtime_path() , "resources" , "configs", "controller")
 FOLDER_QJOYPAD = os.path.join(HOME_DIR, '.qjoypad3')
 FOLDER_G4G = os.path.join(HOME_DIR, '.g4g')
 FOLDER_SCRIPTS = os.path.join(FOLDER_G4G, 'scripts')
 FOLDER_APPS = os.path.join(FOLDER_G4G, 'applications')
+FOLDER_DOWNLOADS = os.path.join(FOLDER_G4G, 'downloads')
 FOLDER_IMAGES = os.path.join(FOLDER_G4G, 'images')
 FOLDER_ICONS = os.path.join(FOLDER_IMAGES, 'icons')
 FOLDER_FANART = os.path.join(FOLDER_IMAGES, 'fanart')
 FOLDER_COVER = os.path.join(FOLDER_IMAGES, 'cover')
 FOLDER_PROGRESS = os.path.join(FOLDER_G4G, 'progress')
+FOLDER_SCRIPTS = os.path.join(FOLDER_G4G, 'scripts')
+FOLDER_SCRIPTCONFIGS = os.path.join(FOLDER_G4G, 'scriptconfigs')
+FOLDER_CONTROLLER = os.path.join(FOLDER_SCRIPTCONFIGS, 'controller')
+FOLDER_CONTROLLER_DEFAULTS = os.path.join(FOLDER_CONTROLLER, 'default')
+FOLDER_ROMS = os.path.join(FOLDER_G4G, 'roms')
+FOLDER_ROMS_GAC = os.path.join(FOLDER_ROMS, 'gamecube') # Gamecube
+FOLDER_ROMS_WII = os.path.join(FOLDER_ROMS, 'wii') # WII
+FOLDER_ROMS_N64 = os.path.join(FOLDER_ROMS, 'n64') # n64
+FOLDER_ROMS_NES = os.path.join(FOLDER_ROMS, 'nes') # NES
+FOLDER_ROMS_PSX = os.path.join(FOLDER_ROMS, 'psx') # Playstation 1
+FOLDER_ROMS_PS2 = os.path.join(FOLDER_ROMS, 'ps2') # Playstation 2
+FOLDER_ROMS_PSP = os.path.join(FOLDER_ROMS, 'psp') # Playstation Portable
 FOLDER_TEMP = os.path.join(FOLDER_G4G, 'temp')
 OVERLAY_GAME_RUNNING = os.path.join(FOLDER_TEMP, 'gameinfo')
 OVERLAY_RUNS_PATH = os.path.join(FOLDER_TEMP, 'overlay.pid')
+
 
 # fanarts
 FANART = os.path.join(plugintools.get_runtime_path() , "fanart.jpg")
@@ -68,6 +83,7 @@ PSX_THUMB = os.path.join(THUMBNAIL_PATH,"psx.png").encode('utf-8')
 PS2_THUMB = os.path.join(THUMBNAIL_PATH,"playstation2.png").encode('utf-8')
 STEAM_THUMB = os.path.join(THUMBNAIL_PATH,"steamicon.png").encode('utf-8')
 ANDROID_THUMB = os.path.join(THUMBNAIL_PATH,"android.png").encode('utf-8')
+FREEROMS_THUMB = "http://www.freeroms.com/images/logo.gif"
 
 # urls
 API_BASE_URL = "http://www.gate4games.com/index.php?cl=gateosapi"
@@ -133,12 +149,16 @@ def getAddonDataPath():
             log('ERROR: failed to create directory: %s' % path)
             dialog.notification(language(50123), language(50126), addonIcon, 5000)
     return path
+
     
 # Entry point
 def run():
     log("g4gmanager.run")
 
-    # Get params
+    # make sure folder structure is present
+    create_g4g_folder_structure()
+    
+    # get params
     params = plugintools.get_params()
     log("g4gmanager.run "+repr(params))
     if params.get("action") is None:
@@ -149,6 +169,34 @@ def run():
 
     plugintools.close_item_list()
 
+
+# creates needed folder structure in home if not done yet
+def create_g4g_folder_structure():
+    folder_list = [FOLDER_G4G, FOLDER_APPS, FOLDER_DOWNLOADS, FOLDER_ICONS, FOLDER_COVER, FOLDER_FANART, FOLDER_PROGRESS, FOLDER_TEMP, FOLDER_PROGRESS, FOLDER_SCRIPTS, FOLDER_CONTROLLER_DEFAULTS, FOLDER_ROMS_GAC, FOLDER_ROMS_N64, FOLDER_ROMS_NES, FOLDER_ROMS_PS2, FOLDER_ROMS_PSP, FOLDER_ROMS_PSX, FOLDER_ROMS_WII,FOLDER_QJOYPAD]
+    
+    controller_layouts_list = ['g4goverlay.lyt', 'OverlayTrigger.lyt']
+    
+    for current_path in folder_list:
+        if not os.path.exists(current_path):
+            os.makedirs(current_path, 0755)
+            
+    # copy files to foreseen places
+    for layout_file in controller_layouts_list:
+        sourcefile = os.path.join(ADDON_FOLDER_CONTROLLER_DEFAULTS,layout_file)
+        destfile = os.path.join(FOLDER_CONTROLLER_DEFAULTS,layout_file)
+        destfile_qjoypad = os.path.join(FOLDER_QJOYPAD,layout_file)
+        
+        if not os.path.isfile(destfile):
+            try:
+                shutil.copyfile(sourcefile,destfile)
+            except:
+                pass
+
+        if not os.path.isfile(destfile_qjoypad):
+            try:
+                shutil.copyfile(sourcefile,destfile_qjoypad)
+            except:
+                pass
     
 # Main menu
 def main_list(params):
@@ -219,7 +267,18 @@ def add_choose_rom_source(params):
     platform = params.get('extra')
     
     plugintools.add_item( action="dummy", title=language(50025).encode('utf-8'), extra=platform, thumbnail=FROM_MEDIA_THUMB, fanart=thumbnail , folder=False )
-    plugintools.add_item( action="add_freeroms_games_letters", title=language(50026).encode('utf-8'), extra=platform, thumbnail=INTERNET_THUMB, fanart=thumbnail , folder=True )
+    plugintools.add_item( action="add_rom_from_internet", title=language(50026).encode('utf-8'), extra=platform, thumbnail=INTERNET_THUMB, fanart=thumbnail , folder=True )
+    
+
+# available sources for rom
+def add_rom_from_internet(params):
+    
+    plugintools.set_view(plugintools.THUMBNAIL)
+    
+    thumbnail = params.get('thumbnail')
+    platform = params.get('extra')
+    
+    plugintools.add_item( action="add_freeroms_games_letters", title="FreeRoms.com", extra=platform, thumbnail=FREEROMS_THUMB, fanart=FREEROMS_THUMB , folder=True )
     
 
 # choose game by letter    
@@ -228,6 +287,8 @@ def add_freeroms_games_letters(params):
     platform = params.get('extra')
     # action = platform + "_letter_list"
     action = "freeroms_letter_list"
+    
+    platform_fanart = get_pic_by_platform(platform)
     
     plugintools.set_view(plugintools.LIST)
     
@@ -259,34 +320,45 @@ def add_freeroms_games_letters(params):
     free_roms_y         = FREE_ROMS_BASE_URL + platform + "_roms_X.htm"
     free_roms_z         = FREE_ROMS_BASE_URL + platform + "_roms_Z.htm"
     
-    plugintools.add_item( action=action, url=free_roms_num,   title="#", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action=action, url=free_roms_a,     title="A", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action=action, url=free_roms_b,     title="B", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action=action, url=free_roms_c,     title="C", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action=action, url=free_roms_d,     title="D", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action=action, url=free_roms_e,     title="E", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action=action, url=free_roms_f,     title="F", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action=action, url=free_roms_g,     title="G", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action=action, url=free_roms_h,     title="H", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action=action, url=free_roms_i,     title="I", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action=action, url=free_roms_j,     title="J", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action=action, url=free_roms_k,     title="K", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action=action, url=free_roms_l,     title="L", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action=action, url=free_roms_m,     title="M", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action=action, url=free_roms_n,     title="N", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action=action, url=free_roms_o,     title="O", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action=action, url=free_roms_p,     title="P", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action=action, url=free_roms_q,     title="Q", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action=action, url=free_roms_r,     title="R", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action=action, url=free_roms_s,     title="S", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action=action, url=free_roms_t,     title="T", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action=action, url=free_roms_u,     title="U", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action=action, url=free_roms_v,     title="V", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action=action, url=free_roms_w,     title="W", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action=action, url=free_roms_x,     title="X", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action=action, url=free_roms_y,     title="Y", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
-    plugintools.add_item( action=action, url=free_roms_z,     title="Z", extra=platform, thumbnail=DEFAULT_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action=action, url=free_roms_num,   title="#", extra=platform, thumbnail=FREEROMS_THUMB, fanart=platform_fanart , folder=True )
+    plugintools.add_item( action=action, url=free_roms_a,     title="A", extra=platform, thumbnail=FREEROMS_THUMB, fanart=platform_fanart , folder=True )
+    plugintools.add_item( action=action, url=free_roms_b,     title="B", extra=platform, thumbnail=FREEROMS_THUMB, fanart=platform_fanart , folder=True )
+    plugintools.add_item( action=action, url=free_roms_c,     title="C", extra=platform, thumbnail=FREEROMS_THUMB, fanart=platform_fanart , folder=True )
+    plugintools.add_item( action=action, url=free_roms_d,     title="D", extra=platform, thumbnail=FREEROMS_THUMB, fanart=platform_fanart , folder=True )
+    plugintools.add_item( action=action, url=free_roms_e,     title="E", extra=platform, thumbnail=FREEROMS_THUMB, fanart=platform_fanart , folder=True )
+    plugintools.add_item( action=action, url=free_roms_f,     title="F", extra=platform, thumbnail=FREEROMS_THUMB, fanart=platform_fanart , folder=True )
+    plugintools.add_item( action=action, url=free_roms_g,     title="G", extra=platform, thumbnail=FREEROMS_THUMB, fanart=platform_fanart , folder=True )
+    plugintools.add_item( action=action, url=free_roms_h,     title="H", extra=platform, thumbnail=FREEROMS_THUMB, fanart=platform_fanart , folder=True )
+    plugintools.add_item( action=action, url=free_roms_i,     title="I", extra=platform, thumbnail=FREEROMS_THUMB, fanart=platform_fanart , folder=True )
+    plugintools.add_item( action=action, url=free_roms_j,     title="J", extra=platform, thumbnail=FREEROMS_THUMB, fanart=platform_fanart , folder=True )
+    plugintools.add_item( action=action, url=free_roms_k,     title="K", extra=platform, thumbnail=FREEROMS_THUMB, fanart=platform_fanart , folder=True )
+    plugintools.add_item( action=action, url=free_roms_l,     title="L", extra=platform, thumbnail=FREEROMS_THUMB, fanart=platform_fanart , folder=True )
+    plugintools.add_item( action=action, url=free_roms_m,     title="M", extra=platform, thumbnail=FREEROMS_THUMB, fanart=platform_fanart , folder=True )
+    plugintools.add_item( action=action, url=free_roms_n,     title="N", extra=platform, thumbnail=FREEROMS_THUMB, fanart=platform_fanart , folder=True )
+    plugintools.add_item( action=action, url=free_roms_o,     title="O", extra=platform, thumbnail=FREEROMS_THUMB, fanart=platform_fanart , folder=True )
+    plugintools.add_item( action=action, url=free_roms_p,     title="P", extra=platform, thumbnail=FREEROMS_THUMB, fanart=platform_fanart , folder=True )
+    plugintools.add_item( action=action, url=free_roms_q,     title="Q", extra=platform, thumbnail=FREEROMS_THUMB, fanart=platform_fanart , folder=True )
+    plugintools.add_item( action=action, url=free_roms_r,     title="R", extra=platform, thumbnail=FREEROMS_THUMB, fanart=platform_fanart , folder=True )
+    plugintools.add_item( action=action, url=free_roms_s,     title="S", extra=platform, thumbnail=FREEROMS_THUMB, fanart=platform_fanart , folder=True )
+    plugintools.add_item( action=action, url=free_roms_t,     title="T", extra=platform, thumbnail=FREEROMS_THUMB, fanart=platform_fanart , folder=True )
+    plugintools.add_item( action=action, url=free_roms_u,     title="U", extra=platform, thumbnail=FREEROMS_THUMB, fanart=platform_fanart , folder=True )
+    plugintools.add_item( action=action, url=free_roms_v,     title="V", extra=platform, thumbnail=FREEROMS_THUMB, fanart=platform_fanart , folder=True )
+    plugintools.add_item( action=action, url=free_roms_w,     title="W", extra=platform, thumbnail=FREEROMS_THUMB, fanart=platform_fanart , folder=True )
+    plugintools.add_item( action=action, url=free_roms_x,     title="X", extra=platform, thumbnail=FREEROMS_THUMB, fanart=platform_fanart , folder=True )
+    plugintools.add_item( action=action, url=free_roms_y,     title="Y", extra=platform, thumbnail=FREEROMS_THUMB, fanart=platform_fanart , folder=True )
+    plugintools.add_item( action=action, url=free_roms_z,     title="Z", extra=platform, thumbnail=FREEROMS_THUMB, fanart=platform_fanart , folder=True )
 
+
+# returns picture by given platform
+def get_pic_by_platform(platform):
+    
+    switcher = {
+        'psx'                   : PSX_THUMB,
+        'nintendo_gamecube'     : GAMECUBE_THUMB,
+    }
+    
+    return switcher.get(platform, "none")
+    
 
 # list games for letter    
 def freeroms_letter_list(params):
@@ -938,7 +1010,8 @@ def remove_app(params):
         cover_filepath          = HOME_DIR + "/.g4g/images/cover/cover_" + app_install_id + ".jpg"
         fanart_filepath         = HOME_DIR + "/.g4g/images/fanart/fanart_" + app_install_id + ".jpg"
         rom_base_path           = HOME_DIR + "/.g4g/roms/"
-        
+        qjoypad_layout          = os.path.join(FOLDER_QJOYPAD, 'layout_' + app_install_id + '.lyt')
+        configs_folder          = os.path.join(FOLDER_CONTROLLER, app_install_id)
         app_filepath = os.path.join(FOLDER_APPS, 'game_' + app_install_id + '.desktop')
         current_file = open(app_filepath)
         
@@ -975,6 +1048,14 @@ def remove_app(params):
             os.remove(desktop_filepath)
             os.remove(fanart_filepath)
             os.remove(cover_filepath)
+            
+        # remove layout
+        if os.path.isfile(qjoypad_layout):
+            os.remove(qjoypad_layout)
+            
+        # remove configs
+        if os.path.exists(configs_folder):
+            shutil.rmtree(configs_folder)
             
         if delete_path is not None:            
             log("g4gmanager.remove_app => delete_path: " + delete_path)        

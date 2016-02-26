@@ -31,6 +31,7 @@ from pySmartDL import SmartDL
 
 # std folders
 HOME_DIR = expanduser("~")
+FOLDER_QJOYPAD = os.path.join(HOME_DIR, '.qjoypad3')
 FOLDER_G4G = os.path.join(HOME_DIR, '.g4g')
 FOLDER_SCRIPTS = os.path.join(FOLDER_G4G, 'scripts')
 FOLDER_APPS = os.path.join(FOLDER_G4G, 'applications')
@@ -41,9 +42,17 @@ FOLDER_COVER = os.path.join(FOLDER_IMAGES, 'cover')
 FOLDER_PROGRESS = os.path.join(FOLDER_G4G, 'progress')
 FOLDER_DOWNLOADS = os.path.join(FOLDER_G4G, 'downloads')
 FOLDER_ROMS = os.path.join(FOLDER_G4G, 'roms')
-# std setttings
-QJOYPAD_THEME_EXIT_ONLY = "Playstation1"
+FOLDER_SCRIPTCONFIGS = os.path.join(FOLDER_G4G, 'scriptconfigs')
+FOLDER_CONTROLLER = os.path.join(FOLDER_SCRIPTCONFIGS, 'controller')
+FOLDER_CONTROLLER_DEFAULTS = os.path.join(FOLDER_SCRIPTCONFIGS, 'controller', 'default')
 
+
+FOLDER_GAME_MANAGER_SCRIPTS = os.path.join(HOME_DIR, '.kodi', 'addons', 'script.g4g.manager', 'resources', 'scripts')
+
+# std setttings
+QJOYPAD_THEME_EXIT_ONLY = "OverlayTrigger"
+QJOYPAD_LAYOUT_PSX = "OverlayTrigger"
+QJOYPAD_LAYOUT_GAMECUBE = "OverlayTrigger"
 # get options set
 opts, args = getopt.getopt(sys.argv[1:], 'd:p:a:u:n:i:s:f', ['downloadtype=', 'packagetype=', 'appid=', 'url=', 'name=', 'image=', 'systemtype=','fanart='])
 pprint.pprint(opts)
@@ -257,7 +266,7 @@ def get_subfolder_by_systemtype(systemtype):
 # returns start command by given systemtype
 def get_startcommand_by_systemtype(systemtype, target_path, target_filename):
     switcher = {
-        'psx'                   : 'pcsx -nogui -cdfile ' + target_path + target_filename,
+        'psx'                   : 'pcsx -nogui -cdfile ' + target_path + target_filename + ' &',
         'nintendo_gamecube'     : 'dolphin-emu --exec="'+ target_path + target_filename + '" --batch &',
     }
     
@@ -274,14 +283,40 @@ def get_program_by_systemtype(systemtype):
     return switcher.get(systemtype, "")
 
 
-# returns matching qjoypad load line
-def get_qjoypad_theme_by_systemtype(systemtype,progress_id):
-    # currently just return the standard exit
-    theme_line = ""
-    if systemtype == 'psx' or systemtype == 'nintendo_gamecube':
-        theme_line += "qjoypad " + QJOYPAD_THEME_EXIT_ONLY + " &\n"
+# returns the layout for the game installed
+# @todo: game possibly needs to deliver its own default config
+def get_qjoypad_default_layout(systemtype,extrainfos):
+    fallback = os.path.join(FOLDER_QJOYPAD, QJOYPAD_THEME_EXIT_ONLY + '.lyt')
+    progress_id = extrainfos.get('progress_id')
+    switcher = {
+        'psx'                   : os.path.join(FOLDER_QJOYPAD, QJOYPAD_LAYOUT_PSX + '.lyt'),
+        'nintendo_gamecube'     : os.path.join(FOLDER_QJOYPAD, QJOYPAD_LAYOUT_GAMECUBE + '.lyt'),
+        'pc'                    : os.path.join(FOLDER_CONTROLLER, progress_id, 'layout_' + progress_id + '.lyt')
+    }
     
-    return theme_line
+    return switcher.get(systemtype, fallback)
+    
+
+# returns matching qjoypad load line
+def get_qjoypad_layout_by_systemtype(systemtype,progress_id):
+    extrainfos = {'progress_id':progress_id}
+    layout_line = ""
+    sourcepath = get_qjoypad_default_layout(systemtype,extrainfos)
+    
+    # copy layout to qjoypad folder
+    dest_layout= 'layout_' + progress_id
+    dest_layout_filename = dest_layout + '.lyt'
+    destpath = os.path.join(FOLDER_QJOYPAD,dest_layout_filename)
+    
+    if not os.path.isfile(destpath):
+        try:
+            shutil.copyfile(sourcepath,destpath)
+        except:
+            pass
+    
+    layout_line += "qjoypad " + dest_layout + " &\n"
+    
+    return layout_line
 
 # returns matching qjoypad kill line
 def get_qjoypad_kill_by_systemtype(systemtype,progress_id):
@@ -311,18 +346,48 @@ def get_xdotool_by_systemtype(systemtype):
 # return script content by systemtype    
 def get_script_content(systemtype, progress_id,target_path,target_filename):
     content  = "#!/bin/sh\n"
-    content += get_qjoypad_theme_by_systemtype(systemtype,progress_id)
+    content += get_qjoypad_layout_by_systemtype(systemtype,progress_id)
     content += "killall -9 kodi.bin\n"
     content += "sc-desktop.py stop\n"
     content += "sc-xbox.py start\n"
+    content += get_script_start_overlay_command(progress_id) + "\n"
+    content += "PID_OL_TRIGGER=$!\n"
     content += get_startcommand_by_systemtype(systemtype, target_path, target_filename) + "\n"
     content += get_xdotool_by_systemtype(systemtype)
+    content += "until PID=`pgrep " + get_process_name_by_systemtype(progress_id, systemtype) + "`\n"
+    content += "do\n"
+    content += "\tsleep 1\n"
+    content += "done\n"
+    content += "echo $PID > " + os.path.join(FOLDER_G4G , 'temp', 'game.pid') + "\n"
+    content += "while ps -p$PID > /dev/null; do sleep 1; done\n"
     content += "sc-xbox.py stop\n"
     content += "sc-desktop.py start\n"
     content += get_qjoypad_kill_by_systemtype(systemtype,progress_id)
+    content += "kill -9 $PID_OL_TRIGGER\n"
+    content += "rm " + os.path.join(FOLDER_G4G , 'temp', 'overlay.pid') + "\n"
     content += "/usr/bin/kodi -fs &\n"
     
     return content
+
+# returns overlay_command
+def get_script_start_overlay_command(progress_id):
+    #/home/kbox/.kodi/addons/script.g4g.manager/resources/scripts/overlay_trigger.py &
+    content  = ""
+    content += os.path.join(FOLDER_GAME_MANAGER_SCRIPTS, 'overlay_trigger.py') + " &"
+    
+    return content
+
+# returns process name
+# @todo: currently only consoles due their process names are easy but it will be nessessary to provide some information in a config file in scriptconfigs
+def get_process_name_by_systemtype(progress_id, systemtype):
+    content  = ""
+    if systemtype == 'psx':
+        content += "pcsx"
+    elif systemtype == 'nintendo_gamecube':
+        content += "dolphin-emu"
+        
+    return content
+
 
 # MAIN PROGRAM
 progress_id = get_next_game_id()

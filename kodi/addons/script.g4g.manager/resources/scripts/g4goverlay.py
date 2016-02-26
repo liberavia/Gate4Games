@@ -102,11 +102,11 @@ class g4gOverlayWindow(QWidget):
         ButtonStopGame.setFocus()
 
         # general settings like putting overlay in front and beeing frameless and semi transparent
-        self.setWindowFlags( Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint )
+        self.setWindowFlags( Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint ) #Qt.X11BypassWindowManagerHint | 
         self.setAttribute(Qt.WA_NoSystemBackground)
         self.setAttribute(Qt.WA_TranslucentBackground)
-        self.showMaximized()
-        
+        #self.showMaximized()
+        self.showFullScreen()
         # Signaling
         ButtonStopGame.clicked.connect(self.quitGame)
         
