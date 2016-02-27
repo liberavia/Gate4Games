@@ -236,6 +236,7 @@ def steam_selection(params):
 # launch steam session
 def launch_steam(params):
     steamlauncher = os.path.join(ADDON_SCRIPTS_PATH, 'steam-launch.sh')
+    os.chmod(steamlauncher, st.st_mode | stat.S_IEXEC)
     cmd = '"%s"' % (steamlauncher)
     try:
         log('attempting to launch: %s' % cmd)
