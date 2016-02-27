@@ -27,10 +27,11 @@ cp /cdrom/gateOS/steamuserconfig.tar.gz /target/home/steam/
 cat - > /target/usr/bin/post_logon.sh << 'EOF'
 #! /bin/bash
 
+######################################## gateOS begin ###################################################################
 # install gateOS packages
 (sudo apt-get update -y -q) | zenity --progress --no-cancel --pulsate --auto-close --text="Updating Package Sources" --title="gateOS Installation"
 (sudo apt-get -y --force-yes install apt-transport-https deb-multimedia-keyring) | zenity --progress --no-cancel --pulsate --auto-close --text="Installing Keyring of Multimedia Repository" --title="gateOS Installation"
-(sudo apt-get -y --force-yes install openbox kodi kodi-standalone kodi-pvr-iptvsimple qjoypad unclutter python-pip gzip xautomation xdotool pcsxr mupen64plus lib32gcc1 gdebi-core p7zip) | zenity --progress --no-cancel --pulsate --auto-close --text="Installing additional packages" --title="gateOS Installation" 
+(sudo apt-get -y --force-yes install openbox kodi kodi-standalone kodi-pvr-iptvsimple qjoypad unclutter python-pip gzip xautomation xdotool pcsxr mupen64plus lib32gcc1 gdebi-core p7zip git) | zenity --progress --no-cancel --pulsate --auto-close --text="Installing additional packages" --title="gateOS Installation" 
 (sudo apt-get -y --force-yes install google-chrome-stable) | zenity --progress --no-cancel --pulsate --auto-close --text="Installing Google Chrome Browser" --title="gateOS Installation"
 
 # gateOS: change Xwrapper.conf from console to anybody
@@ -56,15 +57,29 @@ cd steamcontroller-master
 
 # gateOS install pcsx2 emulator get single package from launchpad ppa for ubuntu (dirty I know...) => Will also need a bios solution. Just to have it on board at the moment
 (wget https://launchpad.net/~gregory-hainaut/+archive/ubuntu/pcsx2.official.ppa/+files/pcsx2_1.4.0-1_i386.deb) | zenity --progress --no-cancel --pulsate --auto-close --text="Downloading single pcsx2 package" --title="gateOS Installation"
-(sudo gdebi -n pcsx2_1.4.0-1_i386.deb) | zenity --progress --no-cancel --pulsate --auto-close --text="Installing single pcsx2 package and its dependencies"
+(sudo gdebi -n pcsx2_1.4.0-1_i386.deb) | zenity --progress --no-cancel --pulsate --auto-close --text="Installing single pcsx2 package and its dependencies" --title="gateOS Installation"
 
 # gateOS install SteamCMD
 sudo mkdir /home/steam/.steamcmd
 sudo cd /home/steam/.steamcmd
-(sudo wget https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz) | zenity --progress --no-cancel --pulsate --auto-close --text="Downloading SteamCMD"
-(sudo tar -xvzf steamcmd_linux.tar.gz) | zenity --progress --no-cancel --pulsate --auto-close --text="Extract SteamCMD"
+(sudo wget https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz) | zenity --progress --no-cancel --pulsate --auto-close --text="Downloading SteamCMD" --title="gateOS Installation"
+(sudo tar -xvzf steamcmd_linux.tar.gz) | zenity --progress --no-cancel --pulsate --auto-close --text="Extract SteamCMD" --title="gateOS Installation"
 sudo chown -R steam:steam /home/steam/.steamcmd
 cd /home/desktop/
+
+# gateOS install dolphin-emu (Nintendo Gamecube) => needs to be compiled...
+sudo mkdir /home/steam/.builddolphin
+sudo cd /home/steam/.builddolphin
+(sudo git clone https://github.com/dolphin-emu/dolphin.git) | zenity --progress --no-cancel --pulsate --auto-close --text="Cloning dolphin-emu repository" --title="gateOS Installation"
+(sudo apt-get install cmake g++ libwxbase3.0-dev libwxgtk3.0-dev libgtk2.0-dev libbluetooth-dev libxrandr-dev libxext-dev libreadline-dev libpulse-dev libusb-1.0-0-dev)| zenity --progress --no-cancel --pulsate --auto-close --text="Installing dependencies for compiling dolphin-emu" --title="gateOS Installation"
+sudo cd /home/steam/.builddolphin/dolphin
+sudo mkdir /home/steam/.builddolphin/dolphin/Build
+sudo cd /home/steam/.builddolphin/dolphin/Build
+(sudo cmake ..)| zenity --progress --no-cancel --pulsate --auto-close --text="Configuring dolphin-emu" --title="gateOS Installation"
+(sudo make) | zenity --progress --no-cancel --pulsate --auto-close --text="Compiling dolphin-emu" --title="gateOS Installation"
+(sudo make install) | zenity --progress --no-cancel --pulsate --auto-close --text="Installing compiled dolphin-emu" --title="gateOS Installation"
+
+######################################## gateOS end ###################################################################
 
 if [[ "$UID" -ne "0" ]]
 then
@@ -75,7 +90,7 @@ then
   if [ "$?" -ne "0" ]; then
     while true;
     do
-      zenity --info --title="SteamOS Install" --text="SteamOS cannot connect to the internet. An internet connection is required to continue installation. If you have a wireless network, configure it now."
+      zenity --info --title="gateOS Install" --text="gateOS cannot connect to the internet. An internet connection is required to continue installation. If you have a wireless network, configure it now."
       nm-connection-editor --type=802-11-wireless --show
       nm-online -t 30
       if [ "$?" -eq "0" ]; then 
@@ -97,7 +112,7 @@ fi
 dbus-send --system --type=method_call --print-reply --dest=org.freedesktop.Accounts /org/freedesktop/Accounts/User1000 org.freedesktop.Accounts.User.SetXSession string:gnome
 dbus-send --system --type=method_call --print-reply --dest=org.freedesktop.Accounts /org/freedesktop/Accounts/User1001 org.freedesktop.Accounts.User.SetXSession string:openbox
 systemctl enable build-dkms
-(for i in `dkms status | cut -d, -f1-2 | tr , / | tr -d ' '`; do sudo dkms remove $i --all; done) | zenity --progress --no-cancel --pulsate --auto-close --text="Configuring Kernel Modules" --title="SteamOS Installation"
+(for i in `dkms status | cut -d, -f1-2 | tr , / | tr -d ' '`; do sudo dkms remove $i --all; done) | zenity --progress --no-cancel --pulsate --auto-close --text="Configuring Kernel Modules" --title="gateOS Installation"
 plymouth-set-default-theme -R steamos
 update-grub
 grub-set-default 0
@@ -110,6 +125,8 @@ rm /home/steam/.config/autostart/post_logon.desktop
 EOF
 
 chmod +x /target/usr/bin/post_logon.sh
+
+######################################## gateOS begin ###################################################################
 
 #
 # gateOS adding udev-rule for allowing gamepads on new xserver sessions
@@ -199,6 +216,8 @@ echo ALL ALL=NOPASSWD: /usr/bin/terminatesteam > /target/etc/sudoers.d/terminate
 # gateOS enable anyone to sudo the xsession switcher
 #
 echo ALL ALL=NOPASSWD: /usr/bin/gateos_xsession_switch > /target/etc/sudoers.d/gateos_xsession_switch
+
+######################################## gateOS end ###################################################################
 
 #
 # Enable anyone to sudo the post logon script
