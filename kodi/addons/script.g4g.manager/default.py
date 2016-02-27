@@ -78,12 +78,16 @@ FROM_MEDIA_THUMB = os.path.join(THUMBNAIL_PATH,"create_image.png").encode('utf-8
 INTERNET_THUMB = os.path.join(THUMBNAIL_PATH,"internet.png").encode('utf-8')
 ADD_GAMES_THUMB = os.path.join(THUMBNAIL_PATH,"add_games.png").encode('utf-8')
 SETTINGS_THUMB = os.path.join(THUMBNAIL_PATH,"settings.png").encode('utf-8')
+WII_THUMB = os.path.join(THUMBNAIL_PATH,"wii.jpg").encode('utf-8')
 GAMECUBE_THUMB = os.path.join(THUMBNAIL_PATH,"gamecube.jpg").encode('utf-8')
+N64_THUMB = os.path.join(THUMBNAIL_PATH,"n64.png").encode('utf-8')
+NES_THUMB = os.path.join(THUMBNAIL_PATH,"nes.png").encode('utf-8')
 PSX_THUMB = os.path.join(THUMBNAIL_PATH,"psx.png").encode('utf-8')
 PS2_THUMB = os.path.join(THUMBNAIL_PATH,"playstation2.png").encode('utf-8')
+PSP_THUMB = os.path.join(THUMBNAIL_PATH,"psp.jpg").encode('utf-8')
 STEAM_THUMB = os.path.join(THUMBNAIL_PATH,"steamicon.png").encode('utf-8')
 ANDROID_THUMB = os.path.join(THUMBNAIL_PATH,"android.png").encode('utf-8')
-FREEROMS_THUMB = "http://www.freeroms.com/images/logo.gif"
+FREEROMS_THUMB = os.path.join(THUMBNAIL_PATH,"freeroms.png").encode('utf-8')
 
 # urls
 API_BASE_URL = "http://www.gate4games.com/index.php?cl=gateosapi"
@@ -174,7 +178,7 @@ def run():
 def create_g4g_folder_structure():
     folder_list = [FOLDER_G4G, FOLDER_APPS, FOLDER_DOWNLOADS, FOLDER_ICONS, FOLDER_COVER, FOLDER_FANART, FOLDER_PROGRESS, FOLDER_TEMP, FOLDER_PROGRESS, FOLDER_SCRIPTS, FOLDER_CONTROLLER_DEFAULTS, FOLDER_ROMS_GAC, FOLDER_ROMS_N64, FOLDER_ROMS_NES, FOLDER_ROMS_PS2, FOLDER_ROMS_PSP, FOLDER_ROMS_PSX, FOLDER_ROMS_WII,FOLDER_QJOYPAD]
     
-    controller_layouts_list = ['g4goverlay.lyt', 'OverlayTrigger.lyt']
+    controller_layouts_list = ['g4goverlay.lyt', 'OverlayTrigger.lyt', 'NES.lyt']
     
     for current_path in folder_list:
         if not os.path.exists(current_path):
@@ -230,7 +234,7 @@ def steam_selection(params):
     
 
 # launch steam session
-def launch_steam():
+def launch_steam(params):
     steamlauncher = os.path.join(ADDON_SCRIPTS_PATH, 'steam-launch.sh')
     cmd = '"%s"' % (steamlauncher)
     try:
@@ -254,7 +258,11 @@ def add_games(params):
     plugintools.add_item( action="dummy", title=language(50021).encode('utf-8'), thumbnail=ANDROID_THUMB, fanart=FANART , folder=False )
     plugintools.add_item( action="add_choose_rom_source", title=language(50022).encode('utf-8'), extra="psx", thumbnail=PSX_THUMB, fanart=FANART , folder=True )
     plugintools.add_item( action="dummy", title=language(50023).encode('utf-8'), thumbnail=PS2_THUMB, fanart=FANART , folder=False )
+    plugintools.add_item( action="dummy", title=language(59998).encode('utf-8'), thumbnail=PSP_THUMB, fanart=FANART , folder=False )
+    plugintools.add_item( action="dummy", title=language(50029).encode('utf-8'), extra="wii", thumbnail=WII_THUMB, fanart=FANART , folder=True )
     plugintools.add_item( action="add_choose_rom_source", title=language(50024).encode('utf-8'), extra="nintendo_gamecube", thumbnail=GAMECUBE_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action="add_choose_rom_source", title=language(50027).encode('utf-8'), extra="n64", thumbnail=N64_THUMB, fanart=FANART , folder=True )
+    plugintools.add_item( action="add_choose_rom_source", title=language(50028).encode('utf-8'), extra="nes", thumbnail=NES_THUMB, fanart=FANART , folder=True )
 
 
 # choose source for gettings
@@ -355,6 +363,11 @@ def get_pic_by_platform(platform):
     switcher = {
         'psx'                   : PSX_THUMB,
         'nintendo_gamecube'     : GAMECUBE_THUMB,
+        'nes'                   : NES_THUMB,
+        'n64'                   : N64_THUMB,
+        'ps2'                   : PS2_THUMB,
+        'psp'                   : PSP_THUMB,
+        'wii'                   : WII_THUMB,
     }
     
     return switcher.get(platform, "none")
@@ -415,6 +428,11 @@ def get_default_thumb_by_platform(platform):
     switcher = {
         'psx'                   : PSX_THUMB,
         'nintendo_gamecube'     : GAMECUBE_THUMB,
+        'nes'                   : NES_THUMB,
+        'n64'                   : N64_THUMB,
+        'ps2'                   : PS2_THUMB,
+        'psp'                   : PSP_THUMB,
+        'wii'                   : WII_THUMB,
     }
     
     return switcher.get(platform, "")
@@ -990,6 +1008,28 @@ def installed_app_actions(params):
     #actions
     plugintools.add_item( action="launch_app", title=start_app_caption , thumbnail=game_cover.encode('utf-8') , fanart=game_cover.encode('utf-8') , extra=execute_path, actorsandmore=app_install_id, folder=False )
     plugintools.add_item( action="remove_app", title=remove_app_caption , thumbnail=game_cover.encode('utf-8') , fanart=game_cover.encode('utf-8') , actorsandmore=game_name.encode('utf-8'), extra=app_install_id, folder=False )
+
+# returns subfolder by given systemtype
+def get_subfolder_by_systemtype(systemtype):
+    switcher = {
+        'psx'                   : 'psx',
+        'nintendo_gamecube'     : 'gamecube',
+        'nes'                   : 'nes',
+        'n64'                   : 'n64',
+    }
+    
+    return switcher.get(systemtype, "none")
+
+# return fileending by given systemtype
+def get_fileending_by_systemtype(systemtype):
+    switcher = {
+        'psx'                   : 'bin',
+        'nintendo_gamecube'     : 'iso',
+        'nes'                   : 'nes',
+        'n64'                   : 'v64',
+    }
+    
+    return switcher.get(systemtype, "none")
     
 # remove app
 def remove_app(params):
@@ -1026,29 +1066,29 @@ def remove_app(params):
         dp.update(25,remove_title,language(50213).encode('utf8') + " " + language(50219).encode('utf8'))
         xbmc.sleep(1000)
         delete_path = None
-        delete_file = None
-        log("g4gmanager.remove_app => game_type: '" + game_type  + "'")        
-        if game_type == 'psx':
-            rom_psx_path = rom_base_path + 'psx/'
-            log("g4gmanager.remove_app => rom_psx_path: " + rom_psx_path)        
-            rom_filename = "rom_" + app_install_id + ".bin"
-            delete_file = os.path.join(rom_psx_path,rom_filename)
-        if game_type == 'nintendo_gamecube':
-            rom_gamecube_path = rom_base_path + 'gamecube/'
-            log("g4gmanager.remove_app => rom_gamecube_path: " + rom_gamecube_path)        
-            rom_filename = "rom_" + app_install_id + ".iso"
-            delete_file = os.path.join(rom_gamecube_path,rom_filename)
+        log("g4gmanager.remove_app => game_type: '" + game_type  + "'")
+        
+        subfolder = get_subfolder_by_systemtype(game_type)
+        target_path = FOLDER_ROMS + "/" + subfolder + "/"
+        delete_filename = "rom_" + app_install_id + "." + get_fileending_by_systemtype(game_type)
+        delete_file = os.path.join(target_path,delete_filename)
+        
 
-        log("g4gmanager.remove_app => delete_file: " + delete_file)        
-        if delete_file is not None:
+        if delete_file is not None and os.path.exists(delete_file):
+            log("g4gmanager.remove_app => delete_file: " + delete_file)        
             os.remove(delete_file)
             dp.update(50, remove_title,language(50213).encode('utf8') + " " + language(50220).encode('utf8'))
             xbmc.sleep(1000)
-            os.remove(script_filepath)
-            os.remove(desktop_filepath)
-            os.remove(fanart_filepath)
-            os.remove(cover_filepath)
             
+        if os.path.isfile(script_filepath):
+            os.remove(script_filepath)
+        if os.path.isfile(desktop_filepath):
+            os.remove(desktop_filepath)
+        if os.path.isfile(fanart_filepath):
+            os.remove(fanart_filepath)
+        if os.path.isfile(cover_filepath):
+            os.remove(cover_filepath)
+
         # remove layout
         if os.path.isfile(qjoypad_layout):
             os.remove(qjoypad_layout)
@@ -1140,25 +1180,6 @@ def kodiBusyDialog():
     time.sleep(10)
     xbmc.executebuiltin("Dialog.Close(busydialog)")        
 
-# launch steam
-def launchSteam():
-    basePath = os.path.join(getAddonInstallPath(), 'resources', 'scripts')
-    steamlauncher = os.path.join(basePath, 'steam-launch.sh')
-    cmd = steamlauncher
-    try:
-            log('attempting to launch: %s' % cmd)
-            print cmd.encode('utf-8')
-            subprocess.Popen(cmd.encode(txt_encode), shell=True, close_fds=True)
-            kodiBusyDialog()
-    except:
-            log('ERROR: failed to launch: %s' % cmd)
-            print cmd.encode(txt_encode)
-            dialog.notification(language(50123), language(50126), addonIcon, 5000)
-		
-# Play hoster link
-def playable(params):
-    log("g4gmanager.playable.media_url "+params.get("url"))
-    plugintools.play_resolved_url( params.get("url") )    
 
 # run the program
 run()

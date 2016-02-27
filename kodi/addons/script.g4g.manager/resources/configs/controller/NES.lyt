@@ -1,0 +1,18 @@
+# QJoyPad 4.1 Layout File
+
+Joystick 1 {
+        Axis 3: throttle+, dZone 11076, xZone 32767, +key 71, -key 0
+        Axis 6: throttle+, dZone 11883, xZone 32767, +key 73, -key 0
+        Button 5: key 116
+        Button 6: key 111
+        Button 9: key 76
+}
+
+Joystick 2 {
+        Axis 3: throttle+, dZone 11076, xZone 32767, +key 71, -key 0
+        Axis 6: throttle+, dZone 11883, xZone 32767, +key 73, -key 0
+        Button 5: key 116
+        Button 6: key 111
+        Button 9: key 76
+}
+ 

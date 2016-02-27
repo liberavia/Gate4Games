@@ -21,6 +21,10 @@
     <string id="50024">Nintendo Gamecube</string>
     <string id="50025">Von Medium</string>
     <string id="50026">Aus dem Internet</string>
+    <string id="50027">Nintendo N64</string>
+    <string id="50028">Nintendo NES</string>
+    <string id="50029">Nintendo WII</string>
+    <string id="59998">Sony Playstation Portable</string>
 
     <!-- Downloads -->
     <string id="50030">Fortschritt</string>

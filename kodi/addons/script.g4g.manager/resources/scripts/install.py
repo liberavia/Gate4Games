@@ -53,6 +53,8 @@ FOLDER_GAME_MANAGER_SCRIPTS = os.path.join(HOME_DIR, '.kodi', 'addons', 'script.
 QJOYPAD_THEME_EXIT_ONLY = "OverlayTrigger"
 QJOYPAD_LAYOUT_PSX = "OverlayTrigger"
 QJOYPAD_LAYOUT_GAMECUBE = "OverlayTrigger"
+QJOYPAD_LAYOUT_NES = "NES"
+QJOYPAD_LAYOUT_N64 = "OverlayTrigger"
 # get options set
 opts, args = getopt.getopt(sys.argv[1:], 'd:p:a:u:n:i:s:f', ['downloadtype=', 'packagetype=', 'appid=', 'url=', 'name=', 'image=', 'systemtype=','fanart='])
 pprint.pprint(opts)
@@ -138,16 +140,10 @@ def direct_download(progress_id, source, name, image, message):
 def extract_package(progress_id, name, image, message, systemtype):
     write_progress(10,progress_id, name, message, image)
     message = "Extracting " + name
-    if systemtype == 'psx':
-        fileending = "bin"
-        download_source = FOLDER_DOWNLOADS + "/download_" + progress_id + ".zip"
-        target_path = FOLDER_ROMS + "/psx/"
-        target_filename = "rom_" + progress_id + "." + fileending
-    elif systemtype == 'nintendo_gamecube':
-        fileending = "iso"
-        download_source = FOLDER_DOWNLOADS + "/download_" + progress_id + ".zip"
-        target_path = FOLDER_ROMS + "/gamecube/"
-        target_filename = "rom_" + progress_id + "." + fileending
+    download_source = FOLDER_DOWNLOADS + "/download_" + progress_id + ".zip"
+    fileending = get_fileending_by_systemtype(systemtype)
+    target_path = os.path.join(FOLDER_ROMS, get_subfolder_by_systemtype(systemtype)) + "/"
+    target_filename = "rom_" + progress_id + "." + fileending
     
     fh = open(download_source, 'rb')
     downloaded_zip = zipfile.ZipFile(fh)
@@ -155,15 +151,19 @@ def extract_package(progress_id, name, image, message, systemtype):
     # search file
     for filename in downloaded_zip.namelist():
         splitted_filename = filename.split('.')
+        repr(splitted_filename)
         file_ending = splitted_filename[1]
-        if file_ending == fileending:
+        if file_ending.lower() == fileending.lower():
             write_progress(50,progress_id, name, message, image)
+            #zipfile_obj = downloaded_zip.open(filename)
+            #shutil.copyfileobj(zipfile_obj, os.path.join(target_path,target_filename))
             downloaded_zip.extract(filename, target_path)
             downloaded_zipfilename = filename
     fh.close()
     
     write_progress(95,progress_id, name, message, image)
-    os.rename(target_path + downloaded_zipfilename, target_path + target_filename)
+    if downloaded_zipfilename != None:
+        os.rename(target_path + downloaded_zipfilename, target_path + target_filename)
     os.remove(download_source)
     
     
@@ -248,6 +248,8 @@ def get_fileending_by_systemtype(systemtype):
     switcher = {
         'psx'                   : 'bin',
         'nintendo_gamecube'     : 'iso',
+        'nes'                   : 'nes',
+        'n64'                   : 'v64',
     }
     
     return switcher.get(systemtype, "none")
@@ -258,6 +260,8 @@ def get_subfolder_by_systemtype(systemtype):
     switcher = {
         'psx'                   : 'psx',
         'nintendo_gamecube'     : 'gamecube',
+        'nes'                   : 'nes',
+        'n64'                   : 'n64',
     }
     
     return switcher.get(systemtype, "none")
@@ -268,6 +272,8 @@ def get_startcommand_by_systemtype(systemtype, target_path, target_filename):
     switcher = {
         'psx'                   : 'pcsx -nogui -cdfile ' + target_path + target_filename + ' &',
         'nintendo_gamecube'     : 'dolphin-emu --exec="'+ target_path + target_filename + '" --batch &',
+        'nes'                   : 'fceux --nogui -fs 1 "' + target_path + target_filename + '" &',
+        'n64'                   : 'mupen64plus --fullscreen --noosd --resolution 1920x1080 "' + target_path + target_filename + '" &',
     }
     
     return switcher.get(systemtype, "")
@@ -291,6 +297,8 @@ def get_qjoypad_default_layout(systemtype,extrainfos):
     switcher = {
         'psx'                   : os.path.join(FOLDER_QJOYPAD, QJOYPAD_LAYOUT_PSX + '.lyt'),
         'nintendo_gamecube'     : os.path.join(FOLDER_QJOYPAD, QJOYPAD_LAYOUT_GAMECUBE + '.lyt'),
+        'nes'                   : os.path.join(FOLDER_QJOYPAD, QJOYPAD_LAYOUT_NES + '.lyt'),
+        'n64'                   : os.path.join(FOLDER_QJOYPAD, QJOYPAD_LAYOUT_N64 + '.lyt'),
         'pc'                    : os.path.join(FOLDER_CONTROLLER, progress_id, 'layout_' + progress_id + '.lyt')
     }
     
@@ -385,6 +393,10 @@ def get_process_name_by_systemtype(progress_id, systemtype):
         content += "pcsx"
     elif systemtype == 'nintendo_gamecube':
         content += "dolphin-emu"
+    elif systemtype == 'nes':
+        content += "fceux"
+    elif systemtype == 'n64':
+        content += "mupen64plus"
         
     return content
 
