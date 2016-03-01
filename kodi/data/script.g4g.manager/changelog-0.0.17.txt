@@ -1,0 +1,85 @@
+== 0.0.17 ==
+  * Released 2016-02-26
+  * Improved ingame overlay
+  * Added initial handling for multiple gamepad layouts
+
+== 0.0.16 ==
+  * Released 2016-02-05
+  * Added start steam option
+  * Added initial version of ingame overlay
+  * Changed install script trigger command to use doublequotes
+
+== 0.0.15 ==
+  * Released 2016-02-05
+  * Exchanged central download mechanism to use pySmartDL library
+  * Added speed and remaining time to download
+
+== 0.0.14 ==
+  * Released 2016-02-02
+  * Added gamecube downloading
+  * Added platform default cover
+
+== 0.0.13 ==
+  * Released 2016-01-29
+  * Added inital version of an integrated download manager
+
+== 0.0.12 ==
+  * Released 2016-01-23
+  * Improved downloading and removing of psx games to be completely non-blocking
+
+== 0.0.11 ==
+  * Released 2016-01-22
+  * Put rom downloads into background => non-blocking and multiple downloads possible
+  * Changed image handling from freeroms
+  * Take notice of already downloading titles when determining a new counter id
+
+== 0.0.10 ==
+  * Released 2016-01-19
+  * Added remove option: currently only for psx
+  * Put create desktop file to a seperate function
+
+== 0.0.9 ==
+  * Released 2016-01-19
+  * Bugfixing
+
+== 0.0.8 ==
+  * Released 2016-01-19
+  * Added possibility to install psx roms from freeroms
+
+== 0.0.7 ==
+  * Released 2015-12-28
+  * gate4games store: improved trailer and review calls
+  * added qrcode to vendor offers
+
+== 0.0.6 ==
+  * Released 2015-12-28
+  * gate4games store: fixed video playback for reviews and trailers
+
+== 0.0.5 ==
+  * Released 2015-12-27
+  * gate4games store: filter categories
+  * gate4games store: sorting lists
+  * gate4games store: rudimentary details page
+
+== 0.0.4 ==
+  * Released 2015-12-26
+  * Improved lists for final API calls for gate4games store
+
+== 0.0.3 ==
+  * Released 2015-12-20
+  * Initial add of gate4games store    
+  
+== 0.0.2 ==
+  * Released 2015-12-17
+  * Removed debug message  
+
+== 0.0.1 ==
+  * Released 2015-12-17
+  * Initial development pre alpha release
+
+  
+  
+  
+
+
+  
