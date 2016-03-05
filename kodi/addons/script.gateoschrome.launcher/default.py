@@ -8,6 +8,7 @@ import stat
 import xbmc
 import xbmcaddon
 import xbmcgui
+from os.path import expanduser
 
 addon = xbmcaddon.Addon(id='script.gateoschrome.launcher')
 addonPath = addon.getAddonInfo('path')
@@ -16,6 +17,10 @@ addonVersion = addon.getAddonInfo('version')
 dialog = xbmcgui.Dialog()
 language = addon.getLocalizedString
 scriptid = 'script.gateoschrome.launcher'
+
+HOME_DIR = expanduser("~")
+FOLDER_QJOYPAD = os.path.join(HOME_DIR, '.qjoypad3')
+
 
 #HACK: sys.getfilesystemencoding() is not supported on all systems (e.g. Android)
 txt_encode = 'utf-8'
@@ -46,6 +51,15 @@ def getAddonDataPath():
             dialog.notification(language(50123), language(50126), addonIcon, 5000)
     return path
 
+
+def copyQjoyPadLayout():
+    layoutSourcePath = os.path.join(getAddonInstallPath(), 'resources', 'configs', 'ChromeMode.lyt')
+    layoutTargetPath = os.path.join(FOLDER_QJOYPAD, 'ChromeMode.lyt')
+    
+    try:
+        shutil.copyfile(layoutSourcePath,layoutTargetPath)
+    except:
+        pass
 
 def makeScriptExec():
     scriptPath = os.path.join(getAddonInstallPath(), 'resources', 'scripts', 'chrome-launch.sh')
@@ -88,5 +102,6 @@ log('****Running Chrome-Launcher v%s....' % addonVersion)
 log('foreseen ONLY to run on gateOS')
 log('System text encoding in use: %s' % txt_encode)
 
+copyQjoyPadLayout()
 makeScriptExec()
 launchChrome()

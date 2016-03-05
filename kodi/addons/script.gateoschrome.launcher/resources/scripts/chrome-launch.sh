@@ -1,6 +1,6 @@
  #!/bin/bash
 killall -9 kodi.bin
-qjoypad DesktopMode &
+qjoypad ChromeMode &
 sc-desktop.py stop
 sc-xbox.py start
 # starting the overlay
