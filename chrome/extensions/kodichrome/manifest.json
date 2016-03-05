@@ -1,0 +1,17 @@
+ {
+  "name": "Kodi Chrome",
+  "version": "1",
+  "manifest_version": 2,
+  "description": "Offers possibility to control browser with the common navigation keys of Kodi",
+  "browser_action": {
+    "name": "Kodi Chrome",
+    "icons": ["icon.png"],
+    "default_icon": "icon.png"
+  },
+  "content_scripts": [ {
+    "js": [ "jquery.min.js", "kodi_tabindex_inject.js", "kodi_navigation_interface.js", "kodi_controls.js" ],
+    "css": ["kodi_chrome_style.css"],
+    "matches": [ "http://*/*", "https://*/*"]
+  }],
+  "web_accessible_resources": ["resources/DialogContext.png", "resources/DialogContextMiddle.png", "resources/DialogContextBottom.png", "jquery.min.js", "kodi_navigation_interface.js", "kodi_controls.js", "kodi_chrome_style.css"]
+}

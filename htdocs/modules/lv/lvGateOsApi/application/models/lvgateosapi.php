@@ -209,12 +209,33 @@ class lvgateosapi extends oxBase {
         if ( count( $aGenres ) > 0 ) {
             $sXml .= '<genres>'.$this->_sNewLine;
             foreach ( $aGenres as $sGenre ) {
-                $sXml .= "\t".'<genre>'.$sGenre.'</genre>'.$this->_sNewLine;
+                /**
+                 * @todothe following replacement is just a workarround. It's mandatory to have a clean encoding instead
+                 */
+                $sGenre = $this->_lvRemoveCrap( $sGenre );
+                $sXml .= "\t".'<genre>'.$this->_sNewLine;;
+                $sXml .= "\t\t".'<name><![CDATA['.$sGenre.']]></name>'.$this->_sNewLine;
+                $sXml .= "\t".'</genre>'.$this->_sNewLine;
             }
             $sXml .= '</genres>'.$this->_sNewLine;
         }
         
         return $sXml;
+    }
+    
+    
+    /**
+     * Removes known crappy stuff from string
+     * 
+     * @param string $sCrappyIn
+     * @return string
+     */
+    protected function _lvRemoveCrap( $sCrappyIn ) {
+        $sOut = utf8_encode( $sCrappyIn );
+        $sOut = str_replace( 'Ã´', 'o', $sOut );
+        $sOut = str_replace( 'Ã©', 'e', $sOut );
+        
+        return $sOut;
     }
     
     
@@ -241,7 +262,7 @@ class lvgateosapi extends oxBase {
                 $sXml .= "\t".'<manufacturer><![CDATA['.$oManufacturer->getTitle().']]></manufacturer>'.$this->_sNewLine;
                 $sXml .= "\t".'<igdb>'.$oArticle->oxarticles__lvigdb_rating->value.'</igdb>'.$this->_sNewLine;
                 $sXml .= "\t".'<coverpic>'.$oArticle->lvGetCoverPictureUrl().'</coverpic>'.$this->_sNewLine;
-                $sXml .= "\t".'<fanart></fanart>'.$this->_sNewLine;
+                $sXml .= "\t".'<fanart>'.$oArticle->lvGetCoverPictureUrl().'</fanart>'.$this->_sNewLine;
                 $sXml .= "\t".'<pictures>'.$this->_sNewLine;
                 foreach ( $aMediaData as $aMedia ) {
                     if ( $aMedia['mediatype'] == 'extpic' ) {
@@ -252,13 +273,17 @@ class lvgateosapi extends oxBase {
                 $sXml .= "\t".'<trailers>'.$this->_sNewLine;
                 foreach ( $aMediaData as $aMedia ) {
                     if ( $aMedia['mediatype'] == 'youtube' ) {
-                        $sXml .= "\t\t".'<trailer>'.$aMedia['url'].'</trailer>'.$this->_sNewLine;
+                        $sXml .= "\t\t".'<trailer>'.$this->_sNewLine;
+                        $sXml .= "\t\t\t".'<videourl>'.$aMedia['url'].'</videourl>'.$this->_sNewLine;
+                        $sXml .= "\t\t".'</trailer>'.$this->_sNewLine;
                     }
                 }
                 $sXml .= "\t".'</trailers>'.$this->_sNewLine;
                 $sXml .= "\t".'<review_videos>'.$this->_sNewLine;
                 foreach ( $this->lvGetReviewVideos( $oArticle ) as $sReviewUrl ) {
-                    $sXml .= "\t\t".'<review_video>'.$sReviewUrl.'</review_video>'.$this->_sNewLine;
+                    $sXml .= "\t\t".'<review_video>'.$this->_sNewLine;
+                    $sXml .= "\t\t\t".'<videourl>'.$sReviewUrl.'</videourl>'.$this->_sNewLine;
+                    $sXml .= "\t\t".'</review_video>'.$this->_sNewLine;
                 }
                 $sXml .= "\t".'</review_videos>'.$this->_sNewLine;
                 $sXml .= "\t".'<prices>'.$this->_sNewLine;
@@ -270,8 +295,8 @@ class lvgateosapi extends oxBase {
                     $sXml .= "\t\t\t".'<vendorname>'.$aAffiliate['vendor']->getTitle().'</vendorname>'.$this->_sNewLine;
                     $sXml .= "\t\t\t".'<vendoricon>'.$aAffiliate['vendor']->getIconUrl().'</vendoricon>'.$this->_sNewLine;
                     $sXml .= "\t\t\t".'<vendorprice>'.$aAffiliate['product']->getPrice()->getBruttoPrice().'</vendorprice>'.$this->_sNewLine;
-                    $sXml .= "\t\t\t".'<vendorlink>'.$sVendorLink.'</vendorlink>'.$this->_sNewLine;
-                    $sXml .= "\t\t\t".'<vendorqrcode>'.$sQrLink.'</vendorlink>'.$this->_sNewLine;
+                    $sXml .= "\t\t\t".'<vendorlink><![CDATA['.$sVendorLink.']]></vendorlink>'.$this->_sNewLine;
+                    $sXml .= "\t\t\t".'<vendorqrcode><![CDATA['.$sQrLink.']]></vendorqrcode>'.$this->_sNewLine;
                     $sXml .= "\t\t".'</vendor>'.$this->_sNewLine;                
                 }
                 $sXml .= "\t".'</prices>'.$this->_sNewLine;

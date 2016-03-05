@@ -1,0 +1,56 @@
+@keyframes border-pulsate {
+    0%   { border-color: rgba(255, 0, 0, 1); }
+    50%  { border-color: rgba(255, 0, 0, 0); }
+    100% { border-color: rgba(255, 0, 0, 1); }
+}
+
+@-webkit-keyframes border-pulsate {
+    0%   { border-color: rgba(255, 0, 0, 1); }
+    50%  { border-color: rgba(255, 0, 0, 0); }
+    100% { border-color: rgba(255, 0, 0, 1); }
+}
+
+.kodiChromeBar {
+    position: fixed;
+    top:0px;
+    right:0px;
+    z-index:999999;
+    width:100%;
+    height:236px;
+    /*background-image: url("chrome-extension://hlbdhjafjkbpeidaehpeodcaocfdakog/resources/DialogContext.png");*/
+    background-color: #000;
+    background-size: 100% 100%;
+}
+
+#kodiChromeUrl {
+    height: 24px;
+    font-size: 16pt !important;
+    font-family: Helvetica !important;
+    width: 75%;
+}
+
+#kodiChromeLoadPageButton {
+    height: 24px;
+    font-size: 16pt !important;
+    font-family: Helvetica !important;
+    width: 5%;
+}
+
+#kodiBarControls input {
+    height: 24px;
+    font-size: 16pt !important;
+    font-family: Helvetica !important;
+    width: 5%;
+}
+
+.kodiChromeActiveElement {
+    border: solid 5px red !important;
+    border-top: solid 5px red !important;
+    border-right: solid 5px red !important;
+    border-bottom: solid 5px red !important;
+    border-left: solid 5px red !important;
+    animation: border-pulsate 3s infinite;
+    -webkit-animation-name: border-pulsate;
+    -webkit-animation-duration: 3s;
+    -webkit-animation-iteration-count: infinite;
+}
