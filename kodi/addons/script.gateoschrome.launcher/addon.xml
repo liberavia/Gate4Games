@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="script.gateoschrome.launcher" name="Chrome" version="1.0.0" provider-name="liberavia">
+    <requires>
+        <import addon="xbmc.python" version="2.19.0"/>
+    </requires>
+    <extension point="xbmc.python.script" library="default.py">
+        <provides>chrome executable</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">Launches Chrome Browser on gateOS</summary>
+        <description lang="en">Chrome on the gateOS operating system. Also integrates an Overlay mechanism which can be used for several operations, as quitting and returning to main Interface. Managing bookmarks etc.</description>
+        <platform>linux</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <website>http://www.gate4games.com</website>
+        <email>info@gate4games.com</email>
+    </extension>
+</addon>

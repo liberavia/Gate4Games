@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="50000">Chrome</string>
+
+    <!-- Error Messages -->
+    <string id="50122">Datei existiert nicht</string>
+    <string id="50121">Addon Einstellungen öffnen?</string>
+    <string id="50123">FEHLER!</string>
+    <string id="50124">Es gibt neue Scripte, userdata Verzeichis updaten?</string>
+    <string id="50125">Wähle 'Nein' um das Update-Script auszuschalten</string>
+    <string id="50126">Prüfe kodi.log für mehr Informationen</string>
+
+</strings>
