@@ -24,6 +24,7 @@ import urllib
 import urllib2
 import json
 import zipfile
+import PyVDF
 from qrcodewindow import ShowQrCodeDialog
 from downloadwindow import ShowDownloadDialog
 from os.path import expanduser
@@ -38,6 +39,9 @@ ADDON_SCRIPTS_PATH = os.path.join(plugintools.get_runtime_path() , "resources" ,
 ADDON_FOLDER_CONTROLLER_DEFAULTS = os.path.join(plugintools.get_runtime_path() , "resources" , "configs", "controller")
 FOLDER_QJOYPAD = os.path.join(HOME_DIR, '.qjoypad3')
 FOLDER_G4G = os.path.join(HOME_DIR, '.g4g')
+FOLDER_G4G_STEAM = os.path.join(FOLDER_G4G, 'steam')
+FOLDER_G4G_STEAM_CACHE = os.path.join(FOLDER_G4G_STEAM, 'cache')
+FOLDER_STEAMCMD = os.path.join(HOME_DIR, '.steamcmd')
 FOLDER_SCRIPTS = os.path.join(FOLDER_G4G, 'scripts')
 FOLDER_APPS = os.path.join(FOLDER_G4G, 'applications')
 FOLDER_DOWNLOADS = os.path.join(FOLDER_G4G, 'downloads')
@@ -829,19 +833,111 @@ def library_available(params):
     log("g4gmanager.library_available "+repr(params))
     
     #currently this is only a dummy entry for testing the custom download progress dialog
-    extra = dict([('downloadtype', 'direct'), ('packagetype', 'zip'), ('appid', '12345'), ('url', 'http://www.irgendwo.de/mypack.zip')])
-    extra = json.dumps(extra)
+#    extra = dict([('downloadtype', 'direct'), ('packagetype', 'zip'), ('appid', '12345'), ('url', 'http://www.irgendwo.de/mypack.zip')])
+#    extra = json.dumps(extra)
+#    
+    set_available_steam_apps()
+
+def set_available_steam_apps():
+    log("g4gmanager.set_available_steam_apps")
+    accountdata_valid   = steam_account_data_valid()
     
-    plugintools.add_item( action="details_available", title="Sample Game" , thumbnail=DEFAULT_THUMB , fanart=FANART, extra=extra , folder=True )
+    if accountdata_valid:
+        fill_steam_apps_cache()
+        steam_folder        = os.path.join(HOME_DIR,plugintools.get_setting("SteamFolder"))
+        steam_registry_file = os.path.join(steam_folder, 'registry.vdf')
+        
+        for app_file in os.listdir(FOLDER_G4G_STEAM_CACHE):
+            log("processing app file: " + app_file)
+            app_filepath = os.path.join(FOLDER_G4G_STEAM_CACHE, app_file)
+            if os.path.isfile(app_filepath):
+                AppId           = os.path.splitext(app_file)[0]
+                log("fetched AppID: " + AppId)
+                VdfAppFile      = PyVDF(infile=app_filepath)
+                AppType         = VdfAppFile.find(AppId + ".common.type")
+                if AppType.lower() != 'game':
+                    continue
+                RegistryFile    = PyVDF(infile=steam_registry_file)    
+                Installed       = SteamApps = RegistryFile.find("Registry.HKCU.Software.Valve.Steam.apps." + AppId + ".installed")
+                # https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/10500/d60c77df97439e8434f0d0be9c3e2d9f39699991.jpg
+                GameName        = VdfAppFile.find(AppId + ".common.name")
+                LogoId          = VdfAppFile.find(AppId + ".common.logo")
+                LogoUrl         = 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/' + AppId + '/' + LogoId + '.jpg'
+                OsList          = VdfAppFile.find(AppId + ".common.oslist")
+                Languages       = VdfAppFile.find(AppId + ".common.languages")
+                LanguageList    = list()
+                for lang_name in Languages:
+                    LanguageList.append(lang_name)
+                InstallDir      = VdfAppFile.find(AppId + ".config.installdir")
+                WinExec         = VdfAppFile.find(AppId + ".config.launch.0.executable")
+                
+                plugintools.add_item( action="available_steam_details", title=GameName.encode('utf8') , thumbnail=LogoUrl.encode('utf8') , fanart=STEAM_THUMB , folder=True )
+                
+                
+def available_steam_details(params):
+    log("g4gmanager.available_steam_details: " + repr(params))
+    
+        
+# will fill the app informaton cache  
+def fill_steam_apps_cache():
+    log("g4gmanager.fill_steam_apps_cache")
+    steam_user          = plugintools.get_setting("SteamUser")
+    steam_password      = plugintools.get_setting("SteamPassword")
+    steam_folder        = os.path.join(HOME_DIR,plugintools.get_setting("SteamFolder"))
+    steam_registry_file = os.path.join(steam_folder, 'registry.vdf')
+    
+    if os.path.isfile(steam_registry_file):
+        RegistryFile = PyVDF(infile=steam_registry_file)
+        SteamApps = RegistryFile.find("Registry.HKCU.Software.Valve.Steam.apps")
+        log(repr(SteamApps))
+        for AppId in SteamApps:
+            log(repr(AppId))
+            steamcmd_command        = os.path.join(FOLDER_STEAMCMD, 'steamcmd.sh')
+            cache_tmp_target_file   = os.path.join(FOLDER_G4G_STEAM_CACHE, str(AppId) + '_tmp.vdf')
+            cache_target_file       = os.path.join(FOLDER_G4G_STEAM_CACHE, str(AppId) + '.vdf')
+            if not os.path.isfile(cache_target_file):
+                # /home/kbox/.steamcmd/steamcmd.sh +login therealliberavia ***** +app_info_print 200510 > /home/kbox/.g4g/steam/cache/200510.vdf
+                shell_command = steamcmd_command + " +login " + steam_user + " " + steam_password + " +app_info_print " + str(AppId) + " +quit > " + cache_tmp_target_file
+                p = subprocess.Popen(shell_command, shell=True, close_fds=True)
+                p.communicate() # wait until done
+                parse_steam_app_file(cache_tmp_target_file,cache_target_file)
+                os.remove(cache_tmp_target_file)
 
 
+# parses temporary steam app file and deletes everything the steamcmd client has dumped
+def parse_steam_app_file(cache_tmp_target_file,cache_target_file):
+    if os.path.isfile(cache_tmp_target_file):
+        tmp_cachefile   = open(cache_tmp_target_file,'r')
+        cachefile       = open(cache_target_file,'w')
+        found_startpoint = False
+        for line in tmp_cachefile:
+            if line.startswith('"'):
+                found_startpoint = True
+            if found_startpoint == True and not line.startswith("CWorkThreadPool::"):
+                cachefile.write(line)
+        cachefile.close()
+        tmp_cachefile.close()
+    
+# returns if data is valid
+def steam_account_data_valid():
+    log("g4gmanager.steam_account_data_valid")
+    steam_user          = plugintools.get_setting("SteamUser")
+    steam_password      = plugintools.get_setting("SteamPassword")
+    steam_folder        = os.path.join(HOME_DIR,plugintools.get_setting("SteamFolder"))
+    # currently just check if data exists
+    return_value = False
+    if steam_user is not None and steam_password is not None and os.path.exists(steam_folder):
+        return_value = True
+
+    return return_value
+    
 # available actions for certain available game
 def details_available(params):
     log("g4gmanager.details_available "+repr(params))
     
     extra = params.get('extra')
     plugintools.add_item( action="start_install_game", title="Install Sample Game" , thumbnail=DEFAULT_THUMB , fanart=FANART, extra=extra , folder=False )
-
+    
 
 # trigger the install script which will do the job and report about it in json files
 def start_install_game(params):

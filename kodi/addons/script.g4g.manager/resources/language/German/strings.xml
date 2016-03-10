@@ -56,7 +56,12 @@
     <string id="50080">[COLOR yellow]Scanne den QR-Code mit deinem Smartphone oder Tablet[/COLOR]</string>
     
     <!-- Settings -->
+    <string id="50100">Allgemein</string>
     <string id="50101">Kodi beenden, wenn ein Spiel gestartet wird.</string>
+    <string id="50120">Steam-Konto</string>
+    <string id="50121">Steam-Benutzername</string>
+    <string id="50122">Steam-Passwort</string>
+    <string id="50123">Steam-Verzeichnis</string>
 
     <!-- General -->
     <string id="50200">ab</string>

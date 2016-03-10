@@ -58,6 +58,10 @@
     <!-- Settings -->
     <string id="50100">General</string>
     <string id="50101">Quit Kodi when launching a game</string>
+    <string id="50120">Steam-Account</string>
+    <string id="50121">Steam-Username</string>
+    <string id="50122">Steam-Password</string>
+    <string id="50123">Steam-Folder</string>
 
     <!-- General -->
     <string id="50200">from</string>
