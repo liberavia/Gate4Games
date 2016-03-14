@@ -28,6 +28,7 @@ import PyVDF
 from qrcodewindow import ShowQrCodeDialog
 from downloadwindow import ShowDownloadDialog
 from os.path import expanduser
+from steamweb import SteamWebBrowser
 
 plugintools.module_log_enabled = False
 plugintools.http_debug_log_enabled = False
@@ -853,9 +854,16 @@ def set_available_steam_apps():
             if os.path.isfile(app_filepath):
                 AppId           = os.path.splitext(app_file)[0]
                 log("fetched AppID: " + AppId)
-                VdfAppFile      = PyVDF(infile=app_filepath)
+                log("processing CDF App File:"+app_filepath);
+                VdfAppFile      = PyVDF()
+                fh              = open(app_filepath,'r')
+                AppFileContent  = fh.read()
+                AppFileContent  = AppFileContent.replace('\\','')
+                fh.close()
+                VdfAppFile.setMaxTokenLength(4096)
+                VdfAppFile.loads(AppFileContent)
                 AppType         = VdfAppFile.find(AppId + ".common.type")
-                if AppType.lower() != 'game':
+                if AppType.lower() != "game":
                     continue
                 RegistryFile    = PyVDF(infile=steam_registry_file)    
                 Installed       = SteamApps = RegistryFile.find("Registry.HKCU.Software.Valve.Steam.apps." + AppId + ".installed")
@@ -863,20 +871,53 @@ def set_available_steam_apps():
                 GameName        = VdfAppFile.find(AppId + ".common.name")
                 LogoId          = VdfAppFile.find(AppId + ".common.logo")
                 LogoUrl         = 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/' + AppId + '/' + LogoId + '.jpg'
-                OsList          = VdfAppFile.find(AppId + ".common.oslist")
-                Languages       = VdfAppFile.find(AppId + ".common.languages")
-                LanguageList    = list()
-                for lang_name in Languages:
-                    LanguageList.append(lang_name)
-                InstallDir      = VdfAppFile.find(AppId + ".config.installdir")
-                WinExec         = VdfAppFile.find(AppId + ".config.launch.0.executable")
-                
-                plugintools.add_item( action="available_steam_details", title=GameName.encode('utf8') , thumbnail=LogoUrl.encode('utf8') , fanart=STEAM_THUMB , folder=True )
+
+
+                plugintools.add_item( action="available_steam_details", title=GameName.encode('utf8') , thumbnail=LogoUrl.encode('utf8') , fanart=STEAM_THUMB , extra=str(AppId), folder=True )
                 
                 
 def available_steam_details(params):
     log("g4gmanager.available_steam_details: " + repr(params))
+    AppId               = params.get('extra')
+    app_filepath        = os.path.join(FOLDER_G4G_STEAM_CACHE, AppId + '.vdf')
+    steam_folder        = os.path.join(HOME_DIR,plugintools.get_setting("SteamFolder"))
+    steam_registry_file = os.path.join(steam_folder, 'registry.vdf')
+
+    if os.path.isfile(app_filepath):
+        log("fetched AppID: " + AppId)
+        log("processing CDF App File:"+app_filepath);
+        VdfAppFile      = PyVDF()
+        fh              = open(app_filepath,'r')
+        AppFileContent  = fh.read()
+        AppFileContent  = AppFileContent.replace('\\','')
+        fh.close()
+        VdfAppFile.setMaxTokenLength(4096)
+        VdfAppFile.loads(AppFileContent)
+        AppType         = VdfAppFile.find(AppId + ".common.type")
+        RegistryFile    = PyVDF(infile=steam_registry_file)    
+        Installed       = SteamApps = RegistryFile.find("Registry.HKCU.Software.Valve.Steam.apps." + AppId + ".installed")
+        # https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/10500/d60c77df97439e8434f0d0be9c3e2d9f39699991.jpg
+        GameName        = VdfAppFile.find(AppId + ".common.name")
+        LogoId          = VdfAppFile.find(AppId + ".common.logo")
+        LogoUrl         = 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/' + AppId + '/' + LogoId + '.jpg'
+        OsList          = VdfAppFile.find(AppId + ".common.oslist")
+        Languages       = VdfAppFile.find(AppId + ".common.languages")
+        LanguageList    = list()
+        for lang_name in Languages:
+            LanguageList.append(lang_name)
+        InstallDir      = VdfAppFile.find(AppId + ".config.installdir")
+        WinExec         = VdfAppFile.find(AppId + ".config.launch.0.executable")
+
+
+        if Installed == "1":
+            install_title = GameName.encode('utf8') + " " + language(50231).encode('utf8') + " " + language(50229).encode('utf8') + " " + language(50230).encode('utf8')
+        else:
+            install_title = language(50209).encode('utf8') + " " + GameName.encode('utf8')
+        plugintools.add_item( action="install_steam_app", title=install_title, thumbnail=LogoUrl.encode('utf8') , fanart=STEAM_THUMB , extra=str(AppId), folder=True )
     
+
+def install_steam_app(params):
+    log("g4gmanager.install_steam_app" + repr(params))
         
 # will fill the app informaton cache  
 def fill_steam_apps_cache():
@@ -886,12 +927,20 @@ def fill_steam_apps_cache():
     steam_folder        = os.path.join(HOME_DIR,plugintools.get_setting("SteamFolder"))
     steam_registry_file = os.path.join(steam_folder, 'registry.vdf')
     
-    if os.path.isfile(steam_registry_file):
-        RegistryFile = PyVDF(infile=steam_registry_file)
-        SteamApps = RegistryFile.find("Registry.HKCU.Software.Valve.Steam.apps")
-        log(repr(SteamApps))
-        for AppId in SteamApps:
-            log(repr(AppId))
+    swb = SteamWebBrowser(steam_user, steam_password)
+    if not swb.logged_in():
+        swb.login()
+    if swb.logged_in():
+        r = swb.get('http://steamcommunity.com/id/therealliberavia/games/?tab=all')
+        site_content = r.text
+        pattern = '\[{([^\]]+)\]'
+        matches = re.findall(pattern,site_content, flags=re.DOTALL)
+        result = matches[0]
+        games_json = "[{" + result + "]"
+        gamedata = json.loads(games_json)
+
+        for game in gamedata:
+            AppId = game['appid']
             steamcmd_command        = os.path.join(FOLDER_STEAMCMD, 'steamcmd.sh')
             cache_tmp_target_file   = os.path.join(FOLDER_G4G_STEAM_CACHE, str(AppId) + '_tmp.vdf')
             cache_target_file       = os.path.join(FOLDER_G4G_STEAM_CACHE, str(AppId) + '.vdf')
@@ -914,6 +963,7 @@ def parse_steam_app_file(cache_tmp_target_file,cache_target_file):
             if line.startswith('"'):
                 found_startpoint = True
             if found_startpoint == True and not line.startswith("CWorkThreadPool::"):
+                #line = line.replace
                 cachefile.write(line)
         cachefile.close()
         tmp_cachefile.close()

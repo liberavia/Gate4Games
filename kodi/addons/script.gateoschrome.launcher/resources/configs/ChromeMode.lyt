@@ -1,6 +1,6 @@
 # QJoyPad 4.1 Layout File
 
-Joystick 2 {
+Joystick 1 {
         Axis 1: gradient, dZone 7307, xZone 31824, maxSpeed 10, tCurve 0, mouse+h
         Axis 2: gradient, dZone 5186, maxSpeed 10, tCurve 0, mouse+v
         Axis 3: throttle+, dZone 6715, xZone 32767, +key 37, -key 0
