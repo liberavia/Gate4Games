@@ -922,6 +922,7 @@ def available_steam_details(params):
 
 def install_steam_app(params):
     log("g4gmanager.install_steam_app" + repr(params))
+
         
 # will fill the app informaton cache  
 def fill_steam_apps_cache(force_recreating=False):
@@ -941,6 +942,8 @@ def fill_steam_apps_cache(force_recreating=False):
     if not os.path.isfile(steam_user_apps_file) or force_recreating:
         create_user_appids_file()
         
+    check_steam_login()    
+        
     if os.path.isfile(steam_user_apps_file):
         with open(steam_user_apps_file) as f:
             for line in f:
@@ -951,10 +954,35 @@ def fill_steam_apps_cache(force_recreating=False):
                 if not os.path.isfile(cache_target_file):
                     # /home/kbox/.steamcmd/steamcmd.sh +login therealliberavia ***** +app_info_print 200510 > /home/kbox/.g4g/steam/cache/200510.vdf
                     shell_command = steamcmd_command + " +login " + steam_user + " " + steam_password + " +app_info_print " + str(AppId) + " +quit > " + cache_tmp_target_file
+                    log("STEAM Client will be called wit the following: " + shell_command)
                     p = subprocess.Popen(shell_command, shell=True, close_fds=True)
                     p.communicate() # wait until done
                     parse_steam_app_file(cache_tmp_target_file,cache_target_file)
                     os.remove(cache_tmp_target_file)
+
+# will fill the app informaton cache  
+def check_steam_login():
+    log("g4gmanager.check_steam_login")
+    steam_user          = plugintools.get_setting("SteamUser")
+    steam_password      = plugintools.get_setting("SteamPassword")
+    steamcmd_command    = os.path.join(FOLDER_STEAMCMD, 'steamcmd.sh')
+    shell_command       = steamcmd_command + " +login " + steam_user + " " + steam_password
+    expect_steam_guard  = "Steam Guard code"
+    child               = pexpect.spawn(shell_command)
+    match               = child.expect([expect_steam_guard,'Steam>', r'\$'])
+
+    if match == 0:
+        prompt = child.after
+        dialog = xbmcgui.Dialog()
+        dialog.ok('Steam Guard', 'Your steam client acccess is protected by Steam Guard.\nPlease check your E-Mail and enter the code in the next dialog')
+        keyboard = xbmc.Keyboard('')
+        keyboard.doModal()
+        if (keyboard.isConfirmed()):
+            code_entered = keyboard.getText()
+            child.sendline(code_entered)
+    elif match == 1:
+        child.sendline('quit')
+    child.expect(pexpect.EOF)    
 
 #controls creating a user app file
 def create_user_appids_file():
@@ -966,13 +994,19 @@ def create_user_appids_file():
     i                   = child.expect (['Please enter the code sent to your mail address at','Please take a look at the captcha image','go on', r'\$'])
 
     if i == 0:
-        keyboard = xbmc.Keyboard('Enter the code')
+        prompt = child.after
+        dialog = xbmcgui.Dialog()
+        dialog.ok('Steam Guard', 'Your webaccess is protected by Steam Guard.\nPlease check your E-Mail and enter the code in the next dialog')
+        keyboard = xbmc.Keyboard('')
         keyboard.doModal()
         if (keyboard.isConfirmed()):
             code_entered = keyboard.getText()
             child.sendline(code_entered)
     elif i == 1:
-        keyboard = xbmc.Keyboard('Enter captcha code')
+        prompt = child.after
+        dialog = xbmcgui.Dialog()
+        dialog.ok('Steam Captcha', prompt)
+        keyboard = xbmc.Keyboard('')
         keyboard.doModal()
         if (keyboard.isConfirmed()):
             code_entered = keyboard.getText()
@@ -1011,7 +1045,7 @@ def steam_account_data_valid():
     steam_folder        = os.path.join(HOME_DIR,plugintools.get_setting("SteamFolder"))
     # currently just check if data exists
     return_value = False
-    if steam_user is not None and steam_password is not None and os.path.exists(steam_folder):
+    if steam_user is not None and steam_password is not None:
         return_value = True
 
     return return_value
