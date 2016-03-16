@@ -18,13 +18,16 @@ import collections
 import ntpath
 import re
 import pprint
-import xml.etree.ElementTree as ET
 import urlparse
 import urllib
 import urllib2
 import json
 import zipfile
 import PyVDF
+import glob
+import pexpect
+import hashlib
+import xml.etree.ElementTree as ET
 from qrcodewindow import ShowQrCodeDialog
 from downloadwindow import ShowDownloadDialog
 from os.path import expanduser
@@ -847,11 +850,13 @@ def set_available_steam_apps():
         fill_steam_apps_cache()
         steam_folder        = os.path.join(HOME_DIR,plugintools.get_setting("SteamFolder"))
         steam_registry_file = os.path.join(steam_folder, 'registry.vdf')
-        
-        for app_file in os.listdir(FOLDER_G4G_STEAM_CACHE):
-            log("processing app file: " + app_file)
-            app_filepath = os.path.join(FOLDER_G4G_STEAM_CACHE, app_file)
+        app_file_pattern    = os.path.join(FOLDER_G4G_STEAM_CACHE, '*.vdf')
+        log('PATTERN IS: ' + app_file_pattern)
+        listofappfiles      = glob.glob(app_file_pattern)
+        log('LIST OF APPFILES: ' + repr(listofappfiles))
+        for app_filepath in listofappfiles:
             if os.path.isfile(app_filepath):
+                app_file        = ntpath.basename(app_filepath)
                 AppId           = os.path.splitext(app_file)[0]
                 log("fetched AppID: " + AppId)
                 log("processing CDF App File:"+app_filepath);
@@ -871,7 +876,6 @@ def set_available_steam_apps():
                 GameName        = VdfAppFile.find(AppId + ".common.name")
                 LogoId          = VdfAppFile.find(AppId + ".common.logo")
                 LogoUrl         = 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/' + AppId + '/' + LogoId + '.jpg'
-
 
                 plugintools.add_item( action="available_steam_details", title=GameName.encode('utf8') , thumbnail=LogoUrl.encode('utf8') , fanart=STEAM_THUMB , extra=str(AppId), folder=True )
                 
@@ -920,38 +924,69 @@ def install_steam_app(params):
     log("g4gmanager.install_steam_app" + repr(params))
         
 # will fill the app informaton cache  
-def fill_steam_apps_cache():
+def fill_steam_apps_cache(force_recreating=False):
     log("g4gmanager.fill_steam_apps_cache")
     steam_user          = plugintools.get_setting("SteamUser")
     steam_password      = plugintools.get_setting("SteamPassword")
     steam_folder        = os.path.join(HOME_DIR,plugintools.get_setting("SteamFolder"))
     steam_registry_file = os.path.join(steam_folder, 'registry.vdf')
     
-    swb = SteamWebBrowser(steam_user, steam_password)
-    if not swb.logged_in():
-        swb.login()
-    if swb.logged_in():
-        r = swb.get('http://steamcommunity.com/id/therealliberavia/games/?tab=all')
-        site_content = r.text
-        pattern = '\[{([^\]]+)\]'
-        matches = re.findall(pattern,site_content, flags=re.DOTALL)
-        result = matches[0]
-        games_json = "[{" + result + "]"
-        gamedata = json.loads(games_json)
+    
+    #create hash of user so we always will have the right user library
+    m = hashlib.md5()
+    m.update(steam_user)
+    steam_user_hash = m.hexdigest()
+    steam_user_apps_file = os.path.join(FOLDER_G4G_STEAM_CACHE, steam_user_hash + '.txt')
 
-        for game in gamedata:
-            AppId = game['appid']
-            steamcmd_command        = os.path.join(FOLDER_STEAMCMD, 'steamcmd.sh')
-            cache_tmp_target_file   = os.path.join(FOLDER_G4G_STEAM_CACHE, str(AppId) + '_tmp.vdf')
-            cache_target_file       = os.path.join(FOLDER_G4G_STEAM_CACHE, str(AppId) + '.vdf')
-            if not os.path.isfile(cache_target_file):
-                # /home/kbox/.steamcmd/steamcmd.sh +login therealliberavia ***** +app_info_print 200510 > /home/kbox/.g4g/steam/cache/200510.vdf
-                shell_command = steamcmd_command + " +login " + steam_user + " " + steam_password + " +app_info_print " + str(AppId) + " +quit > " + cache_tmp_target_file
-                p = subprocess.Popen(shell_command, shell=True, close_fds=True)
-                p.communicate() # wait until done
-                parse_steam_app_file(cache_tmp_target_file,cache_target_file)
-                os.remove(cache_tmp_target_file)
+    if not os.path.isfile(steam_user_apps_file) or force_recreating:
+        create_user_appids_file()
+        
+    if os.path.isfile(steam_user_apps_file):
+        with open(steam_user_apps_file) as f:
+            for line in f:
+                AppId = int(line.strip())
+                steamcmd_command        = os.path.join(FOLDER_STEAMCMD, 'steamcmd.sh')
+                cache_tmp_target_file   = os.path.join(FOLDER_G4G_STEAM_CACHE, str(AppId) + '_tmp.vdf')
+                cache_target_file       = os.path.join(FOLDER_G4G_STEAM_CACHE, str(AppId) + '.vdf')
+                if not os.path.isfile(cache_target_file):
+                    # /home/kbox/.steamcmd/steamcmd.sh +login therealliberavia ***** +app_info_print 200510 > /home/kbox/.g4g/steam/cache/200510.vdf
+                    shell_command = steamcmd_command + " +login " + steam_user + " " + steam_password + " +app_info_print " + str(AppId) + " +quit > " + cache_tmp_target_file
+                    p = subprocess.Popen(shell_command, shell=True, close_fds=True)
+                    p.communicate() # wait until done
+                    parse_steam_app_file(cache_tmp_target_file,cache_target_file)
+                    os.remove(cache_tmp_target_file)
 
+#controls creating a user app file
+def create_user_appids_file():
+    steam_user          = plugintools.get_setting("SteamUser")
+    steam_password      = plugintools.get_setting("SteamPassword")
+    cmd_create_file     = 'python ' + os.path.join(ADDON_SCRIPTS_PATH,'set_steam_appids.py') + ' --user="' + steam_user + '" --password="' + steam_password + '"'
+    #log("COMMAND FOR CREATING APPIDS FILE: " + cmd_create_file)
+    child               = pexpect.spawn(cmd_create_file)
+    i                   = child.expect (['Please enter the code sent to your mail address at','Please take a look at the captcha image','go on', r'\$'])
+
+    if i == 0:
+        keyboard = xbmc.Keyboard('Enter the code')
+        keyboard.doModal()
+        if (keyboard.isConfirmed()):
+            code_entered = keyboard.getText()
+            child.sendline(code_entered)
+    elif i == 1:
+        keyboard = xbmc.Keyboard('Enter captcha code')
+        keyboard.doModal()
+        if (keyboard.isConfirmed()):
+            code_entered = keyboard.getText()
+            child.sendline(code_entered)
+    elif i == 2:
+        log("SEND YES")
+        child.sendline('yes')
+    elif i == 3:
+        log("flushed back to prompt")
+    else:
+        log("should no hang here")
+    #child.close()
+    child.expect(pexpect.EOF)
+    
 
 # parses temporary steam app file and deletes everything the steamcmd client has dumped
 def parse_steam_app_file(cache_tmp_target_file,cache_target_file):

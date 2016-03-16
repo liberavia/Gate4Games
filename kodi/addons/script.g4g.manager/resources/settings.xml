@@ -7,6 +7,7 @@
         <setting label="50121" id="SteamUser"       type="text" default=""/>
         <setting label="50122" id="SteamPassword"   type="text" default="" option="hidden"/>
         <setting label="50123" id="SteamFolder"     type="text" default=".steam" />
+        <setting label="50124" id="SteamFolderWine" type="text" default=".g4g/steam/Games/" />
     </category>
 </settings>
  
