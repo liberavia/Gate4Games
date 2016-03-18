@@ -974,15 +974,18 @@ def check_steam_login():
     if match == 0:
         prompt = child.after
         dialog = xbmcgui.Dialog()
-        dialog.ok('Steam Guard', 'Your steam client acccess is protected by Steam Guard.\nPlease check your E-Mail and enter the code in the next dialog')
+        dialog.ok(language(50041), language(50043))
         keyboard = xbmc.Keyboard('')
         keyboard.doModal()
         if (keyboard.isConfirmed()):
             code_entered = keyboard.getText()
             child.sendline(code_entered)
+            child.expect('Steam>')
+            child.sendline('quit')
     elif match == 1:
         child.sendline('quit')
-    child.expect(pexpect.EOF)    
+    #child.expect(pexpect.EOF)
+    child.close()
 
 #controls creating a user app file
 def create_user_appids_file():
@@ -996,7 +999,7 @@ def create_user_appids_file():
     if i == 0:
         prompt = child.after
         dialog = xbmcgui.Dialog()
-        dialog.ok('Steam Guard', 'Your webaccess is protected by Steam Guard.\nPlease check your E-Mail and enter the code in the next dialog')
+        dialog.ok(language(50041), language(50042))
         keyboard = xbmc.Keyboard('')
         keyboard.doModal()
         if (keyboard.isConfirmed()):

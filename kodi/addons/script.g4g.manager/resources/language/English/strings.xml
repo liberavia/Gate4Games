@@ -33,6 +33,9 @@
     
     <!-- Steam -->
     <string id="50040">Start Steam Session</string>
+    <string id="50041">Steam Guard</string>
+    <string id="50042">Your steam webaccess is protected by Steam Guard. Please check your E-Mail and enter the code in the next dialog.</string>
+    <string id="50043">Your steam client acccess is protected by Steam Guard. Please check your E-Mail and enter the code in the next dialog.</string>
     
     <!-- List actions -->
     <string id="50050">[COLOR blue]Directly to page...[/COLOR]</string>
