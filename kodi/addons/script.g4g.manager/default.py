@@ -960,7 +960,7 @@ def fill_steam_apps_cache(force_recreating=False):
                     parse_steam_app_file(cache_tmp_target_file,cache_target_file)
                     os.remove(cache_tmp_target_file)
 
-# will fill the app informaton cache  
+# triggers a login via steamcmd for determing if there is some need for user validation  
 def check_steam_login():
     log("g4gmanager.check_steam_login")
     steam_user          = plugintools.get_setting("SteamUser")
@@ -969,24 +969,29 @@ def check_steam_login():
     shell_command       = steamcmd_command + " +login " + steam_user + " " + steam_password
     expect_steam_guard  = "Steam Guard code"
     child               = pexpect.spawn(shell_command)
-    match               = child.expect([expect_steam_guard,'Steam>', r'\$'])
+    match               = child.expect([expect_steam_guard,'Steam>'])
 
-    if match == 0:
-        prompt = child.after
-        dialog = xbmcgui.Dialog()
-        dialog.ok(language(50041), language(50043))
-        keyboard = xbmc.Keyboard('')
-        keyboard.doModal()
-        if (keyboard.isConfirmed()):
-            code_entered = keyboard.getText()
-            child.sendline(code_entered)
-            child.expect('Steam>')
+    try:
+        if match == 0:
+            prompt = child.after
+            dialog = xbmcgui.Dialog()
+            dialog.ok(language(50041), language(50043))
+            keyboard = xbmc.Keyboard('')
+            keyboard.doModal()
+            if (keyboard.isConfirmed()):
+                code_entered = keyboard.getText()
+                child.sendline(code_entered)
+                child.expect('Steam>')
+                child.sendline('quit')
+        elif match == 1:
             child.sendline('quit')
-    elif match == 1:
-        child.sendline('quit')
+    except EOF:
+        pass
+    except TIMEOUT:
+        pass
+        
     #child.expect(pexpect.EOF)
-    child.close()
-
+    child.terminate()
 #controls creating a user app file
 def create_user_appids_file():
     steam_user          = plugintools.get_setting("SteamUser")
