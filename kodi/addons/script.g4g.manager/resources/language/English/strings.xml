@@ -36,6 +36,8 @@
     <string id="50041">Steam Guard</string>
     <string id="50042">Your steam webaccess is protected by Steam Guard. Please check your E-Mail and enter the code in the next dialog.</string>
     <string id="50043">Your steam client acccess is protected by Steam Guard. Please check your E-Mail and enter the code in the next dialog.</string>
+    <string id="50044">Steam Captcha</string>
+    <string id="50045">Please enter the code that is displayed on the image.</string>
     
     <!-- List actions -->
     <string id="50050">[COLOR blue]Directly to page...[/COLOR]</string>
@@ -100,6 +102,7 @@
     <string id="50229">already</string>
     <string id="50230">installed</string>
     <string id="50231">is</string>
+    <string id="50232">You can find the game at Library->Installed</string>
     
     <string id="59999">This feature is currently under development</string>
 </strings>

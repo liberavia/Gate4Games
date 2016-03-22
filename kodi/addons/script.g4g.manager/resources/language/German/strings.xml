@@ -36,6 +36,8 @@
     <string id="50041">Steam Guard</string>
     <string id="50042">Ihr Steam Webkonto ist durch Steam Guard geschützt. Bitte prüfen Sie ihre E-Mails und geben den enthaltenen Code im folgenden Dialog ein.</string>
     <string id="50043">Ihr Steam Client ist durch Steam Guard geschützt. Bitte prüfen Sie ihre E-Mails und geben den enthaltenen Code im folgenden Dialog ein.</string>
+    <string id="50044">Steam Captcha</string>
+    <string id="50045">Bitte geben Sie den Code auf dem Bild ein.</string>
     
     <!-- List actions -->
     <string id="50050">[COLOR blue]Direkt zu Seite springen...[/COLOR]</string>
@@ -100,6 +102,8 @@
     <string id="50229">bereits</string>
     <string id="50230">installiert</string>
     <string id="50231">ist</string>
+    <string id="50232">Du findest das Spiel unter Bibliothek->Installiert</string>
+    
     
     <string id="59999">Dieser Teil der Anwendung befindet sich noch in Entwicklung</string>
 </strings>

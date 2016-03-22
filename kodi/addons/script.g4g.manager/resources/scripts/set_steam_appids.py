@@ -53,7 +53,7 @@ if steam_user != "":
         r = swb.get(page)
 
         site_content = r.text
-        #print site_content        
+        # print site_content        
         pattern = '\[{([^\]]+)\]'
         matches = re.findall(pattern,site_content, flags=re.DOTALL)
         result  = matches[0]
