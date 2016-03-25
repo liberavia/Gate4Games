@@ -137,11 +137,13 @@ def wine_steam_download(progress_id, appid, name, image, message, login, passwor
     # init values
     write_progress("0", progress_id, name, message, image, "0", "100", "", "")
     
+    print "VOR THREAD *******************************************************"
     # trigger thread for steamcmd commmand
     trigger_download        = threading.Thread(target=start_wine_steam_download, args=(appid, login, password, steam_app_folder))
     trigger_download.daemon = True
     trigger_download.start()    
 
+    print "NACH THREAD *******************************************************"
     # wait a moment so thread can do the initialization
     time.sleep(3)
     
@@ -149,6 +151,7 @@ def wine_steam_download(progress_id, appid, name, image, message, login, passwor
     message_file_path   = os.path.join(FOLDER_TEMP,message_output_file)
     
     while os.path.isfile(message_file_path):
+        print "Hole Message von "+ message_file_path + "+++++++++++++++++++++++++++++"
         latest_message  = get_latest_message(message_file_path)
         json_message    = parse_latest_message(latest_message, install_method)
         message         = latest_message
@@ -156,6 +159,7 @@ def wine_steam_download(progress_id, appid, name, image, message, login, passwor
         todownload      = "99"
         remainingtime   = "88:88:88"
         currentrate     = "1,7 MB"
+        percent         = "0"
         write_progress(percent, progress_id, name, message, image, downloaded, todownload, remainingtime, currentrate)
         time.sleep(1)
 
@@ -215,6 +219,7 @@ def start_wine_steam_download(appid, login, password, folder):
     VdfAppFile.loads(AppFileContent)
     InstallDir          = VdfAppFile.find(appid + ".config.installdir")
     InstallDir          = str(InstallDir)
+    folder              = os.path.join(HOME_DIR, folder)
     force_install_dir   = folder + "steamapps/common/" + InstallDir.encode('utf8')
     try:
         os.makedirs(force_install_dir, 0755)
@@ -222,10 +227,12 @@ def start_wine_steam_download(appid, login, password, folder):
         pass
         
     # build command
-    steam_command_opts  = " " + "+@sSteamCmdForcePlatformType windows +login " + login + " " + password + " +force_install_dir " +  force_install_dir
-    steam_start_command = steamcmd_command + steam_command_opts + " +app_update " + appid + " -language german validate +quit" + " >> " + message_file_path
+    steam_command_opts  = ' ' + '+@sSteamCmdForcePlatformType windows +login ' + login + ' ' + password + ' + force_install_dir "' +  force_install_dir + '"'
+    steam_start_command = "unbuffer " + steamcmd_command + steam_command_opts + " +app_update " + appid + " validate +quit" + " > " + message_file_path
     
     print steam_start_command
+    subprocess.Popen(steam_start_command, shell=True, close_fds=True)
+    print "HAAAAALLLLOOOOOOO"
 
 
 # returns md5 hash of ingoing string
