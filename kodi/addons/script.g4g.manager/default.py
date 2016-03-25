@@ -432,6 +432,7 @@ def freeroms_game_details(params):
 
     plugintools.add_item( action="install_freeroms_game", url=zip_source, title=language(50209).encode('utf8') + " " + freeroms_title, thumbnail=cover_image, fanart=screenshot, actorsandmore=screenshot, plot=freeroms_title, extra=platform, folder=False )
 
+
 # returns default thumb by platform
 def get_default_thumb_by_platform(platform):
     switcher = {
@@ -468,11 +469,12 @@ def install_freeroms_game(params):
         basePath = os.path.join(getAddonInstallPath(), 'resources', 'scripts')
         install_script = os.path.join(basePath, 'install.py')        
         cmd = "python " + install_script + ' --url="' + url + '" --downloadtype="' + downloadtype + '" --image="' + image + '" --name="' + title + '" --systemtype="' + systemtype + '" --packagetype="' + packagetype + '" --fanart="' + fanart + '"'
-        log("g4gmanager.install_psx_game => trigger command: "+ cmd)
+        log("g4gmanager.install_freeroms_game => trigger command: "+ cmd)
         subprocess.Popen(cmd, shell=True, close_fds=True)
         notification_title = language(50224).encode('utf8') + " " + language(50201).encode('utf8') + " " + title + " " + language(50225).encode('utf8')
         notification_message = language(50226).encode('utf8')
         xbmc.executebuiltin('Notification(' + notification_title + ',' + notification_message + ',5000,' + image + ')')
+        
 
 # checks application dir iterate through all files and take the highest value add 1 and transfer it to 8 letter length string 
 def get_next_game_id():
@@ -835,13 +837,9 @@ def library_selection(params):
 #show available games which are not installed from steam,gog,amazon
 def library_available(params):
     log("g4gmanager.library_available "+repr(params))
-    
-    #currently this is only a dummy entry for testing the custom download progress dialog
-#    extra = dict([('downloadtype', 'direct'), ('packagetype', 'zip'), ('appid', '12345'), ('url', 'http://www.irgendwo.de/mypack.zip')])
-#    extra = json.dumps(extra)
-#    
     set_available_steam_apps()
 
+# add available steam apps if account is valid
 def set_available_steam_apps():
     log("g4gmanager.set_available_steam_apps")
     accountdata_valid   = steam_account_data_valid()
@@ -885,6 +883,7 @@ def set_available_steam_apps():
 def available_steam_details(params):
     log("g4gmanager.available_steam_details: " + repr(params))
     AppId               = params.get('extra')
+    AppId               = str(AppId)
     steam_user_hash     = get_steam_user_hash()
     app_cache_filename  = steam_user_hash + '_' + AppId + '.vdf'
     app_filepath        = os.path.join(FOLDER_G4G_STEAM_CACHE, app_cache_filename)
@@ -919,26 +918,61 @@ def available_steam_details(params):
 
         if Installed == "1":
             install_title   = GameName.encode('utf8') + " " + language(50231).encode('utf8') + " " + language(50229).encode('utf8') + " " + language(50230).encode('utf8')
-            install_action  = 'message_steam_app_installed'
-            install_folder  = False
+            install_action  = 'library_installed'
         else:
             install_title   = language(50209).encode('utf8') + " " + GameName.encode('utf8')
             install_action  = 'install_steam_app'
-            install_folder  = True
+        
+        gamesupport = get_steam_gateos_support(AppId)
             
-        plugintools.add_item( action=install_action, title=install_title, thumbnail=LogoUrl.encode('utf8') , fanart=STEAM_THUMB , extra=str(AppId), folder=install_folder )
+        plugintools.add_item( action=install_action, title=install_title, thumbnail=LogoUrl.encode('utf8') , fanart=STEAM_THUMB , plot=GameName.encode('utf8'), extra=AppId, actorsandmore=gamesupport, folder=True )
+ 
+
+# returns if given steam appid is supported by gateos
+# TODO: Currently just a dummy. Requesting support via gate4games api
+def get_steam_gateos_support(AppId):
+    log("g4gmanager.get_steam_gateos_support" + repr(AppId))
+    return "wine_steam"
+#    return "native_steam"
+#    return "not_supported"
     
 
+# installs a steam app (native and wine)
 def install_steam_app(params):
     log("g4gmanager.install_steam_app" + repr(params))
 
-    
+    install_title   = params.get('title')
+    title           = params.get('plot')
+    appid           = params.get('extra')
+
+
+    install_message = language(50216).encode('utf8') + " " + title + " " + language(50217).encode('utf8')
+    if dialog.yesno(install_title, install_message):
+        steam_user      = plugintools.get_setting("SteamUser")
+        steam_password  = plugintools.get_setting("SteamPassword")
+        catalog         = plugintools.get_setting("SteamFolderWine")
+        image           = params.get('thumbnail')
+        fanart          = STEAM_THUMB
+        systemtype      = "steam"
+        downloadtype    = params.get('actorsandmore')
+        install_script  = os.path.join(ADDON_SCRIPTS_PATH, 'install.py')        
+        cmd             = "python " + install_script + ' --appid="' + appid + '" --downloadtype="' + downloadtype + '" --image="' + image + '" --name="' + title + '" --systemtype="' + systemtype + '" --fanart="' + fanart + '" --login="' + steam_user + '" --password="' + steam_password + '" --catalog="' + catalog + '"'
+        log("g4gmanager.install_steamgame => trigger command: "+ cmd)
+#        subprocess.Popen(cmd, shell=True, close_fds=True)
+        notification_title      = language(50224).encode('utf8') + " " + language(50201).encode('utf8') + " " + title + " " + language(50225).encode('utf8')
+        notification_message    = language(50226).encode('utf8')
+        xbmc.executebuiltin('Notification(' + notification_title + ',' + notification_message + ',5000,' + image + ')')
+        
+
+# displays a messagebox that app is already installed and where it can be found
 def message_steam_app_installed(params):
     log("g4gmanager.message_steam_app_installed" + repr(params))
     install_title = params.get('title')
     message = install_title.encode('utf8') + '. ' + language(50232).encode('utf8')
     plugintools.message("Gate4Games Manager", message,"")
-#
+
+
+# returns md5 hash of username
 def get_steam_user_hash():
     log("g4gmanager.fill_steam_apps_cache")
     steam_user = plugintools.get_setting("SteamUser")

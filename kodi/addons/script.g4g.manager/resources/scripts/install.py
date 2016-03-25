@@ -17,6 +17,12 @@ import urllib2
 import json
 import zipfile
 import getopt
+import PyVDF
+import glob
+import pexpect
+import hashlib
+import thread
+import threading
 import xml.etree.ElementTree as ET
 from os.path import expanduser
 from pySmartDL import SmartDL
@@ -33,6 +39,9 @@ from pySmartDL import SmartDL
 HOME_DIR = expanduser("~")
 FOLDER_QJOYPAD = os.path.join(HOME_DIR, '.qjoypad3')
 FOLDER_G4G = os.path.join(HOME_DIR, '.g4g')
+FOLDER_G4G_STEAM = os.path.join(FOLDER_G4G, 'steam')
+FOLDER_G4G_STEAM_CACHE = os.path.join(FOLDER_G4G_STEAM, 'cache')
+FOLDER_STEAMCMD = os.path.join(HOME_DIR, '.steamcmd')
 FOLDER_SCRIPTS = os.path.join(FOLDER_G4G, 'scripts')
 FOLDER_APPS = os.path.join(FOLDER_G4G, 'applications')
 FOLDER_IMAGES = os.path.join(FOLDER_G4G, 'images')
@@ -45,6 +54,7 @@ FOLDER_ROMS = os.path.join(FOLDER_G4G, 'roms')
 FOLDER_SCRIPTCONFIGS = os.path.join(FOLDER_G4G, 'scriptconfigs')
 FOLDER_CONTROLLER = os.path.join(FOLDER_SCRIPTCONFIGS, 'controller')
 FOLDER_CONTROLLER_DEFAULTS = os.path.join(FOLDER_SCRIPTCONFIGS, 'controller', 'default')
+FOLDER_TEMP = os.path.join(FOLDER_G4G, 'temp')
 
 
 FOLDER_GAME_MANAGER_SCRIPTS = os.path.join(HOME_DIR, '.kodi', 'addons', 'script.g4g.manager', 'resources', 'scripts')
@@ -55,8 +65,10 @@ QJOYPAD_LAYOUT_PSX = "OverlayTrigger"
 QJOYPAD_LAYOUT_GAMECUBE = "OverlayTrigger"
 QJOYPAD_LAYOUT_NES = "NES"
 QJOYPAD_LAYOUT_N64 = "OverlayTrigger"
+
+
 # get options set
-opts, args = getopt.getopt(sys.argv[1:], 'd:p:a:u:n:i:s:f', ['downloadtype=', 'packagetype=', 'appid=', 'url=', 'name=', 'image=', 'systemtype=','fanart='])
+opts, args = getopt.getopt(sys.argv[1:], 'd:p:a:u:n:i:s:f:l:p:c', ['downloadtype=', 'packagetype=', 'appid=', 'url=', 'name=', 'image=', 'systemtype=','fanart=','login=','password=','catalog='])
 pprint.pprint(opts)
 
 for opt, arg in opts:
@@ -76,6 +88,13 @@ for opt, arg in opts:
         systemtype = arg
     elif opt in ('-f', '--fanart'):
         fanart = arg
+    elif opt in ('-l', '--login'):
+        login = arg
+    elif opt in ('-p', '--password'):
+        password = arg
+    elif opt in ('-c', '--catalog'):
+        folder = arg
+
 
 # write current progress into progress file
 def write_progress(percent, progress_id, name, message, image="", downloaded="", todownload="", remainingtime="", currentrate="" ):
@@ -108,11 +127,116 @@ def get_next_game_id():
     
     return next_id
 
+# starts a download via steamcmd and does pol setup linked to gateos wine-steam-install
+def wine_steam_download(progress_id, appid, name, image, message, login, password, folder):
+    steam_user          = login.encode('utf8') 
+    steam_user_hash     = get_hash_of(login)
+    steam_app_folder    = folder.encode('utf8')
+    install_method      = 'wine_steam'
 
-#def direct_download(progress_id, source, name, image, message):
-    ## do the direct download
-    #target_path = FOLDER_DOWNLOADS + "/download_" + progress_id + ".zip"
-    #urllib.urlretrieve(source,target_path,lambda nb, bs, fs, url=source: direct_download_progress_message(nb,bs,fs,progress_id,name,image,message))
+    # init values
+    write_progress("0", progress_id, name, message, image, "0", "100", "", "")
+    
+    # trigger thread for steamcmd commmand
+    trigger_download        = threading.Thread(target=start_wine_steam_download, args=(appid, login, password, steam_app_folder))
+    trigger_download.daemon = True
+    trigger_download.start()    
+
+    # wait a moment so thread can do the initialization
+    time.sleep(3)
+    
+    message_output_file = get_message_output_file(steam_user, appid, install_method)
+    message_file_path   = os.path.join(FOLDER_TEMP,message_output_file)
+    
+    while os.path.isfile(message_file_path):
+        latest_message  = get_latest_message(message_file_path)
+        json_message    = parse_latest_message(latest_message, install_method)
+        message         = latest_message
+        downloaded      = "50"
+        todownload      = "99"
+        remainingtime   = "88:88:88"
+        currentrate     = "1,7 MB"
+        write_progress(percent, progress_id, name, message, image, downloaded, todownload, remainingtime, currentrate)
+        time.sleep(1)
+
+
+def parse_latest_message(latest_message, install_method):
+    return ""
+
+# get latest message of delivered message_file
+def get_latest_message(message_file_path):
+    message_file_handler    = open(message_file_path,'r')
+    latest_message          = tail(message_file_handler,1)
+    message_file_handler.close()
+
+    return latest_message
+
+
+# Reads a n lines from f with an offset of offset lines
+def tail(f, n, offset=0):    
+    avg_line_length = 74
+    to_read = n + offset
+    while 1:
+        try:
+            f.seek(-(avg_line_length * to_read), 2)
+        except IOError:
+            # woops.  apparently file is smaller than what we want
+            # to step back, go to the beginning instead
+            f.seek(0)
+        pos = f.tell()
+        lines = f.read().splitlines()
+        if len(lines) >= to_read or pos == 0:
+            return lines[-to_read:offset and -offset or None]
+        avg_line_length *= 1.3
+        
+# returns a message output filename generated by user and an id
+def get_message_output_file(user,gameid,installtype):
+    game_hash           = get_hash_of(user + gameid)
+    message_output_file = installtype + '_' + game_hash + '.txt'
+    
+    return message_output_file
+    
+
+# starts a steam download as a thread
+def start_wine_steam_download(appid, login, password, folder):
+    message_output_file = get_message_output_file(login, appid, 'wine_steam')
+    message_file_path   = os.path.join(FOLDER_TEMP,message_output_file)
+    steamcmd_command    = os.path.join(FOLDER_STEAMCMD, 'steamcmd.sh')
+    steam_user_hash     = get_hash_of(login)
+    appid_vdf_filename  = steam_user_hash + '_' + str(appid) + '.vdf'
+    app_vdf_filepath    = os.path.join(FOLDER_G4G_STEAM_CACHE,appid_vdf_filename)
+    print app_vdf_filepath
+    VdfAppFile          = PyVDF()
+    fh                  = open(app_vdf_filepath,'r')
+    AppFileContent      = fh.read()
+    AppFileContent      = AppFileContent.replace('\\','')
+    fh.close()
+    VdfAppFile.setMaxTokenLength(4096)
+    VdfAppFile.loads(AppFileContent)
+    InstallDir          = VdfAppFile.find(appid + ".config.installdir")
+    InstallDir          = str(InstallDir)
+    force_install_dir   = folder + "steamapps/common/" + InstallDir.encode('utf8')
+    try:
+        os.makedirs(force_install_dir, 0755)
+    except:
+        pass
+        
+    # build command
+    steam_command_opts  = " " + "+@sSteamCmdForcePlatformType windows +login " + login + " " + password + " +force_install_dir " +  force_install_dir
+    steam_start_command = steamcmd_command + steam_command_opts + " +app_update " + appid + " -language german validate +quit" + " >> " + message_file_path
+    
+    print steam_start_command
+
+
+# returns md5 hash of ingoing string
+def get_hash_of(ingoing):
+    #create hash of user so we always will have the right user library
+    m = hashlib.md5()
+    m.update(ingoing)
+    outgoing = m.hexdigest()
+    
+    return str(outgoing)
+        
 
 def direct_download(progress_id, source, name, image, message):
     # do the direct download
@@ -406,6 +530,11 @@ progress_id = get_next_game_id()
 progress_filename = "/progress_" + progress_id + ".json"
 
 try:
+    packagetype
+except:
+    packagetype=""
+
+try:
     fanart
 except:
     fanart=image
@@ -414,6 +543,10 @@ if downloadtype == 'direct':
     message = "Downloading " + name
     direct_download(progress_id, url, name, image, message)
 
+if downloadtype == 'wine_steam':
+    message = "Downloading " + name
+    wine_steam_download(progress_id, appid, name, image, message, login, password, folder)
+    
 if packagetype == 'zip':
     message = "Extracting " + name
     extract_package(progress_id, name, image, message, systemtype)

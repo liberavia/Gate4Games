@@ -68,6 +68,7 @@
     <string id="50122">Steam-Password</string>
     <string id="50123">Steam-Folder</string>
     <string id="50124">Steam-Folder (Wine)</string>
+    <string id="50125">Steam-Wine</string>
 
     <!-- General -->
     <string id="50200">from</string>
