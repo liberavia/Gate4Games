@@ -831,21 +831,25 @@ def library_selection(params):
     plugintools.set_view(plugintools.THUMBNAIL)
     
     plugintools.add_item( action="library_installed", title=language(50010).encode('utf-8') , thumbnail=LIBRARY_INSTALLED_THUMB , fanart=FANART , folder=True )
-    plugintools.add_item( action="library_available", title=language(50011).encode('utf-8') , thumbnail=LIBRARY_AVAILABLE_THUMB , fanart=FANART , folder=True )
+    plugintools.add_item( action="library_available", title=language(50011).encode('utf-8') , thumbnail=LIBRARY_AVAILABLE_THUMB , fanart=FANART, extra="" , folder=True )
 
 
 #show available games which are not installed from steam,gog,amazon
 def library_available(params):
     log("g4gmanager.library_available "+repr(params))
-    set_available_steam_apps()
+    force_recreating = params.get('extra')
+    set_available_steam_apps(force_recreating=force_recreating)
 
 # add available steam apps if account is valid
-def set_available_steam_apps():
+def set_available_steam_apps(force_recreating):
     log("g4gmanager.set_available_steam_apps")
     accountdata_valid   = steam_account_data_valid()
     
     if accountdata_valid:
-        fill_steam_apps_cache()
+        
+        fill_steam_apps_cache(force_recreating)
+        refresh_steam_account_message = "[COLOR green]" + language(50233).encode('utf-8') + " " + language(50120).encode('utf8') + "[/COLOR]"
+        plugintools.add_item( action="library_available", title=refresh_steam_account_message , thumbnail=STEAM_THUMB , fanart=FANART, extra="refresh" , folder=True )
         steam_user_hash     = get_steam_user_hash()
         steam_folder        = os.path.join(HOME_DIR,plugintools.get_setting("SteamFolder"))
         steam_registry_file = os.path.join(steam_folder, 'registry.vdf')
@@ -866,18 +870,21 @@ def set_available_steam_apps():
                 AppFileContent  = AppFileContent.replace('\\','')
                 fh.close()
                 VdfAppFile.setMaxTokenLength(4096)
-                VdfAppFile.loads(AppFileContent)
-                AppType         = VdfAppFile.find(AppId + ".common.type")
-                if AppType.lower() != "game":
-                    continue
-                RegistryFile    = PyVDF(infile=steam_registry_file)    
-                Installed       = SteamApps = RegistryFile.find("Registry.HKCU.Software.Valve.Steam.apps." + AppId + ".installed")
-                # https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/10500/d60c77df97439e8434f0d0be9c3e2d9f39699991.jpg
-                GameName        = VdfAppFile.find(AppId + ".common.name")
-                LogoId          = VdfAppFile.find(AppId + ".common.logo")
-                LogoUrl         = 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/' + AppId + '/' + LogoId + '.jpg'
+                try:
+                    VdfAppFile.loads(AppFileContent)
+                    AppType         = VdfAppFile.find(AppId + ".common.type")
+                    if AppType.lower() != "game":
+                        continue
+                    RegistryFile    = PyVDF(infile=steam_registry_file)    
+                    Installed       = SteamApps = RegistryFile.find("Registry.HKCU.Software.Valve.Steam.apps." + AppId + ".installed")
+                    # https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/10500/d60c77df97439e8434f0d0be9c3e2d9f39699991.jpg
+                    GameName        = VdfAppFile.find(AppId + ".common.name")
+                    LogoId          = VdfAppFile.find(AppId + ".common.logo")
+                    LogoUrl         = 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/' + AppId + '/' + LogoId + '.jpg'
 
-                plugintools.add_item( action="available_steam_details", title=GameName.encode('utf8') , thumbnail=LogoUrl.encode('utf8') , fanart=STEAM_THUMB , extra=str(AppId), folder=True )
+                    plugintools.add_item( action="available_steam_details", title=GameName.encode('utf8') , thumbnail=LogoUrl.encode('utf8') , fanart=STEAM_THUMB , extra=str(AppId), folder=True )
+                except:
+                    pass
                 
                 
 def available_steam_details(params):
@@ -919,13 +926,15 @@ def available_steam_details(params):
         if Installed == "1":
             install_title   = GameName.encode('utf8') + " " + language(50231).encode('utf8') + " " + language(50229).encode('utf8') + " " + language(50230).encode('utf8')
             install_action  = 'library_installed'
+            folder          = True
         else:
             install_title   = language(50209).encode('utf8') + " " + GameName.encode('utf8')
             install_action  = 'install_steam_app'
+            folde           = False
         
         gamesupport = get_steam_gateos_support(AppId)
             
-        plugintools.add_item( action=install_action, title=install_title, thumbnail=LogoUrl.encode('utf8') , fanart=STEAM_THUMB , plot=GameName.encode('utf8'), extra=AppId, actorsandmore=gamesupport, folder=True )
+        plugintools.add_item( action=install_action, title=install_title, thumbnail=LogoUrl.encode('utf8') , fanart=STEAM_THUMB , plot=GameName.encode('utf8'), extra=AppId, actorsandmore=gamesupport, folder=folder )
  
 
 # returns if given steam appid is supported by gateos
@@ -974,7 +983,7 @@ def message_steam_app_installed(params):
 
 # returns md5 hash of username
 def get_steam_user_hash():
-    log("g4gmanager.fill_steam_apps_cache")
+    log("g4gmanager.get_steam_user_hash")
     steam_user = plugintools.get_setting("SteamUser")
     #create hash of user so we always will have the right user library
     m = hashlib.md5()
@@ -985,7 +994,7 @@ def get_steam_user_hash():
 
         
 # will fill the app informaton cache  
-def fill_steam_apps_cache(force_recreating=False):
+def fill_steam_apps_cache(force_recreating):
     log("g4gmanager.fill_steam_apps_cache")
     steam_user              = plugintools.get_setting("SteamUser")
     steam_password          = plugintools.get_setting("SteamPassword")
@@ -997,7 +1006,7 @@ def fill_steam_apps_cache(force_recreating=False):
     
     #create hash of user so we always will have the right user library
 
-    if not os.path.isfile(steam_user_apps_file) or force_recreating:
+    if not os.path.isfile(steam_user_apps_file) or force_recreating == "refresh":
         create_user_appids_file()
         
     check_steam_login()    
