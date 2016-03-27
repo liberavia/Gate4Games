@@ -66,6 +66,8 @@ QJOYPAD_LAYOUT_GAMECUBE = "OverlayTrigger"
 QJOYPAD_LAYOUT_NES = "NES"
 QJOYPAD_LAYOUT_N64 = "OverlayTrigger"
 
+subpid = ""
+
 
 # get options set
 opts, args = getopt.getopt(sys.argv[1:], 'd:p:a:u:n:i:s:f:l:p:c', ['downloadtype=', 'packagetype=', 'appid=', 'url=', 'name=', 'image=', 'systemtype=','fanart=','login=','password=','catalog='])
@@ -97,8 +99,10 @@ for opt, arg in opts:
 
 
 # write current progress into progress file
-def write_progress(percent, progress_id, name, message, image="", downloaded="", todownload="", remainingtime="", currentrate="" ):
-    progress_info = dict([('pid', str(os.getpid())), ('percent', percent), ('name', name), ('downloaded', downloaded), ('todownload', todownload), ('image', image), ('message', message), ('remainingtime', remainingtime), ('currentrate', currentrate)])
+def write_progress(percent, progress_id, name, message, image="", downloaded="", todownload="", remainingtime="", currentrate=""):
+    global subpid
+    progress_info = dict([('pid', str(os.getpid())), ('percent', percent), ('name', name), ('downloaded', downloaded), ('todownload', todownload), ('image', image), ('message', message), ('remainingtime', remainingtime), ('currentrate', currentrate), ('subpid', subpid)])
+    print progress_info
     progress_info_json = json.dumps(progress_info)
     progress_filename = "progress_" + progress_id + ".json"
     filehandler = open(FOLDER_PROGRESS + "/" + progress_filename, 'w')
@@ -153,27 +157,75 @@ def wine_steam_download(progress_id, appid, name, image, message, login, passwor
     while os.path.isfile(message_file_path):
         print "Hole Message von "+ message_file_path + "+++++++++++++++++++++++++++++"
         latest_message  = get_latest_message(message_file_path)
-        json_message    = parse_latest_message(latest_message, install_method)
-        message         = latest_message
-        downloaded      = "50"
-        todownload      = "99"
-        remainingtime   = "88:88:88"
-        currentrate     = "1,7 MB"
-        percent         = "0"
+        parsed_message  = parse_latest_message(latest_message, install_method)
+        downloaded      = parsed_message['downloaded']
+        todownload      = parsed_message['todownload']
+        remainingtime   = "-"
+        currentrate     = "-"
+        percent         = parsed_message['percent']
         write_progress(percent, progress_id, name, message, image, downloaded, todownload, remainingtime, currentrate)
         time.sleep(1)
 
 
+# parse string for pattern and return list of values
 def parse_latest_message(latest_message, install_method):
-    return ""
+    pattern = "downloading, progress: ([0-9,]+) \(([0-9]+) \/ ([0-9]+)\)"
+    matches = re.findall(pattern,latest_message,re.DOTALL)
+    try:
+        matches = matches[0]
+    except:
+        pass
+    pprint.pprint(matches)
+    
+    #percent
+    try:
+        percent_raw             = matches[0]
+        print percent_raw
+        percent_float           = float(percent_raw.replace(",","."))
+        percent                 = int(round(percent_float,0))
+    except:
+        percent                 = "0"
+
+    #downloaed
+    try:
+        downloaded_bytes        = int(matches[1])
+        print downloaded_bytes
+        downloaded_kbytes       = float(downloaded_bytes/1024)
+        downloaded_mbytes       = float(downloaded_kbytes/1024)
+        downloaded              = round(downloaded_mbytes,2)
+        downloaded              = str(downloaded)
+        downloaded              = downloaded.replace('.',',')
+    except:
+        downloaded              = "0"
+
+    #todownload
+    try:
+        todownload_bytes        = int(matches[2])
+        print todownload_bytes
+        todownload_kbytes       = float(todownload_bytes/1024)
+        todownload_mbytes       = float(todownload_kbytes/1024)
+        todownload              = round(todownload_mbytes,2)
+        todownload              = str(todownload)
+        todownload              = todownload.replace('.',',')
+    except:
+        todownload              = "0"
+    
+    
+    parsed_result = {"percent" : percent, "downloaded":downloaded, "todownload":todownload}
+    
+    print parsed_result
+    
+    return parsed_result
 
 # get latest message of delivered message_file
 def get_latest_message(message_file_path):
     message_file_handler    = open(message_file_path,'r')
     latest_message          = tail(message_file_handler,1)
     message_file_handler.close()
-
-    return latest_message
+    
+    print latest_message[0]
+    
+    return latest_message[0]
 
 
 # Reads a n lines from f with an offset of offset lines
@@ -203,6 +255,7 @@ def get_message_output_file(user,gameid,installtype):
 
 # starts a steam download as a thread
 def start_wine_steam_download(appid, login, password, folder):
+    global subpid
     message_output_file = get_message_output_file(login, appid, 'wine_steam')
     message_file_path   = os.path.join(FOLDER_TEMP,message_output_file)
     steamcmd_command    = os.path.join(FOLDER_STEAMCMD, 'steamcmd.sh')
@@ -230,9 +283,7 @@ def start_wine_steam_download(appid, login, password, folder):
     steam_command_opts  = ' ' + '+@sSteamCmdForcePlatformType windows +login ' + login + ' ' + password + ' + force_install_dir "' +  force_install_dir + '"'
     steam_start_command = "unbuffer " + steamcmd_command + steam_command_opts + " +app_update " + appid + " validate +quit" + " > " + message_file_path
     
-    print steam_start_command
-    subprocess.Popen(steam_start_command, shell=True, close_fds=True)
-    print "HAAAAALLLLOOOOOOO"
+    subpid              = subprocess.Popen(steam_start_command, shell=True, close_fds=True).pid
 
 
 # returns md5 hash of ingoing string
