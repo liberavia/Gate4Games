@@ -92,14 +92,26 @@ class ShowDownloadDialog(xbmcgui.WindowXMLDialog):
         download_filepath_7z    = FOLDER_DOWNLOADS + "/download_" + ProgressId + ".7z"
         
         # read file and get process id
-        process_id = False
+        process_id      = False
+        subprocess_id   = False
         progress_file = open(progress_filepath,'r')
         with progress_file as json_file:
             progress_info = json.load(json_file)
-            process_id = progress_info['pid']
-            xbmc.log('PROCESS_ID is ' + process_id)
+            process_id      = progress_info['pid']
+            subprocess_id   = progress_info['subpid']
+            xbmc.log('PROCESS_ID is ' + process_id + ' SUBPROCESS ID is ' + subprocess_id)
         progress_file.close()
         
+        
+        
+        # kill sub process
+        if subprocess_id != False and subprocess_id != '':
+            cmd = 'kill -9 ' + subprocess_id
+            xbmc.log('KILL Subprocess with: ' + cmd)
+            #install_process = subprocess.Popen(cmd, shell=True, close_fds=True)
+            subprocess.call(["kill", "-9", subprocess_id])
+            #install_process.communicate()
+
         # kill process
         if process_id != False:
             cmd = 'kill -9 ' + process_id
@@ -107,6 +119,7 @@ class ShowDownloadDialog(xbmcgui.WindowXMLDialog):
             #install_process = subprocess.Popen(cmd, shell=True, close_fds=True)
             subprocess.call(["kill", "-9", process_id])
             #install_process.communicate()
+        
             
         # check existing files and clean up
         if os.path.isfile(script_filepath):

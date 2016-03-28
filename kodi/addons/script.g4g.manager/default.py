@@ -930,7 +930,7 @@ def available_steam_details(params):
         else:
             install_title   = language(50209).encode('utf8') + " " + GameName.encode('utf8')
             install_action  = 'install_steam_app'
-            folde           = False
+            folder          = False
         
         gamesupport = get_steam_gateos_support(AppId)
             
@@ -967,7 +967,7 @@ def install_steam_app(params):
         install_script  = os.path.join(ADDON_SCRIPTS_PATH, 'install.py')        
         cmd             = "python " + install_script + ' --appid="' + appid + '" --downloadtype="' + downloadtype + '" --image="' + image + '" --name="' + title + '" --systemtype="' + systemtype + '" --fanart="' + fanart + '" --login="' + steam_user + '" --password="' + steam_password + '" --catalog="' + catalog + '"'
         log("g4gmanager.install_steamgame => trigger command: "+ cmd)
-#        subprocess.Popen(cmd, shell=True, close_fds=True)
+        subprocess.Popen(cmd, shell=True, close_fds=True)
         notification_title      = language(50224).encode('utf8') + " " + language(50201).encode('utf8') + " " + title + " " + language(50225).encode('utf8')
         notification_message    = language(50226).encode('utf8')
         xbmc.executebuiltin('Notification(' + notification_title + ',' + notification_message + ',5000,' + image + ')')
