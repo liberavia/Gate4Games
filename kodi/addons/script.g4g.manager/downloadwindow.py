@@ -94,15 +94,15 @@ class ShowDownloadDialog(xbmcgui.WindowXMLDialog):
         # read file and get process id
         process_id      = False
         subprocess_id   = False
+        appid           = False
         progress_file = open(progress_filepath,'r')
         with progress_file as json_file:
             progress_info = json.load(json_file)
             process_id      = progress_info['pid']
             subprocess_id   = progress_info['subpid']
-            xbmc.log('PROCESS_ID is ' + process_id + ' SUBPROCESS ID is ' + subprocess_id)
+            appid           = progress_info['appid']
+            xbmc.log('PROCESS_ID is ' + process_id + ' SUBPROCESS ID is ' + subprocess_id + ' APPID is ' + appid)
         progress_file.close()
-        
-        
         
         # kill sub process
         if subprocess_id != False and subprocess_id != '':
@@ -113,12 +113,15 @@ class ShowDownloadDialog(xbmcgui.WindowXMLDialog):
             #install_process.communicate()
 
         # kill process
-        if process_id != False:
+        if process_id != False and process_id != '':
             cmd = 'kill -9 ' + process_id
             xbmc.log('KILL Process with: ' + cmd)
             #install_process = subprocess.Popen(cmd, shell=True, close_fds=True)
             subprocess.call(["kill", "-9", process_id])
             #install_process.communicate()
+            
+        if appid != False and appdid != '':
+            self.killSteamCmd(appid)    
         
             
         # check existing files and clean up
@@ -145,6 +148,16 @@ class ShowDownloadDialog(xbmcgui.WindowXMLDialog):
             
         xbmc.executebuiltin('Container.Update')
         xbmc.executebuiltin('Container.Refresh')
+
+    def killSteamCmd(self, AppId):
+        AppId = int(AppId) + 0
+        cmd_get_pids    = "ps aux | grep steamcmd | grep " + str(AppId) + " | awk '{print $2}'"
+        p               = subprocess.Popen(cmd_get_pids, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr  = p.communicate()
+        pids_string     = str(stdout.strip())
+        pids_to_kill    = [int(s) for s in pids_string.split() if s.isdigit()]
+        for pid_to_kill in pids_to_kill:
+            subprocess.call(["kill", "-9", str(pid_to_kill)])
         
     def setProgressId(self, ProgressId):
         self.downloadProgressId = ProgressId

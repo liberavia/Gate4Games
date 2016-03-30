@@ -99,9 +99,9 @@ for opt, arg in opts:
 
 
 # write current progress into progress file
-def write_progress(percent, progress_id, name, message, image="", downloaded="", todownload="", remainingtime="", currentrate=""):
+def write_progress(percent, progress_id, name, message, image="", downloaded="", todownload="", remainingtime="", currentrate="", appid=""):
     global subpid
-    progress_info = dict([('pid', str(os.getpid())), ('percent', percent), ('name', name), ('downloaded', downloaded), ('todownload', todownload), ('image', image), ('message', message), ('remainingtime', remainingtime), ('currentrate', currentrate), ('subpid', subpid)])
+    progress_info = dict([('pid', str(os.getpid())), ('percent', percent), ('name', name), ('downloaded', downloaded), ('todownload', todownload), ('image', image), ('message', message), ('remainingtime', remainingtime), ('currentrate', currentrate), ('subpid', subpid), ('appid', appid)])
     print progress_info
     progress_info_json = json.dumps(progress_info)
     progress_filename = "progress_" + progress_id + ".json"
@@ -163,7 +163,7 @@ def wine_steam_download(progress_id, appid, name, image, message, login, passwor
         remainingtime   = "-"
         currentrate     = "-"
         percent         = parsed_message['percent']
-        write_progress(percent, progress_id, name, message, image, downloaded, todownload, remainingtime, currentrate)
+        write_progress(percent, progress_id, name, message, image, downloaded, todownload, remainingtime, currentrate, appid)
         time.sleep(1)
 
 
@@ -280,7 +280,8 @@ def start_wine_steam_download(appid, login, password, folder):
         pass
         
     # build command
-    steam_command_opts  = ' ' + '+@sSteamCmdForcePlatformType windows +login ' + login + ' ' + password + ' + force_install_dir "' +  force_install_dir + '"'
+    #steam_command_opts  = ' ' + '+@sSteamCmdForcePlatformType windows +login ' + login + ' ' + password + ' + force_install_dir "' +  force_install_dir + '"'
+    steam_command_opts  = ' ' + '+@sSteamCmdForcePlatformType windows +login ' + login + ' ' + password
     steam_start_command = "unbuffer " + steamcmd_command + steam_command_opts + " +app_update " + appid + " validate +quit" + " > " + message_file_path
     
     subpid              = subprocess.Popen(steam_start_command, shell=True, close_fds=True).pid

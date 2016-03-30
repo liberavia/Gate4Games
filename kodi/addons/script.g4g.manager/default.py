@@ -1345,8 +1345,8 @@ def remove_app(params):
         rom_base_path           = HOME_DIR + "/.g4g/roms/"
         qjoypad_layout          = os.path.join(FOLDER_QJOYPAD, 'layout_' + app_install_id + '.lyt')
         configs_folder          = os.path.join(FOLDER_CONTROLLER, app_install_id)
-        app_filepath = os.path.join(FOLDER_APPS, 'game_' + app_install_id + '.desktop')
-        current_file = open(app_filepath)
+        app_filepath            = os.path.join(FOLDER_APPS, 'game_' + app_install_id + '.desktop')
+        current_file            = open(app_filepath)
         
         for line in current_file:
             if line.startswith('Type='):
@@ -1361,6 +1361,10 @@ def remove_app(params):
         delete_path = None
         log("g4gmanager.remove_app => game_type: '" + game_type  + "'")
         
+        
+        # deleting by gametype
+        
+        # roms
         subfolder = get_subfolder_by_systemtype(game_type)
         target_path = FOLDER_ROMS + "/" + subfolder + "/"
         delete_filename = "rom_" + app_install_id + "." + get_fileending_by_systemtype(game_type)
@@ -1372,7 +1376,12 @@ def remove_app(params):
             os.remove(delete_file)
             dp.update(50, remove_title,language(50213).encode('utf8') + " " + language(50220).encode('utf8'))
             xbmc.sleep(1000)
-            
+
+        # steam
+        # steamcmd command: app_uninstall 332800 -complete
+
+
+        # remove game manger stuff
         if os.path.isfile(script_filepath):
             os.remove(script_filepath)
         if os.path.isfile(desktop_filepath):
