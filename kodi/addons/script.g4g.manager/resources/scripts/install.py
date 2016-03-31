@@ -363,12 +363,12 @@ def send_notification(header,message,length,image):
     #cmd = '"%s"' % (cmd)
     subprocess.Popen(cmd, shell=True, close_fds=True)
 
-def finish_install(progress_id, name, image, fanart, message, systemtype, pc_type=""):
+def finish_install(progress_id, name, image, fanart, message, systemtype, pc_type="",appid=""):
     message = "Finish installation"
     create_script(progress_id, name, image, message, systemtype)
     write_progress(40, progress_id, name, message, image)
     time.sleep(1)
-    create_desktop_file(name,systemtype,progress_id,image,fanart,pc_type)
+    create_desktop_file(name,systemtype,progress_id,image,fanart,pc_type,appid)
     write_progress(80, progress_id, name, message, image)
     time.sleep(1)
     textures_db_path = HOME_DIR + "/.kodi/userdata/Database/Textures13.db"
@@ -378,7 +378,7 @@ def finish_install(progress_id, name, image, fanart, message, systemtype, pc_typ
     time.sleep(1)
     
 # creating a desktop file to make library noticed about the installation    
-def create_desktop_file(title,install_type,next_id,thumbnail,fanart,pc_type):
+def create_desktop_file(title,install_type,next_id,thumbnail,fanart,pc_type,appid=""):
     script_filepath     = FOLDER_SCRIPTS + "/script_" + next_id
     desktop_filepath    = FOLDER_APPS + "/game_" + next_id + ".desktop"
     icon_filepath       = FOLDER_ICONS + "/icon_" + next_id + ".jpg"
@@ -396,6 +396,8 @@ def create_desktop_file(title,install_type,next_id,thumbnail,fanart,pc_type):
     target_desktopfile.write('Type='+ install_type)
     target_desktopfile.write("\n")
     target_desktopfile.write('PCType='+ pc_type)
+    target_desktopfile.write("\n")
+    target_desktopfile.write('AppId='+ appid)
     target_desktopfile.write("\n")
     target_desktopfile.write('Name=' + title )
     target_desktopfile.write("\n")
@@ -598,6 +600,11 @@ try:
 except:
     fanart=image
 
+try:
+    appid
+except:
+    appid=""
+
 if downloadtype == 'direct':
     message = "Downloading " + name
     direct_download(progress_id, url, name, image, message)
@@ -611,7 +618,7 @@ if packagetype == 'zip':
     extract_package(progress_id, name, image, message, systemtype)
 
 message = "Finishing installation"    
-finish_install(progress_id, name, image, fanart, message, systemtype)    
+finish_install(progress_id, name, image, fanart, message, systemtype,"",appid)    
 
 message = name + " successfully installed"    
 write_progress(100, progress_id, name, message, image)

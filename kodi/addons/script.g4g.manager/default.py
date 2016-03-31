@@ -1350,9 +1350,11 @@ def remove_app(params):
         
         for line in current_file:
             if line.startswith('Type='):
-                game_type = line.replace('Type=', '')
+                game_type       = line.replace('Type=', '')
             if line.startswith('Type='):
-                pc_game_type = line.replace('PCType=', '')
+                pc_game_type    = line.replace('PCType=', '')
+            if line.startswith('AppId='):
+                appid           = line.replace('AppId=', '')
         
         game_type = game_type.strip()
 
@@ -1364,21 +1366,30 @@ def remove_app(params):
         
         # deleting by gametype
         
-        # roms
-        subfolder = get_subfolder_by_systemtype(game_type)
-        target_path = FOLDER_ROMS + "/" + subfolder + "/"
-        delete_filename = "rom_" + app_install_id + "." + get_fileending_by_systemtype(game_type)
-        delete_file = os.path.join(target_path,delete_filename)
+        game_type_section = get_game_type_section_by_game_type(game_type,pc_game_type)
         
+        if game_type_section == 'roms':
+            # roms
+            subfolder = get_subfolder_by_systemtype(game_type)
+            target_path = FOLDER_ROMS + "/" + subfolder + "/"
+            delete_filename = "rom_" + app_install_id + "." + get_fileending_by_systemtype(game_type)
+            delete_file = os.path.join(target_path,delete_filename)
 
-        if delete_file is not None and os.path.exists(delete_file):
-            log("g4gmanager.remove_app => delete_file: " + delete_file)        
-            os.remove(delete_file)
-            dp.update(50, remove_title,language(50213).encode('utf8') + " " + language(50220).encode('utf8'))
-            xbmc.sleep(1000)
 
-        # steam
-        # steamcmd command: app_uninstall 332800 -complete
+            if delete_file is not None and os.path.exists(delete_file):
+                log("g4gmanager.remove_app => delete_file: " + delete_file)        
+                os.remove(delete_file)
+                dp.update(50, remove_title,language(50213).encode('utf8') + " " + language(50220).encode('utf8'))
+                xbmc.sleep(1000)
+        elif game_type_section == 'steam':
+            # steam
+            # steamcmd command: app_uninstall 332800 -complete
+            steam_uninstall_cmd = 'app_uninstall ' + str(appid) + '-complete'
+            log("STEAM Client will be called wit the following: " + shell_command)
+            p = subprocess.Popen(steam_uninstall_cmd, shell=True, close_fds=True)
+            p.communicate() # wait until done
+        else:
+            log('G4G-MANAGER UNINSTALL PROBLEM: game_type_section ' + str(game_type_section) + 'unknown')
 
 
         # remove game manger stuff
