@@ -38,6 +38,12 @@ class lvigdb extends oxBase {
     protected $_iLvIgdbRequestMaxCount = 10000;
     
     /**
+     * Maximum count of affected articles
+     * @var int
+     */
+    protected $_iLvIgdbMaxAffected = 10000;
+
+    /**
      * Logfile used
      * @var string
      */
@@ -121,6 +127,12 @@ class lvigdb extends oxBase {
      */
     protected $_aCleanupSearchTerms = array();
     
+    /**
+     * Debug Flag
+     * @var bool 
+     */
+    protected $_blDebug = False;
+    
     
     
 
@@ -181,7 +193,7 @@ class lvigdb extends oxBase {
             WHERE
                 OXPARENTID='' AND
                 LVIGDB_LAST_UPDATED <= '".$sMinLastDate."'
-            LIMIT ".$this->_iLvIgdbRequestMaxCount."
+            LIMIT ".$this->_iLvIgdbMaxAffected."
         ";
         $oRs = $this->_oLvDb->Execute( $sQuery );
         
@@ -285,6 +297,9 @@ class lvigdb extends oxBase {
         $this->_oLvDb->Execute( $sQuery );
         
         $dRelevanceRating = ( isset( $dFakeRating ) && $dFakeRating > 0 ) ? $dFakeRating: $dRating;
+        if ( $this->_blDebug ) {
+            print_r($aGameDetails);
+        }
         $iRelevance = $this->_lvCalcRelevance( $dRelevanceRating, $sReleaseDate, $sOxid );
         
         // update oxarticles
@@ -489,6 +504,20 @@ class lvigdb extends oxBase {
             // the more the game is in the past the more it will give a malus on the base value of rating
             $iRelevance = (int)floor( $dBaseValue - $iWeeks );
         }
+        
+        if ( $this->_blDebug ) {
+            echo "sOxid is:"."\t\t\t".$sOxid."\n";
+            echo "dRating is:"."\t\t\t".$dRating."\n";
+            echo "dBaseValue is:"."\t\t\t".$dBaseValue."\n";
+            echo "iAmountOffers is:"."\t\t".$iAmountOffers."\n";
+            echo "sReleaseDate is:"."\t\t".$sReleaseDate."\n";
+            echo "iTimeReleaseDate is:"."\t\t".$iTimeReleaseDate."\n";
+            echo "blUpComingRelease is:"."\t\t".$blUpComingRelease."\n";
+            echo "iSeconds is:"."\t\t\t".$iSeconds."\n";
+            echo "iWeeks is:"."\t\t\t".$iWeeks."\n";
+            echo "iRelevance is:"."\t\t\t".$iRelevance."\n";
+            echo "=============================================================\n";
+        }        
         
         return $iRelevance;
     }
