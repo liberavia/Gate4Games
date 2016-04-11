@@ -1302,6 +1302,7 @@ def installed_app_actions(params):
     plugintools.add_item( action="launch_app", title=start_app_caption , thumbnail=game_cover.encode('utf-8') , fanart=game_cover.encode('utf-8') , extra=execute_path, actorsandmore=app_install_id, folder=False )
     plugintools.add_item( action="remove_app", title=remove_app_caption , thumbnail=game_cover.encode('utf-8') , fanart=game_cover.encode('utf-8') , actorsandmore=game_name.encode('utf-8'), extra=app_install_id, folder=False )
 
+
 # returns subfolder by given systemtype
 def get_subfolder_by_systemtype(systemtype):
     switcher = {
@@ -1313,6 +1314,7 @@ def get_subfolder_by_systemtype(systemtype):
     
     return switcher.get(systemtype, "none")
 
+
 # return fileending by given systemtype
 def get_fileending_by_systemtype(systemtype):
     switcher = {
@@ -1323,7 +1325,34 @@ def get_fileending_by_systemtype(systemtype):
     }
     
     return switcher.get(systemtype, "none")
+
+
+# return general type of game to trigger matching things
+def get_game_type_section_by_game_type(game_type,pc_game_type):
+    switcher = {
+        'psx'                   : 'roms',
+        'nintendo_gamecube'     : 'roms',
+        'nes'                   : 'roms',
+        'n64'                   : 'roms',
+        'gog'                   : 'gog',
+        'amazon'                : 'amazon',
+        'steam'                 : 'steam',
+    }
     
+    if pc_game_type != "":
+        pc_switcher = {
+            'gog'                   : 'gog',
+            'wine_gog'              : 'gog',
+            'wine_amazon'           : 'amazon',
+            'steam_native'          : 'steam',
+            'steam_wine'            : 'steam',
+            'wine_steam'            : 'steam',
+        }
+        game_type = pc_switcher.get(pc_game_type, "none")
+    
+    return switcher.get(game_type, "none")
+
+
 # remove app
 def remove_app(params):
     dialog = xbmcgui.Dialog()
@@ -1351,7 +1380,7 @@ def remove_app(params):
         for line in current_file:
             if line.startswith('Type='):
                 game_type       = line.replace('Type=', '')
-            if line.startswith('Type='):
+            if line.startswith('PCType='):
                 pc_game_type    = line.replace('PCType=', '')
             if line.startswith('AppId='):
                 appid           = line.replace('AppId=', '')
