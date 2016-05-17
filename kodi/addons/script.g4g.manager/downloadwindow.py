@@ -68,6 +68,8 @@ class ShowDownloadDialog(xbmcgui.WindowXMLDialog):
         self.getControl(LABEL_MESSAGE).setLabel(str(self.downloadMessage) + "...")
         self.getControl(LABEL_REMAINING).setLabel(str(self.downloadRemainingTime))
         self.getControl(LABEL_RATE).setLabel(str(self.downloadCurrentRate))
+        self.getControl(LABEL_DOWNLOADED).setLabel(str(self.downloadDownloaded))
+        
         pass
         
     def onClick(self, controlID):
@@ -210,6 +212,12 @@ class ShowDownloadDialog(xbmcgui.WindowXMLDialog):
         xbmc.log('Update CurrentRate to : ' + str(CurrentRate))
         self.getControl(LABEL_RATE).setLabel(str(CurrentRate) + "")
         pass
+
+    def updateDownloadDownloaded(self, Downloaded):
+        xbmc.log('Update Downloaded to : ' + str(Downloaded))
+        self.getControl(LABEL_DOWNLOADED).setLabel(str(Downloaded) + "")
+        pass
+    
 
 '''
 xbmc.log("MySkin is: " + MySkin)

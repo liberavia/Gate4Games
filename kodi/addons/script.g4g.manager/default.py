@@ -1194,6 +1194,7 @@ def show_download_progress(params):
             downloaddisplay.setDownloadMessage(progress_info['message'])
             downloaddisplay.setDownloadRemainingTime(progress_info['remainingtime'])
             downloaddisplay.setDownloadCurrentRate(progress_info['currentrate'])
+            downloaddisplay.setDownloadDownloaded(progress_info['downloaded'])
             update_thread = threading.Thread(target=update_progress_details, args=(downloaddisplay, progress_filepath))
             update_thread.daemon = True
             update_thread.start()    
@@ -1216,6 +1217,7 @@ def update_progress_details(window, filepath):
                 window.updateDownloadMessage(progress_info['message'])
                 window.updateDownloadRemainingTime(progress_info['remainingtime'])
                 window.updateDownloadCurrentRate(progress_info['currentrate'])
+                window.updateDownloadDownloaded(progress_info['downloaded'])
                 window.setProgressFilePath(filepath)
         except:
             pass

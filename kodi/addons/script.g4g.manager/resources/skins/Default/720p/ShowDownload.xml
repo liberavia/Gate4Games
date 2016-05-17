@@ -12,7 +12,7 @@
                         <left>0</left>
                         <top>0</top>
                         <width>850</width>
-                        <height>320</height>
+                        <height>355</height>
                         <texture border="40">DialogBack.png</texture>
                 </control>
                 <control type="image">
@@ -104,10 +104,38 @@
                     <textcolor>selected</textcolor>
                     <shadowcolor>black</shadowcolor>
                 </control>
+                <control type="label">
+                    <description>label downloaded caption</description>
+                    <left>250</left>
+                    <top>120</top>
+                    <width>200</width>
+                    <height>30</height>
+                    <align>left</align>
+                    <font>font13_title</font>
+                    <label>$ADDON[script.g4g.manager 50234]:</label>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <textcolor>selected</textcolor>
+                    <shadowcolor>black</shadowcolor>
+                </control>
+                <control type="label" id="9902">
+                    <description>label downloaded</description>
+                    <left>450</left>
+                    <top>120</top>
+                    <width>620</width>
+                    <height>30</height>
+                    <align>left</align>
+                    <font>font13_title</font>
+                    <label></label>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <textcolor>selected</textcolor>
+                    <shadowcolor>black</shadowcolor>
+                </control>
                 <control type="label" id="9908">
                     <description>label message</description>
                     <left>250</left>
-                    <top>120</top>
+                    <top>155</top>
                     <width>620</width>
                     <height>30</height>
                     <align>left</align>
@@ -120,7 +148,7 @@
                 </control>
                 <control type="progress" id="9905">
                     <description>progress of task</description>
-                    <top>160</top>
+                    <top>195</top>
                     <left>250</left>
                     <width>550</width>
                     <height>30</height>
@@ -129,7 +157,7 @@
                 <control type="label" id="9901">
                     <description>label percent inside progress bar</description>
                     <left>520</left>
-                    <top>160</top>
+                    <top>195</top>
                     <width>80</width>
                     <height>30</height>
                     <align>left</align>
@@ -142,7 +170,7 @@
                 </control>
                 <control type="button" id="9906">
                     <description>Go Back</description>
-                    <top>220</top>
+                    <top>255</top>
                     <left>250</left>
                     <width>250</width>
                     <height>60</height>
@@ -160,7 +188,7 @@
                 </control>
                 <control type="button" id="9907">
                     <description>Abort Download</description>
-                    <top>220</top>
+                    <top>255</top>
                     <left>550</left>
                     <width>250</width>
                     <height>60</height>
