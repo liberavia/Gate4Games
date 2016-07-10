@@ -1,2 +1,6 @@
-[B]0.0.1[/B]
+[B]0.1.0[/B]
 - initial release for debugging issues
+
+[B]0.1.1[/B]
+- naming issues
+

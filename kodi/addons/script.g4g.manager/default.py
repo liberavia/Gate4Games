@@ -393,7 +393,7 @@ def freeroms_letter_list(params):
     
     # only roms that provide images
     #pattern = '<a href="([^"]+)">([^>]+)<img[^<]+'
-    pattern = '<td align=left nowrap><a href="([^"]+)">([^>]+)<[^<]+'
+    pattern = '<td align=left nowrap><a href="([^"]+)" itemprop="url"><span itemprop="name">([^>]+)<[^<]+'
     games = plugintools.find_multiple_matches(body,pattern)    
     
     for game in games:

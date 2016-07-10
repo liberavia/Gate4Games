@@ -106,4 +106,40 @@
             <email>info@gate4games.com</email>
         </extension>
     </addon>
+    <addon id="script.gateoschrome.launcher" name="Chrome" version="1.0.2" provider-name="liberavia">
+        <requires>
+            <import addon="xbmc.python" version="2.19.0"/>
+        </requires>
+        <extension point="xbmc.python.script" library="default.py">
+            <provides>chrome executable</provides>
+        </extension>
+        <extension point="xbmc.addon.metadata">
+            <summary lang="en">Launches Chrome Browser on gateOS</summary>
+            <description lang="en">Chrome on the gateOS operating system. Also integrates an Overlay mechanism which can be used for several operations, as quitting and returning to main Interface. Managing bookmarks etc.</description>
+            <platform>linux</platform>
+            <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+            <website>http://www.gate4games.com</website>
+            <email>info@gate4games.com</email>
+        </extension>
+    </addon>
+    <addon id="skin.gateos" version="0.1.1" name="GateUI" provider-name="liberavia">
+        <requires>
+            <import addon="xbmc.gui" version="5.9.0"/>
+        </requires>
+        <extension
+            point="xbmc.gui.skin"
+            debugging="false"
+            effectslowdown="1.0">
+            <res width="1280" height="720" aspect="16:9" default="true" folder="720p" />
+        </extension>
+        <extension point="xbmc.addon.metadata">
+            <summary lang="de_DE">gateOS ist das Standard Skin für das gateOS-Betriebssystem</summary>
+            <summary lang="en_US">Default skin for gateOS Operating System</summary>
+            <description lang="de_DE">Eine Beschreibung</description>
+            <description lang="en_US">A description</description>
+            <disclaimer lang="de_DE">Skin is based on confluence Standard.</disclaimer>
+            <disclaimer lang="en_US">Skin is based on confluence Standard</disclaimer>
+            <platform>all</platform>
+        </extension>
+    </addon>
 </addons>
