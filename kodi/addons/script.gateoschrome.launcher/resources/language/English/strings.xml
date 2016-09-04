@@ -1,13 +1,111 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-    <string id="50000">Chrome</string>
+    <string id="50000">Main Menu</string>
+    
+    <!-- Main menu -->
+    <string id="50001">Steam</string>
+    <string id="50002">Library</string>
+    <string id="50003">Add Games</string>
+    <string id="50004">Settings</string>
+    <string id="50005">Downloads</string>
+    
+    <!-- Library -->
+    <string id="50010">Installed</string>
+    <string id="50011">Available</string>
+    
+    <!-- Add Games -->
+    <string id="50020">PC-Games</string>
+    <string id="50021">Android Apps</string>
+    <string id="50022">Sony Playstation 1</string>
+    <string id="50023">Sony Playstation 2</string>
+    <string id="50024">Nintendo Gamecube</string>
+    <string id="50025">From Media</string>
+    <string id="50026">From the Internet</string>
+    <string id="50027">Nintendo N64</string>
+    <string id="50028">Nintendo NES</string>
+    <string id="50029">Nintendo WII</string>
+    <string id="59998">Sony Playstation Portable</string>
+    
+    <!-- Downloads -->
+    <string id="50030">Progress</string>
+    <string id="50031">Back</string>
+    <string id="50032">Cancel Download</string>
+    
+    <!-- Steam -->
+    <string id="50040">Start Steam Session</string>
+    <string id="50041">Steam Guard</string>
+    <string id="50042">Your steam webaccess is protected by Steam Guard. Please check your E-Mail and enter the code in the next dialog.</string>
+    <string id="50043">Your steam client acccess is protected by Steam Guard. Please check your E-Mail and enter the code in the next dialog.</string>
+    <string id="50044">Steam Captcha</string>
+    <string id="50045">Please enter the code that is displayed on the image.</string>
+    
+    <!-- List actions -->
+    <string id="50050">[COLOR blue]Directly to page...[/COLOR]</string>
+    <string id="50051">[COLOR blue]Filter by genre...[/COLOR]</string>
+    <string id="50052">[COLOR blue]Sort result...[/COLOR]</string>
+    <string id="50053">Next page</string>
+    <string id="50054">[COLOR blue]Sort by relevance descending[/COLOR]</string>
+    <string id="50055">[COLOR blue]Sort by relevance ascending[/COLOR]</string>
+    <string id="50056">[COLOR blue]Sort by name ascending[/COLOR]</string>
+    <string id="50057">[COLOR blue]Sort by name descending[/COLOR]</string>
+    <string id="50058">[COLOR blue]Sort by price ascending[/COLOR]</string>
+    <string id="50059">[COLOR blue]Sort by price descending[/COLOR]</string>
+    <string id="50060">[COLOR blue]Sort by IGDB-Rating descending[/COLOR]</string>
+    <string id="50061">[COLOR blue]Sort by IGDB-Rating ascending[/COLOR]</string>
+    <string id="50062">[COLOR blue]Sort by release date descending[/COLOR]</string>
+    <string id="50063">[COLOR blue]Sort by release date ascending[/COLOR]</string>
+    <string id="50064">[COLOR blue]Back to Game Manger main menu[/COLOR]</string>
+    <string id="50065">[COLOR blue]Release Genre-Selection[/COLOR]</string>
+    
+    <!-- Window displays -->
+    <string id="50080">[COLOR yellow]Scanne den QR-Code mit deinem Smartphone oder Tablet[/COLOR]</string>
+    
+    <!-- Settings -->
+    <string id="50100">General</string>
+    <string id="50101">Quit Kodi when launching a game</string>
+    <string id="50120">Steam-Account</string>
+    <string id="50121">Steam-Username</string>
+    <string id="50122">Steam-Password</string>
+    <string id="50123">Steam-Folder</string>
+    <string id="50124">Steam-Folder (Wine)</string>
+    <string id="50125">Steam-Wine</string>
 
-    <!-- Error Messages -->
-    <string id="50122">File does not exist</string>
-    <string id="50121">Open addon settings?</string>
-    <string id="50123">ERROR!</string>
-    <string id="50124">New scripts available, update userdata scripts?</string>
-    <string id="50125">Select 'No' to disable the Script Update Check</string>
-    <string id="50126">Check kodi.log file for details</string>
-
+    <!-- General -->
+    <string id="50200">from</string>
+    <string id="50201">of</string>
+    <string id="50202">Details for</string>
+    <string id="50203">Trailers for</string>
+    <string id="50204">Reviews for</string>
+    <string id="50205">Trailer for</string>
+    <string id="50206">Review for</string>
+    <string id="50207">Screenshots for</string>
+    <string id="50208">at</string>
+    <string id="50209">Install</string>
+    <string id="50210">Download of</string>
+    <string id="50211">Extract</string>
+    <string id="50212">Start</string>
+    <string id="50213">Remove</string>
+    <string id="50214">removed</string>
+    <string id="50215">installation?</string>
+    <string id="50216">Confirm to</string>
+    <string id="50217">removal?</string>
+    <string id="50218">Finished installation.</string>
+    <string id="50219">Gamedata</string>
+    <string id="50220">Links</string>
+    <string id="50221">Preparing removal</string>
+    <string id="50222">Refreshing thumbnail cache</string>
+    <string id="50223">Create</string>
+    <string id="50224">Started installation</string>
+    <string id="50225"></string>
+    <string id="50226">Follow progress in Download-Section</string>
+    <string id="50227">Remaining</string>
+    <string id="50228">Speed</string>
+    <string id="50229">already</string>
+    <string id="50230">installed</string>
+    <string id="50231">is</string>
+    <string id="50232">You can find the game at Library->Installed</string>
+    <string id="50233">Refresh</string>
+    <string id="50234">Downloaded</string>
+        
+    <string id="59999">This feature is currently under development</string>
 </strings>

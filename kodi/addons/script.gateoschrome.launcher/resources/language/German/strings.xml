@@ -1,13 +1,112 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-    <string id="50000">Chrome</string>
+    <string id="50000">Hauptmenü</string>
+    
+    <!-- Main menu -->
+    <string id="50001">Steam</string>
+    <string id="50002">Bibliothek</string>
+    <string id="50003">Games Hinzufügen</string>
+    <string id="50004">Einstellungen</string>
+    <string id="50005">Downloads</string>
+    
+    <!-- Library -->
+    <string id="50010">Installiert</string>
+    <string id="50011">Verfügbar</string>
 
-    <!-- Error Messages -->
-    <string id="50122">Datei existiert nicht</string>
-    <string id="50121">Addon Einstellungen öffnen?</string>
-    <string id="50123">FEHLER!</string>
-    <string id="50124">Es gibt neue Scripte, userdata Verzeichis updaten?</string>
-    <string id="50125">Wähle 'Nein' um das Update-Script auszuschalten</string>
-    <string id="50126">Prüfe kodi.log für mehr Informationen</string>
+    <!-- Add Games -->
+    <string id="50020">PC-Games</string>
+    <string id="50021">Android Apps</string>
+    <string id="50022">Sony Playstation 1</string>
+    <string id="50023">Sony Playstation 2</string>
+    <string id="50024">Nintendo Gamecube</string>
+    <string id="50025">Von Medium</string>
+    <string id="50026">Aus dem Internet</string>
+    <string id="50027">Nintendo N64</string>
+    <string id="50028">Nintendo NES</string>
+    <string id="50029">Nintendo WII</string>
+    <string id="59998">Sony Playstation Portable</string>
 
+    <!-- Downloads -->
+    <string id="50030">Fortschritt</string>
+    <string id="50031">Zurück</string>
+    <string id="50032">Download abbrechen</string>
+    
+    <!-- Steam -->
+    <string id="50040">Steam Starten</string>
+    <string id="50041">Steam Guard</string>
+    <string id="50042">Ihr Steam Webkonto ist durch Steam Guard geschützt. Bitte prüfen Sie ihre E-Mails und geben den enthaltenen Code im folgenden Dialog ein.</string>
+    <string id="50043">Ihr Steam Client ist durch Steam Guard geschützt. Bitte prüfen Sie ihre E-Mails und geben den enthaltenen Code im folgenden Dialog ein.</string>
+    <string id="50044">Steam Captcha</string>
+    <string id="50045">Bitte geben Sie den Code auf dem Bild ein.</string>
+    
+    <!-- List actions -->
+    <string id="50050">[COLOR blue]Direkt zu Seite springen...[/COLOR]</string>
+    <string id="50051">[COLOR blue]Nach Genre...[/COLOR]</string>
+    <string id="50052">[COLOR blue]Sortieren nach...[/COLOR]</string>
+    <string id="50053">Nächste Seite</string>
+    <string id="50054">[COLOR blue]Nach Relevanz (Absteigend)[/COLOR]</string>
+    <string id="50055">[COLOR blue]Nach Relevanz (Aufsteigend)[/COLOR]</string>
+    <string id="50056">[COLOR blue]Nach Name (Aufsteigend)[/COLOR]</string>
+    <string id="50057">[COLOR blue]Nach Name (Absteigend)[/COLOR]</string>
+    <string id="50058">[COLOR blue]Nach Preis (Absteigend)[/COLOR]</string>
+    <string id="50059">[COLOR blue]Nach Preis (Aufsteigend)[/COLOR]</string>
+    <string id="50060">[COLOR blue]Nach IGDB-Wertung (Absteigend)[/COLOR]</string>
+    <string id="50061">[COLOR blue]Nach IGDB-Wertung (Aufsteigend)[/COLOR]</string>
+    <string id="50062">[COLOR blue]Nach Veröffentlichung (Absteigend)[/COLOR]</string>
+    <string id="50063">[COLOR blue]Nach Veröffentlichung (Aufsteigend)[/COLOR]</string>
+    <string id="50064">[COLOR blue]Zurück zum Hauptmenü[/COLOR]</string>
+    <string id="50065">[COLOR blue]Genre-Einschränkung aufheben[/COLOR]</string>
+    
+    <!-- Window displays -->
+    <string id="50080">[COLOR yellow]Scanne den QR-Code mit deinem Smartphone oder Tablet[/COLOR]</string>
+    
+    <!-- Settings -->
+    <string id="50100">Allgemein</string>
+    <string id="50101">Kodi beenden, wenn ein Spiel gestartet wird.</string>
+    <string id="50120">Steam-Konto</string>
+    <string id="50121">Steam-Benutzername</string>
+    <string id="50122">Steam-Passwort</string>
+    <string id="50123">Steam-Verzeichnis</string>
+    <string id="50124">Steam-Verzeichnis (Wine)</string>
+    <string id="50125">Steam-Wine</string>
+
+    <!-- General -->
+    <string id="50200">ab</string>
+    <string id="50201">von</string>
+    <string id="50202">Details zu</string>
+    <string id="50203">Trailer für</string>
+    <string id="50204">Reviews für</string>
+    <string id="50205">Trailer für</string>
+    <string id="50206">Review für</string>
+    <string id="50207">Screenshots für</string>
+    <string id="50208">bei</string>
+    <string id="50209">Installiere</string>
+    <string id="50210">Herunterladen von</string>
+    <string id="50211">Extrahiere</string>
+    <string id="50212">Starte</string>
+    <string id="50213">Entferne</string>
+    <string id="50214">entfernt</string>
+    <string id="50215">entfernen?</string>
+    <string id="50216">Willst du</string>
+    <string id="50217">installieren?</string>
+    <string id="50218">Installation abgeschlossen.</string>
+    <string id="50219">Spieldaten</string>
+    <string id="50220">Verlinkungen</string>
+    <string id="50221">Entfernung wird vorbereitet</string>
+    <string id="50222">Bildercache löschen</string>
+    <string id="50223">Erstelle</string>
+    <string id="50224">Installation</string>
+    <string id="50225">gestartet</string>
+    <string id="50226">Verfolge den Fortschritt bei den Downloads</string>
+    <string id="50227">Verbleibend</string>
+    <string id="50228">Geschwindigkeit</string>
+    <string id="50229">bereits</string>
+    <string id="50230">installiert</string>
+    <string id="50231">ist</string>
+    <string id="50232">Du findest das Spiel unter Bibliothek->Installiert</string>
+    <string id="50233">Aktualisiere</string>
+    <string id="50234">Heruntergeladen</string>
+    
+    
+    <string id="59999">Dieser Teil der Anwendung befindet sich noch in Entwicklung</string>
 </strings>

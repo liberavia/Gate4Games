@@ -1,6 +1,3 @@
-Steam Launcher for gateOS
-Based on the original Steam Launcher of teedub
+gate4games Game-Manager
 
 https://www.gate4games.com
-http://store.steampowered.com/bigpicture
-http://kodi.tv/
